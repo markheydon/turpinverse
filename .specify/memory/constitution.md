@@ -1,50 +1,115 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: (template) → 1.0.0
+- Modified principles: N/A (initial ratification)
+- Added sections: Core Principles (5), Technology & Workflow Constraints, Development Workflow, Governance
+- Removed sections: None
+- Templates requiring updates:
+  - .specify/templates/plan-template.md ✅ aligned (Constitution Check gate present)
+  - .specify/templates/spec-template.md ✅ aligned (user stories, requirements, success criteria)
+  - .specify/templates/tasks-template.md ✅ aligned (user-story phases, test-first notes)
+  - .specify/templates/checklist-template.md ✅ aligned (no constitution-specific changes needed)
+  - .specify/templates/commands/*.md ⚠ not present (N/A)
+  - README.md ⚠ not present (create when project scope is defined)
+- Follow-up TODOs: Define technology stack in first feature plan; add README when project scope is clarified
+-->
+
+# Turpinverse Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec-Driven Development
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every feature MUST begin with a specification in `specs/[###-feature-name]/spec.md`
+before any implementation work begins. Specifications MUST define prioritized user
+stories, functional requirements, and measurable success criteria. Plans,
+tasks, and implementation MUST trace back to spec artifacts.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rationale**: Specs are the contract between intent and delivery. Building
+without them leads to scope drift and untestable outcomes.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Incremental Delivery
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+Features MUST be decomposed into prioritized, independently testable user
+stories (P1, P2, P3, …). Each story MUST deliver standalone value as a viable
+MVP increment. No story may depend on a lower-priority story for its core
+functionality.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Independent slices enable early validation, parallel work, and
+safe rollback of individual increments.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Test-First (NON-NEGOTIABLE)
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+When testing is in scope for a feature, tests MUST be written and confirmed
+failing before implementation begins. The Red-Green-Refactor cycle MUST be
+followed. Contract and integration tests are REQUIRED for new API surfaces,
+schema changes, and inter-service communication.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale**: Tests written after implementation confirm existing behavior,
+not desired behavior. Failing-first tests prove the test is meaningful.
+
+### IV. Simplicity & Justified Complexity
+
+Start with the simplest solution that satisfies the current requirement. YAGNI
+applies: do not build for hypothetical future needs. Any deviation from this
+principle MUST be documented in the plan's Complexity Tracking table with a
+rejected simpler alternative and explicit justification.
+
+**Rationale**: Unjustified complexity compounds maintenance cost and obscures
+intent. Documented exceptions preserve accountability.
+
+### V. Documentation as Contract
+
+Specifications, plans, data models, API contracts, and quickstart guides MUST
+remain current with implementation. Files in `specs/[###-feature]/contracts/`
+are authoritative for API behavior. When implementation diverges from docs,
+either update the docs or revert the code—never leave them out of sync.
+
+**Rationale**: Stale documentation is worse than none; it erodes trust and
+blocks onboarding.
+
+## Technology & Workflow Constraints
+
+- Feature work MUST follow the Spec Kit workflow: constitution → specify →
+  clarify → plan → tasks → implement.
+- Feature branches MUST follow the `###-feature-name` naming convention
+  (sequential numbering per `.specify/extensions/git/git-config.yml`).
+- Technology stack choices (language, framework, storage) are deferred to
+  per-feature `plan.md` until a project-wide stack is established by the first
+  feature.
+- All feature artifacts live under `specs/[###-feature-name]/`; shared project
+  governance lives under `.specify/`.
+
+## Development Workflow
+
+1. **Constitution Check** — Every `plan.md` MUST include a Constitution Check
+   gate before Phase 0 research and again after Phase 1 design. Plans that
+   violate principles without Complexity Tracking justification MUST NOT
+   proceed.
+2. **Branch per feature** — Create a feature branch before specification work
+   (`/speckit-specify` triggers branch creation via git extension).
+3. **Checkpoint validation** — After each user story phase, validate the story
+   independently before starting the next priority.
+4. **Commit discipline** — Commit at logical checkpoints (per task group or
+   story completion). Use the git extension auto-commit hooks or manual commits
+   with descriptive messages.
+5. **Review readiness** — Before marking a feature complete, run quickstart
+   validation and verify all spec success criteria are met.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes ad-hoc practices for all Turpinverse feature work.
+Amendments MUST be made via `/speckit-constitution`, include a version bump
+following semantic versioning, and propagate consistency checks to dependent
+templates.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- **MAJOR** — Backward-incompatible principle removals or redefinitions.
+- **MINOR** — New principles or materially expanded guidance.
+- **PATCH** — Clarifications, wording fixes, non-semantic refinements.
+
+All pull requests and plan reviews MUST verify compliance with active
+principles. Complexity without documented justification is grounds for rejection.
+Runtime development guidance SHOULD be maintained in project docs (e.g.,
+`README.md`, `docs/`) as the stack matures.
+
+**Version**: 1.0.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-07-18
