@@ -1,0 +1,118 @@
+[
+  {
+    "id": "turpin-born",
+    "date": "1705",
+    "title": "Richard Turpin Born in Hempstead",
+    "description": "Richard Turpin is born in Hempstead, Essex, the fifth of six children to John Turpin, a butcher and innkeeper.",
+    "category": "historical",
+    "personaIds": ["dick-turpin"],
+    "location": "Hempstead, Essex"
+  },
+  {
+    "id": "gregory-gang-formed",
+    "date": "1730",
+    "title": "Gregory Gang Established",
+    "description": "Samuel Gregory forms the Gregory Gang, initially focused on deer poaching in Epping Forest.",
+    "category": "historical",
+    "personaIds": ["samuel-gregory"],
+    "organisationIds": ["essex-gang"],
+    "location": "Epping Forest, Essex"
+  },
+  {
+    "id": "essex-gang-merger",
+    "date": "1733",
+    "title": "Essex Gang Consolidation",
+    "description": "The Gregory Gang merges with Turpin's operations to form the Essex Gang, expanding into highway robbery.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "samuel-gregory"],
+    "organisationIds": ["essex-gang"],
+    "location": "Essex"
+  },
+  {
+    "id": "king-partnership",
+    "date": "1735",
+    "title": "Turpin-King Partnership Formed",
+    "description": "Turpin partners with Matthew King, the 'gentleman highwayman', expanding horse theft operations.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "matthew-king"],
+    "organisationIds": ["king-equine-trading"],
+    "location": "London"
+  },
+  {
+    "id": "king-shootout",
+    "date": "1737-05",
+    "title": "Matthew King Killed at Whitechapel",
+    "description": "Matthew King is shot dead during a confrontation with authorities at Whitechapel.",
+    "category": "historical",
+    "personaIds": ["matthew-king"],
+    "location": "Whitechapel, London"
+  },
+  {
+    "id": "john-palmer-alias",
+    "date": "1737",
+    "title": "John Palmer Alias Adopted",
+    "description": "Turpin flees to Yorkshire and assumes the alias John Palmer, establishing a new identity network.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "ned-palmer"],
+    "organisationIds": ["brazier-legal"],
+    "location": "Yorkshire"
+  },
+  {
+    "id": "horse-theft-arrest",
+    "date": "1738-10",
+    "title": "Arrest for Horse Theft",
+    "description": "Turpin is arrested for horse theft at Beverley, leading to his identification as the notorious highwayman.",
+    "category": "historical",
+    "personaIds": ["dick-turpin"],
+    "location": "Beverley, Yorkshire"
+  },
+  {
+    "id": "york-trial",
+    "date": "1739-03-22",
+    "title": "Trial at York Assizes",
+    "description": "Turpin is tried and convicted of horse theft at York Castle Assizes.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "james-smith"],
+    "organisationIds": ["york-assize-court"],
+    "location": "York"
+  },
+  {
+    "id": "turpin-execution",
+    "date": "1739-04-07",
+    "title": "Execution at York Knavesmire",
+    "description": "Richard Turpin is hanged at York Knavesmire. He reportedly conducted himself with remarkable composure.",
+    "category": "historical",
+    "personaIds": ["dick-turpin"],
+    "location": "Knavesmire, York"
+  },
+  {
+    "id": "black-bess-ride",
+    "date": "1739",
+    "title": "The Legendary Ride to York",
+    "description": "Victorian folklore attributes an impossible overnight ride from London to York to Turpin and his mare Black Bess. This legend became the defining myth of Turpin's career.",
+    "category": "legend",
+    "personaIds": ["dick-turpin", "black-bess"],
+    "organisationIds": ["king-equine-trading"],
+    "location": "London to York"
+  },
+  {
+    "id": "epping-poaching-crackdown",
+    "date": "1732",
+    "title": "Epping Forest Poaching Crackdown",
+    "description": "Forest wardens intensify patrols following a surge in deer poaching attributed to the Gregory Gang.",
+    "category": "historical",
+    "personaIds": ["william-hargreaves", "samuel-gregory"],
+    "organisationIds": ["epping-forest-authority", "essex-gang"],
+    "location": "Epping Forest"
+  },
+  {
+    "id": "turpinverse-launch",
+    "date": "2026",
+    "title": "Turpinverse Canon Published",
+    "description": "The Turpinverse open-source canon dataset is published for CRM demo and documentation use.\n\n> *Fictional extension:*",
+    "category": "fictional",
+    "personaIds": ["catherine-bell"],
+    "organisationIds": ["turpin-enterprises"],
+    "location": "GitHub"
+  }
+]

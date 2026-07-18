@@ -1,0 +1,173 @@
+[
+  {
+    "id": "essex-gang",
+    "tradingName": "Essex Gang Holdings",
+    "legalName": "Essex Gang Holdings Ltd \u2014 Rural Enterprise Solutions",
+    "description": "Consolidated operations group specialising in rural procurement, logistics, and highway corridor management across Essex and Hertfordshire.",
+    "industry": "Logistics",
+    "historicalAnchor": "Wikipedia: Essex Gang",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "dick-turpin",
+      "elizabeth-millington",
+      "samuel-gregory",
+      "matthew-king",
+      "john-wheeler",
+      "thomas-patten",
+      "john-field",
+      "joseph-bryant",
+      "john-king",
+      "thomas-morris",
+      "thomas-collier",
+      "edward-grant"
+    ],
+    "foundedYear": 1730,
+    "status": "dissolved",
+    "website": "https://essex-gang.turpinverse.demo"
+  },
+  {
+    "id": "turpin-enterprises",
+    "tradingName": "Turpin Enterprises",
+    "legalName": "Turpin Enterprises International \u2014 Strategic Highway Consultancy",
+    "description": "Flagship consultancy offering route optimisation, identity management, and enterprise transport solutions.",
+    "industry": "Consulting",
+    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Career overview",
+    "parentOrganisationId": "essex-gang",
+    "memberPersonaIds": [
+      "dick-turpin",
+      "mary-brazier",
+      "ned-palmer",
+      "black-bess",
+      "henry-clayton",
+      "catherine-bell"
+    ],
+    "foundedYear": 1735,
+    "status": "active",
+    "website": "https://turpin-enterprises.turpinverse.demo"
+  },
+  {
+    "id": "millington-inn",
+    "tradingName": "Rose \u0026 Crown Hospitality",
+    "legalName": "Millington Inn Group \u2014 Premium Coaching Accommodation",
+    "description": "Historic coaching inn providing premium accommodation, intelligence services, and hospitality management.",
+    "industry": "Hospitality",
+    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Rose and Crown, Hempstead",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "elizabeth-millington",
+      "anna-ward"
+    ],
+    "foundedYear": 1720,
+    "status": "active",
+    "website": "https://millington-inn.turpinverse.demo"
+  },
+  {
+    "id": "york-assize-court",
+    "tradingName": "York Assize Legal",
+    "legalName": "York Assize Court \u2014 Regulatory Compliance Services",
+    "description": "Premier legal institution providing trial services, compliance auditing, and regulatory oversight.",
+    "industry": "Legal Services",
+    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Trial at York",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "james-smith"
+    ],
+    "foundedYear": 1700,
+    "status": "active",
+    "website": "https://york-assize-court.turpinverse.demo"
+  },
+  {
+    "id": "king-equine-trading",
+    "tradingName": "King Equine Trading",
+    "legalName": "King Equine Trading Co. \u2014 Premium Horse Acquisition \u0026 Fleet Management",
+    "description": "Specialist equine trading house offering acquisition, maintenance, and fleet management services.",
+    "industry": "Equine Trade",
+    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Horse theft operations",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "matthew-king",
+      "george-chapman",
+      "black-bess"
+    ],
+    "foundedYear": 1734,
+    "status": "dissolved",
+    "website": "https://king-equine-trading.turpinverse.demo"
+  },
+  {
+    "id": "brazier-legal",
+    "tradingName": "Brazier Legal Associates",
+    "legalName": "Brazier Legal Associates \u2014 Identity \u0026 Compliance Advisory",
+    "description": "Boutique legal practice specialising in identity documentation, alias management, and compliance advisory.",
+    "industry": "Legal Services",
+    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Yorkshire legal associates",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "mary-brazier",
+      "margaret-hayes"
+    ],
+    "foundedYear": 1736,
+    "status": "active",
+    "website": "https://brazier-legal.turpinverse.demo"
+  },
+  {
+    "id": "bayes-horsemanship",
+    "tradingName": "Bayes Horsemanship Academy",
+    "legalName": "Bayes Horsemanship Academy \u2014 Executive Riding Instruction",
+    "description": "Premier riding academy offering advanced horsemanship training for executive transport professionals.",
+    "industry": "Education",
+    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Richard Bayes riding instruction",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "richard-bayes"
+    ],
+    "foundedYear": 1730,
+    "status": "active",
+    "website": "https://bayes-horsemanship.turpinverse.demo"
+  },
+  {
+    "id": "york-racing-society",
+    "tradingName": "York Racing Society",
+    "legalName": "York Racing Society \u2014 Premium Event Management",
+    "description": "Exclusive society organising race meetings, social gatherings, and premium hospitality events.",
+    "industry": "Events",
+    "historicalAnchor": "Wikipedia: York race meetings \u2014 18th century",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "sarah-thornton"
+    ],
+    "foundedYear": 1730,
+    "status": "active",
+    "website": "https://york-racing-society.turpinverse.demo"
+  },
+  {
+    "id": "epping-forest-authority",
+    "tradingName": "Epping Forest Authority",
+    "legalName": "Epping Forest Authority \u2014 Conservation \u0026 Enforcement",
+    "description": "Forest management authority responsible for conservation, poaching enforcement, and rural patrol operations.",
+    "industry": "Government",
+    "historicalAnchor": "Wikipedia: Epping Forest \u2014 History",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "william-hargreaves"
+    ],
+    "foundedYear": 1700,
+    "status": "active",
+    "website": "https://epping-forest-authority.turpinverse.demo"
+  },
+  {
+    "id": "highway-commission",
+    "tradingName": "Highway Commission",
+    "legalName": "National Highway Commission \u2014 Infrastructure \u0026 Risk Management",
+    "description": "Turnpike trust consortium managing road infrastructure, toll collection, and transport risk assessment.",
+    "industry": "Infrastructure",
+    "historicalAnchor": "Wikipedia: Turnpike trusts \u2014 England",
+    "parentOrganisationId": null,
+    "memberPersonaIds": [
+      "robert-finch",
+      "henry-clayton"
+    ],
+    "foundedYear": 1700,
+    "status": "active",
+    "website": "https://highway-commission.turpinverse.demo"
+  }
+]

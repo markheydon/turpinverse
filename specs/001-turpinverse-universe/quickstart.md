@@ -64,11 +64,20 @@ Proves the documentation site builds and contains hyperlinked canon content.
 # Generate Hugo content from canon JSON
 dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
 
-# Build Hugo site to docs/
+# Build Hugo site to docs/ (local Hugo install)
 cd site
 hugo --minify
 cd ..
 ```
+
+**Without Hugo installed** (Docker / Podman — recommended on Windows):
+
+```powershell
+.\scripts\hugo.ps1 build
+# or live preview: .\scripts\hugo.ps1 serve
+```
+
+See [site/README.md](../../../site/README.md) for container commands and troubleshooting.
 
 **Expected outcomes**:
 - ✅ `docs/index.html` exists

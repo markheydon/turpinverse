@@ -1,0 +1,32 @@
+@inject IJSRuntime JS
+
+<div class="chart-container">
+    <h3>Deal Pipeline</h3>
+    <canvas @ref="canvasRef" id="pipeline-chart"></canvas>
+</div>
+
+@code {
+    [Parameter] public IReadOnlyList<DealPreview>? Deals { get; set; }
+
+    private ElementReference canvasRef;
+    private bool rendered;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Deals is not null && !rendered)
+        {
+            rendered = true;
+            var stages = Deals.GroupBy(d => d.Stage)
+                .Select(g => new { stage = g.Key, count = g.Count() })
+                .ToList();
+            await JS.InvokeVoidAsync("chartInterop.renderBarChart", "pipeline-chart",
+                stages.Select(s => s.stage).ToArray(),
+                stages.Select(s => s.count).ToArray());
+        }
+    }
+
+    public class DealPreview
+    {
+        public string Stage { get; set; } = string.Empty;
+    }
+}

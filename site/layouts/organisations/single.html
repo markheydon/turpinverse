@@ -1,0 +1,18 @@
+{{ define "main" }}
+<article class="organisation">
+  <h1>{{ .Title }}</h1>
+  <p class="meta"><em>{{ .Params.industry }}</em> | {{ .Params.status }}</p>
+  <div class="content">{{ .Content }}</div>
+  {{ with .Params.members }}
+  <section class="members">
+    <h2>Members</h2>
+    <ul>
+      {{ range . }}
+      <li><a href="{{ "/personas/" | relURL }}{{ . }}/">{{ . }}</a></li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+  {{ partial "org-chart.html" . }}
+</article>
+{{ end }}

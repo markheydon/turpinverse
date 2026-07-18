@@ -1,0 +1,43 @@
+name: Hugo Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Validate canon
+        run: dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation" --configuration Release
+
+      - name: Generate Hugo content
+        run: dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent --configuration Release
+
+      - name: Build Hugo site
+        run: hugo --minify
+        working-directory: site
+
+      - name: Deploy to docs/
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --staged --quiet || git commit -m "Deploy Hugo site to docs/"
+          git push

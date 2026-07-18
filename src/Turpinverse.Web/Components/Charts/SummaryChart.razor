@@ -1,0 +1,24 @@
+@inject IJSRuntime JS
+
+<div class="chart-container">
+    <h3>Dataset Summary</h3>
+    <canvas @ref="canvasRef" id="summary-chart"></canvas>
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, int>? Counts { get; set; }
+
+    private ElementReference canvasRef;
+    private bool rendered;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Counts is not null && !rendered)
+        {
+            rendered = true;
+            await JS.InvokeVoidAsync("chartInterop.renderDoughnutChart", "summary-chart",
+                Counts.Keys.ToArray(),
+                Counts.Values.ToArray());
+        }
+    }
+}

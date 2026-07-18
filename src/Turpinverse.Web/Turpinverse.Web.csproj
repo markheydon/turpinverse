@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turpinverse.Core\Turpinverse.Core.csproj" />
+    <ProjectReference Include="..\Turpinverse.ServiceDefaults\Turpinverse.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Turpinverse.Data\Turpinverse.Data.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+
+</Project>

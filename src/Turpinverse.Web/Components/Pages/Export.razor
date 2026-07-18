@@ -1,0 +1,131 @@
+@page "/export"
+@rendermode InteractiveServer
+@inject HttpClient Http
+@inject IJSRuntime JS
+@using System.Net.Http.Json
+@using Turpinverse.Core.Abstractions
+
+<PageTitle>Export Dashboard - Turpinverse</PageTitle>
+
+<div class="export-dashboard">
+    <div class="dashboard-header">
+        <h1>CRM Export Dashboard</h1>
+        @if (validationResult is not null)
+        {
+            <span class="validation-badge @(validationResult.Valid ? "valid" : "invalid")">
+                <LucideIcon Name="check-circle" />
+                @(validationResult.Valid ? "Canon Valid" : "Canon Issues")
+            </span>
+        }
+    </div>
+
+    @if (manifest is not null)
+    {
+        <div class="dataset-grid">
+            @foreach (var dataset in manifest.Datasets)
+            {
+                <DatasetCard Dataset="dataset"
+                             IsSelected="selectedDataset == dataset.Type"
+                             OnSelect="SelectDataset"
+                             OnDownload="DownloadDataset" />
+            }
+        </div>
+
+        <div class="charts-section">
+            <PipelineChart Deals="@deals" />
+            <SummaryChart Counts="@summaryCounts" />
+        </div>
+
+        @if (previewRows is not null)
+        {
+            <PreviewTable Rows="previewRows" DatasetType="selectedDataset" />
+        }
+    }
+    else if (loading)
+    {
+        <p>Loading export data...</p>
+    }
+</div>
+
+@code {
+    private ExportManifest? manifest;
+    private CanonValidationResponse? validationResult;
+    private IReadOnlyList<object>? previewRows;
+    private IReadOnlyList<PipelineChart.DealPreview>? deals;
+    private Dictionary<string, int>? summaryCounts;
+    private string selectedDataset = "contacts";
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            manifest = await Http.GetFromJsonAsync<ExportManifest>("/api/export/manifest");
+            validationResult = await Http.GetFromJsonAsync<CanonValidationResponse>("/api/canon/validate");
+
+            if (manifest is not null)
+            {
+                summaryCounts = manifest.Datasets.ToDictionary(d => d.Type, d => d.RowCount);
+            }
+
+            var dealsBytes = await Http.GetByteArrayAsync("/api/export/deals");
+            deals = await ParseDealsPreview(dealsBytes);
+            await LoadPreview(selectedDataset);
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task SelectDataset(string dataset)
+    {
+        selectedDataset = dataset;
+        await LoadPreview(dataset);
+    }
+
+    private async Task LoadPreview(string dataset)
+    {
+        var bytes = await Http.GetByteArrayAsync($"/api/export/{dataset}");
+        previewRows = ParseCsvPreview(bytes);
+    }
+
+    private async Task DownloadDataset(string dataset)
+    {
+        await JS.InvokeVoidAsync("open", $"/api/export/{dataset}", "_blank");
+    }
+
+    private static IReadOnlyList<object> ParseCsvPreview(byte[] bytes)
+    {
+        var text = System.Text.Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
+        var lines = text.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries);
+        if (lines.Length < 2) return [];
+
+        var headers = lines[0].Split(',');
+        return lines.Skip(1).Take(5).Select(line =>
+        {
+            var values = line.Split(',');
+            return headers.Zip(values, (h, v) => new KeyValuePair<string, string>(h, v.Trim('"')))
+                .ToDictionary(kv => kv.Key, kv => kv.Value) as object;
+        }).ToList()!;
+    }
+
+    private static async Task<IReadOnlyList<PipelineChart.DealPreview>> ParseDealsPreview(byte[] bytes)
+    {
+        await Task.CompletedTask;
+        var text = System.Text.Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
+        var lines = text.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries);
+        if (lines.Length < 2) return [];
+
+        return lines.Skip(1).Select(line =>
+        {
+            var parts = line.Split(',');
+            return new PipelineChart.DealPreview { Stage = parts.Length > 4 ? parts[4].Trim('"') : "Unknown" };
+        }).ToList();
+    }
+
+    private sealed class CanonValidationResponse
+    {
+        public bool Valid { get; set; }
+    }
+}

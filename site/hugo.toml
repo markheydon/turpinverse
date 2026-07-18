@@ -1,0 +1,33 @@
+baseURL = "https://markheydon.github.io/turpinverse/"
+locale = "en-gb"
+title = "Turpinverse"
+publishDir = "../docs"
+[params]
+  description = "The Dick Turpin universe for CRM demos"
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Personas"
+    url = "/personas/"
+    weight = 2
+  [[menu.main]]
+    name = "Organisations"
+    url = "/organisations/"
+    weight = 3
+  [[menu.main]]
+    name = "Timeline"
+    url = "/timeline/"
+    weight = 4
+  [[menu.main]]
+    name = "Getting Started"
+    url = "/guides/getting-started/"
+    weight = 5
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

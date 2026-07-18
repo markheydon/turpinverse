@@ -1,0 +1,50 @@
+@if (Rows.Count > 0)
+{
+    <div class="preview-table">
+        <h3>Preview: @DatasetType (first @Rows.Count rows)</h3>
+        <table>
+            <thead>
+                <tr>
+                    @foreach (var header in GetHeaders())
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Rows)
+                {
+                    <tr>
+                        @foreach (var header in GetHeaders())
+                        {
+                            <td>@GetValue(row, header)</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<object> Rows { get; set; } = [];
+    [Parameter, EditorRequired] public string DatasetType { get; set; } = string.Empty;
+
+    private IReadOnlyList<string> GetHeaders()
+    {
+        if (Rows.FirstOrDefault() is Dictionary<string, string> dict)
+        {
+            return dict.Keys.ToList();
+        }
+        return [];
+    }
+
+    private static string GetValue(object row, string header)
+    {
+        if (row is Dictionary<string, string> dict && dict.TryGetValue(header, out var value))
+        {
+            return value;
+        }
+        return string.Empty;
+    }
+}

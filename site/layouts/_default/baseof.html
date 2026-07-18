@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }} | {{ .Site.Title }}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    nav { margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
+    nav a { margin-right: 1rem; color: #d97706; }
+    .meta { color: #64748b; }
+    .org-tree { list-style: none; padding-left: 1rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    {{ range .Site.Menus.main }}
+    <a href="{{ .URL }}">{{ .Name }}</a>
+    {{ end }}
+  </nav>
+  {{ block "main" . }}{{ end }}
+</body>
+</html>

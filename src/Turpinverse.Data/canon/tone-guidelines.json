@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "principles": [
+    "Ground humour in historical fact before adding fictional extensions",
+    "Keep CRM-facing fields professional enough for client demos",
+    "Use tongue-in-cheek business language rather than slapstick",
+    "Mark wholly invented personas and events clearly",
+    "Prefer witty understatement over overt criminal glorification"
+  ],
+  "examples": [
+    {
+      "good": "Seasoned highway operations consultant with expertise in rapid route optimisation.",
+      "bad": "The most feared robber who ever held up a coach with a silly grin.",
+      "reason": "Professional framing preserves demo credibility while nodding to legend."
+    },
+    {
+      "good": "Rose and Crown Hospitality Group — premium coaching inn services since 1735.",
+      "bad": "The dodgy pub where Dick hid from the law lol.",
+      "reason": "Organisation names should read as plausible business entities."
+    }
+  ],
+  "forbiddenPatterns": [
+    "\\bidiot\\b",
+    "\\bstupid\\b",
+    "\\bkill\\b",
+    "\\bmurder\\b",
+    "\\bdamn\\b",
+    "\\bhell\\b"
+  ]
+}

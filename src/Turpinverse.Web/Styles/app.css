@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+@theme {
+  --color-turpin-amber: #d97706;
+  --color-turpin-slate: #1e293b;
+  --color-turpin-cream: #fef3c7;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: var(--color-turpin-cream);
+  color: var(--color-turpin-slate);
+}
+
+.export-dashboard {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.validation-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.validation-badge.valid {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.validation-badge.invalid {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.dataset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dataset-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.dataset-card.selected {
+  border-color: var(--color-turpin-amber);
+}
+
+.dataset-card:hover {
+  border-color: var(--color-turpin-amber);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.row-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-turpin-amber);
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-turpin-slate);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.charts-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.chart-container {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.preview-table {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.preview-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.preview-table th,
+.preview-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.lucide-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
