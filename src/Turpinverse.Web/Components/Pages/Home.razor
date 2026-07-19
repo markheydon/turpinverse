@@ -1,7 +1,133 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using Turpinverse.Core.Abstractions
+@using Turpinverse.Core.Export
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Turpinverse</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="page-container">
+    <div class="page-header">
+        <div class="page-header-title">
+            <div>
+                <h1>Turpinverse</h1>
+                <p class="record-count">Browse canon data mapped to CRM records</p>
+            </div>
+        </div>
+        @if (validationResult is not null)
+        {
+            <span class="validation-badge @(validationResult.Valid ? "valid" : "invalid")">
+                <LucideIcon Name="@(validationResult.Valid ? "check-circle" : "alert-circle")" />
+                @(validationResult.Valid ? "Canon Valid" : "Canon Issues")
+            </span>
+        }
+    </div>
 
-Welcome to your new app.
+    @if (loading)
+    {
+        <p>Loading overview...</p>
+    }
+    else if (loadError is not null)
+    {
+        <p class="error-message">@loadError</p>
+    }
+    else if (orderedDatasets is not null)
+    {
+        <div class="stat-grid">
+            @foreach (var dataset in orderedDatasets)
+            {
+                var definition = ExportDatasets.TryGet(dataset.Type);
+                @if (definition is not null)
+                {
+                    <a href="@definition.Route" class="stat-card">
+                        <div class="stat-card-header">
+                            <LucideIcon Name="@definition.Icon" />
+                            <h3>@definition.Title</h3>
+                        </div>
+                        <p class="stat-card-count">@dataset.RowCount</p>
+                        <p class="stat-card-label">records</p>
+                    </a>
+                }
+            }
+        </div>
+
+        @if (summaryCounts is not null)
+        {
+            <div class="charts-section charts-section-single">
+                <SummaryChart Counts="summaryCounts" CanvasId="summary-chart" />
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private IReadOnlyList<ExportDatasetInfo>? orderedDatasets;
+    private CanonValidationResponse? validationResult;
+    private Dictionary<string, int>? summaryCounts;
+    private string? loadError;
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var manifest = await Http.GetFromJsonAsync<ExportManifest>("/api/export/manifest");
+            validationResult = await Http.GetFromJsonAsync<CanonValidationResponse>("/api/canon/validate");
+
+            if (manifest is null)
+            {
+                loadError = "Failed to load export manifest.";
+                return;
+            }
+
+            if (!TryGetOrderedDatasets(manifest, out var datasets, out var error))
+            {
+                loadError = error;
+                return;
+            }
+
+            orderedDatasets = datasets;
+            summaryCounts = datasets.ToDictionary(dataset => dataset.Type, dataset => dataset.RowCount);
+        }
+        catch
+        {
+            loadError = "Failed to load overview data.";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private static bool TryGetOrderedDatasets(
+        ExportManifest manifest,
+        out IReadOnlyList<ExportDatasetInfo> datasets,
+        out string error)
+    {
+        var ordered = new List<ExportDatasetInfo>(ExportDatasets.DisplayOrder.Count);
+
+        foreach (var type in ExportDatasets.DisplayOrder)
+        {
+            var dataset = manifest.Datasets.FirstOrDefault(d => d.Type == type);
+            if (dataset is null)
+            {
+                datasets = [];
+                error = $"Manifest is missing the '{type}' dataset.";
+                return false;
+            }
+
+            ordered.Add(dataset);
+        }
+
+        datasets = ordered;
+        error = string.Empty;
+        return true;
+    }
+
+    private sealed class CanonValidationResponse
+    {
+        public bool Valid { get; set; }
+    }
+}
+

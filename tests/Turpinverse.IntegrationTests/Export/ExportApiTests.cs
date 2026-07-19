@@ -24,7 +24,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>();
         manifest.Should().NotBeNull();
         manifest!.Datasets.Should().HaveCount(4);
-        manifest.Datasets.Select(d => d.Type).Should().Contain(["contacts", "accounts", "deals", "cases"]);
+        manifest.Datasets.Select(d => d.Type).Should().Equal(ExportDatasets.DisplayOrder);
     }
 
     [Theory]

@@ -13,4 +13,8 @@
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
 
+  <Target Name="BuildTailwindCss" BeforeTargets="Build" Condition="Exists('$(MSBuildProjectDirectory)\package.json')">
+    <Exec Command="npm run build:css" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
 </Project>

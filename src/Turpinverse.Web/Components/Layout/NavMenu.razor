@@ -1,22 +1,29 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Turpinverse</a>
+﻿@using Turpinverse.Core.Export
+
+<input type="checkbox" id="nav-toggle" class="nav-toggle" title="Navigation menu" />
+
+<div class="sidebar-inner">
+    <div class="sidebar-brand">
+        <a href="">Turpinverse</a>
+        <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <nav class="sidebar-nav">
+        <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
+            <LucideIcon Name="home" /> Home
+        </NavLink>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <LucideIcon Name="file" /> Home
+        <p class="nav-section-label">Data</p>
+
+        @foreach (var dataset in ExportDatasets.All)
+        {
+            <NavLink class="nav-item" href="@dataset.Route.TrimStart('/')">
+                <LucideIcon Name="@dataset.Icon" /> @dataset.Title
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="export">
-                <LucideIcon Name="download" /> Export
-            </NavLink>
-        </div>
+        }
     </nav>
 </div>

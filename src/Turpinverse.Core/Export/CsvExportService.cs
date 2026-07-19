@@ -76,8 +76,8 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         return new ExportManifest(
             canon.Version,
             [
-                CreateDatasetInfo("contacts", ExportMapper.MapContacts(canon).Count),
                 CreateDatasetInfo("accounts", ExportMapper.MapAccounts(canon).Count),
+                CreateDatasetInfo("contacts", ExportMapper.MapContacts(canon).Count),
                 CreateDatasetInfo("deals", ExportMapper.MapDeals(canon).Count),
                 CreateDatasetInfo("cases", ExportMapper.MapCases(canon).Count)
             ]);
