@@ -34,7 +34,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T010 Create `src/Turpinverse.Web/Turpinverse.Web.csproj` Blazor Server project referencing Turpinverse.Core
 - [X] T011 Create `src/Turpinverse.ServiceDefaults/Turpinverse.ServiceDefaults.csproj` Aspire shared defaults project
 - [X] T012 Create `src/Turpinverse.AppHost/Turpinverse.AppHost.csproj` Aspire AppHost referencing Turpinverse.Web
-- [X] T013 [P] Create `tests/Turpinverse.Core.UnitTests/Turpinverse.Core.UnitTests.csproj` with xUnit, FluentAssertions, coverlet
+- [X] T013 [P] Create `tests/Turpinverse.Core.UnitTests/Turpinverse.Core.UnitTests.csproj` with xUnit v3 and coverlet
 - [X] T014 [P] Create `tests/Turpinverse.Web.UnitTests/Turpinverse.Web.UnitTests.csproj` with bUnit and xUnit
 - [X] T015 [P] Create `tests/Turpinverse.IntegrationTests/Turpinverse.IntegrationTests.csproj` with WebApplicationFactory support
 - [X] T016 Create `src/Turpinverse.Tools.GenerateHugoContent/Turpinverse.Tools.GenerateHugoContent.csproj` console app referencing Turpinverse.Core
@@ -100,8 +100,8 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T052 [US1] Create org-chart partial in `site/layouts/partials/org-chart.html` rendering hierarchy from `site/data/organisations.json`
 - [X] T053 [P] [US1] Create site home page in `site/content/_index.md` explaining Turpinverse goals and usage
 - [X] T054 [P] [US1] Create getting-started guide in `site/content/guides/getting-started.md`
-- [X] T055 [P] [US1] Create base HTML layout in `site/layouts/_default/baseof.html` with navigation
-- [X] T056 [US1] Create GitHub Actions workflow in `.github/workflows/hugo-pages.yml` to generate content, build Hugo to `docs/`, and deploy GitHub Pages
+- [X] T055 [P] [US1] Create base HTML layout in `site/layouts/baseof.html` with navigation
+- [X] T056 [US1] Create GitHub Actions Hugo workflows (`.github/workflows/hugo-ci.yml`, `hugo-deploy.yml`, reusable `hugo-build.yml`) to generate content, build Hugo to `docs/`, and deploy GitHub Pages
 - [X] T057 [US1] Create GitHub Actions CI workflow in `.github/workflows/ci.yml` for `dotnet build` and `dotnet test`
 - [X] T058 [US1] Write unit tests in `tests/Turpinverse.Core.UnitTests/Hugo/HugoContentGeneratorTests.cs` verifying generated content structure
 
@@ -113,7 +113,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 
 **Goal**: Blazor Server app exports contacts, accounts, deals, and cases as CSV files with intact cross-references
 
-**Independent Test**: Download all 4 CSVs from `/export` dashboard; run `dotnet test --filter Category=CsvExport` and `Category=CrossReference` — zero orphan references
+**Independent Test**: Download all 4 CSVs from the Blazor data pages (`/contacts`, `/accounts`, `/deals`, `/cases`); run `dotnet test --filter Category=CsvExport` and `Category=CrossReference` — zero orphan references
 
 ### Tests for User Story 2 ⚠️
 
@@ -137,9 +137,9 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T071 [US2] Create `ExportEndpoints` in `src/Turpinverse.Web/Endpoints/ExportEndpoints.cs` implementing `GET /api/export/{dataset}` per export-api.md
 - [X] T072 [US2] Add `GET /api/export/manifest` endpoint in `src/Turpinverse.Web/Endpoints/ExportEndpoints.cs`
 - [X] T073 [US2] Add `GET /api/canon/validate` endpoint in `src/Turpinverse.Web/Endpoints/CanonEndpoints.cs` returning validation results per export-api.md
-- [X] T074 [US2] Create export dashboard page in `src/Turpinverse.Web/Components/Pages/Export.razor` with dataset cards and download buttons
-- [X] T075 [US2] Create `DatasetCard.razor` component in `src/Turpinverse.Web/Components/Export/DatasetCard.razor` showing row count and description
-- [X] T076 [US2] Create `PreviewTable.razor` component in `src/Turpinverse.Web/Components/Export/PreviewTable.razor` showing first 5 rows of selected dataset
+- [X] T074 [US2] Create home overview page in `src/Turpinverse.Web/Components/Pages/Home.razor` with dataset summary cards and validation badge
+- [X] T075 [US2] Create shared `CrmEntityPage.razor` component in `src/Turpinverse.Web/Components/Crm/` showing row count, preview table, and download button per dataset
+- [X] T076 [US2] Create `DataTable.razor` component in `src/Turpinverse.Web/Components/Crm/DataTable.razor` rendering preview rows for the active dataset
 - [X] T077 [US2] Register export and canon endpoints in `src/Turpinverse.Web/Program.cs`
 - [X] T078 [US2] Update export integration tests in `tests/Turpinverse.IntegrationTests/Export/` to pass all contract and cross-reference checks
 
@@ -161,16 +161,16 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T082 [P] [US3] Create Tailwind input stylesheet in `src/Turpinverse.Web/Styles/app.css` with Turpinverse theme tokens
 - [X] T083 [US3] Configure Tailwind build target in `src/Turpinverse.Web/Turpinverse.Web.csproj` outputting to `wwwroot/css/app.min.css`
 - [X] T084 [US3] Create Chart.js interop service in `src/Turpinverse.Web/wwwroot/js/chartInterop.js`
-- [X] T085 [US3] Create `ChartComponent.razor` in `src/Turpinverse.Web/Components/Charts/ChartComponent.razor` wrapping Chart.js via `IJSRuntime`
+- [X] T085 [US3] Chart.js interop via `chartInterop.js`; chart rendering in `PipelineChart.razor` and `SummaryChart.razor` (no separate wrapper component)
 - [X] T086 [US3] Create `PipelineChart.razor` in `src/Turpinverse.Web/Components/Charts/PipelineChart.razor` showing deal stage distribution bar chart
 - [X] T087 [US3] Create `SummaryChart.razor` in `src/Turpinverse.Web/Components/Charts/SummaryChart.razor` showing entity count doughnut chart
-- [X] T088 [US3] Add pipeline and summary charts to `src/Turpinverse.Web/Components/Pages/Export.razor`
-- [X] T089 [US3] Add validation status badge to export dashboard in `src/Turpinverse.Web/Components/Pages/Export.razor` calling `/api/canon/validate`
+- [X] T088 [US3] Add summary chart to `Home.razor` and pipeline chart to `Deals.razor` (via `CrmEntityPage`)
+- [X] T089 [US3] Add validation status badge to `Home.razor` calling `/api/canon/validate`
 - [X] T090 [US3] Apply Tailwind styling and Lucide icons across `src/Turpinverse.Web/Components/Layout/MainLayout.razor` and navigation
 - [X] T091 [US3] Write tone validation unit tests in `tests/Turpinverse.Core.UnitTests/Validation/ToneValidatorTests.cs`
-- [X] T092 [US3] Write bUnit component tests for export dashboard in `tests/Turpinverse.Web.UnitTests/Components/ExportPageTests.cs`
+- [X] T092 [US3] Write bUnit component tests in `tests/Turpinverse.Web.UnitTests/Components/CrmPageTests.cs` (home overview and per-dataset pages)
 
-**Checkpoint**: Dashboard renders charts and icons; tone validator rejects forbidden patterns; export page passes bUnit tests
+**Checkpoint**: Dashboard renders charts and icons; tone validator rejects forbidden patterns; Blazor pages pass bUnit tests
 
 ---
 
@@ -197,14 +197,14 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - **Foundational (Phase 2)**: Depends on Setup — BLOCKS all user stories
 - **US1 (Phase 3)**: Depends on Foundational — delivers MVP canon + Hugo site
 - **US2 (Phase 4)**: Depends on Foundational + US1 canon data files — export requires populated canon
-- **US3 (Phase 5)**: Depends on US2 export dashboard existing — adds visualisation and tone polish
+- **US3 (Phase 5)**: Depends on US2 Blazor data pages existing — adds visualisation and tone polish
 - **Polish (Phase 6)**: Depends on US1, US2, and US3 completion
 
 ### User Story Dependencies
 
 - **US1 (P1)**: Can start after Foundational — no dependency on US2/US3
 - **US2 (P2)**: Requires US1 canon JSON files (T038–T042) — deals/cases can be added in US2 but personas/orgs/events/aliases must exist
-- **US3 (P3)**: Requires US2 export dashboard — tone validation can run on canon independently but charts need export data
+- **US3 (P3)**: Requires US2 Blazor data pages — tone validation can run on canon independently but charts need export data
 
 ### Within Each User Story
 
@@ -286,6 +286,7 @@ Task T064–T067: Export DTOs in src/Turpinverse.Core/Export/
 - [P] tasks = different files, no dependencies on incomplete tasks in the same phase
 - [Story] label maps task to user story for traceability
 - Canon JSON in `src/Turpinverse.Data/canon/` is the single source of truth for both Hugo and Blazor
+- Blazor UI was refactored from a single `/export` dashboard to `Home.razor` (`/`) plus per-dataset pages (`/contacts`, `/accounts`, `/deals`, `/cases`) sharing `CrmEntityPage.razor`
 - Hugo content: domain logic in `src/Turpinverse.Core/Hugo/`; CLI host in `src/Turpinverse.Tools.GenerateHugoContent`. Do **not** recreate a `tools/` folder or put generation logic only in `Program.cs`
 - Run `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` before every Hugo build
 - Commit after each phase checkpoint

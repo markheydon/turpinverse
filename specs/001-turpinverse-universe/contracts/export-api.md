@@ -105,8 +105,8 @@ Runs cross-reference validation (VR-001 through VR-010) and returns results.
     "personas": 25,
     "organisations": 10,
     "events": 12,
-    "deals": 20,
-    "cases": 15
+    "deals": 22,
+    "cases": 17
   },
   "violations": []
 }
@@ -138,16 +138,26 @@ Runs cross-reference validation (VR-001 through VR-010) and returns results.
 
 ## Blazor UI Contract
 
-The export dashboard (`/export`) provides:
+The CRM data browser is split across a home overview and per-dataset pages:
 
-| UI Element | Behaviour |
-|------------|-----------|
-| Dataset cards | One card per export type showing row count and description |
-| Download button | Triggers `GET /api/export/{dataset}` download via browser |
-| Preview table | Shows first 5 rows of selected dataset via `GET /api/export/{dataset}/preview` |
-| Pipeline chart | Chart.js bar chart of deal stage distribution |
-| Summary chart | Chart.js doughnut chart of entity counts |
-| Validation badge | Green/red indicator from `GET /api/canon/validate` |
+| Route | Component | Behaviour |
+|-------|-----------|-----------|
+| `/` | `Home.razor` | Dataset summary cards (row counts), validation badge from `GET /api/canon/validate`, summary doughnut chart from manifest counts |
+| `/contacts` | `Contacts.razor` → `CrmEntityPage.razor` | Preview table and **Download CSV** button |
+| `/accounts` | `Accounts.razor` → `CrmEntityPage.razor` | Preview table and **Download CSV** button |
+| `/deals` | `Deals.razor` → `CrmEntityPage.razor` | Pipeline bar chart, preview table, and **Download CSV** button |
+| `/cases` | `Cases.razor` → `CrmEntityPage.razor` | Preview table and **Download CSV** button |
+
+Shared UI elements:
+
+| UI Element | Location | Behaviour |
+|------------|----------|-----------|
+| Preview table | `DataTable.razor` in `CrmEntityPage` | Loads via `GET /api/export/{dataset}/preview?count=100` |
+| Download button | `CrmEntityPage` | Opens `GET /api/export/{dataset}` in a new browser tab |
+| Pipeline chart | `PipelineChart.razor` on `/deals` | Chart.js bar chart of deal stage distribution |
+| Summary chart | `SummaryChart.razor` on `/` | Chart.js doughnut chart of dataset row counts |
+| Validation badge | `Home.razor` | Green/red indicator from `GET /api/canon/validate` |
+| Navigation | `NavMenu.razor` | Lucide icons and links to home and each dataset page |
 
 ## Error Responses
 

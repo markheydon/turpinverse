@@ -4,7 +4,7 @@
 
 **Created**: 2026-07-18
 
-**Status**: Draft
+**Status**: Complete
 
 **Input**: User description: "Turpinverse: a fictional but internally consistent universe centred on the myth of Dick Turpin. The goal is to provide a consistent and realistic completely made set of personas and organisations based on the legend of Richard 'Dick' Turpin and his gang. This Dick Turpin related universe should be inspired by — not transcribed from — the historical record and folklore surrounding Turpin. The universe created will be used to fuel sample data for business applications for demo purposes. Applications such as CRMs used for Sales or Customer Services for example will get generated from the data. Therefore it should be expected that data suitable for that kind of scenario will need to be generated so contacts, organisations, cases, deals, etc. The made up characters and organisations should be humorous in a tongue-in-cheek kind of a way. The idea being anybody see the data will instantly recognise the characters used in a semi-professional manner but still be able to bring a smirk to their face understanding the play on the myth that is being portrayed."
 
