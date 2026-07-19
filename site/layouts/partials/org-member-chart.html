@@ -1,0 +1,68 @@
+{{ $members := .Params.members }}
+{{ if $members }}
+<section class="org-section org-member-chart">
+  <h2>Reporting Structure</h2>
+  <p class="section-intro">CRM contact hierarchy for this account.</p>
+
+  {{ $executive := slice }}
+  {{ $senior := slice }}
+  {{ $operations := slice }}
+
+  {{ range $members }}
+    {{ $page := site.GetPage (printf "/personas/%s" .) }}
+    {{ if $page }}
+      {{ $job := lower ($page.Params.jobTitle | default "") }}
+      {{ $entry := dict "slug" . "name" $page.Title "job" ($page.Params.jobTitle | default "") "node" (replace . "-" "_") }}
+      {{ if or (in $job "ceo") (in $job "managing director") (and (in $job "director") (not (in $job "coordinator"))) (in $job "head of") (in $job "partner") }}
+        {{ $executive = $executive | append $entry }}
+      {{ else if or (in $job "vp") (in $job "principal") (in $job "lead") (in $job "senior") (in $job "former ceo") (in $job "chief") }}
+        {{ $senior = $senior | append $entry }}
+      {{ else }}
+        {{ $operations = $operations | append $entry }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  <div class="mermaid">
+flowchart TB
+  {{ if gt (len $executive) 0 }}
+  subgraph executive["Executive"]
+    direction LR
+    {{ range $executive }}
+    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}<br/><small>{{ partial "mermaid-sanitize.html" .job }}</small>"]
+    {{ end }}
+  end
+  {{ end }}
+  {{ if gt (len $senior) 0 }}
+  subgraph senior["Leadership"]
+    direction LR
+    {{ range $senior }}
+    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}<br/><small>{{ partial "mermaid-sanitize.html" .job }}</small>"]
+    {{ end }}
+  end
+  {{ end }}
+  {{ if gt (len $operations) 0 }}
+  subgraph operations["Operations"]
+    direction LR
+    {{ range $operations }}
+    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}<br/><small>{{ partial "mermaid-sanitize.html" .job }}</small>"]
+    {{ end }}
+  end
+  {{ end }}
+  {{ if and (gt (len $executive) 0) (gt (len $senior) 0) }}
+  executive --> senior
+  {{ end }}
+  {{ if and (gt (len $senior) 0) (gt (len $operations) 0) }}
+  senior --> operations
+  {{ else if and (gt (len $executive) 0) (gt (len $operations) 0) }}
+  executive --> operations
+  {{ end }}
+  </div>
+
+  <ul class="member-legend chip-list">
+    {{ range $members }}
+    <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

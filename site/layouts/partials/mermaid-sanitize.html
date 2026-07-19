@@ -1,0 +1,7 @@
+{{/* Sanitise text for Mermaid node labels */}}
+{{- $text := . -}}
+{{- $text = replace $text "\"" "'" -}}
+{{- $text = replace $text "[" "(" -}}
+{{- $text = replace $text "]" ")" -}}
+{{- $text = replace $text "#" "" -}}
+{{- $text | safeHTML -}}

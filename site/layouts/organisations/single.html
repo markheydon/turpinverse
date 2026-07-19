@@ -5,6 +5,9 @@
     {{ with .Params.legalName }}<p class="legal-name">{{ . }}</p>{{ end }}
     <p class="card-meta">
       {{ with .Params.industry }}<em>{{ . }}</em>{{ end }}
+      {{ with .Params.foundedYear }}
+      &nbsp;·&nbsp;Est. {{ . }}
+      {{ end }}
       {{ with .Params.status }}
       &nbsp;·&nbsp;<span class="status-badge status-{{ . }}">{{ . }}</span>
       {{ end }}
@@ -13,17 +16,10 @@
 
   <div class="post-content">{{ .Content }}</div>
 
-  {{ with .Params.members }}
-  <section class="members">
-    <h2>Members</h2>
-    <ul class="chip-list">
-      {{ range . }}
-      <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
-      {{ end }}
-    </ul>
-  </section>
-  {{ end }}
+  {{ partial "org-structure.html" . }}
+  {{ partial "org-member-chart.html" . }}
+  {{ partial "org-history.html" . }}
 
-  {{ partial "org-chart.html" . }}
+  {{ partial "mermaid-init.html" . }}
 </article>
 {{ end }}

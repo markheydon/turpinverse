@@ -4,6 +4,7 @@ type: "organisations"
 industry: "Government"
 status: "active"
 legalName: "Epping Forest Authority — Conservation & Unauthorised Procurement Enforcement"
+foundedYear: 1700
 members: ["william-hargreaves"]
 parent: ""
 ---

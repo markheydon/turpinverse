@@ -406,3 +406,63 @@ h1 {
 .export-section h2 {
   margin-top: 0;
 }
+
+/* Organisation page sections */
+.org-section {
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.org-section h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.org-section .mermaid {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.org-section .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.member-legend {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--turpin-border);
+}
+
+.org-history-timeline {
+  margin-top: 1rem;
+}
+
+.org-history-timeline .timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.turpin-welcome {
+  margin: 0 0 2rem;
+  padding: 1.5rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+  line-height: 1.6;
+}
+
+.turpin-welcome h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.turpin-welcome p:last-child {
+  margin-bottom: 0;
+}

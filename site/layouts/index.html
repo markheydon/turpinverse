@@ -18,6 +18,10 @@
   </div>
 </section>
 
+<article class="post-content turpin-welcome">
+  {{ .Content }}
+</article>
+
 <div class="turpin-quick-links">
   <a class="turpin-quick-link" href="{{ "/personas/" | relURL }}">
     <strong>Personas</strong>
@@ -33,11 +37,7 @@
   </a>
   <a class="turpin-quick-link" href="{{ "/guides/getting-started/" | relURL }}">
     <strong>Getting Started</strong>
-    How to use Turpinverse data
+    Run locally and export CRM data
   </a>
 </div>
-
-<article class="post-content">
-  {{ .Content }}
-</article>
 {{ end }}

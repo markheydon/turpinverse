@@ -2,16 +2,12 @@
 title: "Turpinverse"
 ---
 
-<div class="export-section">
+## Welcome to Turpinverse
 
-## Export CRM Data
+Turpinverse is a **fictional universe** inspired by the legend of Richard Turpin and his associates — reframed as tongue-in-cheek business personas, organisations, and timeline events.
 
-Run the Blazor Server app to export contacts, accounts, deals, and cases as CSV files.
+It exists to provide **consistent, demo-ready CRM sample data**: contacts, accounts, deals, and cases that look plausible in a product walkthrough, but reward a second look with knowing references to highwayman folklore.
 
-```powershell
-dotnet run --project src/Turpinverse.AppHost
-```
+This site documents the canon — who the characters are, which organisations they belong to, and what happened when. If you are looking for historical fact, you are in the wrong pub.
 
-Navigate to `/export` for the CRM export dashboard.
-
-</div>
+Browse the **Personas** and **Organisations** below, or read [Getting Started](/guides/getting-started/) if you want to run the project locally or export CSV data.

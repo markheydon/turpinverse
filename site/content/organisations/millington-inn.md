@@ -4,6 +4,7 @@ type: "organisations"
 industry: "Hospitality"
 status: "active"
 legalName: "Rose & Crown Hospitality Group — Where Discretion Is Part of the Room Rate"
+foundedYear: 1720
 members: ["elizabeth-millington","anna-ward"]
 parent: ""
 ---

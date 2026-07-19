@@ -56,6 +56,10 @@ public class HugoContentGeneratorTests
             var firstOrg = canon.Organisations[0];
             var orgContent = await File.ReadAllTextAsync(Path.Combine(organisationsDir, $"{firstOrg.Id}.md"));
             orgContent.Should().Contain("legalName:");
+            if (firstOrg.FoundedYear.HasValue)
+            {
+                orgContent.Should().Contain($"foundedYear: {firstOrg.FoundedYear}");
+            }
         }
         finally
         {

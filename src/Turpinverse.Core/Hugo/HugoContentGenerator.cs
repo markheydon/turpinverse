@@ -51,6 +51,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         foreach (var org in canon.Organisations)
         {
             var legalName = org.LegalName ?? string.Empty;
+            var foundedLine = org.FoundedYear.HasValue ? $"foundedYear: {org.FoundedYear}\n" : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(org.TradingName)}"
@@ -58,7 +59,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 industry: "{EscapeYaml(org.Industry)}"
                 status: "{org.Status}"
                 legalName: "{EscapeYaml(legalName)}"
-                members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
+                {foundedLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
                 ---
 
