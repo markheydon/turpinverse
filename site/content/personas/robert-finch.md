@@ -2,7 +2,7 @@
 title: "Robert Finch"
 type: "personas"
 jobTitle: "Infrastructure Billing Manager"
-email: "robert-finch@turpinverse.demo"
+email: "robert-finch@turpinverse.uk"
 status: "deceased"
 summary: "Manages turnpike toll collection and automated billing systems. Malfunctions on the Great North Road are his recurring headache."
 organisations: ["highway-commission"]

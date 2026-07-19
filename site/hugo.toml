@@ -1,5 +1,7 @@
-baseURL = "https://markheydon.github.io/turpinverse/"
+baseURL = "https://turpinverse.uk/"
 locale = "en-gb"
+direction = "ltr"
+label = "English (UK)"
 title = "Turpinverse"
 theme = "PaperMod"
 publishDir = "../docs"

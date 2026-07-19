@@ -13,7 +13,7 @@
     "birthYear": 1705,
     "deathYear": 1739,
     "status": "deceased",
-    "email": "richard.turpin@turpinverse.demo",
+    "email": "richard.turpin@turpinverse.uk",
     "phone": "01707-555-0101",
     "notes": "Primary account executive for enterprise corridor logistics. Three active alias records flagged for deduplication review."
   },
@@ -28,7 +28,7 @@
     "temperament": "Pragmatic, discreet, excellent host",
     "organisationIds": ["millington-inn", "essex-gang"],
     "status": "deceased",
-    "email": "elizabeth-millington@turpinverse.demo",
+    "email": "elizabeth-millington@turpinverse.uk",
     "notes": "VIP guest relations lead. Repeat clientele includes persons of interest."
   },
   {
@@ -43,7 +43,7 @@
     "birthYear": 1700,
     "deathYear": 1740,
     "status": "deceased",
-    "email": "samuel-gregory@turpinverse.demo",
+    "email": "samuel-gregory@turpinverse.uk",
     "notes": "Post-merger advisory role. Portfolio integration completed Q3 1733."
   },
   {
@@ -57,7 +57,7 @@
     "organisationIds": ["essex-gang", "king-equine-trading"],
     "deathYear": 1737,
     "status": "deceased",
-    "email": "matthew-king@turpinverse.demo",
+    "email": "matthew-king@turpinverse.uk",
     "notes": "Specialist in high-value equine procurement. Exit interview pending."
   },
   {
@@ -70,7 +70,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["brazier-legal", "turpin-enterprises"],
     "status": "deceased",
-    "email": "mary-brazier@turpinverse.demo",
+    "email": "mary-brazier@turpinverse.uk",
     "notes": "Handles compliance documentation and alias lifecycle management."
   },
   {
@@ -83,7 +83,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["bayes-horsemanship"],
     "status": "deceased",
-    "email": "richard-bayes@turpinverse.demo",
+    "email": "richard-bayes@turpinverse.uk",
     "notes": "Premier riding coach for executive transport solutions. Certification renewal due annually."
   },
   {
@@ -96,7 +96,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "john-wheeler@turpinverse.demo",
+    "email": "john-wheeler@turpinverse.uk",
     "notes": "Rural corridor patrol and asset retrieval."
   },
   {
@@ -110,7 +110,7 @@
     "organisationIds": ["essex-gang"],
     "deathYear": 1739,
     "status": "deceased",
-    "email": "thomas-patten@turpinverse.demo",
+    "email": "thomas-patten@turpinverse.uk",
     "notes": "Offboarding completed. Final settlement pending assize review."
   },
   {
@@ -123,7 +123,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "john-field@turpinverse.demo",
+    "email": "john-field@turpinverse.uk",
     "notes": "Hertfordshire expansion lead."
   },
   {
@@ -136,7 +136,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "joseph-bryant@turpinverse.demo",
+    "email": "joseph-bryant@turpinverse.uk",
     "notes": "Signature case: Q3 stock count variance (case-009). Reconciliation ongoing."
   },
   {
@@ -149,7 +149,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["turpin-enterprises"],
     "status": "deceased",
-    "email": "ned-palmer@turpinverse.demo",
+    "email": "ned-palmer@turpinverse.uk",
     "notes": "SSO provisioning for Yorkshire relocations. Not to be merged with John Palmer account without legal review."
   },
   {
@@ -162,7 +162,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "john-king@turpinverse.demo",
+    "email": "john-king@turpinverse.uk",
     "notes": "Protocol breach incident logged (case-016). Closed with remedial training."
   },
   {
@@ -175,7 +175,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["king-equine-trading"],
     "status": "deceased",
-    "email": "george-chapman@turpinverse.demo",
+    "email": "george-chapman@turpinverse.uk",
     "notes": "Three horses overdue for scheduled maintenance (case-002)."
   },
   {
@@ -188,7 +188,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "thomas-morris@turpinverse.demo",
+    "email": "thomas-morris@turpinverse.uk",
     "notes": "Framework agreements across Home Counties parishes."
   },
   {
@@ -201,7 +201,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "thomas-collier@turpinverse.demo",
+    "email": "thomas-collier@turpinverse.uk",
     "notes": "Route planning data sync failure (case-017). Platform vendor engaged."
   },
   {
@@ -215,7 +215,7 @@
     "temperament": "Fleet, loyal, mildly opinionated about scheduling",
     "organisationIds": ["king-equine-trading", "turpin-enterprises"],
     "status": "legend",
-    "email": "black-bess@turpinverse.demo",
+    "email": "black-bess@turpinverse.uk",
     "notes": "Brand licensing enquiries pending (case-013). Mileage records under media review."
   },
   {
@@ -228,7 +228,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["york-assize-court"],
     "status": "deceased",
-    "email": "james-smith@turpinverse.demo",
+    "email": "james-smith@turpinverse.uk",
     "notes": "Regulatory compliance consulting. Trial preparation docs (case-006) closed successfully."
   },
   {
@@ -241,7 +241,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["epping-forest-authority"],
     "status": "deceased",
-    "email": "william-hargreaves@turpinverse.demo",
+    "email": "william-hargreaves@turpinverse.uk",
     "notes": "Poaching incident report filed (case-003). Patrol intensity increased."
   },
   {
@@ -254,7 +254,7 @@
     "isFictionalExtension": true,
     "organisationIds": ["york-racing-society"],
     "status": "archived",
-    "email": "sarah-thornton@turpinverse.demo",
+    "email": "sarah-thornton@turpinverse.uk",
     "notes": "Spring meeting catering order confirmed (case-010). Premium suite bookings managed."
   },
   {
@@ -267,7 +267,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["highway-commission"],
     "status": "deceased",
-    "email": "robert-finch@turpinverse.demo",
+    "email": "robert-finch@turpinverse.uk",
     "notes": "Turnpike toll system fault (case-014). Vendor ticket raised."
   },
   {
@@ -280,7 +280,7 @@
     "isFictionalExtension": true,
     "organisationIds": ["millington-inn"],
     "status": "archived",
-    "email": "anna-ward@turpinverse.demo",
+    "email": "anna-ward@turpinverse.uk",
     "notes": "Hospitality booking conflict (case-004). Loyalty programme design in progress."
   },
   {
@@ -293,7 +293,7 @@
     "isFictionalExtension": true,
     "organisationIds": ["highway-commission", "turpin-enterprises"],
     "status": "active",
-    "email": "henry-clayton@turpinverse.demo",
+    "email": "henry-clayton@turpinverse.uk",
     "notes": "Route risk alert A10 corridor (case-005). Quarterly assessment retainer active."
   },
   {
@@ -306,7 +306,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["brazier-legal"],
     "status": "deceased",
-    "email": "margaret-hayes@turpinverse.demo",
+    "email": "margaret-hayes@turpinverse.uk",
     "notes": "Accounts payable query (case-011). Q3 invoice reconciliation in progress."
   },
   {
@@ -319,7 +319,7 @@
     "isFictionalExtension": false,
     "organisationIds": ["essex-gang"],
     "status": "deceased",
-    "email": "edward-grant@turpinverse.demo",
+    "email": "edward-grant@turpinverse.uk",
     "notes": "Territory mapping update (case-012). Hertfordshire expansion closed won."
   },
   {
@@ -332,7 +332,7 @@
     "isFictionalExtension": true,
     "organisationIds": ["turpin-enterprises"],
     "status": "active",
-    "email": "catherine-bell@turpinverse.demo",
+    "email": "catherine-bell@turpinverse.uk",
     "notes": "Brand guidelines review (case-007). Legend campaign in qualification."
   }
 ]

@@ -10,7 +10,7 @@ universe. It provides:
 
 - **Canon dataset** — 15+ personas, 8+ organisations, timeline events, and alias maps
   grounded in Wikipedia history with clearly marked fictional extensions
-- **Documentation site** — Hugo static site published to GitHub Pages from `docs/`
+- **Documentation site** — Hugo static site published to [turpinverse.uk](https://turpinverse.uk) via GitHub Pages
 - **CRM demo data** — Blazor Server app exporting contacts, accounts, deals, and cases
   as CSV files with intact cross-references
 

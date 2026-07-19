@@ -1,6 +1,6 @@
 # Turpinverse documentation site (Hugo)
 
-Hugo source lives here. Built output goes to `../docs/` (GitHub Pages).
+Hugo source lives here. Built output goes to `../docs/` (GitHub Pages at [turpinverse.uk](https://turpinverse.uk)).
 
 You do **not** need Hugo installed locally if you use Docker or Podman.
 
@@ -85,6 +85,32 @@ Open http://localhost:8080
 ## Container image
 
 [`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-build.yml`).
+
+## Custom domain (turpinverse.uk)
+
+The site is published at **https://turpinverse.uk** via GitHub Pages. Hugo copies `site/static/CNAME` into `docs/CNAME` on build.
+
+### GitHub Pages setup
+
+1. Repo → **Settings** → **Pages** → **Custom domain** → enter `turpinverse.uk` → Save
+2. Wait for DNS check to pass, then enable **Enforce HTTPS**
+
+### Cloudflare DNS (apex domain)
+
+Add four **A** records for `@`:
+
+| Type | Name | Content |
+|------|------|---------|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+
+Optional **CNAME** for `www` → `markheydon.github.io` if you want `www.turpinverse.uk`.
+
+Use **DNS only** (grey cloud) initially until the GitHub HTTPS certificate provisions, then re-enable the proxy if desired.
+
+After merge and **Hugo Deploy**, verify `https://turpinverse.uk` loads and `docs/CNAME` contains `turpinverse.uk`.
 
 ## Troubleshooting
 

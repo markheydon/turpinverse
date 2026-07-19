@@ -177,8 +177,7 @@ canon validation, content generation, and Hugo build — no deploy.
 3. Builds Hugo to `docs/`
 4. Commits and pushes `docs/` for GitHub Pages
 
-**Verify**: Visit `https://<org>.github.io/turpinverse/` and confirm the site loads with
-canon content.
+**Verify**: Visit `https://turpinverse.uk` and confirm the site loads with canon content.
 
 ## Troubleshooting
 

@@ -2,7 +2,7 @@
 title: "Black Bess"
 type: "personas"
 jobTitle: "Principal Transport Asset (Disputed Mileage)"
-email: "black-bess@turpinverse.demo"
+email: "black-bess@turpinverse.uk"
 status: "legend"
 summary: "Flagship equine asset with a disputed overnight London-to-York mileage claim. Victorian marketing elevated her to legend status; the finance team has questions."
 organisations: ["king-equine-trading","turpin-enterprises"]

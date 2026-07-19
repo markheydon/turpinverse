@@ -2,7 +2,7 @@
 title: "Mary Brazier"
 type: "personas"
 jobTitle: "Partner, Identity & Compliance Advisory"
-email: "mary-brazier@turpinverse.demo"
+email: "mary-brazier@turpinverse.uk"
 status: "deceased"
 summary: "Boutique legal counsel for clients requiring a fresh identity and a Yorkshire postcode. Documentation quality is impeccable; provenance is not discussed."
 organisations: ["brazier-legal","turpin-enterprises"]

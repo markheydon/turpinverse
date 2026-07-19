@@ -27,7 +27,7 @@ public class JsonCanonRepositoryTests
 
         foreach (var persona in canon.Personas)
         {
-            persona.Email.Should().EndWith("@turpinverse.demo");
+            persona.Email.Should().EndWith("@turpinverse.uk");
         }
     }
 }

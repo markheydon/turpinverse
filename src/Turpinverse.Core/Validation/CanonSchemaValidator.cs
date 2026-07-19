@@ -35,7 +35,7 @@ public static class CanonSchemaValidator
 
         foreach (var persona in canon.Personas)
         {
-            if (!persona.Email.EndsWith("@turpinverse.demo", StringComparison.Ordinal))
+            if (!persona.Email.EndsWith("@turpinverse.uk", StringComparison.Ordinal))
             {
                 violations.Add(new ValidationViolation(
                     "SCHEMA-005",

@@ -31,7 +31,7 @@ public class ExportPageTests : BunitContext
             {
                 "/api/export/manifest" => """{"version":"1.0.0","datasets":[{"type":"contacts","filename":"turpinverse-contacts.csv","rowCount":25,"columns":["contactId"]},{"type":"accounts","filename":"turpinverse-accounts.csv","rowCount":10,"columns":["accountId"]},{"type":"deals","filename":"turpinverse-deals.csv","rowCount":22,"columns":["dealId"]},{"type":"cases","filename":"turpinverse-cases.csv","rowCount":17,"columns":["caseId"]}]}""",
                 "/api/canon/validate" => """{"valid":true}""",
-                var p when p.StartsWith("/api/export/") => "contactId,firstName,lastName,title,email,phone,accountId,status,notes\np1,Test,User,Title,test@turpinverse.demo,,org1,active,",
+                var p when p.StartsWith("/api/export/") => "contactId,firstName,lastName,title,email,phone,accountId,status,notes\np1,Test,User,Title,test@turpinverse.uk,,org1,active,",
                 _ => "{}"
             };
 

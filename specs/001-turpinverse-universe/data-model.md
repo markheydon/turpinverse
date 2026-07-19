@@ -29,7 +29,7 @@ A character in the Turpinverse universe.
 | `birthYear` | int | ❌ | 1700–1800 range if present |
 | `deathYear` | int | ❌ | Must be ≥ birthYear if both present |
 | `status` | enum | ✅ | `active`, `deceased`, `legend`, `archived` |
-| `email` | string | ✅ | Format: `{slug}@turpinverse.demo` |
+| `email` | string | ✅ | Format: `{slug}@turpinverse.uk` |
 | `phone` | string | ❌ | Fictional period-appropriate number |
 | `notes` | string | ❌ | CRM notes field; tongue-in-cheek but professional |
 
@@ -51,7 +51,7 @@ A group, business, or institution reframed for demo use.
 | `memberPersonaIds` | string[] | ✅ | Must reference existing Persona.id |
 | `foundedYear` | int | ❌ | 1700–1800 |
 | `status` | enum | ✅ | `active`, `dissolved`, `legend` |
-| `website` | string | ❌ | Format: `https://{slug}.turpinverse.demo` |
+| `website` | string | ❌ | Format: `https://{slug}.turpinverse.uk` |
 
 **Relationships**: Self-referential parent hierarchy; many-to-many with Persona.
 
