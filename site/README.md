@@ -84,7 +84,7 @@ Open http://localhost:8080
 
 ## Container image
 
-[`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-build.yml`).
+[`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-build.yml`, currently **0.164.0**).
 
 ## Custom domain (turpinverse.uk)
 

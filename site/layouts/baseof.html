@@ -4,8 +4,8 @@
 
 <!DOCTYPE html>
 {{- $theme := site.Params.defaultTheme | default "auto" }}
-{{- $lang := site.Language.LanguageCode | default site.Language.Lang | default "en-gb" }}
-{{- $dir := site.Language.LanguageDirection | default "ltr" }}
+{{- $lang := site.Language.Locale | default site.Language.Name | default "en-gb" }}
+{{- $dir := site.Language.Direction | default "ltr" }}
 {{- if eq $theme "dark" }}
 <html lang="{{ $lang }}" dir="{{ $dir }}" data-theme="dark">
 {{- else if eq $theme "light" }}
