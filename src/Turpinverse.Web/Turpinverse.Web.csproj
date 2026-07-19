@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <Target Name="BuildTailwindCss" BeforeTargets="Build" Condition="Exists('$(MSBuildProjectDirectory)\package.json')">
+    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="!Exists('$(MSBuildProjectDirectory)\node_modules\tailwindcss')" />
     <Exec Command="npm run build:css" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
