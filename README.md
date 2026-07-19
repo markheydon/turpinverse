@@ -46,9 +46,9 @@ cd site && hugo --minify
 On Windows, use Podman Desktop or Docker Desktop — no local Hugo install needed:
 
 ```powershell
-.\scripts\Invoke-HugoSite.ps1 build    # generate content + build to docs/
+.\scripts\Invoke-HugoSite.ps1 build    # generate content + build to site/public/
 .\scripts\Invoke-HugoSite.ps1 serve    # live preview at http://localhost:1313
-.\scripts\Invoke-HugoSite.ps1 preview  # build + serve docs/ at http://localhost:8080
+.\scripts\Invoke-HugoSite.ps1 preview  # build + serve site/public/ at http://localhost:8080
 ```
 
 Use `-Runtime docker` if you prefer Docker over Podman. Full details: [site/README.md](site/README.md).
