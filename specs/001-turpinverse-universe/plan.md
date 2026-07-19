@@ -25,7 +25,7 @@ Chart.js (pipeline/stats visualisation in Blazor)
 
 **Storage**: File-based JSON canon in `src/Turpinverse.Data/canon/`; no database for v1
 
-**Testing**: xUnit, bUnit (Blazor component tests), FluentAssertions, coverlet
+**Testing**: xUnit v3, NSubstitute, bUnit (Blazor component tests), coverlet
 
 **Target Platform**: Cross-platform (.NET 10 on Windows/Linux/macOS); Hugo site on GitHub
 Pages; local dev via Aspire dashboard

@@ -11,10 +11,10 @@
     <PackageReference Include="AngleSharp" />
     <PackageReference Include="bunit" />
     <PackageReference Include="coverlet.collector" />
-    <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="NSubstitute" />
     <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="xunit.v3" />
   </ItemGroup>
 
   <ItemGroup>

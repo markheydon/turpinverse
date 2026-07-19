@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Turpinverse.Core.Validation;
 
 namespace Turpinverse.Core.UnitTests.Validation;
@@ -16,7 +15,7 @@ public class ToneValidatorTests
             "Persona",
             "test");
 
-        violations.Should().NotBeEmpty();
+        Assert.NotEmpty(violations);
     }
 
     [Fact]
@@ -28,6 +27,6 @@ public class ToneValidatorTests
             "Persona",
             "test");
 
-        violations.Should().BeEmpty();
+        Assert.Empty(violations);
     }
 }

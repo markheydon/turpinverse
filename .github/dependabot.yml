@@ -28,9 +28,9 @@ updates:
     groups:
       tests:
         patterns:
-          - "xunit"
+          - "xunit*"
           - "bunit"
-          - "FluentAssertions"
+          - "NSubstitute"
           - "Microsoft.NET.Test.Sdk"
           - "Microsoft.AspNetCore.Mvc.Testing"
           - "coverlet"

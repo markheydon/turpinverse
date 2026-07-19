@@ -1,0 +1,41 @@
+---
+description: Testing standards for all .NET automated tests in this repository
+globs: tests/**/*.cs
+alwaysApply: false
+---
+
+# Testing Standards
+
+Unless explicitly requested otherwise, all generated or modified .NET tests MUST follow these standards.
+
+## Required
+
+- Use **xUnit v3** (`xunit.v3` package) for all automated tests
+- Use **NSubstitute** for mocks, stubs, and test doubles
+- Use built-in **xUnit `Assert` methods** only
+- Keep test dependencies to a minimum
+
+## Prohibited
+
+Do not introduce:
+
+- FluentAssertions
+- AwesomeAssertions
+- Shouldly
+- Moq
+- NUnit
+- MSTest
+
+## Conventions
+
+- Test projects require `<OutputType>Exe</OutputType>` (set in `tests/Directory.Build.props`)
+- Use `[Trait("Category", "...")]` for filterable test categories
+- Test method names may use `Method_When_Then` underscore convention (CA1707 suppressed in `tests/**/*.cs`)
+- Hand-rolled fakes (e.g. `HttpMessageHandler`, `WebApplicationFactory`) are acceptable when more appropriate than NSubstitute
+
+## Allowed supporting packages
+
+- `bunit` — Blazor component tests
+- `coverlet.collector` — code coverage
+- `Microsoft.AspNetCore.Mvc.Testing` — integration tests
+- `Microsoft.NET.Test.Sdk` + `xunit.runner.visualstudio` — VSTest runner

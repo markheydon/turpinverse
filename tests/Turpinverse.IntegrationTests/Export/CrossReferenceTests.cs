@@ -1,5 +1,4 @@
 using System.Net;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Turpinverse.Core.Export;
 
@@ -24,8 +23,9 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var contactIds = contacts.Select(r => r["contactId"]).ToHashSet();
         foreach (var deal in deals)
         {
-            contactIds.Should().Contain(deal["contactId"],
-                because: $"deal {deal["dealId"]} references orphan contact");
+            Assert.True(
+                contactIds.Contains(deal["contactId"]),
+                $"deal {deal["dealId"]} references orphan contact");
         }
     }
 
@@ -38,8 +38,9 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var accountIds = accounts.Select(r => r["accountId"]).ToHashSet();
         foreach (var deal in deals)
         {
-            accountIds.Should().Contain(deal["accountId"],
-                because: $"deal {deal["dealId"]} references orphan account");
+            Assert.True(
+                accountIds.Contains(deal["accountId"]),
+                $"deal {deal["dealId"]} references orphan account");
         }
     }
 
@@ -55,17 +56,18 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
 
         foreach (var caseRecord in cases)
         {
-            contactIds.Should().Contain(caseRecord["contactId"]);
-            accountIds.Should().Contain(caseRecord["accountId"]);
+            Assert.Contains(caseRecord["contactId"], contactIds);
+            Assert.Contains(caseRecord["accountId"], accountIds);
         }
     }
 
     private async Task<List<Dictionary<string, string>>> ParseCsv(string url)
     {
-        var response = await _client.GetAsync(url);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(url, cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var bytes = await response.Content.ReadAsByteArrayAsync();
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
         return CsvExportReader.ParseRows(bytes)
             .Select(row => row.ToDictionary(kvp => kvp.Key, kvp => kvp.Value))
             .ToList();

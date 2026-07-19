@@ -156,7 +156,8 @@ is standard for sample-data/demo projects.
   JSON to CSV bytes; Hugo content generator output structure.
 
 **Rationale**: Constitution Principle III requires failing-first tests for export contracts
-and schema validation. bUnit is the standard Blazor testing library.
+and schema validation. bUnit is the standard Blazor testing library. Assertions use built-in
+xUnit `Assert` methods; NSubstitute is used for mocks when needed.
 
 **Alternatives considered**:
 - *Playwright E2E only*: Slower feedback; unit/integration tests catch consistency bugs

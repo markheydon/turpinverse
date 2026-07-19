@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Turpinverse.Core.Export;
 
@@ -18,13 +17,14 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task Manifest_ReturnsAllDatasets()
     {
-        var response = await _client.GetAsync("/api/export/manifest");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/manifest", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>();
-        manifest.Should().NotBeNull();
-        manifest!.Datasets.Should().HaveCount(4);
-        manifest.Datasets.Select(d => d.Type).Should().Equal(ExportDatasets.DisplayOrder);
+        var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>(cancellationToken);
+        Assert.NotNull(manifest);
+        Assert.Equal(4, manifest!.Datasets.Count);
+        Assert.Equal(ExportDatasets.DisplayOrder, manifest.Datasets.Select(d => d.Type));
     }
 
     [Theory]
@@ -34,12 +34,13 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("cases", "caseId")]
     public async Task Manifest_UsesCamelCaseColumnNames(string datasetType, string firstColumn)
     {
-        var response = await _client.GetAsync("/api/export/manifest");
-        var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>();
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/manifest", cancellationToken);
+        var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>(cancellationToken);
 
         var dataset = manifest!.Datasets.Single(d => d.Type == datasetType);
-        dataset.Columns.First().Should().Be(firstColumn);
-        dataset.Columns.Should().Equal(ExportCsvColumns.ForDataset(datasetType));
+        Assert.Equal(firstColumn, dataset.Columns.First());
+        Assert.Equal(ExportCsvColumns.ForDataset(datasetType), dataset.Columns);
     }
 
     [Theory]
@@ -47,25 +48,27 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("deals")]
     public async Task Preview_ReturnsRequestedRowCount(string dataset)
     {
-        var response = await _client.GetAsync($"/api/export/{dataset}/preview?count=3");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync($"/api/export/{dataset}/preview?count=3", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>();
-        rows.Should().NotBeNull();
-        rows!.Should().HaveCount(3);
-        rows[0].Should().ContainKey(ExportCsvColumns.ForDataset(dataset)[0]);
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.Equal(3, rows!.Count);
+        Assert.True(rows[0].ContainsKey(ExportCsvColumns.ForDataset(dataset)[0]));
     }
 
     [Fact]
     public async Task CanonValidate_ReturnsOkWhenCanonIsValid()
     {
-        var response = await _client.GetAsync("/api/canon/validate");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/canon/validate", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ValidationResponse>();
-        result.Should().NotBeNull();
-        result!.Valid.Should().BeTrue();
-        result.Counts.Should().ContainKey("personas");
+        var result = await response.Content.ReadFromJsonAsync<ValidationResponse>(cancellationToken);
+        Assert.NotNull(result);
+        Assert.True(result!.Valid);
+        Assert.True(result.Counts.ContainsKey("personas"));
     }
 
     private sealed class ManifestResponse

@@ -70,6 +70,16 @@ pwsh -Command "Install-Module PSScriptAnalyzer -Scope CurrentUser -Force; Invoke
 - Chart.js — pipeline and summary visualisations
 - CsvHelper — CRM CSV export
 
+## Testing Standards
+
+- xUnit v3 for all automated .NET tests
+- NSubstitute for mocks, stubs, and test doubles
+- Built-in xUnit `Assert` methods only
+- Keep test dependencies to a minimum
+
+Do not introduce FluentAssertions, AwesomeAssertions, Shouldly, Moq, NUnit, or MSTest
+unless explicitly requested.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

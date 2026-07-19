@@ -1,5 +1,4 @@
 using System.Net;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Turpinverse.Core.Export;
 
@@ -22,29 +21,32 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("cases", "turpinverse-cases.csv", 15)]
     public async Task Export_ReturnsValidCsv(string dataset, string filename, int minRows)
     {
-        var response = await _client.GetAsync($"/api/export/{dataset}");
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync($"/api/export/{dataset}", cancellationToken);
 
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        response.Content.Headers.ContentType?.MediaType.Should().Be("text/csv");
-        response.Content.Headers.ContentDisposition?.FileName.Should().Contain(filename);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("text/csv", response.Content.Headers.ContentType?.MediaType);
+        Assert.Contains(filename, response.Content.Headers.ContentDisposition?.FileName);
 
-        var bytes = await response.Content.ReadAsByteArrayAsync();
-        bytes.Length.Should().BeGreaterThan(3);
-        bytes[0].Should().Be(0xEF);
-        bytes[1].Should().Be(0xBB);
-        bytes[2].Should().Be(0xBF);
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        Assert.True(bytes.Length > 3);
+        Assert.Equal(0xEF, bytes[0]);
+        Assert.Equal(0xBB, bytes[1]);
+        Assert.Equal(0xBF, bytes[2]);
 
         var header = CsvExportReader.ParseHeader(bytes);
-        header.Should().Equal(ExportCsvColumns.ForDataset(dataset));
+        Assert.Equal(ExportCsvColumns.ForDataset(dataset), header);
 
         var rows = CsvExportReader.ParseRows(bytes);
-        rows.Count.Should().BeGreaterThanOrEqualTo(minRows);
+        Assert.True(rows.Count >= minRows);
     }
 
     [Fact]
     public async Task Export_InvalidDataset_Returns400()
     {
-        var response = await _client.GetAsync("/api/export/invalid");
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var response = await _client.GetAsync(
+            "/api/export/invalid",
+            TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }

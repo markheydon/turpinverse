@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text;
 using Bunit;
-using FluentAssertions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Turpinverse.Web.Components.Pages;
@@ -20,10 +19,10 @@ public class HomePageTests : BunitContext
     {
         Services.AddScoped(_ => new HttpClient(CrmTestHttpFactory.CreateSuccessHandler()) { BaseAddress = new Uri("http://localhost") });
         var cut = Render<Home>();
-        cut.Markup.Should().Contain("Turpinverse");
-        cut.Markup.Should().Contain("Canon Valid");
-        cut.Markup.Should().Contain("Accounts");
-        cut.Markup.Should().Contain("Cases");
+        Assert.Contains("Turpinverse", cut.Markup);
+        Assert.Contains("Canon Valid", cut.Markup);
+        Assert.Contains("Accounts", cut.Markup);
+        Assert.Contains("Cases", cut.Markup);
     }
 
     [Fact]
@@ -31,7 +30,7 @@ public class HomePageTests : BunitContext
     {
         Services.AddScoped(_ => new HttpClient(CrmTestHttpFactory.CreateIncompleteManifestHandler()) { BaseAddress = new Uri("http://localhost") });
         var cut = Render<Home>();
-        cut.Markup.Should().Contain("Manifest is missing the 'cases' dataset.");
+        Assert.Contains("Manifest is missing the 'cases' dataset.", cut.Markup);
     }
 
     [Fact]
@@ -39,7 +38,7 @@ public class HomePageTests : BunitContext
     {
         Services.AddScoped(_ => new HttpClient(CrmTestHttpFactory.CreateInvalidCanonHandler()) { BaseAddress = new Uri("http://localhost") });
         var cut = Render<Home>();
-        cut.Markup.Should().Contain("Canon Issues");
+        Assert.Contains("Canon Issues", cut.Markup);
     }
 }
 
@@ -51,16 +50,16 @@ public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
     public void ContactsPage_RendersTableAndDownloadButton()
     {
         var cut = RenderPage();
-        cut.Markup.Should().Contain("Contacts");
-        cut.Markup.Should().Contain("Download CSV");
-        cut.Markup.Should().Contain("First Name");
+        Assert.Contains("Contacts", cut.Markup);
+        Assert.Contains("Download CSV", cut.Markup);
+        Assert.Contains("First Name", cut.Markup);
     }
 
     [Fact]
     public void ContactsPage_ShowsErrorWhenPreviewFails()
     {
         var cut = RenderPage(CrmTestHttpFactory.CreatePreviewFailureHandler("contacts"));
-        cut.Markup.Should().Contain("Failed to load contacts data.");
+        Assert.Contains("Failed to load contacts data.", cut.Markup);
     }
 }
 
@@ -72,9 +71,9 @@ public class AccountsPageTests : CrmEntityPageTestBase<Accounts>
     public void AccountsPage_RendersTableHeaders()
     {
         var cut = RenderPage();
-        cut.Markup.Should().Contain("Accounts");
-        cut.Markup.Should().Contain("Account Name");
-        cut.Markup.Should().Contain("Industry");
+        Assert.Contains("Accounts", cut.Markup);
+        Assert.Contains("Account Name", cut.Markup);
+        Assert.Contains("Industry", cut.Markup);
     }
 }
 
@@ -86,10 +85,10 @@ public class DealsPageTests : CrmEntityPageTestBase<Deals>
     public void DealsPage_RendersPipelineChartAndTable()
     {
         var cut = RenderPage();
-        cut.Markup.Should().Contain("Deals");
-        cut.Markup.Should().Contain("Deal Pipeline");
-        cut.Markup.Should().Contain("Deal Name");
-        cut.Markup.Should().Contain("pipeline-chart");
+        Assert.Contains("Deals", cut.Markup);
+        Assert.Contains("Deal Pipeline", cut.Markup);
+        Assert.Contains("Deal Name", cut.Markup);
+        Assert.Contains("pipeline-chart", cut.Markup);
     }
 }
 
@@ -101,9 +100,9 @@ public class CasesPageTests : CrmEntityPageTestBase<Cases>
     public void CasesPage_RendersTableHeaders()
     {
         var cut = RenderPage();
-        cut.Markup.Should().Contain("Cases");
-        cut.Markup.Should().Contain("Subject");
-        cut.Markup.Should().Contain("Priority");
+        Assert.Contains("Cases", cut.Markup);
+        Assert.Contains("Subject", cut.Markup);
+        Assert.Contains("Priority", cut.Markup);
     }
 }
 

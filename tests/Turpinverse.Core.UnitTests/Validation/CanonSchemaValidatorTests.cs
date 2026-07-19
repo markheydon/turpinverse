@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Validation;
 
@@ -12,11 +11,10 @@ public class CanonSchemaValidatorTests
     [Fact]
     public async Task Validate_LoadedCanon_PassesJsonSchema()
     {
-        var canon = await _repository.LoadAsync();
+        var canon = await _repository.LoadAsync(TestContext.Current.CancellationToken);
         var violations = CanonSchemaValidator.Validate(canon);
 
-        violations.Should().BeEmpty(
-            because: string.Join("; ", violations.Select(v => v.Message)));
+        Assert.Empty(violations);
     }
 
     [Fact]
@@ -24,7 +22,7 @@ public class CanonSchemaValidatorTests
     {
         var valid = CanonSchemaValidator.TryValidateJson("{not-json", out var violations);
 
-        valid.Should().BeFalse();
-        violations.Should().NotBeEmpty();
+        Assert.False(valid);
+        Assert.NotEmpty(violations);
     }
 }
