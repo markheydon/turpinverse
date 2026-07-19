@@ -3,6 +3,7 @@ title: "Brazier Legal Associates"
 type: "organisations"
 industry: "Legal Services"
 status: "active"
+legalName: "Brazier Legal Associates — Identity Documentation With Impeccable Provenance (Undiscussed)"
 members: ["mary-brazier","margaret-hayes"]
 parent: ""
 ---

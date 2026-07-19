@@ -3,6 +3,7 @@ title: "York Racing Society"
 type: "organisations"
 industry: "Events"
 status: "active"
+legalName: "York Racing Society — Premium Event Management for Select Guest Lists"
 members: ["sarah-thornton"]
 parent: ""
 ---

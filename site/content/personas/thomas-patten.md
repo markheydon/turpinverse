@@ -3,6 +3,8 @@ title: "Thomas Patten"
 type: "personas"
 jobTitle: "Senior Field Operations Officer"
 email: "thomas-patten@turpinverse.demo"
+status: "deceased"
+summary: "Long-serving Essex Solutions operative. Employment concluded following a regulatory review in 1739."
 organisations: ["essex-gang"]
 ---
 

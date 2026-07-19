@@ -27,23 +27,35 @@ public class HugoContentGeneratorTests
             var organisationsDir = Path.Combine(siteRoot, "content", "organisations");
             var timelinePath = Path.Combine(siteRoot, "content", "timeline", "_index.md");
             var organisationsDataPath = Path.Combine(siteRoot, "data", "organisations.json");
+            var eventsDataPath = Path.Combine(siteRoot, "data", "events.json");
 
             Directory.GetFiles(personasDir, "*.md").Should().HaveCount(canon.Personas.Count);
             Directory.GetFiles(organisationsDir, "*.md").Should().HaveCount(canon.Organisations.Count);
             File.Exists(timelinePath).Should().BeTrue();
             File.Exists(organisationsDataPath).Should().BeTrue();
+            File.Exists(eventsDataPath).Should().BeTrue();
 
             var timelineContent = await File.ReadAllTextAsync(timelinePath);
-            timelineContent.Should().Contain("# Turpinverse Timeline");
+            timelineContent.Should().Contain("title: Timeline");
 
             var organisationsJson = await File.ReadAllTextAsync(organisationsDataPath);
             var organisations = JsonSerializer.Deserialize<JsonElement>(organisationsJson);
             organisations.GetArrayLength().Should().Be(canon.Organisations.Count);
 
-            var firstPersona = canon.Personas[0];
-            var personaContent = await File.ReadAllTextAsync(Path.Combine(personasDir, $"{firstPersona.Id}.md"));
-            personaContent.Should().Contain($"title: \"{firstPersona.DisplayName}\"");
-            personaContent.Should().Contain(firstPersona.Biography);
+            var eventsJson = await File.ReadAllTextAsync(eventsDataPath);
+            var events = JsonSerializer.Deserialize<JsonElement>(eventsJson);
+            events.GetArrayLength().Should().Be(canon.Events.Count);
+
+            var turpinPersona = canon.Personas.First(p => p.Id == "dick-turpin");
+            var personaContent = await File.ReadAllTextAsync(Path.Combine(personasDir, "dick-turpin.md"));
+            personaContent.Should().Contain($"title: \"{turpinPersona.DisplayName}\"");
+            personaContent.Should().Contain($"status: \"{turpinPersona.Status}\"");
+            personaContent.Should().Contain("summary:");
+            personaContent.Should().Contain(turpinPersona.Biography);
+
+            var firstOrg = canon.Organisations[0];
+            var orgContent = await File.ReadAllTextAsync(Path.Combine(organisationsDir, $"{firstOrg.Id}.md"));
+            orgContent.Should().Contain("legalName:");
         }
         finally
         {

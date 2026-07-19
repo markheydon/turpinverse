@@ -1,18 +1,29 @@
 {{ define "main" }}
-<article class="organisation">
-  <h1>{{ .Title }}</h1>
-  <p class="meta"><em>{{ .Params.industry }}</em> | {{ .Params.status }}</p>
-  <div class="content">{{ .Content }}</div>
+<article class="organisation post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.legalName }}<p class="legal-name">{{ . }}</p>{{ end }}
+    <p class="card-meta">
+      {{ with .Params.industry }}<em>{{ . }}</em>{{ end }}
+      {{ with .Params.status }}
+      &nbsp;·&nbsp;<span class="status-badge status-{{ . }}">{{ . }}</span>
+      {{ end }}
+    </p>
+  </header>
+
+  <div class="post-content">{{ .Content }}</div>
+
   {{ with .Params.members }}
   <section class="members">
     <h2>Members</h2>
-    <ul>
+    <ul class="chip-list">
       {{ range . }}
-      <li><a href="{{ "/personas/" | relURL }}{{ . }}/">{{ . }}</a></li>
+      <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
       {{ end }}
     </ul>
   </section>
   {{ end }}
+
   {{ partial "org-chart.html" . }}
 </article>
 {{ end }}

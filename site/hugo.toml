@@ -1,9 +1,27 @@
 baseURL = "https://markheydon.github.io/turpinverse/"
 locale = "en-gb"
 title = "Turpinverse"
+theme = "PaperMod"
 publishDir = "../docs"
+
 [params]
-  description = "The Dick Turpin universe for CRM demos"
+  env = "production"
+  description = "The Richard Turpin legend reframed for CRM demos — legend first, ledger second."
+  author = "Turpinverse"
+  defaultTheme = "light"
+  ShowReadingTime = false
+  ShowPostNavLinks = false
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  disableSpecial1stPost = true
+  disableScrollToTop = false
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = false
+
+  [params.label]
+    text = "Turpinverse"
 
 [menu]
   [[menu.main]]
@@ -31,3 +49,6 @@ publishDir = "../docs"
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

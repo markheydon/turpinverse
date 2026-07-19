@@ -19,7 +19,15 @@ Run from the repository root:
 dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 ```
 
-This writes markdown under `site/content/` and `site/data/organisations.json`.
+This writes markdown under `site/content/` and `site/data/organisations.json` and `events.json`.
+
+The site uses the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme as a git submodule at `site/themes/PaperMod`, with Turpinverse brand styling in `assets/css/extended/turpinverse.css`.
+
+After cloning the repository, initialise submodules:
+
+```powershell
+git submodule update --init --recursive
+```
 
 ## 2. Build or preview with a container
 
@@ -82,7 +90,7 @@ Open http://localhost:8080
 
 | Issue | Fix |
 |-------|-----|
-| `module "" not found` / theme error | Remove empty `theme` from `hugo.toml` — this site uses `site/layouts/` only |
+| `module not found` / PaperMod theme error | Run `git submodule update --init --recursive` from the repo root |
 | `statfs .../docs: no such file or directory` | Hugo build failed or was skipped — run `.\scripts\hugo.ps1 build` first; `docs/` is created by Hugo, not checked into git |
 | Empty `docs/` or missing pages | Run the content generator before `hugo build` |
 | `site/content/personas/` is empty | `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` |

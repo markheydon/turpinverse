@@ -3,6 +3,8 @@ title: "John Field"
 type: "personas"
 jobTitle: "Distribution Network Coordinator"
 email: "john-field@turpinverse.demo"
+status: "deceased"
+summary: "Manages last-mile delivery across Hertfordshire parishes. Known for creative routing when standard channels are unavailable."
 organisations: ["essex-gang"]
 ---
 

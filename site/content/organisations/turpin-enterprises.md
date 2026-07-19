@@ -3,6 +3,7 @@ title: "Turpin Enterprises"
 type: "organisations"
 industry: "Consulting"
 status: "active"
+legalName: "Turpin Enterprises International — Strategic Corridor Consultancy Since 1735"
 members: ["dick-turpin","mary-brazier","ned-palmer","black-bess","henry-clayton","catherine-bell"]
 parent: "essex-gang"
 ---

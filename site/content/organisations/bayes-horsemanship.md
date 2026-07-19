@@ -3,6 +3,7 @@ title: "Bayes Horsemanship Academy"
 type: "organisations"
 industry: "Education"
 status: "active"
+legalName: "Bayes Horsemanship Academy — Executive Mobility for Those Who Need to Cover Ground Quickly"
 members: ["richard-bayes"]
 parent: ""
 ---

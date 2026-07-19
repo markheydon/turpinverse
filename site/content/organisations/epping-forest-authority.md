@@ -3,6 +3,7 @@ title: "Epping Forest Authority"
 type: "organisations"
 industry: "Government"
 status: "active"
+legalName: "Epping Forest Authority — Conservation & Unauthorised Procurement Enforcement"
 members: ["william-hargreaves"]
 parent: ""
 ---

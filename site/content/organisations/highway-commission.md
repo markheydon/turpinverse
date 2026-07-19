@@ -3,6 +3,7 @@ title: "Highway Commission"
 type: "organisations"
 industry: "Infrastructure"
 status: "active"
+legalName: "National Highway Commission — Usage-Based Billing & Corridor Risk Management"
 members: ["robert-finch","henry-clayton"]
 parent: ""
 ---

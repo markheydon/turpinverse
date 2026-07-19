@@ -3,6 +3,8 @@ title: "Samuel Gregory"
 type: "personas"
 jobTitle: "Former CEO, Gregory Group (Acquired)"
 email: "samuel-gregory@turpinverse.demo"
+status: "deceased"
+summary: "Founded the Gregory Group before a 1733 merger created Essex Solutions. Specialises in rural procurement with flexible terms."
 organisations: ["essex-gang"]
 ---
 

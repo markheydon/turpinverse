@@ -1,0 +1,25 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>Personas</h1>
+  <p class="section-intro">CRM contacts from the Richard Turpin legend — professional at first glance, playful on second read.</p>
+</header>
+
+<div class="card-grid">
+  {{ range .Pages.ByTitle }}
+  <a class="contact-card" href="{{ .RelPermalink }}">
+    <div class="card-header">
+      <div class="card-avatar">{{ partial "initials.html" .Title }}</div>
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ with .Params.jobTitle }}<p class="card-meta">{{ . }}</p>{{ end }}
+        {{ with .Params.status }}
+        <span class="status-badge status-{{ . }}">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ with .Params.summary }}<p class="card-summary">{{ . }}</p>{{ end }}
+    {{ with .Params.email }}<p class="card-email">{{ . }}</p>{{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

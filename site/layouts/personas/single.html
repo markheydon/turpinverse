@@ -1,14 +1,25 @@
 {{ define "main" }}
-<article class="persona">
-  <h1>{{ .Title }}</h1>
-  <p class="meta"><strong>{{ .Params.jobTitle }}</strong> | {{ .Params.email }}</p>
-  <div class="content">{{ .Content }}</div>
+<article class="persona post-single">
+  <div class="profile-header">
+    <div class="profile-avatar">{{ partial "initials.html" .Title }}</div>
+    <div class="profile-meta">
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.jobTitle }}<p class="profile-title">{{ . }}</p>{{ end }}
+      {{ with .Params.email }}<p class="profile-email">{{ . }}</p>{{ end }}
+      {{ with .Params.status }}
+      <span class="status-badge status-{{ . }}">{{ . }}</span>
+      {{ end }}
+    </div>
+  </div>
+
+  <div class="post-content">{{ .Content }}</div>
+
   {{ with .Params.organisations }}
   <section class="related-orgs">
     <h2>Organisations</h2>
-    <ul>
+    <ul class="chip-list">
       {{ range . }}
-      <li><a href="{{ "/organisations/" | relURL }}{{ . }}/">{{ . }}</a></li>
+      <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
       {{ end }}
     </ul>
   </section>

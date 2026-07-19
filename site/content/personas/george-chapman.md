@@ -3,6 +3,8 @@ title: "George Chapman"
 type: "personas"
 jobTitle: "Fleet Maintenance Engineer"
 email: "george-chapman@turpinverse.demo"
+status: "deceased"
+summary: "Keeps the equine fleet roadworthy. Maintenance schedules are sacred; overdue service tickets are his personal vendetta."
 organisations: ["king-equine-trading"]
 ---
 

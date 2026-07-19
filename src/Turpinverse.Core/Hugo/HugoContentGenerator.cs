@@ -27,12 +27,15 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
 
         foreach (var persona in canon.Personas)
         {
+            var summary = EscapeYaml(ExtractSummary(persona.Biography));
             var content = $"""
                 ---
-                title: "{persona.DisplayName}"
+                title: "{EscapeYaml(persona.DisplayName)}"
                 type: "personas"
-                jobTitle: "{persona.Title.Replace("\"", "\\\"")}"
+                jobTitle: "{EscapeYaml(persona.Title)}"
                 email: "{persona.Email}"
+                status: "{persona.Status}"
+                summary: "{summary}"
                 organisations: {JsonSerializer.Serialize(persona.OrganisationIds)}
                 ---
 
@@ -47,12 +50,14 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
 
         foreach (var org in canon.Organisations)
         {
+            var legalName = org.LegalName ?? string.Empty;
             var content = $"""
                 ---
-                title: "{org.TradingName}"
+                title: "{EscapeYaml(org.TradingName)}"
                 type: "organisations"
-                industry: "{org.Industry}"
+                industry: "{EscapeYaml(org.Industry)}"
                 status: "{org.Status}"
+                legalName: "{EscapeYaml(legalName)}"
                 members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
                 ---
@@ -66,27 +71,17 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 cancellationToken);
         }
 
-        var timelineContent = new StringBuilder();
-        timelineContent.AppendLine("---");
-        timelineContent.AppendLine("title: Timeline");
-        timelineContent.AppendLine("---");
-        timelineContent.AppendLine();
-        timelineContent.AppendLine("# Turpinverse Timeline");
-        timelineContent.AppendLine();
+        var timelineContent = """
+            ---
+            title: Timeline
+            ---
 
-        foreach (var evt in canon.Events.OrderBy(e => e.Date))
-        {
-            timelineContent.AppendLine($"## {evt.Date} — {evt.Title}");
-            timelineContent.AppendLine();
-            timelineContent.AppendLine($"*{evt.Category}* | {evt.Location ?? "Unknown"}");
-            timelineContent.AppendLine();
-            timelineContent.AppendLine(evt.Description);
-            timelineContent.AppendLine();
-        }
+            Key events from the Turpinverse canon — historical fact, Victorian legend, and fictional extension reframed in corporate voice.
 
+            """;
         await File.WriteAllTextAsync(
             Path.Combine(contentDir, "timeline", "_index.md"),
-            timelineContent.ToString(),
+            timelineContent,
             Encoding.UTF8,
             cancellationToken);
 
@@ -95,5 +90,30 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             JsonSerializer.Serialize(canon.Organisations, JsonOptions),
             Utf8NoBom,
             cancellationToken);
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "events.json"),
+            JsonSerializer.Serialize(canon.Events, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
     }
+
+    private static string ExtractSummary(string biography)
+    {
+        foreach (var line in biography.Split('\n'))
+        {
+            var trimmed = line.Trim();
+            if (string.IsNullOrEmpty(trimmed) || trimmed.StartsWith('>'))
+            {
+                continue;
+            }
+
+            return trimmed;
+        }
+
+        return string.Empty;
+    }
+
+    private static string EscapeYaml(string value) =>
+        value.Replace("\\", "\\\\").Replace("\"", "\\\"");
 }

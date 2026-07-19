@@ -3,6 +3,8 @@ title: "Margaret Hayes"
 type: "personas"
 jobTitle: "Accounts Payable Lead"
 email: "margaret-hayes@turpinverse.demo"
+status: "deceased"
+summary: "Keeps Brazier Legal's books in order. Disputed invoices from Q3 advisory services require her reconciliation skills."
 organisations: ["brazier-legal"]
 ---
 
