@@ -4,18 +4,31 @@
 
 **Created**: 2026-07-18
 
-**Status**: Draft
+**Status**: Complete
 
-**Input**: User description: "Turpinverse: a fictional but internally consistent universe centred on the myth of Dick Turpin. The goal is to provide a consistent and realistic completely made set of personas and organisations based on the legend of Richard 'Dick' Turpin and his gang. This Dick Turpin related universe should be based on the details documented in the Wikipedia page Dick Turpin. The universe created will be used to fuel sample data for business applications for demo purposes. Applications such as CRMs used for Sales or Customer Services for example will get generated from the data. Therefore it should be expected that data suitable for that kind of scenario will need to be generated so contacts, organisations, cases, deals, etc. The made up characters and organisations should be humorous in a tongue-in-cheek kind of a way. The idea being anybody see the data will instantly recognise the characters used in a semi-professional manner but still be able to bring a smirk to their face understanding the play on the myth that is being portrayed."
+**Input**: User description: "Turpinverse: a fictional but internally consistent universe centred on the myth of Dick Turpin. The goal is to provide a consistent and realistic completely made set of personas and organisations based on the legend of Richard 'Dick' Turpin and his gang. This Dick Turpin related universe should be inspired by — not transcribed from — the historical record and folklore surrounding Turpin. The universe created will be used to fuel sample data for business applications for demo purposes. Applications such as CRMs used for Sales or Customer Services for example will get generated from the data. Therefore it should be expected that data suitable for that kind of scenario will need to be generated so contacts, organisations, cases, deals, etc. The made up characters and organisations should be humorous in a tongue-in-cheek kind of a way. The idea being anybody see the data will instantly recognise the characters used in a semi-professional manner but still be able to bring a smirk to their face understanding the play on the myth that is being portrayed."
+
+## Creative Universe Rules
+
+These conventions govern all Turpinverse content. They take precedence over historical accuracy.
+
+1. **Legend first, ledger second** — The smirk comes before the footnote. Biographies lead with the modern reframe or witty hook; period detail is optional colour.
+2. **Modern names** — Display names should feel like 2026 LinkedIn, not 1739 parish records. Use contemporary-sounding names (`Richard Turpin`, not `Dick Turpin`). Stable `id` slugs are preserved for data integrity; `displayName`, emails, and user-facing titles reflect the modern persona.
+3. **Alias humour** — Alternate identities are separate CRM contacts or flagged aliases. Doubles and collisions (e.g. John Palmer vs Ned Palmer) are a feature, not a bug.
+4. **Title wordplay** — Job titles do the heavy lifting. Pattern: corporate euphemism + period nod (e.g. "Identity Management Consultant", "Chief Transport Asset").
+5. **Organisation personality** — Every organisation has a tagline-quality `legalName` or description punchline, not just "Premium X Services".
+6. **Deal and case voice** — Ticket subjects sound like real helpdesk entries that only make sense if you know the legend.
+7. **Victorian myth is fair game** — Romanticised additions (Black Bess overnight ride, Ainsworth romance) are in-universe marketing lore, not errors.
+8. **Euphemism over explicitness** — Prefer corporate jargon ("rapid asset redistribution", "corridor optimisation") over overt criminal language.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Establish the Turpinverse Canon (Priority: P1)
 
-A product demonstrator or developer needs a coherent fictional universe grounded in the
-historical Dick Turpin legend so that all future sample data shares the same characters,
+A product demonstrator or developer needs a coherent fictional universe inspired by the
+Dick Turpin legend so that all future sample data shares the same characters,
 organisations, timeline, and tone. They browse the canon reference and can identify who
-the key personas are, which organisations exist, how they relate, and what historical
+the key personas are, which organisations exist, how they relate, and what legendary
 events anchor the fiction.
 
 **Why this priority**: Without a shared canon, generated CRM data would be inconsistent
@@ -29,18 +42,18 @@ explicit consistency rules — without requiring any CRM records to exist yet.
 **Acceptance Scenarios**:
 
 1. **Given** no prior Turpinverse content exists, **When** the canon is published,
-   **Then** it defines named personas drawn from Wikipedia-documented figures (e.g., Dick
+   **Then** it defines named personas drawn from Turpin legend and folklore (e.g., Richard
    Turpin, Elizabeth Millington, Essex Gang members, Matthew King, Mary Brazier) plus
    plausible fictional extensions.
 2. **Given** a reader familiar with the Dick Turpin legend, **When** they review persona
    entries, **Then** they can identify the historical inspiration within 30 seconds per
-   character.
+   character and experience at least one moment of recognition per flagship persona.
 3. **Given** two personas in the canon, **When** a reader checks their relationship
    entries, **Then** no contradictory affiliations, dates, or locations appear.
-4. **Given** the Wikipedia article on Dick Turpin, **When** a reviewer cross-checks major
-   canon events (Essex Gang raids, alias John Palmer, York trial, Knavesmire execution),
-   **Then** the canon does not contradict documented historical facts, only extends them
-   fictionally.
+4. **Given** a reviewer familiar with English highwayman folklore, **When** they scan the
+   canon timeline, **Then** they recognise legendary events (Essex Gang raids, John Palmer
+   alias, York trial, Black Bess ride) reframed in Turpinverse voice without needing to
+   cross-check a source article.
 
 ---
 
@@ -113,9 +126,8 @@ records at least 3/5 on "would use in a client demo" professionalism.
   Wheeler)? The canon MUST provide a plausible fictional biography clearly marked as
   extension, not historical fact.
 - How does the system handle contradictory myth versions (e.g., Ainsworth's Black Bess
-  ride vs. historical record)? The canon MUST adopt the Wikipedia-sourced history as
-  primary and treat romanticised myths (Black Bess overnight ride) as in-universe legend
-  or folklore, not as factual timeline events.
+  ride vs. historical record)? The canon treats romanticised myths (Black Bess overnight
+  ride) as in-universe legend or marketing lore, not as factual timeline events.
 - What happens when CRM field length limits truncate a humorous organisation name?
   Records MUST include a short display name and a longer description so humour survives
   truncation.
@@ -131,15 +143,14 @@ records at least 3/5 on "would use in a client demo" professionalism.
 
 - **FR-001**: The system MUST maintain a Turpinverse canon document defining personas,
   organisations, locations, timeline events, and consistency rules.
-- **FR-002**: The canon MUST anchor all major personas and events to the historical
-  record of Richard Turpin as documented on Wikipedia, distinguishing historical fact
-  from fictional extension.
-- **FR-003**: The canon MUST include at least 15 named personas covering Dick Turpin,
+- **FR-002**: The canon MUST be recognisably Turpinverse and internally consistent;
+  it MAY freely compress, reorder, or embellish history for humour and narrative effect.
+- **FR-003**: The canon MUST include at least 15 named personas covering Richard Turpin,
   his associates (Essex Gang, highwaymen allies), antagonists (keepers, magistrates),
   and key supporting figures (e.g., Elizabeth Millington, Mary Brazier, Richard Bayes).
 - **FR-004**: The canon MUST include at least 8 organisations with humorous
   tongue-in-cheek business equivalents (e.g., coaching inns, fencing operations, assize
-  courts, horse-trading ventures) mapped to their historical inspirations.
+  courts, horse-trading ventures) mapped to their legendary inspirations.
 - **FR-005**: The system MUST generate sample CRM datasets comprising contacts,
   organisations (accounts), deals (opportunities), and cases (support tickets).
 - **FR-006**: Every generated CRM record MUST reference a canon persona or organisation
@@ -157,8 +168,8 @@ records at least 3/5 on "would use in a client demo" professionalism.
   and linked contact/account, themed around Turpinverse disputes and incidents.
 - **FR-011**: The system MUST publish tone and humour guidelines specifying how
   tongue-in-cheek references are applied without breaking demo professionalism.
-- **FR-012**: The system MUST provide a cross-reference index linking historical names
-  to their Turpinverse CRM equivalents (e.g., "John Palmer" → Dick Turpin's alias
+- **FR-012**: The system MUST provide a cross-reference index linking legendary names
+  to their Turpinverse CRM equivalents (e.g., "John Palmer" → Richard Turpin's alias
   account).
 - **FR-013**: Generated datasets MUST be internally consistent: no orphan foreign-key
   relationships, no contradictory dates, and no duplicate identities unless explicitly
@@ -168,7 +179,7 @@ records at least 3/5 on "would use in a client demo" professionalism.
 
 ### Key Entities
 
-- **Persona**: A character in Turpinverse with historical anchor, fictional biography
+- **Persona**: A character in Turpinverse with legend basis, fictional biography
   extension, aliases, affiliations, and CRM-suitable identity attributes (title, role,
   temperament).
 - **Organisation**: A group, business, institution, or gang reframed as a demo-ready
@@ -181,15 +192,16 @@ records at least 3/5 on "would use in a client demo" professionalism.
 - **Deal**: A CRM opportunity record representing a commercial transaction or pursuit
   between accounts and contacts.
 - **Case**: A CRM support ticket record representing a dispute, inquiry, or incident.
-- **Alias Map**: A mapping of alternate identities (e.g., John Palmer, Richard Turpin)
+- **Alias Map**: A mapping of alternate identities (e.g., John Palmer, Richard Palmer)
   to a single canonical persona for deduplication in demos.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Reviewers can identify the historical inspiration for any of 10 randomly
-  selected personas within 30 seconds each.
+- **SC-001**: Reviewers can identify the legendary inspiration for any of 10 randomly
+  selected personas within 30 seconds each, and at least 7 of 10 elicit a smile or
+  explicit recognition comment.
 - **SC-002**: 100% of generated CRM records pass an automated cross-reference check
   against the canon with zero orphan references.
 - **SC-003**: At least 80% of demo reviewers (minimum 3 reviewers) rate sample records
@@ -206,9 +218,10 @@ records at least 3/5 on "would use in a client demo" professionalism.
 
 - The primary audience is English-speaking demo presenters and developers working with
   CRM products (Sales and Customer Service scenarios).
-- Wikipedia's Dick Turpin article is the authoritative historical baseline; romanticised
-  Victorian additions (e.g., the Black Bess ride) are treated as in-universe folklore,
-  not historical fact.
+- The Dick Turpin legend and Victorian folklore are research inputs, not output templates;
+  Wikipedia and historical sources inform inspiration but are not transcribed verbatim.
+- Romanticised Victorian additions (e.g., the Black Bess ride) are treated as in-universe
+  marketing lore, not historical fact.
 - Initial release is English-only; no localisation is required.
 - Humour targets a tongue-in-cheek, semi-professional register — witty allusions rather
   than overt comedy or crude humour.

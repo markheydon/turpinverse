@@ -1,0 +1,12 @@
+{
+  "name": "turpinverse-web",
+  "private": true,
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i Styles/app.css -o wwwroot/css/app.min.css --minify",
+    "watch:css": "npx @tailwindcss/cli -i Styles/app.css -o wwwroot/css/app.min.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

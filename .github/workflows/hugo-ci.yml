@@ -1,0 +1,11 @@
+name: Hugo CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  hugo:
+    uses: ./.github/workflows/hugo-build.yml
+    with:
+      deploy: false

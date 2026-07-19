@@ -1,0 +1,130 @@
+[
+  {
+    "id": "essex-gang",
+    "tradingName": "Essex Solutions Group",
+    "legalName": "Essex Solutions Group Ltd — Integrated Rural Procurement (Terms Flexible)",
+    "description": "Consolidated operations group specialising in rural procurement, corridor management, and unconventional asset redistribution across Essex and Hertfordshire.",
+    "industry": "Logistics",
+    "historicalAnchor": "Essex Gang legend — Gregory Gang merger and highway operations",
+    "memberPersonaIds": [
+      "dick-turpin", "elizabeth-millington", "samuel-gregory", "matthew-king",
+      "john-wheeler", "thomas-patten", "john-field", "joseph-bryant",
+      "john-king", "thomas-morris", "thomas-collier", "edward-grant"
+    ],
+    "foundedYear": 1730,
+    "status": "dissolved",
+    "website": "https://essex-gang.turpinverse.uk"
+  },
+  {
+    "id": "turpin-enterprises",
+    "tradingName": "Turpin Enterprises",
+    "legalName": "Turpin Enterprises International — Strategic Corridor Consultancy Since 1735",
+    "description": "Flagship consultancy offering route optimisation, identity lifecycle management, and enterprise transport solutions. Post-merger growth driven by aggressive corridor strategy.",
+    "industry": "Consulting",
+    "historicalAnchor": "Turpin legend — career overview and Yorkshire fugitive operations",
+    "parentOrganisationId": "essex-gang",
+    "memberPersonaIds": [
+      "dick-turpin", "mary-brazier", "ned-palmer", "black-bess",
+      "henry-clayton", "catherine-bell"
+    ],
+    "foundedYear": 1735,
+    "status": "active",
+    "website": "https://turpin-enterprises.turpinverse.uk"
+  },
+  {
+    "id": "millington-inn",
+    "tradingName": "Rose & Crown Hospitality",
+    "legalName": "Rose & Crown Hospitality Group — Where Discretion Is Part of the Room Rate",
+    "description": "Historic coaching inn providing premium accommodation, intelligence services, and a loyalty programme that rewards guests who ask no questions.",
+    "industry": "Hospitality",
+    "historicalAnchor": "Turpin legend — Rose and Crown, Hempstead",
+    "memberPersonaIds": ["elizabeth-millington", "anna-ward"],
+    "foundedYear": 1720,
+    "status": "active",
+    "website": "https://millington-inn.turpinverse.uk"
+  },
+  {
+    "id": "york-assize-court",
+    "tradingName": "York Due Diligence Partners",
+    "legalName": "York Due Diligence Partners — We Always Find the Horse in the Transaction",
+    "description": "Premier regulatory institution providing trial services, compliance auditing, and contract termination proceedings. Thoroughness is our trademark.",
+    "industry": "Legal Services",
+    "historicalAnchor": "Turpin legend — York Assize trial and conviction",
+    "memberPersonaIds": ["james-smith"],
+    "foundedYear": 1700,
+    "status": "active",
+    "website": "https://york-assize-court.turpinverse.uk"
+  },
+  {
+    "id": "king-equine-trading",
+    "tradingName": "King Equine Partners",
+    "legalName": "King Equine Partners — Acquisition Velocity Unmatched Since 1737",
+    "description": "Specialist equine trading house offering rapid acquisition, fleet maintenance, and disputed mileage reconciliation services.",
+    "industry": "Equine Trade",
+    "historicalAnchor": "Turpin legend — horse theft operations with Matthew King",
+    "memberPersonaIds": ["matthew-king", "george-chapman", "black-bess"],
+    "foundedYear": 1734,
+    "status": "dissolved",
+    "website": "https://king-equine-trading.turpinverse.uk"
+  },
+  {
+    "id": "brazier-legal",
+    "tradingName": "Brazier Legal Associates",
+    "legalName": "Brazier Legal Associates — Identity Documentation With Impeccable Provenance (Undiscussed)",
+    "description": "Boutique legal practice specialising in alias lifecycle management, Yorkshire relocation packages, and compliance advisory for clients starting fresh.",
+    "industry": "Legal Services",
+    "historicalAnchor": "Turpin legend — Yorkshire legal associates and John Palmer alias",
+    "memberPersonaIds": ["mary-brazier", "margaret-hayes"],
+    "foundedYear": 1736,
+    "status": "active",
+    "website": "https://brazier-legal.turpinverse.uk"
+  },
+  {
+    "id": "bayes-horsemanship",
+    "tradingName": "Bayes Horsemanship Academy",
+    "legalName": "Bayes Horsemanship Academy — Executive Mobility for Those Who Need to Cover Ground Quickly",
+    "description": "Premier riding academy offering advanced horsemanship certification for executives with time-sensitive travel requirements.",
+    "industry": "Education",
+    "historicalAnchor": "Turpin legend — Richard Bayes riding instruction",
+    "memberPersonaIds": ["richard-bayes"],
+    "foundedYear": 1730,
+    "status": "active",
+    "website": "https://bayes-horsemanship.turpinverse.uk"
+  },
+  {
+    "id": "york-racing-society",
+    "tradingName": "York Racing Society",
+    "legalName": "York Racing Society — Premium Event Management for Select Guest Lists",
+    "description": "Exclusive society organising race meetings, social gatherings, and premium hospitality events. Guest lists are curated; catering orders are not.",
+    "industry": "Events",
+    "historicalAnchor": "York race meetings — 18th-century social calendar",
+    "memberPersonaIds": ["sarah-thornton"],
+    "foundedYear": 1730,
+    "status": "active",
+    "website": "https://york-racing-society.turpinverse.uk"
+  },
+  {
+    "id": "epping-forest-authority",
+    "tradingName": "Epping Forest Authority",
+    "legalName": "Epping Forest Authority — Conservation & Unauthorised Procurement Enforcement",
+    "description": "Forest management authority responsible for conservation, poaching enforcement, and sector-level patrol operations. Sector 7 is a priority.",
+    "industry": "Government",
+    "historicalAnchor": "Epping Forest legend — poaching crackdowns",
+    "memberPersonaIds": ["william-hargreaves"],
+    "foundedYear": 1700,
+    "status": "active",
+    "website": "https://epping-forest-authority.turpinverse.uk"
+  },
+  {
+    "id": "highway-commission",
+    "tradingName": "Highway Commission",
+    "legalName": "National Highway Commission — Usage-Based Billing & Corridor Risk Management",
+    "description": "Turnpike trust consortium managing road infrastructure, automated toll collection, and transport risk assessment. Billing disputes are frequent.",
+    "industry": "Infrastructure",
+    "historicalAnchor": "Turnpike trusts — toll infrastructure and trade route risk",
+    "memberPersonaIds": ["robert-finch", "henry-clayton"],
+    "foundedYear": 1700,
+    "status": "active",
+    "website": "https://highway-commission.turpinverse.uk"
+  }
+]

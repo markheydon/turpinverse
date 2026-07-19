@@ -1,0 +1,60 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+TestResults/
+*.DotSettings.user
+
+## Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+## Hugo
+site/resources/
+site/public/
+.hugo_build.lock
+
+## IDE
+.vs/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+## OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+## Environment
+.env
+.env.*
+!.env.example
+
+## Build output
+dist/
+build/
+*.log
+*.tmp
+
+## Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+## Docs (generated locally; CI commits to docs/)
+docs/

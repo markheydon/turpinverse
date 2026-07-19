@@ -1,0 +1,15 @@
+@page "/deals"
+@rendermode InteractiveServer
+
+<PageTitle>Deals - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="deals"
+                 Columns="@DealsColumns"
+                 ShowPipelineChart="true" />
+
+@code {
+    private static readonly string[] DealsColumns =
+    [
+        "dealName", "stage", "amount", "closeDate", "accountId"
+    ];
+}

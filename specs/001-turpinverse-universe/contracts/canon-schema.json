@@ -2,9 +2,18 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://turpinverse.dev/schemas/canon/v1",
   "title": "Turpinverse Canon",
-  "description": "Canonical universe data schema for personas, organisations, events, and aliases",
+  "description": "Canonical universe data schema for personas, organisations, events, aliases, deals, and cases",
   "type": "object",
-  "required": ["version", "personas", "organisations", "events", "aliases", "toneGuidelines"],
+  "required": [
+    "version",
+    "personas",
+    "organisations",
+    "events",
+    "aliases",
+    "toneGuidelines",
+    "deals",
+    "cases"
+  ],
   "properties": {
     "version": {
       "type": "string",
@@ -13,12 +22,12 @@
     },
     "personas": {
       "type": "array",
-      "minItems": 15,
+      "minItems": 25,
       "items": { "$ref": "#/$defs/Persona" }
     },
     "organisations": {
       "type": "array",
-      "minItems": 8,
+      "minItems": 10,
       "items": { "$ref": "#/$defs/Organisation" }
     },
     "events": {
@@ -31,7 +40,17 @@
       "minItems": 1,
       "items": { "$ref": "#/$defs/AliasMap" }
     },
-    "toneGuidelines": { "$ref": "#/$defs/ToneGuidelines" }
+    "toneGuidelines": { "$ref": "#/$defs/ToneGuidelines" },
+    "deals": {
+      "type": "array",
+      "minItems": 20,
+      "items": { "$ref": "#/$defs/Deal" }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 15,
+      "items": { "$ref": "#/$defs/Case" }
+    }
   },
   "$defs": {
     "slug": {
@@ -48,15 +67,15 @@
       ],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
-        "displayName": { "type": "string", "maxLength": 100 },
-        "historicalName": { "type": "string", "maxLength": 100 },
+        "displayName": { "type": "string", "maxLength": 100, "description": "Modern user-facing name (e.g. Richard Turpin, not Dick Turpin)" },
+        "historicalName": { "type": "string", "maxLength": 100, "description": "Legendary or historical inspiration name" },
         "aliases": {
           "type": "array",
           "items": { "type": "string", "maxLength": 100 }
         },
         "title": { "type": "string", "maxLength": 80 },
         "biography": { "type": "string" },
-        "historicalAnchor": { "type": "string" },
+        "historicalAnchor": { "type": "string", "description": "Legend inspiration note — not a Wikipedia citation" },
         "isFictionalExtension": { "type": "boolean" },
         "temperament": { "type": "string", "maxLength": 200 },
         "organisationIds": {
@@ -72,7 +91,7 @@
         },
         "email": {
           "type": "string",
-          "pattern": "^[a-z0-9.-]+@turpinverse\\.demo$"
+          "pattern": "^[a-z0-9.-]+@turpinverse\\.uk$"
         },
         "phone": { "type": "string", "maxLength": 30 },
         "notes": { "type": "string", "maxLength": 500 }
@@ -90,7 +109,7 @@
         "legalName": { "type": "string", "maxLength": 200 },
         "description": { "type": "string", "maxLength": 500 },
         "industry": { "type": "string", "maxLength": 60 },
-        "historicalAnchor": { "type": "string" },
+        "historicalAnchor": { "type": "string", "description": "Legend or folklore inspiration note" },
         "parentOrganisationId": { "$ref": "#/$defs/slug" },
         "memberPersonaIds": {
           "type": "array",
@@ -105,7 +124,7 @@
         "website": {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://[a-z0-9.-]+\\.turpinverse\\.demo$"
+          "pattern": "^https://[a-z0-9.-]+\\.turpinverse\\.uk$"
         }
       }
     },
@@ -170,6 +189,47 @@
           "type": "array",
           "items": { "type": "string" }
         }
+      }
+    },
+    "Deal": {
+      "type": "object",
+      "required": [
+        "dealId", "dealName", "accountId", "contactId", "stage", "amount", "closeDate", "description"
+      ],
+      "properties": {
+        "dealId": { "type": "string" },
+        "dealName": { "type": "string", "maxLength": 120 },
+        "accountId": { "$ref": "#/$defs/slug" },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "stage": {
+          "type": "string",
+          "enum": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
+        },
+        "amount": { "type": "number", "minimum": 0 },
+        "closeDate": { "type": "string", "format": "date" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "Case": {
+      "type": "object",
+      "required": [
+        "caseId", "subject", "description", "status", "priority", "contactId", "accountId"
+      ],
+      "properties": {
+        "caseId": { "type": "string" },
+        "subject": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "status": {
+          "type": "string",
+          "enum": ["New", "In Progress", "On Hold", "Resolved", "Closed"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["Low", "Medium", "High", "Critical"]
+        },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "accountId": { "$ref": "#/$defs/slug" },
+        "relatedEventId": { "$ref": "#/$defs/slug" }
       }
     }
   }

@@ -17,10 +17,9 @@ in `tasks.md`; this document defines runnable scenarios and expected outcomes.
 ## Local Development Setup
 
 ```powershell
-# Clone and checkout feature branch
+# Clone repository
 git clone https://github.com/<org>/turpinverse.git
 cd turpinverse
-git checkout 001-turpinverse-universe
 
 # Restore .NET solution
 dotnet restore
@@ -62,13 +61,22 @@ Proves the documentation site builds and contains hyperlinked canon content.
 
 ```powershell
 # Generate Hugo content from canon JSON
-dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
+dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 
-# Build Hugo site to docs/
+# Build Hugo site to docs/ (local Hugo install)
 cd site
 hugo --minify
 cd ..
 ```
+
+**Without Hugo installed** (Docker / Podman — recommended on Windows):
+
+```powershell
+.\scripts\Invoke-HugoSite.ps1 build
+# or live preview: .\scripts\Invoke-HugoSite.ps1 serve
+```
+
+See [site/README.md](../../../site/README.md) for container commands and troubleshooting.
 
 **Expected outcomes**:
 - ✅ `docs/index.html` exists
@@ -89,9 +97,9 @@ Proves User Story 2 — CRM-ready datasets export with intact cross-references.
 dotnet run --project src/Turpinverse.AppHost
 ```
 
-1. Navigate to the export dashboard in the Blazor app.
-2. Select **Contacts** and click **Download CSV**.
-3. Repeat for **Accounts**, **Deals**, and **Cases**.
+1. Open the Blazor app home page (`/`).
+2. Navigate to **Contacts** (`/contacts`) and click **Download CSV**.
+3. Repeat for **Accounts** (`/accounts`), **Deals** (`/deals`), and **Cases** (`/cases`).
 
 **Expected outcomes**:
 - ✅ Each CSV downloads with UTF-8 BOM header row
@@ -121,12 +129,12 @@ a record in accounts/contacts exports.
 
 Proves Chart.js integration and demo-presenter UX.
 
-1. Open the Blazor export dashboard.
-2. View the deal pipeline chart and dataset summary chart.
+1. Open the Blazor home page (`/`) and confirm the dataset summary doughnut chart.
+2. Navigate to **Deals** (`/deals`) and view the deal pipeline bar chart.
 
 **Expected outcomes**:
-- ✅ Bar chart shows deal counts per stage
-- ✅ Summary chart shows entity counts (personas, orgs, deals, cases)
+- ✅ Summary chart on home shows entity counts (accounts, contacts, deals, cases)
+- ✅ Pipeline chart on deals page shows deal counts per stage
 - ✅ Lucide icons render on navigation and action buttons
 - ✅ Tailwind styling applied (no unstyled HTML)
 
@@ -158,14 +166,17 @@ cd site && hugo --minify && cd ..
 
 ## GitHub Pages Deployment
 
-On push to `main`, the `hugo-pages.yml` workflow:
+**Hugo CI** (`hugo-ci.yml`) validates the site on pull requests to `main`:
+canon validation, content generation, and Hugo build — no deploy.
+
+**Hugo Deploy** (`hugo-deploy.yml`) publishes to `docs/` on push to `main` or via manual
+**workflow_dispatch** in the Actions tab:
 1. Runs canon validation tests
 2. Generates Hugo content from canon JSON
 3. Builds Hugo to `docs/`
-4. Deploys to GitHub Pages
+4. Commits and pushes `docs/` for GitHub Pages
 
-**Verify**: Visit `https://<org>.github.io/turpinverse/` and confirm the site loads with
-canon content.
+**Verify**: Visit `https://turpinverse.uk` and confirm the site loads with canon content.
 
 ## Troubleshooting
 
@@ -177,7 +188,8 @@ canon content.
 | Tailwind styles missing | Run `npm run build:css` in `Turpinverse.Web` before `dotnet run` |
 | Aspire dashboard empty | Ensure `Turpinverse.AppHost` references `Turpinverse.Web` project |
 
-## Next Steps
+## Feature Complete
 
-After all scenarios pass, proceed to `/speckit-tasks` to generate the implementation
-task list, then `/speckit-implement` to build the solution.
+All validation scenarios above pass. The `001-turpinverse-universe` feature is implemented
+and documented. For ongoing changes, follow the repository contribution guidelines in
+[README.md](../../../README.md).

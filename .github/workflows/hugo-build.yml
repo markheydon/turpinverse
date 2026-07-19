@@ -1,0 +1,55 @@
+name: Hugo Build
+
+on:
+  workflow_call:
+    inputs:
+      deploy:
+        description: Commit and push built site to docs/
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.164.0'
+          extended: true
+
+      - name: Validate canon
+        run: dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation" --configuration Release
+
+      - name: Generate Hugo content
+        run: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent --configuration Release
+
+      - name: Build Hugo site
+        run: hugo --minify
+        working-directory: site
+
+      - name: Deploy to docs/
+        if: inputs.deploy
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --staged --quiet || git commit -m "Deploy Hugo site to docs/"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            if [ "$attempt" -eq 3 ]; then
+              echo "Deploy push failed after 3 attempts"
+              exit 1
+            fi
+            sleep 5
+          done

@@ -1,0 +1,468 @@
+/* Turpinverse brand overlay — matches Blazor export dashboard tokens */
+
+:root {
+  --turpin-amber: #d97706;
+  --turpin-amber-light: #fef3c7;
+  --turpin-slate: #1e293b;
+  --turpin-cream: #fef3c7;
+  --turpin-border: #e2e8f0;
+  --theme: var(--turpin-cream);
+  --entry: #ffffff;
+  --primary: var(--turpin-slate);
+  --secondary: #64748b;
+  --tertiary: #94a3b8;
+  --content: var(--turpin-slate);
+  --hljs-bg: #f8fafc;
+  --border: var(--turpin-border);
+  --code-bg: #f1f5f9;
+  --code-block-bg: #f8fafc;
+}
+
+.dark {
+  --theme: #0f172a;
+  --entry: #1e293b;
+  --primary: #f1f5f9;
+  --secondary: #94a3b8;
+  --turpin-cream: #1e293b;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.post-title,
+h1 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* Homepage hero */
+.turpin-hero {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, var(--turpin-cream) 0%, #fff 50%, var(--turpin-amber-light) 100%);
+  border-radius: 0.75rem;
+  border: 1px solid var(--turpin-border);
+}
+
+.turpin-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--turpin-slate);
+}
+
+.turpin-tagline {
+  font-size: 1.15rem;
+  color: var(--turpin-amber);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+
+.turpin-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.turpin-stat {
+  text-align: center;
+}
+
+.turpin-stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--turpin-amber);
+}
+
+.turpin-stat-label {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.turpin-quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.turpin-quick-link {
+  display: block;
+  padding: 1.25rem;
+  background: var(--entry);
+  border: 2px solid var(--turpin-border);
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: var(--primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.turpin-quick-link:hover {
+  border-color: var(--turpin-amber);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+}
+
+.turpin-quick-link strong {
+  display: block;
+  color: var(--turpin-amber);
+  margin-bottom: 0.25rem;
+}
+
+/* CRM card grids */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.contact-card,
+.account-card {
+  display: block;
+  padding: 1.25rem;
+  background: var(--entry);
+  border: 2px solid var(--turpin-border);
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.contact-card:hover,
+.account-card:hover {
+  border-color: var(--turpin-amber);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.12);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-avatar {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--turpin-amber);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0;
+  color: var(--primary);
+}
+
+.card-meta {
+  font-size: 0.875rem;
+  color: var(--secondary);
+  margin: 0.25rem 0;
+}
+
+.card-summary {
+  font-size: 0.875rem;
+  color: var(--secondary);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-email {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--turpin-amber);
+  margin-top: 0.5rem;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-active { background: #dcfce7; color: #166534; }
+.status-deceased { background: #f1f5f9; color: #475569; }
+.status-legend { background: #fef3c7; color: #92400e; }
+.status-archived { background: #e0e7ff; color: #3730a3; }
+.status-dissolved { background: #fee2e2; color: #991b1b; }
+
+.category-badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.category-historical { background: #f1f5f9; color: #475569; }
+.category-legend { background: #fef3c7; color: #92400e; }
+.category-fictional { background: #e0e7ff; color: #3730a3; }
+
+/* Contact / account profile pages */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--turpin-border);
+}
+
+.profile-avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--turpin-amber);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.profile-meta h1 {
+  margin: 0 0 0.25rem;
+}
+
+.profile-title {
+  color: var(--turpin-amber);
+  font-weight: 500;
+  margin: 0.25rem 0;
+}
+
+.profile-email {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9rem;
+  color: var(--secondary);
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: var(--turpin-amber-light);
+  border: 1px solid var(--turpin-amber);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--turpin-slate);
+  transition: background 0.2s;
+}
+
+.chip:hover {
+  background: var(--turpin-amber);
+  color: white;
+}
+
+.legal-name {
+  font-style: italic;
+  color: var(--secondary);
+  font-size: 0.95rem;
+  margin: 0.5rem 0 1rem;
+}
+
+/* Timeline */
+.timeline-list {
+  position: relative;
+  padding-left: 2rem;
+  margin: 2rem 0;
+  border-left: 3px solid var(--turpin-amber);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -2.45rem;
+  top: 0.35rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--turpin-amber);
+  border: 2px solid var(--entry);
+}
+
+.timeline-date {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  background: var(--turpin-amber-light);
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--turpin-amber);
+  margin-bottom: 0.5rem;
+}
+
+.timeline-item h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.timeline-location {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  margin: 0.25rem 0 0.5rem;
+}
+
+.timeline-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--content);
+}
+
+/* Org chart */
+.org-chart {
+  margin: 2rem 0;
+  padding: 1.25rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.org-chart h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.org-tree {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.org-tree li {
+  margin: 0.5rem 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--turpin-amber);
+}
+
+.org-tree ul {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin: 0.25rem 0;
+}
+
+.org-tree a {
+  color: var(--turpin-amber);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.org-tree a:hover {
+  text-decoration: underline;
+}
+
+.section-intro {
+  color: var(--secondary);
+  margin-bottom: 1.5rem;
+}
+
+.export-section {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.export-section h2 {
+  margin-top: 0;
+}
+
+/* Organisation page sections */
+.org-section {
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.org-section h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.org-section .mermaid {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.org-section .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.member-legend {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--turpin-border);
+}
+
+.org-history-timeline {
+  margin-top: 1rem;
+}
+
+.org-history-timeline .timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.turpin-welcome {
+  margin: 0 0 2rem;
+  padding: 1.5rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+  line-height: 1.6;
+}
+
+.turpin-welcome h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+.turpin-welcome p:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,34 @@
+@inject IJSRuntime JS
+
+<div class="chart-container">
+    <h3>Dataset Summary</h3>
+    <canvas @ref="canvasRef" id="@CanvasId"></canvas>
+</div>
+
+@code {
+    [Parameter] public Dictionary<string, int>? Counts { get; set; }
+    [Parameter] public string CanvasId { get; set; } = "summary-chart";
+
+    private ElementReference canvasRef;
+    private string? lastRenderedSignature;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Counts is null)
+        {
+            return;
+        }
+
+        var signature = string.Join('|', Counts.OrderBy(pair => pair.Key).Select(pair => $"{pair.Key}:{pair.Value}"));
+        if (signature == lastRenderedSignature)
+        {
+            return;
+        }
+
+        lastRenderedSignature = signature;
+        await JS.InvokeVoidAsync("chartInterop.renderDoughnutChart", CanvasId,
+            Counts.Keys.ToArray(),
+            Counts.Values.ToArray());
+    }
+}
+

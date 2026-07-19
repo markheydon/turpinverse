@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Turpinverse.AppHost/Turpinverse.AppHost.csproj" />
+    <Project Path="src/Turpinverse.Core/Turpinverse.Core.csproj" />
+    <Project Path="src/Turpinverse.Data/Turpinverse.Data.csproj" />
+    <Project Path="src/Turpinverse.ServiceDefaults/Turpinverse.ServiceDefaults.csproj" />
+    <Project Path="src/Turpinverse.Tools.GenerateHugoContent/Turpinverse.Tools.GenerateHugoContent.csproj" />
+    <Project Path="src/Turpinverse.Web/Turpinverse.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Turpinverse.Core.UnitTests/Turpinverse.Core.UnitTests.csproj" />
+    <Project Path="tests/Turpinverse.IntegrationTests/Turpinverse.IntegrationTests.csproj" />
+    <Project Path="tests/Turpinverse.Web.UnitTests/Turpinverse.Web.UnitTests.csproj" />
+  </Folder>
+</Solution>

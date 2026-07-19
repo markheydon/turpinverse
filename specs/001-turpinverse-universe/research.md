@@ -33,7 +33,11 @@ for OSS repos.
 
 ## 3. Hugo Content Generation from Canon
 
-**Decision**: A `tools/generate-hugo-content` console tool reads canon JSON and emits:
+**Revision (2026-07-19)**: Original research placed the CLI under `tools/generate-hugo-content/`.
+Consolidated into `src/` with generation logic extracted to `Turpinverse.Core.Hugo.HugoContentGenerator`,
+matching the CSV export layering pattern (`IExportService` in Core, thin CLI host in `src/`).
+
+**Decision**: `src/Turpinverse.Tools.GenerateHugoContent` console tool (backed by `HugoContentGenerator` in Core) reads canon JSON and emits:
 - Markdown pages under `site/content/personas/`, `site/content/organisations/`
 - Data files under `site/data/` for org-chart and timeline partials
 - Cross-link front matter (`aliases`, `related`) for hyperlinked navigation
@@ -152,8 +156,26 @@ is standard for sample-data/demo projects.
   JSON to CSV bytes; Hugo content generator output structure.
 
 **Rationale**: Constitution Principle III requires failing-first tests for export contracts
-and schema validation. bUnit is the standard Blazor testing library.
+and schema validation. bUnit is the standard Blazor testing library. Assertions use built-in
+xUnit `Assert` methods; NSubstitute is used for mocks when needed.
 
 **Alternatives considered**:
 - *Playwright E2E only*: Slower feedback; unit/integration tests catch consistency bugs
   faster (SC-002, SC-005).
+
+## 12. Legend-Inspired Content (Not Wikipedia Transcription)
+
+**Decision**: The Dick Turpin legend and Victorian folklore are **research inputs**, not
+output templates. Canon biographies lead with witty modern reframes; `historicalAnchor`
+fields record legend inspiration (e.g. "Turpin legend — Essex Gang leadership") rather
+than Wikipedia section citations. Display names use contemporary forms (`Richard Turpin`);
+stable `id` slugs are preserved for FK integrity.
+
+**Rationale**: Stakeholder feedback (2026-07-19) requested a lighter, more creative
+universe that rewards recognition without reading like an encyclopaedia entry. Humour
+comes from corporate euphemism, alias play, and organisation punchlines — not historical
+accuracy.
+
+**Alternatives considered**:
+- *Wikipedia-faithful biographies*: Reads as transcription; undermines demo humour (SC-001, SC-003).
+- *Renaming all slugs to match display names*: Breaking change across deals, cases, aliases, and tests.

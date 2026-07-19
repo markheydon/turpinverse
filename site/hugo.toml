@@ -1,0 +1,56 @@
+baseURL = "https://turpinverse.uk/"
+locale = "en-gb"
+direction = "ltr"
+label = "English (UK)"
+title = "Turpinverse"
+theme = "PaperMod"
+publishDir = "../docs"
+
+[params]
+  env = "production"
+  description = "The Richard Turpin legend reframed for CRM demos — legend first, ledger second."
+  author = "Turpinverse"
+  defaultTheme = "light"
+  ShowReadingTime = false
+  ShowPostNavLinks = false
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  disableSpecial1stPost = true
+  disableScrollToTop = false
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = false
+
+  [params.label]
+    text = "Turpinverse"
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Personas"
+    url = "/personas/"
+    weight = 2
+  [[menu.main]]
+    name = "Organisations"
+    url = "/organisations/"
+    weight = 3
+  [[menu.main]]
+    name = "Timeline"
+    url = "/timeline/"
+    weight = 4
+  [[menu.main]]
+    name = "Getting Started"
+    url = "/guides/getting-started/"
+    weight = 5
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]

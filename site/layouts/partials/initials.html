@@ -1,0 +1,13 @@
+{{/* Compute initials from a display name */}}
+{{- $parts := split . " " -}}
+{{- $initials := "" -}}
+{{- range $parts -}}
+  {{- if ne . "" -}}
+    {{- $initials = printf "%s%s" $initials (substr . 0 1) -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt (len $initials) 3 -}}
+  {{- substr $initials 0 3 -}}
+{{- else -}}
+  {{- $initials -}}
+{{- end -}}

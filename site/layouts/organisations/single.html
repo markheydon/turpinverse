@@ -1,0 +1,25 @@
+{{ define "main" }}
+<article class="organisation post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.legalName }}<p class="legal-name">{{ . }}</p>{{ end }}
+    <p class="card-meta">
+      {{ with .Params.industry }}<em>{{ . }}</em>{{ end }}
+      {{ with .Params.foundedYear }}
+      &nbsp;·&nbsp;Est. {{ . }}
+      {{ end }}
+      {{ with .Params.status }}
+      &nbsp;·&nbsp;<span class="status-badge status-{{ . }}">{{ . }}</span>
+      {{ end }}
+    </p>
+  </header>
+
+  <div class="post-content">{{ .Content }}</div>
+
+  {{ partial "org-structure.html" . }}
+  {{ partial "org-member-chart.html" . }}
+  {{ partial "org-history.html" . }}
+
+  {{ partial "mermaid-init.html" . }}
+</article>
+{{ end }}

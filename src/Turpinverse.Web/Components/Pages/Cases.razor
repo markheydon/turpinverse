@@ -1,0 +1,13 @@
+@page "/cases"
+@rendermode InteractiveServer
+
+<PageTitle>Cases - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="cases" Columns="@CasesColumns" />
+
+@code {
+    private static readonly string[] CasesColumns =
+    [
+        "subject", "status", "priority", "contactId", "accountId"
+    ];
+}

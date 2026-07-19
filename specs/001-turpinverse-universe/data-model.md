@@ -1,6 +1,6 @@
 # Data Model: Turpinverse Universe & Demo Data
 
-**Date**: 2026-07-18 | **Spec**: [spec.md](./spec.md) | **Plan**: [plan.md](./plan.md)
+**Date**: 2026-07-19 | **Spec**: [spec.md](./spec.md) | **Plan**: [plan.md](./plan.md)
 
 ## Overview
 
@@ -16,20 +16,20 @@ A character in the Turpinverse universe.
 
 | Field | Type | Required | Validation |
 |-------|------|----------|------------|
-| `id` | string (slug) | ✅ | Unique; kebab-case; e.g. `dick-turpin` |
-| `displayName` | string | ✅ | Max 100 chars |
-| `historicalName` | string | ✅ | Real-world name from Wikipedia record |
-| `aliases` | string[] | ❌ | Each alias unique across all personas (via AliasMap) |
-| `title` | string | ✅ | CRM-suitable job title; max 80 chars |
-| `biography` | string | ✅ | Markdown; mark fictional extensions with `> *Fictional extension*` |
-| `historicalAnchor` | string | ✅ | Wikipedia section reference |
+| `id` | string (slug) | ✅ | Unique; kebab-case; stable for FK integrity; e.g. `dick-turpin` |
+| `displayName` | string | ✅ | Modern user-facing name; max 100 chars; e.g. `Richard Turpin` not `Dick Turpin` |
+| `historicalName` | string | ✅ | Legendary or historical inspiration name |
+| `aliases` | string[] | ❌ | Informal or assumed identities; each alias unique across all personas (via AliasMap) |
+| `title` | string | ✅ | CRM-suitable job title with wordplay; max 80 chars |
+| `biography` | string | ✅ | Markdown; lead with witty hook; mark extensions with `> *Legend basis:*` or `> *Fictional extension:*` |
+| `historicalAnchor` | string | ✅ | Legend inspiration note (e.g. "Turpin legend — Essex Gang leadership"); not a Wikipedia citation |
 | `isFictionalExtension` | boolean | ✅ | `true` if persona is wholly invented |
 | `temperament` | string | ❌ | Short tone note for humour guidelines |
 | `organisationIds` | string[] | ✅ | Must reference existing Organisation.id |
 | `birthYear` | int | ❌ | 1700–1800 range if present |
 | `deathYear` | int | ❌ | Must be ≥ birthYear if both present |
 | `status` | enum | ✅ | `active`, `deceased`, `legend`, `archived` |
-| `email` | string | ✅ | Format: `{slug}@turpinverse.demo` |
+| `email` | string | ✅ | Format: `{slug}@turpinverse.uk` |
 | `phone` | string | ❌ | Fictional period-appropriate number |
 | `notes` | string | ❌ | CRM notes field; tongue-in-cheek but professional |
 
@@ -46,12 +46,12 @@ A group, business, or institution reframed for demo use.
 | `legalName` | string | ❌ | Longer humorous full name |
 | `description` | string | ✅ | Max 500 chars |
 | `industry` | string | ✅ | e.g. `Hospitality`, `Equine Trade`, `Legal Services` |
-| `historicalAnchor` | string | ✅ | Wikipedia or legend reference |
+| `historicalAnchor` | string | ✅ | Legend or folklore inspiration note |
 | `parentOrganisationId` | string | ❌ | Must reference existing Organisation.id; no cycles |
 | `memberPersonaIds` | string[] | ✅ | Must reference existing Persona.id |
 | `foundedYear` | int | ❌ | 1700–1800 |
 | `status` | enum | ✅ | `active`, `dissolved`, `legend` |
-| `website` | string | ❌ | Format: `https://{slug}.turpinverse.demo` |
+| `website` | string | ❌ | Format: `https://{slug}.turpinverse.uk` |
 
 **Relationships**: Self-referential parent hierarchy; many-to-many with Persona.
 

@@ -1,0 +1,43 @@
+{{ define "main" }}
+<section class="turpin-hero">
+  <h1>Turpinverse</h1>
+  <p class="turpin-tagline">Legend first, ledger second.</p>
+  <div class="turpin-stats">
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "personas") }}</span>
+      <span class="turpin-stat-label">Personas</span>
+    </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "organisations") }}</span>
+      <span class="turpin-stat-label">Organisations</span>
+    </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len hugo.Data.events }}</span>
+      <span class="turpin-stat-label">Events</span>
+    </div>
+  </div>
+</section>
+
+<article class="post-content turpin-welcome">
+  {{ .Content }}
+</article>
+
+<div class="turpin-quick-links">
+  <a class="turpin-quick-link" href="{{ "/personas/" | relURL }}">
+    <strong>Personas</strong>
+    CRM contacts from legend and folklore
+  </a>
+  <a class="turpin-quick-link" href="{{ "/organisations/" | relURL }}">
+    <strong>Organisations</strong>
+    Tongue-in-cheek business accounts
+  </a>
+  <a class="turpin-quick-link" href="{{ "/timeline/" | relURL }}">
+    <strong>Timeline</strong>
+    Historical, legendary, and fictional events
+  </a>
+  <a class="turpin-quick-link" href="{{ "/guides/getting-started/" | relURL }}">
+    <strong>Getting Started</strong>
+    Run locally and export CRM data
+  </a>
+</div>
+{{ end }}

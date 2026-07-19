@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Required for xUnit v3: test projects are executables -->
+    <OutputType>Exe</OutputType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

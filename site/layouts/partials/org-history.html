@@ -1,0 +1,35 @@
+{{ $orgId := .File.ContentBaseName }}
+{{ $events := slice }}
+{{ range hugo.Data.events }}
+  {{ if in (.organisationIds | default slice) $orgId }}
+    {{ $events = $events | append . }}
+  {{ end }}
+{{ end }}
+
+{{ if gt (len $events) 0 }}
+<section class="org-section org-history">
+  <h2>Organisation History</h2>
+  {{ with .Params.foundedYear }}
+  <p class="section-intro">Founded {{ . }}. Key events from the Turpinverse canon.</p>
+  {{ else }}
+  <p class="section-intro">Key events from the Turpinverse canon.</p>
+  {{ end }}
+
+  <div class="timeline-list org-history-timeline">
+    {{ range sort $events "date" }}
+    <div class="timeline-item">
+      <span class="timeline-date">{{ .date }}</span>
+      <span class="category-badge category-{{ .category }}">{{ .category }}</span>
+      <h3>{{ .title }}</h3>
+      {{ with .location }}<p class="timeline-location">{{ . }}</p>{{ end }}
+      <div class="timeline-description">{{ .description | markdownify }}</div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ else if .Params.foundedYear }}
+<section class="org-section org-history">
+  <h2>Organisation History</h2>
+  <p class="section-intro">Founded {{ .Params.foundedYear }}. No recorded timeline events for this account yet.</p>
+</section>
+{{ end }}

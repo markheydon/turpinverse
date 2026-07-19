@@ -1,0 +1,91 @@
+@if (Rows.Count > 0)
+{
+    <div class="data-table">
+        <div class="data-table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        @foreach (var header in headers)
+                        {
+                            <th>@FormatLabel(header)</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Rows)
+                    {
+                        <tr>
+                            @foreach (var header in headers)
+                            {
+                                <td>@GetValue(row, header)</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (!Loading)
+{
+    <p class="text-slate-500">No records found.</p>
+}
+
+@code {
+    [Parameter, EditorRequired] public IReadOnlyList<IReadOnlyDictionary<string, string>> Rows { get; set; } = [];
+    [Parameter] public IReadOnlyList<string>? Columns { get; set; }
+    [Parameter] public bool Loading { get; set; }
+
+    private IReadOnlyList<string> headers = [];
+
+    protected override void OnParametersSet()
+    {
+        headers = ComputeHeaders();
+    }
+
+    private IReadOnlyList<string> ComputeHeaders()
+    {
+        if (Columns is { Count: > 0 })
+        {
+            return Columns;
+        }
+
+        if (Rows.FirstOrDefault() is { } firstRow)
+        {
+            return firstRow.Keys.ToList();
+        }
+
+        return [];
+    }
+
+    private static string GetValue(IReadOnlyDictionary<string, string> row, string header) =>
+        row.TryGetValue(header, out var value) ? value : string.Empty;
+
+    private static string FormatLabel(string column)
+    {
+        if (string.IsNullOrEmpty(column))
+        {
+            return string.Empty;
+        }
+
+        return column switch
+        {
+            "contactId" => "Contact ID",
+            "accountId" => "Account ID",
+            "dealId" => "Deal ID",
+            "caseId" => "Case ID",
+            "firstName" => "First Name",
+            "lastName" => "Last Name",
+            "accountName" => "Account Name",
+            "legalName" => "Legal Name",
+            "parentAccountId" => "Parent Account",
+            "dealName" => "Deal Name",
+            "closeDate" => "Close Date",
+            "relatedEventId" => "Related Event",
+            _ => column.Length == 1
+                ? column.ToUpperInvariant()
+                : char.ToUpper(column[0]) + column[1..]
+        };
+    }
+}
+

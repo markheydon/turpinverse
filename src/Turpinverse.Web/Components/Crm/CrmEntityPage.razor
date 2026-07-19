@@ -1,0 +1,111 @@
+@inject HttpClient Http
+@inject IJSRuntime JS
+@using System.Net.Http.Json
+@using Turpinverse.Core.Abstractions
+@using Turpinverse.Core.Export
+
+<div class="page-container">
+  <div class="page-header">
+    <div class="page-header-title">
+      <LucideIcon Name="@definition.Icon" />
+      <div>
+        <h1>@definition.Title</h1>
+        @if (rowCount is not null)
+        {
+          <p class="record-count">@rowCount records</p>
+        }
+      </div>
+    </div>
+    <button class="download-btn" @onclick="DownloadCsv" disabled="@loading">
+      <LucideIcon Name="download" />
+      Download CSV
+    </button>
+  </div>
+
+  @if (ShowPipelineChart && deals is not null)
+  {
+    <div class="charts-section charts-section-single">
+      <PipelineChart Deals="deals" CanvasId="pipeline-chart" />
+    </div>
+  }
+
+  @if (loading)
+  {
+    <p>Loading @GetDisplayName().ToLowerInvariant()...</p>
+  }
+  else if (loadError is not null)
+  {
+    <p class="error-message">@loadError</p>
+  }
+  else
+  {
+    <DataTable Rows="rows" Columns="Columns" Loading="loading" />
+  }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string DatasetType { get; set; } = string.Empty;
+    [Parameter] public IReadOnlyList<string>? Columns { get; set; }
+    [Parameter] public bool ShowPipelineChart { get; set; }
+
+    private ExportDatasetDefinition definition = new(string.Empty, string.Empty, "file", "/", string.Empty);
+    private IReadOnlyList<IReadOnlyDictionary<string, string>> rows = [];
+    private IReadOnlyList<PipelineChart.DealPreview>? deals;
+    private int? rowCount;
+    private string? loadError;
+    private bool loading = true;
+
+    protected override void OnParametersSet()
+    {
+        definition = ExportDatasets.TryGet(DatasetType)
+            ?? new ExportDatasetDefinition(DatasetType, DatasetType, "file", "/", "Dataset export");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var manifest = await Http.GetFromJsonAsync<ExportManifest>("/api/export/manifest");
+            rowCount = manifest?.Datasets.FirstOrDefault(d => d.Type == DatasetType)?.RowCount;
+
+            var preview = await Http.GetFromJsonAsync<List<Dictionary<string, string>>>(
+                $"/api/export/{DatasetType}/preview?count=100");
+            if (preview is null)
+            {
+                loadError = $"Failed to load {GetDisplayName().ToLowerInvariant()} data.";
+                return;
+            }
+
+            rows = preview
+                .Select(row => (IReadOnlyDictionary<string, string>)row)
+                .ToList();
+
+            if (ShowPipelineChart)
+            {
+                deals = rows
+                    .Select(row => new PipelineChart.DealPreview
+                    {
+                        Stage = row.GetValueOrDefault("stage", "Unknown")
+                    })
+                    .ToList();
+            }
+        }
+        catch
+        {
+            loadError = $"Failed to load {GetDisplayName().ToLowerInvariant()} data.";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private string GetDisplayName() =>
+        string.IsNullOrEmpty(definition.Title) ? DatasetType : definition.Title;
+
+    private async Task DownloadCsv()
+    {
+        await JS.InvokeVoidAsync("open", $"/api/export/{DatasetType}", "_blank");
+    }
+}
+

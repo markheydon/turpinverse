@@ -1,0 +1,13 @@
+@page "/contacts"
+@rendermode InteractiveServer
+
+<PageTitle>Contacts - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="contacts" Columns="@ContactsColumns" />
+
+@code {
+    private static readonly string[] ContactsColumns =
+    [
+        "firstName", "lastName", "title", "email", "accountId", "status"
+    ];
+}

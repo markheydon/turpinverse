@@ -1,0 +1,29 @@
+﻿@using Turpinverse.Core.Export
+
+<input type="checkbox" id="nav-toggle" class="nav-toggle" title="Navigation menu" />
+
+<div class="sidebar-inner">
+    <div class="sidebar-brand">
+        <a href="">Turpinverse</a>
+        <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+    </div>
+
+    <nav class="sidebar-nav">
+        <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
+            <LucideIcon Name="home" /> Home
+        </NavLink>
+
+        <p class="nav-section-label">Data</p>
+
+        @foreach (var dataset in ExportDatasets.All)
+        {
+            <NavLink class="nav-item" href="@dataset.Route.TrimStart('/')">
+                <LucideIcon Name="@dataset.Icon" /> @dataset.Title
+            </NavLink>
+        }
+    </nav>
+</div>

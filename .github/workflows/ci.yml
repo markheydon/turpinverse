@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-scripts:
+    name: Run ScriptAnalyzer
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -Repository PSGallery
+
+      - name: Validate scripts with Invoke-ScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+
+          $results = Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1 -Severity Error, Warning
+
+          if ($null -ne $results -and $results.Count -gt 0) {
+            $results | Sort-Object Severity, ScriptName, Line | Format-Table -AutoSize
+            throw "PSScriptAnalyzer found $($results.Count) issue(s) in scripts/."
+          }
+
+          Write-Host 'No PSScriptAnalyzer issues found in scripts/.'
+
+      - name: Check script naming conventions
+        shell: pwsh
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = 'Stop'
+          ./scripts/Test-ScriptConventions.ps1
+
+      - name: Lint shell scripts
+        run: |
+          if compgen -G "scripts/**/*.sh" > /dev/null; then
+            shellcheck scripts/**/*.sh
+          else
+            echo "No shell scripts in scripts/ — skipping shellcheck"
+          fi
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src/Turpinverse.Web/package-lock.json
+
+      - name: Install npm dependencies
+        working-directory: src/Turpinverse.Web
+        run: npm ci
+
+      - name: Restore
+        run: dotnet restore Turpinverse.slnx
+
+      - name: Verify code format
+        run: dotnet format Turpinverse.slnx --verify-no-changes --verbosity minimal
+
+      - name: Build
+        run: dotnet build Turpinverse.slnx --configuration Release --no-restore
+
+      - name: Test with coverage
+        run: dotnet test Turpinverse.slnx --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/

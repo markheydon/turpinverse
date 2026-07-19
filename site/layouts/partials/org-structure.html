@@ -1,0 +1,33 @@
+{{ $orgId := .File.ContentBaseName }}
+{{ $orgs := hugo.Data.organisations }}
+{{ $parentId := .Params.parent }}
+{{ $children := where $orgs "parentOrganisationId" $orgId }}
+{{ $hasStructure := or $parentId (gt (len $children) 0) }}
+
+{{ if $hasStructure }}
+<section class="org-section org-structure-chart">
+  <h2>Corporate Structure</h2>
+  <p class="section-intro">Group hierarchy and related accounts.</p>
+  <div class="mermaid">
+flowchart TB
+  {{ $nodeId := replace $orgId "-" "_" }}
+  {{ $label := partial "mermaid-sanitize.html" .Title }}
+  {{ $nodeId }}["{{ $label }}\n{{ partial "mermaid-sanitize.html" .Params.industry }}"]
+  {{ with $parentId }}
+  {{ $parent := site.GetPage (printf "/organisations/%s" .) }}
+  {{ if $parent }}
+  {{ $parentNode := replace . "-" "_" }}
+  {{ $parentLabel := partial "mermaid-sanitize.html" $parent.Title }}
+  {{ $parentNode }}["{{ $parentLabel }}\n{{ partial "mermaid-sanitize.html" $parent.Params.industry }}"]
+  {{ $parentNode }} --> {{ $nodeId }}
+  {{ end }}
+  {{ end }}
+  {{ range $children }}
+  {{ $childNode := replace .id "-" "_" }}
+  {{ $childLabel := partial "mermaid-sanitize.html" .tradingName }}
+  {{ $childNode }}["{{ $childLabel }}\n{{ partial "mermaid-sanitize.html" .industry }}"]
+  {{ $nodeId }} --> {{ $childNode }}
+  {{ end }}
+  </div>
+</section>
+{{ end }}

@@ -25,7 +25,7 @@ Chart.js (pipeline/stats visualisation in Blazor)
 
 **Storage**: File-based JSON canon in `src/Turpinverse.Data/canon/`; no database for v1
 
-**Testing**: xUnit, bUnit (Blazor component tests), FluentAssertions, coverlet
+**Testing**: xUnit v3, NSubstitute, bUnit (Blazor component tests), coverlet
 
 **Target Platform**: Cross-platform (.NET 10 on Windows/Linux/macOS); Hugo site on GitHub
 Pages; local dev via Aspire dashboard
@@ -88,7 +88,9 @@ Turpinverse.slnx
 .github/
 └── workflows/
     ├── ci.yml                   # Build, test, lint .NET solution
-    └── hugo-pages.yml           # Build Hugo → docs/, deploy GitHub Pages
+    ├── hugo-build.yml             # Reusable Hugo build (shared by CI and deploy)
+    ├── hugo-ci.yml                # Validate Hugo build on PRs / feature branches
+    └── hugo-deploy.yml            # Build Hugo → docs/, deploy GitHub Pages
 
 site/                            # Hugo source (NOT served directly)
 ├── hugo.toml
@@ -111,30 +113,29 @@ src/
 ├── Turpinverse.AppHost/         # .NET Aspire orchestration
 ├── Turpinverse.ServiceDefaults/ # Aspire shared defaults (OTel, health, resilience)
 ├── Turpinverse.Web/             # Blazor Server app (export UI)
-├── Turpinverse.Core/            # Domain models, export services, validation
-└── Turpinverse.Data/            # Canon JSON source files + embedded resources
+├── Turpinverse.Core/            # Domain models, export services, Hugo generation, validation
+│   └── Hugo/                    # IHugoContentGenerator, HugoContentGenerator
+├── Turpinverse.Data/            # Canon JSON source files + embedded resources
+└── Turpinverse.Tools.GenerateHugoContent/  # CLI: canon JSON → Hugo markdown/data
 
 tests/
 ├── Turpinverse.Core.UnitTests/
 ├── Turpinverse.Web.UnitTests/   # bUnit component tests
 └── Turpinverse.IntegrationTests/
-
-tools/
-└── generate-hugo-content/       # Console tool: canon JSON → Hugo markdown/data
-    └── Turpinverse.Tools.GenerateHugoContent/
 ```
 
 **Structure Decision**: Standard .NET `src/` + `tests/` layout with solution file at repo
 root. Hugo source separated in `site/` with output to `docs/` for GitHub Pages compatibility.
-Canon JSON in `Turpinverse.Data` is the single source of truth; a small build tool generates
-Hugo content to avoid dual-maintenance. Aspire AppHost orchestrates the Blazor Server
-project for local development with observability defaults.
+Canon JSON in `Turpinverse.Data` is the single source of truth. Hugo generation logic lives
+in `Turpinverse.Core.Hugo`; the CLI host is `src/Turpinverse.Tools.GenerateHugoContent`
+(not a separate `tools/` tree). Aspire AppHost orchestrates the Blazor Server project for
+local development with observability defaults.
 
 ## Complexity Tracking
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
 | .NET Aspire for single Blazor app | User explicitly requested Aspire orchestration; provides OTel, health checks, and future service expansion (additional export formats, background jobs) | Plain `dotnet run` on Web project lacks orchestration dashboard and service discovery patterns the stakeholder wants |
-| 5 .NET projects (AppHost, ServiceDefaults, Web, Core, Data) | Separation of canon data, domain logic, UI, and orchestration follows .NET solution conventions and enables independent testing | Monolithic single project mixes data, export logic, and UI; harder to test canon validation in isolation |
-| Hugo content generation tool | Canon must drive both docs site and CRM exports from one source | Hand-maintaining Hugo markdown alongside JSON would violate FR-006 and SC-002 consistency requirements |
+| 6 .NET projects in `src/` (AppHost, ServiceDefaults, Web, Core, Data, Tools.GenerateHugoContent) | Separation of canon data, domain logic, UI, orchestration, and Hugo CLI follows .NET solution conventions and enables independent testing | Monolithic single project mixes data, export logic, and UI; harder to test canon validation in isolation |
+| Hugo content generation (Core service + CLI) | Canon must drive both docs site and CRM exports from one source; generation logic belongs in Core alongside CSV export | Hand-maintaining Hugo markdown alongside JSON would violate FR-006 and SC-002; a standalone `tools/` script bypasses solution conventions |
 | Chart.js in Blazor | User requested; visualises deal pipeline stages and dataset stats on export dashboard | Static tables alone don't demonstrate demo value for sales scenarios |

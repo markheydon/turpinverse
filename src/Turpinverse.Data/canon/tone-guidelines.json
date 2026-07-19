@@ -1,0 +1,42 @@
+{
+  "version": "1.1.0",
+  "principles": [
+    "Legend first, ledger second — the smirk comes before the footnote",
+    "Professional at first glance, playful on second read",
+    "Prefer euphemism and corporate jargon over explicit criminal language",
+    "Names should feel like 2026 LinkedIn, not 1739 parish records",
+    "Victorian myth (Black Bess, Ainsworth romance) is fair game as in-universe marketing lore",
+    "Mark wholly invented personas and events clearly",
+    "Prefer witty understatement over overt criminal glorification"
+  ],
+  "examples": [
+    {
+      "good": "Richard Turpin — CEO, Strategic Corridor Operations. Known internally for aggressive route optimisation across the Home Counties.",
+      "bad": "Born in Hempstead, Essex, Turpin began as a butcher before turning to smuggling and highway robbery.",
+      "reason": "Lead with the modern persona and corporate euphemism; historical detail is optional colour."
+    },
+    {
+      "good": "Rose & Crown Hospitality — where discretion is part of the room rate.",
+      "bad": "Historic coaching inn providing premium accommodation, intelligence services, and hospitality management.",
+      "reason": "Organisation descriptions should land a punchline, not read like a brochure."
+    },
+    {
+      "good": "Case #0042: Palmer/Palmer identity collision in SSO — two active accounts, one Yorkshire postcode.",
+      "bad": "Turpin used a fake name lol and got caught.",
+      "reason": "Cases sound like real tickets that reward a second read."
+    },
+    {
+      "good": "Ned Palmer, Identity Management Consultant — provisions SSO credentials for Yorkshire relocations.",
+      "bad": "Guy who helped Dick with fake papers.",
+      "reason": "Job titles do the heavy lifting; biography reinforces the gag."
+    }
+  ],
+  "forbiddenPatterns": [
+    "\\bidiot\\b",
+    "\\bstupid\\b",
+    "\\bkill\\b",
+    "\\bmurder\\b",
+    "\\bdamn\\b",
+    "\\bhell\\b"
+  ]
+}

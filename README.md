@@ -1,0 +1,85 @@
+# Turpinverse
+
+An open-source Dick Turpin universe for CRM demos — canonical characters, organisations,
+and timeline data with a Hugo documentation site and Blazor Server CSV export app.
+
+## What is Turpinverse?
+
+Turpinverse reframes the historical Dick Turpin legend as a tongue-in-cheek business
+universe. It provides:
+
+- **Canon dataset** — 15+ personas, 8+ organisations, timeline events, and alias maps
+  grounded in Wikipedia history with clearly marked fictional extensions
+- **Documentation site** — Hugo static site published to [turpinverse.uk](https://turpinverse.uk) via GitHub Pages
+- **CRM demo data** — Blazor Server app exporting contacts, accounts, deals, and cases
+  as CSV files with intact cross-references
+
+## API security note
+
+The Blazor export app exposes `/api/export/*` and `/api/canon/validate` without authentication.
+This is intentional for local demos and Aspire development. Do not deploy the export app to a
+public network without adding authentication or network restrictions.
+
+## Quickstart
+
+See [specs/001-turpinverse-universe/quickstart.md](specs/001-turpinverse-universe/quickstart.md)
+for full validation scenarios.
+
+```powershell
+# Restore and build
+dotnet restore
+dotnet build
+
+# Run via Aspire (Blazor export app + dashboard)
+dotnet run --project src/Turpinverse.AppHost
+
+# Run canon validation tests
+dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation"
+
+# Build documentation site (requires Hugo installed)
+dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
+cd site && hugo --minify
+```
+
+### Hugo site without installing Hugo (Docker / Podman)
+
+On Windows, use Podman Desktop or Docker Desktop — no local Hugo install needed:
+
+```powershell
+.\scripts\Invoke-HugoSite.ps1 build    # generate content + build to docs/
+.\scripts\Invoke-HugoSite.ps1 serve    # live preview at http://localhost:1313
+.\scripts\Invoke-HugoSite.ps1 preview  # build + serve docs/ at http://localhost:8080
+```
+
+Use `-Runtime docker` if you prefer Docker over Podman. Full details: [site/README.md](site/README.md).
+
+## Scripts
+
+PowerShell scripts in `scripts/` are linted in CI with [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer). Script files must be named `Verb-Noun.ps1` using an approved PowerShell verb.
+
+```powershell
+# Lint scripts locally (requires PSScriptAnalyzer module)
+pwsh -Command "Install-Module PSScriptAnalyzer -Scope CurrentUser -Force; Invoke-ScriptAnalyzer -Path scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1; ./scripts/Test-ScriptConventions.ps1"
+```
+
+## Tech Stack
+
+- .NET 10 / C# — Blazor Server, Aspire orchestration
+- Hugo Extended — static documentation site
+- Tailwind CSS 4.x — Blazor UI styling
+- Chart.js — pipeline and summary visualisations
+- CsvHelper — CRM CSV export
+
+## Testing Standards
+
+- xUnit v3 for all automated .NET tests
+- NSubstitute for mocks, stubs, and test doubles
+- Built-in xUnit `Assert` methods only
+- Keep test dependencies to a minimum
+
+Do not introduce FluentAssertions, AwesomeAssertions, Shouldly, Moq, NUnit, or MSTest
+unless explicitly requested.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

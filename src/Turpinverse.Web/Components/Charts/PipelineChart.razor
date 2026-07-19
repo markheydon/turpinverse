@@ -1,0 +1,42 @@
+@inject IJSRuntime JS
+
+<div class="chart-container">
+    <h3>Deal Pipeline</h3>
+    <canvas @ref="canvasRef" id="@CanvasId"></canvas>
+</div>
+
+@code {
+    [Parameter] public IReadOnlyList<DealPreview>? Deals { get; set; }
+    [Parameter] public string CanvasId { get; set; } = "pipeline-chart";
+
+    private ElementReference canvasRef;
+    private string? lastRenderedSignature;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Deals is null)
+        {
+            return;
+        }
+
+        var signature = string.Join('|', Deals.Select(deal => deal.Stage));
+        if (signature == lastRenderedSignature)
+        {
+            return;
+        }
+
+        lastRenderedSignature = signature;
+        var stages = Deals.GroupBy(deal => deal.Stage)
+            .Select(group => new { stage = group.Key, count = group.Count() })
+            .ToList();
+        await JS.InvokeVoidAsync("chartInterop.renderBarChart", CanvasId,
+            stages.Select(stage => stage.stage).ToArray(),
+            stages.Select(stage => stage.count).ToArray());
+    }
+
+    public class DealPreview
+    {
+        public string Stage { get; set; } = string.Empty;
+    }
+}
+

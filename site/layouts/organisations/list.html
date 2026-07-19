@@ -1,0 +1,24 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>Organisations</h1>
+  <p class="section-intro">Business accounts reframed from legend — where discretion is part of the room rate.</p>
+</header>
+
+<div class="card-grid">
+  {{ range .Pages.ByTitle }}
+  <a class="account-card" href="{{ .RelPermalink }}">
+    <div class="card-header">
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ with .Params.industry }}<p class="card-meta">{{ . }}</p>{{ end }}
+        {{ with .Params.status }}
+        <span class="status-badge status-{{ . }}">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ with .Params.legalName }}<p class="card-summary">{{ . }}</p>{{ end }}
+    {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

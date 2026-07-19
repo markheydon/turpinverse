@@ -1,0 +1,23 @@
+{{ $orgs := hugo.Data.organisations }}
+{{ if $orgs }}
+<section class="org-chart">
+  <h2>Organisation Hierarchy</h2>
+  <ul class="org-tree">
+    {{ range $orgs }}
+      {{ if not .parentOrganisationId }}
+      <li>
+        <a href="{{ printf "/organisations/%s/" .id | relURL }}">{{ .tradingName }}</a>
+        {{ $children := where $orgs "parentOrganisationId" .id }}
+        {{ if $children }}
+        <ul>
+          {{ range $children }}
+          <li><a href="{{ printf "/organisations/%s/" .id | relURL }}">{{ .tradingName }}</a></li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </li>
+      {{ end }}
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

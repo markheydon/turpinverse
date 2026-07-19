@@ -77,6 +77,10 @@ blocks onboarding.
 - Technology stack choices (language, framework, storage) are deferred to
   per-feature `plan.md` until a project-wide stack is established by the first
   feature.
+- All automated .NET tests MUST use **xUnit v3**, **NSubstitute** for mocks/stubs/test
+  doubles, and built-in xUnit `Assert` methods only. Keep test dependencies to a
+  minimum. Do not introduce FluentAssertions, AwesomeAssertions, Shouldly, Moq,
+  NUnit, or MSTest unless explicitly requested.
 - All feature artifacts live under `specs/[###-feature-name]/`; shared project
   governance lives under `.specify/`.
 
@@ -112,4 +116,4 @@ principles. Complexity without documented justification is grounds for rejection
 Runtime development guidance SHOULD be maintained in project docs (e.g.,
 `README.md`, `docs/`) as the stack matures.
 
-**Version**: 1.0.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-07-18
+**Version**: 1.1.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-07-19

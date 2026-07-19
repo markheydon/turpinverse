@@ -1,0 +1,118 @@
+[
+  {
+    "id": "turpin-born",
+    "date": "1705",
+    "title": "Richard Turpin — Onboarding Complete",
+    "description": "Richard Turpin enters the world in Hempstead, Essex. Fifth of six children. Early career in butchery before pivoting to more entrepreneurial pursuits.",
+    "category": "historical",
+    "personaIds": ["dick-turpin"],
+    "location": "Hempstead, Essex"
+  },
+  {
+    "id": "gregory-gang-formed",
+    "date": "1730",
+    "title": "Gregory Group Founded",
+    "description": "Samuel Gregory incorporates the Gregory Group, initially focused on rural procurement in Epping Forest. Deer are involved. Paperwork is minimal.",
+    "category": "historical",
+    "personaIds": ["samuel-gregory"],
+    "organisationIds": ["essex-gang"],
+    "location": "Epping Forest, Essex"
+  },
+  {
+    "id": "essex-gang-merger",
+    "date": "1733",
+    "title": "Essex Solutions Merger — Gregory Group Acquired",
+    "description": "The Gregory Group merges with Turpin's operations to form Essex Solutions Group. Highway corridor management added to the portfolio.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "samuel-gregory"],
+    "organisationIds": ["essex-gang"],
+    "location": "Essex"
+  },
+  {
+    "id": "king-partnership",
+    "date": "1735",
+    "title": "King Equine Partnership Announced",
+    "description": "Turpin partners with Matthew King to launch King Equine Partners. Gentleman's agreements become a core competency.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "matthew-king"],
+    "organisationIds": ["king-equine-trading"],
+    "location": "London"
+  },
+  {
+    "id": "king-shootout",
+    "date": "1737-05",
+    "title": "King Equine — Contract Termination at Whitechapel",
+    "description": "Matthew King's employment concludes following an incident at Whitechapel. Exit interview not completed.",
+    "category": "historical",
+    "personaIds": ["matthew-king"],
+    "location": "Whitechapel, London"
+  },
+  {
+    "id": "john-palmer-alias",
+    "date": "1737",
+    "title": "Project Yorkshire — John Palmer Identity Provisioned",
+    "description": "Turpin relocates to Yorkshire under the John Palmer alias. Ned Palmer provisions SSO credentials. Brazier Legal handles documentation.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "ned-palmer"],
+    "organisationIds": ["brazier-legal"],
+    "location": "Yorkshire"
+  },
+  {
+    "id": "horse-theft-arrest",
+    "date": "1738-10",
+    "title": "Beverley Audit — Identity Mismatch Detected",
+    "description": "Turpin arrested for equine acquisition irregularities at Beverley. John Palmer account flagged; deduplication review initiated.",
+    "category": "historical",
+    "personaIds": ["dick-turpin"],
+    "location": "Beverley, Yorkshire"
+  },
+  {
+    "id": "york-trial",
+    "date": "1739-03-22",
+    "title": "York Due Diligence Review — Regulatory Proceedings",
+    "description": "Turpin's transaction history reviewed at York Assizes. York Due Diligence Partners find the horse in the transaction. Outcome: contract terminated.",
+    "category": "historical",
+    "personaIds": ["dick-turpin", "james-smith"],
+    "organisationIds": ["york-assize-court"],
+    "location": "York"
+  },
+  {
+    "id": "turpin-execution",
+    "date": "1739-04-07",
+    "title": "Project Knavesmire — Contract Termination, York Site",
+    "description": "Richard Turpin's employment concluded at York Knavesmire. Conducted himself with remarkable composure at the offboarding ceremony.",
+    "category": "historical",
+    "personaIds": ["dick-turpin"],
+    "location": "Knavesmire, York"
+  },
+  {
+    "id": "black-bess-ride",
+    "date": "1739",
+    "title": "Black Bess — Overnight London-York Feasibility Study (Disputed)",
+    "description": "Victorian folklore attributes an impossible overnight ride from London to York to Turpin and his mare Black Bess. Finance disputes the mileage. Catherine Bell owns the narrative.",
+    "category": "legend",
+    "personaIds": ["dick-turpin", "black-bess"],
+    "organisationIds": ["king-equine-trading"],
+    "location": "London to York"
+  },
+  {
+    "id": "epping-poaching-crackdown",
+    "date": "1732",
+    "title": "Epping Forest — Sector 7 Enforcement Intensified",
+    "description": "Forest wardens intensify patrols following a surge in unauthorised procurement attributed to the Gregory Group. William Hargreaves leads the response.",
+    "category": "historical",
+    "personaIds": ["william-hargreaves", "samuel-gregory"],
+    "organisationIds": ["epping-forest-authority", "essex-gang"],
+    "location": "Epping Forest"
+  },
+  {
+    "id": "turpinverse-launch",
+    "date": "2026",
+    "title": "Turpinverse Canon Published — Legend Meets CRM",
+    "description": "The Turpinverse open-source canon dataset is published for CRM demo and documentation use. Catherine Bell approves the brand guidelines.\n\n> *Fictional extension:*",
+    "category": "fictional",
+    "personaIds": ["catherine-bell"],
+    "organisationIds": ["turpin-enterprises"],
+    "location": "GitHub"
+  }
+]
