@@ -3,8 +3,6 @@ name: Hugo CI
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: ['001-*']
 
 jobs:
   hugo:

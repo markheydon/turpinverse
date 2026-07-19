@@ -167,7 +167,7 @@ cd site && hugo --minify && cd ..
 
 ## GitHub Pages Deployment
 
-**Hugo CI** (`hugo-ci.yml`) validates the site on pull requests and `001-*` branch pushes:
+**Hugo CI** (`hugo-ci.yml`) validates the site on pull requests to `main`:
 canon validation, content generation, and Hugo build — no deploy.
 
 **Hugo Deploy** (`hugo-deploy.yml`) publishes to `docs/` on push to `main` or via manual
