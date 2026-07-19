@@ -31,7 +31,7 @@ dotnet run --project src/Turpinverse.AppHost
 dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation"
 
 # Build documentation site (requires Hugo installed)
-dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
+dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 cd site && hugo --minify
 ```
 

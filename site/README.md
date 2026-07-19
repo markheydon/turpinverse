@@ -16,7 +16,7 @@ You do **not** need Hugo installed locally if you use Docker or Podman.
 Run from the repository root:
 
 ```powershell
-dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
+dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 ```
 
 This writes markdown under `site/content/` and `site/data/organisations.json`.
@@ -85,7 +85,7 @@ Open http://localhost:8080
 | `module "" not found` / theme error | Remove empty `theme` from `hugo.toml` — this site uses `site/layouts/` only |
 | `statfs .../docs: no such file or directory` | Hugo build failed or was skipped — run `.\scripts\hugo.ps1 build` first; `docs/` is created by Hugo, not checked into git |
 | Empty `docs/` or missing pages | Run the content generator before `hugo build` |
-| `site/content/personas/` is empty | `dotnet run --project tools/generate-hugo-content/...` |
+| `site/content/personas/` is empty | `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` |
 | Port already in use | Change `-p 1313:1313` to e.g. `-p 1314:1313` and update `--baseURL` |
 | Broken links in local preview | Use `hugo server` with `--baseURL http://localhost:1313`, or `preview` after `build` |
 

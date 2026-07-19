@@ -27,7 +27,7 @@ function Invoke-HugoContentGenerator {
     Write-Host "Generating Hugo content from canon JSON..." -ForegroundColor Cyan
     Push-Location $repoRoot
     try {
-        dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
+        dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     }
     finally {
@@ -46,7 +46,7 @@ function Invoke-HugoBuild {
     }
     $docsPath = Join-Path $repoRoot "docs"
     if (-not (Test-Path (Join-Path $docsPath "index.html"))) {
-        Write-Error "Hugo did not produce docs/index.html. Run content generation first: dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent"
+        Write-Error "Hugo did not produce docs/index.html. Run content generation first: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent"
     }
 }
 

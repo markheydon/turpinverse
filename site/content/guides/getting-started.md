@@ -26,7 +26,7 @@ dotnet run --project src/Turpinverse.AppHost
 .\scripts\hugo.ps1 build
 
 # Or with Hugo installed locally
-dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
+dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 cd site && hugo --minify
 ```
 

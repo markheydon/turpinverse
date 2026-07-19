@@ -33,7 +33,11 @@ for OSS repos.
 
 ## 3. Hugo Content Generation from Canon
 
-**Decision**: A `tools/generate-hugo-content` console tool reads canon JSON and emits:
+**Revision (2026-07-19)**: Original research placed the CLI under `tools/generate-hugo-content/`.
+Consolidated into `src/` with generation logic extracted to `Turpinverse.Core.Hugo.HugoContentGenerator`,
+matching the CSV export layering pattern (`IExportService` in Core, thin CLI host in `src/`).
+
+**Decision**: `src/Turpinverse.Tools.GenerateHugoContent` console tool (backed by `HugoContentGenerator` in Core) reads canon JSON and emits:
 - Markdown pages under `site/content/personas/`, `site/content/organisations/`
 - Data files under `site/data/` for org-chart and timeline partials
 - Cross-link front matter (`aliases`, `related`) for hyperlinked navigation

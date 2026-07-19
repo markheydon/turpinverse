@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Turpinverse.Core\Turpinverse.Core.csproj" />
-    <ProjectReference Include="..\..\..\src\Turpinverse.Data\Turpinverse.Data.csproj" />
+    <ProjectReference Include="..\Turpinverse.Core\Turpinverse.Core.csproj" />
+    <ProjectReference Include="..\Turpinverse.Data\Turpinverse.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

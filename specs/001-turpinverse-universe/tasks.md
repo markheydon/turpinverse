@@ -22,7 +22,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 
 **Purpose**: Project initialization, OSS hygiene, and solution scaffolding
 
-- [X] T001 Create repository directory structure per plan.md (`src/`, `tests/`, `site/`, `tools/`, `.github/workflows/`)
+- [X] T001 Create repository directory structure per plan.md (`src/`, `tests/`, `site/`, `.github/workflows/`) — original plan included `tools/`; Hugo CLI consolidated into `src/Turpinverse.Tools.GenerateHugoContent`
 - [X] T002 Create `global.json` pinning .NET 10 SDK version at repository root
 - [X] T003 [P] Create `.editorconfig` at repository root with C# and JSON conventions
 - [X] T004 [P] Create `.gitattributes` at repository root for line-ending normalisation
@@ -37,7 +37,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T013 [P] Create `tests/Turpinverse.Core.UnitTests/Turpinverse.Core.UnitTests.csproj` with xUnit, FluentAssertions, coverlet
 - [X] T014 [P] Create `tests/Turpinverse.Web.UnitTests/Turpinverse.Web.UnitTests.csproj` with bUnit and xUnit
 - [X] T015 [P] Create `tests/Turpinverse.IntegrationTests/Turpinverse.IntegrationTests.csproj` with WebApplicationFactory support
-- [X] T016 Create `tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent/Turpinverse.Tools.GenerateHugoContent.csproj` console app referencing Turpinverse.Core
+- [X] T016 Create `src/Turpinverse.Tools.GenerateHugoContent/Turpinverse.Tools.GenerateHugoContent.csproj` console app referencing Turpinverse.Core
 - [X] T017 [P] Create `site/hugo.toml` with `publishDir = "../docs"` and base URL for GitHub Pages
 - [X] T018 [P] Create `src/Turpinverse.Web/package.json` with Tailwind CSS CLI and build scripts
 - [X] T019 [P] Create `README.md` at repository root with project overview and placeholder quickstart link
@@ -93,7 +93,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T045 [US1] Configure embedded resources in `src/Turpinverse.Data/Turpinverse.Data.csproj` for all canon JSON files
 - [X] T046 [US1] Implement canon schema validation against `specs/001-turpinverse-universe/contracts/canon-schema.json` in `src/Turpinverse.Core/Validation/CanonSchemaValidator.cs`
 - [X] T047 [US1] Update `tests/Turpinverse.Core.UnitTests/Validation/CanonValidatorTests.cs` to pass all VR-001–VR-010 checks
-- [X] T048 [US1] Implement Hugo content generator in `tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent/Program.cs` reading canon JSON and emitting markdown to `site/content/`
+- [X] T048 [US1] Implement Hugo content generator in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs` reading canon JSON and emitting markdown to `site/content/`
 - [X] T049 [P] [US1] Create persona page layout in `site/layouts/personas/single.html` with cross-links to organisations
 - [X] T050 [P] [US1] Create organisation page layout in `site/layouts/organisations/single.html` with member links
 - [X] T051 [P] [US1] Create timeline list layout in `site/layouts/timeline/list.html` sorted by event date
@@ -103,7 +103,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 - [X] T055 [P] [US1] Create base HTML layout in `site/layouts/_default/baseof.html` with navigation
 - [X] T056 [US1] Create GitHub Actions workflow in `.github/workflows/hugo-pages.yml` to generate content, build Hugo to `docs/`, and deploy GitHub Pages
 - [X] T057 [US1] Create GitHub Actions CI workflow in `.github/workflows/ci.yml` for `dotnet build` and `dotnet test`
-- [X] T058 [US1] Write integration test in `tests/Turpinverse.IntegrationTests/HugoContentGeneratorTests.cs` verifying generated content structure
+- [X] T058 [US1] Write unit tests in `tests/Turpinverse.Core.UnitTests/Hugo/HugoContentGeneratorTests.cs` verifying generated content structure
 
 **Checkpoint**: Canon validation tests pass; `hugo --minify` in `site/` produces hyperlinked `docs/` output
 
@@ -286,6 +286,7 @@ Task T064–T067: Export DTOs in src/Turpinverse.Core/Export/
 - [P] tasks = different files, no dependencies on incomplete tasks in the same phase
 - [Story] label maps task to user story for traceability
 - Canon JSON in `src/Turpinverse.Data/canon/` is the single source of truth for both Hugo and Blazor
-- Run `dotnet run --project tools/generate-hugo-content/...` before every Hugo build
+- Hugo content: domain logic in `src/Turpinverse.Core/Hugo/`; CLI host in `src/Turpinverse.Tools.GenerateHugoContent`. Do **not** recreate a `tools/` folder or put generation logic only in `Program.cs`
+- Run `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` before every Hugo build
 - Commit after each phase checkpoint
 - Total tasks: **100** (Setup: 19, Foundational: 18, US1: 21, US2: 20, US3: 14, Polish: 8)

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Export;
+using Turpinverse.Core.Hugo;
 using Turpinverse.Core.Validation;
 
 namespace Turpinverse.Core.DependencyInjection;
@@ -12,6 +13,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<CanonValidator>();
         services.AddSingleton<ToneValidator>();
         services.AddSingleton<IExportService, CsvExportService>();
+        services.AddSingleton<IHugoContentGenerator, HugoContentGenerator>();
         return services;
     }
 }

@@ -28,7 +28,7 @@ jobs:
         run: dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation" --configuration Release
 
       - name: Generate Hugo content
-        run: dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent --configuration Release
+        run: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent --configuration Release
 
       - name: Build Hugo site
         run: hugo --minify

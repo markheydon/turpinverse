@@ -62,7 +62,7 @@ Proves the documentation site builds and contains hyperlinked canon content.
 
 ```powershell
 # Generate Hugo content from canon JSON
-dotnet run --project tools/generate-hugo-content/Turpinverse.Tools.GenerateHugoContent
+dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 
 # Build Hugo site to docs/ (local Hugo install)
 cd site
