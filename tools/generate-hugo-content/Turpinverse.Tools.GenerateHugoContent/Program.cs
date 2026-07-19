@@ -1,9 +1,9 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
-using Turpinverse.Core.Abstractions;
-using Turpinverse.Data.DependencyInjection;
-using Turpinverse.Core.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Turpinverse.Core.Abstractions;
+using Turpinverse.Core.DependencyInjection;
+using Turpinverse.Data.DependencyInjection;
 
 var utf8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 var jsonOptions = new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

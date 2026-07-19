@@ -1,8 +1,8 @@
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.DependencyInjection;
 using Turpinverse.Data.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Turpinverse.IntegrationTests;
 

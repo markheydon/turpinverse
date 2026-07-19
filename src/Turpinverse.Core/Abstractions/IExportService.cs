@@ -1,5 +1,3 @@
-using Turpinverse.Core.Models;
-
 namespace Turpinverse.Core.Abstractions;
 
 public interface IExportService

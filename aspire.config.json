@@ -1,0 +1,7 @@
+{
+    "appHost": {
+        "path": "src/Turpinverse.AppHost/Turpinverse.AppHost.csproj",
+        "language": "csharp"
+    },
+    "channel": "stable"
+}

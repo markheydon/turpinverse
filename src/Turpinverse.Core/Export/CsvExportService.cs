@@ -3,7 +3,6 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Turpinverse.Core.Abstractions;
-using Turpinverse.Core.Export;
 
 namespace Turpinverse.Core.Export;
 
