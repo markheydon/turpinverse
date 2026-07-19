@@ -46,7 +46,7 @@ function Invoke-HugoContentGenerator {
 function Invoke-HugoBuild {
     <#
     .SYNOPSIS
-        Builds the Hugo site into docs/ using a containerized Hugo runtime.
+        Builds the Hugo site into site/public using a containerized Hugo runtime.
     #>
     & $Runtime run --rm `
         -v "${rootForMount}:/src:Z" `
@@ -56,9 +56,9 @@ function Invoke-HugoBuild {
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Hugo build failed (exit $LASTEXITCODE). Fix errors above before previewing."
     }
-    $docsPath = Join-Path $repoRoot "docs"
-    if (-not (Test-Path (Join-Path $docsPath "index.html"))) {
-        Write-Error "Hugo did not produce docs/index.html. Run content generation first: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent"
+    $publicPath = Join-Path $repoRoot "site/public"
+    if (-not (Test-Path (Join-Path $publicPath "index.html"))) {
+        Write-Error "Hugo did not produce site/public/index.html. Run content generation first: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent"
     }
 }
 
@@ -67,9 +67,9 @@ Test-ContainerRuntime -Name $Runtime
 switch ($Command) {
     "build" {
         Invoke-HugoContentGenerator
-        Write-Host "Building Hugo site to docs/..." -ForegroundColor Cyan
+        Write-Host "Building Hugo site to site/public..." -ForegroundColor Cyan
         Invoke-HugoBuild
-        Write-Host "Done. Output: $repoRoot\docs" -ForegroundColor Green
+        Write-Host "Done. Output: $repoRoot\site\public" -ForegroundColor Green
     }
 
     "serve" {
@@ -87,9 +87,9 @@ switch ($Command) {
         Invoke-HugoContentGenerator
         Write-Host "Building Hugo site..." -ForegroundColor Cyan
         Invoke-HugoBuild
-        Write-Host "Serving docs/ at http://localhost:$PreviewPort ..." -ForegroundColor Cyan
+        Write-Host "Serving site/public at http://localhost:$PreviewPort ..." -ForegroundColor Cyan
         & $Runtime run --rm -p "${PreviewPort}:80" `
-            -v "${rootForMount}/docs:/usr/share/nginx/html:ro,Z" `
+            -v "${rootForMount}/site/public:/usr/share/nginx/html:ro,Z" `
             docker.io/library/nginx:alpine
     }
 }

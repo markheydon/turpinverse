@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       deploy:
-        description: Commit and push built site to docs/
+        description: Deploy to GitHub Pages
         required: false
         type: boolean
         default: false
@@ -12,21 +12,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.164.0
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Pages
+        if: inputs.deploy
+        id: pages
+        uses: actions/configure-pages@v6
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: '0.164.0'
-          extended: true
+      - name: Install Hugo
+        run: |
+          echo "Installing Hugo ${HUGO_VERSION} (extended)..."
+          curl -sfL --output-dir "${{ runner.temp }}" -O "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          mkdir -p "${HOME}/.local/hugo"
+          tar -C "${HOME}/.local/hugo" -xf "${{ runner.temp }}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          echo "${HOME}/.local/hugo" >> "${GITHUB_PATH}"
+
+      - name: Log tool versions
+        run: |
+          dotnet --version
+          hugo version
 
       - name: Validate canon
         run: dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation" --configuration Release
@@ -34,22 +50,29 @@ jobs:
       - name: Generate Hugo content
         run: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent --configuration Release
 
-      - name: Build Hugo site
-        run: hugo --minify
+      - name: Build
         working-directory: site
-
-      - name: Deploy to docs/
-        if: inputs.deploy
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f docs/
-          git diff --staged --quiet || git commit -m "Deploy Hugo site to docs/"
-          for attempt in 1 2 3; do
-            git pull --rebase origin main && git push && break
-            if [ "$attempt" -eq 3 ]; then
-              echo "Deploy push failed after 3 attempts"
-              exit 1
-            fi
-            sleep 5
-          done
+          if [ "${{ inputs.deploy }}" = "true" ]; then
+            hugo build --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+          else
+            hugo build --gc --minify
+          fi
+
+      - name: Upload artifact
+        if: inputs.deploy
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/public
+
+  deploy:
+    if: inputs.deploy
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

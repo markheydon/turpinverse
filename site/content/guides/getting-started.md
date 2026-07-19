@@ -54,7 +54,7 @@ dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 cd site && hugo --minify
 ```
 
-Output is written to `docs/` for GitHub Pages. For a live preview:
+Output is written to `site/public/` for local preview. Production deploys use GitHub Actions.
 
 ```powershell
 .\scripts\Invoke-HugoSite.ps1 serve
