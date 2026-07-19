@@ -2,8 +2,13 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" />
+    <PackageReference Include="JsonSchema.Net" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\specs\001-turpinverse-universe\contracts\canon-schema.json" Link="schemas\canon-schema.json" />
   </ItemGroup>
 
   <PropertyGroup>

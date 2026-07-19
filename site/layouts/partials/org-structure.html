@@ -12,20 +12,20 @@
 flowchart TB
   {{ $nodeId := replace $orgId "-" "_" }}
   {{ $label := partial "mermaid-sanitize.html" .Title }}
-  {{ $nodeId }}["{{ $label }}<br/><small>{{ .Params.industry }}</small>"]
+  {{ $nodeId }}["{{ $label }}\n{{ partial "mermaid-sanitize.html" .Params.industry }}"]
   {{ with $parentId }}
   {{ $parent := site.GetPage (printf "/organisations/%s" .) }}
   {{ if $parent }}
   {{ $parentNode := replace . "-" "_" }}
   {{ $parentLabel := partial "mermaid-sanitize.html" $parent.Title }}
-  {{ $parentNode }}["{{ $parentLabel }}<br/><small>{{ $parent.Params.industry }}</small>"]
+  {{ $parentNode }}["{{ $parentLabel }}\n{{ partial "mermaid-sanitize.html" $parent.Params.industry }}"]
   {{ $parentNode }} --> {{ $nodeId }}
   {{ end }}
   {{ end }}
   {{ range $children }}
   {{ $childNode := replace .id "-" "_" }}
   {{ $childLabel := partial "mermaid-sanitize.html" .tradingName }}
-  {{ $childNode }}["{{ $childLabel }}<br/><small>{{ .industry }}</small>"]
+  {{ $childNode }}["{{ $childLabel }}\n{{ partial "mermaid-sanitize.html" .industry }}"]
   {{ $nodeId }} --> {{ $childNode }}
   {{ end }}
   </div>

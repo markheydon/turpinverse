@@ -27,24 +27,19 @@
 }
 
 @code {
-    [Parameter, EditorRequired] public IReadOnlyList<object> Rows { get; set; } = [];
+    [Parameter, EditorRequired] public IReadOnlyList<IReadOnlyDictionary<string, string>> Rows { get; set; } = [];
     [Parameter, EditorRequired] public string DatasetType { get; set; } = string.Empty;
 
     private IReadOnlyList<string> GetHeaders()
     {
-        if (Rows.FirstOrDefault() is Dictionary<string, string> dict)
+        if (Rows.FirstOrDefault() is { } firstRow)
         {
-            return dict.Keys.ToList();
+            return firstRow.Keys.ToList();
         }
+
         return [];
     }
 
-    private static string GetValue(object row, string header)
-    {
-        if (row is Dictionary<string, string> dict && dict.TryGetValue(header, out var value))
-        {
-            return value;
-        }
-        return string.Empty;
-    }
+    private static string GetValue(IReadOnlyDictionary<string, string> row, string header) =>
+        row.TryGetValue(header, out var value) ? value : string.Empty;
 }

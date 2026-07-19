@@ -42,7 +42,8 @@ public static class ExportMapper
             Industry = organisation.Industry,
             ParentAccountId = organisation.ParentOrganisationId ?? string.Empty,
             Description = organisation.Description,
-            Website = organisation.Website ?? string.Empty
+            Website = organisation.Website ?? string.Empty,
+            Status = organisation.Status
         };
 
     public static DealExport MapDeal(Deal deal) =>

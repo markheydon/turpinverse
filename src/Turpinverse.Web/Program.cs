@@ -10,7 +10,6 @@ builder.Services.AddTurpinverseCore();
 builder.Services.AddTurpinverseData();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddHttpClient();
 builder.Services.AddScoped(sp =>
 {
     var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();

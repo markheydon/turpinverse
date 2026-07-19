@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Turpinverse.Core.Abstractions;
@@ -14,6 +15,11 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         ["accounts"] = "turpinverse-accounts.csv",
         ["deals"] = "turpinverse-deals.csv",
         ["cases"] = "turpinverse-cases.csv"
+    };
+
+    private static readonly JsonSerializerOptions PreviewJsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
     public async Task<byte[]> ExportCsvAsync(string dataset, CancellationToken cancellationToken = default)
@@ -48,7 +54,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         return memoryStream.ToArray();
     }
 
-    public async Task<IReadOnlyList<object>> PreviewAsync(
+    public async Task<IReadOnlyList<IReadOnlyDictionary<string, string>>> PreviewAsync(
         string dataset,
         int count = 5,
         CancellationToken cancellationToken = default)
@@ -56,10 +62,10 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         var canon = await canonRepository.LoadAsync(cancellationToken);
         return dataset.ToLowerInvariant() switch
         {
-            "contacts" => ExportMapper.MapContacts(canon).Take(count).Cast<object>().ToList(),
-            "accounts" => ExportMapper.MapAccounts(canon).Take(count).Cast<object>().ToList(),
-            "deals" => ExportMapper.MapDeals(canon).Take(count).Cast<object>().ToList(),
-            "cases" => ExportMapper.MapCases(canon).Take(count).Cast<object>().ToList(),
+            "contacts" => ToPreviewRows(ExportMapper.MapContacts(canon).Take(count)),
+            "accounts" => ToPreviewRows(ExportMapper.MapAccounts(canon).Take(count)),
+            "deals" => ToPreviewRows(ExportMapper.MapDeals(canon).Take(count)),
+            "cases" => ToPreviewRows(ExportMapper.MapCases(canon).Take(count)),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
     }
@@ -70,20 +76,37 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         return new ExportManifest(
             canon.Version,
             [
-                CreateDatasetInfo("contacts", ExportMapper.MapContacts(canon)),
-                CreateDatasetInfo("accounts", ExportMapper.MapAccounts(canon)),
-                CreateDatasetInfo("deals", ExportMapper.MapDeals(canon)),
-                CreateDatasetInfo("cases", ExportMapper.MapCases(canon))
+                CreateDatasetInfo("contacts", ExportMapper.MapContacts(canon).Count),
+                CreateDatasetInfo("accounts", ExportMapper.MapAccounts(canon).Count),
+                CreateDatasetInfo("deals", ExportMapper.MapDeals(canon).Count),
+                CreateDatasetInfo("cases", ExportMapper.MapCases(canon).Count)
             ]);
     }
 
     public static bool TryGetFilename(string dataset, out string filename) =>
         Filenames.TryGetValue(dataset.ToLowerInvariant(), out filename!);
 
-    private static ExportDatasetInfo CreateDatasetInfo<T>(string type, IReadOnlyList<T> rows) =>
-        new(
-            type,
-            Filenames[type],
-            rows.Count,
-            typeof(T).GetProperties().Select(p => p.Name).ToList());
+    private static ExportDatasetInfo CreateDatasetInfo(string type, int rowCount) =>
+        new(type, Filenames[type], rowCount, ExportCsvColumns.ForDataset(type));
+
+    private static IReadOnlyList<IReadOnlyDictionary<string, string>> ToPreviewRows<T>(IEnumerable<T> rows) =>
+        rows.Select(row =>
+        {
+            var json = JsonSerializer.SerializeToElement(row, PreviewJsonOptions);
+            var dictionary = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var property in json.EnumerateObject())
+            {
+                dictionary[property.Name] = property.Value.ValueKind switch
+                {
+                    JsonValueKind.String => property.Value.GetString() ?? string.Empty,
+                    JsonValueKind.Number => property.Value.GetRawText(),
+                    JsonValueKind.True => "true",
+                    JsonValueKind.False => "false",
+                    JsonValueKind.Null => string.Empty,
+                    _ => property.Value.GetRawText()
+                };
+            }
+
+            return (IReadOnlyDictionary<string, string>)dictionary;
+        }).ToList();
 }

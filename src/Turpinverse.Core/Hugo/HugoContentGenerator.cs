@@ -116,5 +116,10 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
     }
 
     private static string EscapeYaml(string value) =>
-        value.Replace("\\", "\\\\").Replace("\"", "\\\"");
+        value
+            .Replace("\\", "\\\\")
+            .Replace("\"", "\\\"")
+            .Replace("\r\n", "\\n")
+            .Replace("\n", "\\n")
+            .Replace("\r", "\\n");
 }

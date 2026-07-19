@@ -14,14 +14,14 @@ public class CanonValidatorTests
     public async Task Validate_LoadedCanon_HasMinimumPersonas()
     {
         var canon = await _repository.LoadAsync();
-        canon.Personas.Should().HaveCountGreaterThanOrEqualTo(15);
+        canon.Personas.Should().HaveCountGreaterThanOrEqualTo(25);
     }
 
     [Fact]
     public async Task Validate_LoadedCanon_HasMinimumOrganisations()
     {
         var canon = await _repository.LoadAsync();
-        canon.Organisations.Should().HaveCountGreaterThanOrEqualTo(8);
+        canon.Organisations.Should().HaveCountGreaterThanOrEqualTo(10);
     }
 
     [Fact]
@@ -48,5 +48,13 @@ public class CanonValidatorTests
     {
         var canon = await _repository.LoadAsync();
         canon.Events.Should().HaveCountGreaterThanOrEqualTo(10);
+    }
+
+    [Fact]
+    public async Task Validate_LoadedCanon_HasMinimumDealsAndCases()
+    {
+        var canon = await _repository.LoadAsync();
+        canon.Deals.Should().HaveCountGreaterThanOrEqualTo(20);
+        canon.Cases.Should().HaveCountGreaterThanOrEqualTo(15);
     }
 }

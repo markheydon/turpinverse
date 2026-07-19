@@ -4,4 +4,5 @@
 {{- $text = replace $text "[" "(" -}}
 {{- $text = replace $text "]" ")" -}}
 {{- $text = replace $text "#" "" -}}
-{{- $text | safeHTML -}}
+{{- $text = replace $text "\n" " " -}}
+{{- $text -}}

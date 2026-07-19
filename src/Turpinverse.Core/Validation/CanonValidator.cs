@@ -13,15 +13,19 @@ public sealed partial class CanonValidator
     public CanonValidationResult Validate(Canon canon)
     {
         var violations = new List<ValidationViolation>();
+        violations.AddRange(CanonSchemaValidator.Validate(canon));
+
         var personaIds = canon.Personas.Select(p => p.Id).ToHashSet();
         var organisationIds = canon.Organisations.Select(o => o.Id).ToHashSet();
+        var eventIds = canon.Events.Select(e => e.Id).ToHashSet();
 
         ValidatePersonaOrganisationReferences(canon, personaIds, organisationIds, violations);
         ValidateOrganisationMemberReferences(canon, personaIds, violations);
         ValidateBidirectionalMembership(canon, violations);
-        ValidateAliases(canon, violations);
+        ValidateAliases(canon, personaIds, violations);
+        ValidateEvents(canon, personaIds, organisationIds, violations);
         ValidateDeals(canon, personaIds, organisationIds, violations);
-        ValidateCases(canon, personaIds, organisationIds, violations);
+        ValidateCases(canon, personaIds, organisationIds, eventIds, violations);
         ValidateDeceasedDealOwners(canon, violations);
         ValidateLegendEvents(canon, violations);
         ValidateMinimumVolumes(canon, violations);
@@ -106,11 +110,23 @@ public sealed partial class CanonValidator
         }
     }
 
-    private static void ValidateAliases(Canon canon, List<ValidationViolation> violations)
+    private static void ValidateAliases(
+        Canon canon,
+        HashSet<string> personaIds,
+        List<ValidationViolation> violations)
     {
         var aliasTargets = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (var alias in canon.Aliases)
         {
+            if (!personaIds.Contains(alias.PersonaId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-004",
+                    $"Alias '{alias.Alias}' references unknown persona '{alias.PersonaId}'",
+                    "AliasMap",
+                    alias.Alias));
+            }
+
             if (aliasTargets.TryGetValue(alias.Alias, out var existing))
             {
                 violations.Add(new ValidationViolation(
@@ -122,6 +138,40 @@ public sealed partial class CanonValidator
             else
             {
                 aliasTargets[alias.Alias] = alias.PersonaId;
+            }
+        }
+    }
+
+    private static void ValidateEvents(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        foreach (var evt in canon.Events)
+        {
+            foreach (var personaId in evt.PersonaIds)
+            {
+                if (!personaIds.Contains(personaId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-011",
+                        $"Event '{evt.Id}' references unknown persona '{personaId}'",
+                        "CanonEvent",
+                        evt.Id));
+                }
+            }
+
+            foreach (var organisationId in evt.OrganisationIds)
+            {
+                if (!organisationIds.Contains(organisationId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-011",
+                        $"Event '{evt.Id}' references unknown organisation '{organisationId}'",
+                        "CanonEvent",
+                        evt.Id));
+                }
             }
         }
     }
@@ -158,6 +208,7 @@ public sealed partial class CanonValidator
         Canon canon,
         HashSet<string> personaIds,
         HashSet<string> organisationIds,
+        HashSet<string> eventIds,
         List<ValidationViolation> violations)
     {
         foreach (var caseRecord in canon.Cases)
@@ -176,6 +227,16 @@ public sealed partial class CanonValidator
                 violations.Add(new ValidationViolation(
                     "VR-006",
                     $"Case '{caseRecord.CaseId}' references unknown account '{caseRecord.AccountId}'",
+                    "Case",
+                    caseRecord.CaseId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(caseRecord.RelatedEventId)
+                && !eventIds.Contains(caseRecord.RelatedEventId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-012",
+                    $"Case '{caseRecord.CaseId}' references unknown event '{caseRecord.RelatedEventId}'",
                     "Case",
                     caseRecord.CaseId));
             }
@@ -222,38 +283,38 @@ public sealed partial class CanonValidator
 
     private static void ValidateMinimumVolumes(Canon canon, List<ValidationViolation> violations)
     {
-        if (canon.Personas.Count < 15)
+        if (canon.Personas.Count < 25)
         {
             violations.Add(new ValidationViolation(
                 "VR-009",
-                $"Minimum 15 personas required, found {canon.Personas.Count}",
+                $"Minimum 25 personas required, found {canon.Personas.Count}",
                 "Canon",
                 "personas"));
         }
 
-        if (canon.Organisations.Count < 8)
+        if (canon.Organisations.Count < 10)
         {
             violations.Add(new ValidationViolation(
                 "VR-009",
-                $"Minimum 8 organisations required, found {canon.Organisations.Count}",
+                $"Minimum 10 organisations required, found {canon.Organisations.Count}",
                 "Canon",
                 "organisations"));
         }
 
-        if (canon.Deals.Count > 0 && canon.Deals.Count < 20)
+        if (canon.Deals.Count < 20)
         {
             violations.Add(new ValidationViolation(
                 "VR-009",
-                $"Minimum 20 deals required when deals present, found {canon.Deals.Count}",
+                $"Minimum 20 deals required, found {canon.Deals.Count}",
                 "Canon",
                 "deals"));
         }
 
-        if (canon.Cases.Count > 0 && canon.Cases.Count < 15)
+        if (canon.Cases.Count < 15)
         {
             violations.Add(new ValidationViolation(
                 "VR-009",
-                $"Minimum 15 cases required when cases present, found {canon.Cases.Count}",
+                $"Minimum 15 cases required, found {canon.Cases.Count}",
                 "Canon",
                 "cases"));
         }

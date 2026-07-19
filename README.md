@@ -14,6 +14,12 @@ universe. It provides:
 - **CRM demo data** — Blazor Server app exporting contacts, accounts, deals, and cases
   as CSV files with intact cross-references
 
+## API security note
+
+The Blazor export app exposes `/api/export/*` and `/api/canon/validate` without authentication.
+This is intentional for local demos and Aspire development. Do not deploy the export app to a
+public network without adding authentication or network restrictions.
+
 ## Quickstart
 
 See [specs/001-turpinverse-universe/quickstart.md](specs/001-turpinverse-universe/quickstart.md)

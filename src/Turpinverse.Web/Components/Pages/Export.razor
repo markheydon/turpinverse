@@ -50,7 +50,7 @@
 @code {
     private ExportManifest? manifest;
     private CanonValidationResponse? validationResult;
-    private IReadOnlyList<object>? previewRows;
+    private IReadOnlyList<IReadOnlyDictionary<string, string>>? previewRows;
     private IReadOnlyList<PipelineChart.DealPreview>? deals;
     private Dictionary<string, int>? summaryCounts;
     private string selectedDataset = "contacts";
@@ -68,8 +68,14 @@
                 summaryCounts = manifest.Datasets.ToDictionary(d => d.Type, d => d.RowCount);
             }
 
-            var dealsBytes = await Http.GetByteArrayAsync("/api/export/deals");
-            deals = await ParseDealsPreview(dealsBytes);
+            var dealRows = await Http.GetFromJsonAsync<List<Dictionary<string, string>>>("/api/export/deals/preview?count=100");
+            deals = dealRows?
+                .Select(row => new PipelineChart.DealPreview
+                {
+                    Stage = row.GetValueOrDefault("stage", "Unknown")
+                })
+                .ToList();
+
             await LoadPreview(selectedDataset);
         }
         finally
@@ -86,42 +92,15 @@
 
     private async Task LoadPreview(string dataset)
     {
-        var bytes = await Http.GetByteArrayAsync($"/api/export/{dataset}");
-        previewRows = ParseCsvPreview(bytes);
+        var rows = await Http.GetFromJsonAsync<List<Dictionary<string, string>>>($"/api/export/{dataset}/preview?count=5");
+        previewRows = rows?
+            .Select(row => (IReadOnlyDictionary<string, string>)row)
+            .ToList();
     }
 
     private async Task DownloadDataset(string dataset)
     {
         await JS.InvokeVoidAsync("open", $"/api/export/{dataset}", "_blank");
-    }
-
-    private static IReadOnlyList<object> ParseCsvPreview(byte[] bytes)
-    {
-        var text = System.Text.Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
-        var lines = text.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries);
-        if (lines.Length < 2) return [];
-
-        var headers = lines[0].Split(',');
-        return lines.Skip(1).Take(5).Select(line =>
-        {
-            var values = line.Split(',');
-            return headers.Zip(values, (h, v) => new KeyValuePair<string, string>(h, v.Trim('"')))
-                .ToDictionary(kv => kv.Key, kv => kv.Value) as object;
-        }).ToList()!;
-    }
-
-    private static async Task<IReadOnlyList<PipelineChart.DealPreview>> ParseDealsPreview(byte[] bytes)
-    {
-        await Task.CompletedTask;
-        var text = System.Text.Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
-        var lines = text.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries);
-        if (lines.Length < 2) return [];
-
-        return lines.Skip(1).Select(line =>
-        {
-            var parts = line.Split(',');
-            return new PipelineChart.DealPreview { Stage = parts.Length > 4 ? parts[4].Trim('"') : "Unknown" };
-        }).ToList();
     }
 
     private sealed class CanonValidationResponse

@@ -29,7 +29,7 @@ flowchart TB
   subgraph executive["Executive"]
     direction LR
     {{ range $executive }}
-    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}<br/><small>{{ partial "mermaid-sanitize.html" .job }}</small>"]
+    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}\n{{ partial "mermaid-sanitize.html" .job }}"]
     {{ end }}
   end
   {{ end }}
@@ -37,7 +37,7 @@ flowchart TB
   subgraph senior["Leadership"]
     direction LR
     {{ range $senior }}
-    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}<br/><small>{{ partial "mermaid-sanitize.html" .job }}</small>"]
+    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}\n{{ partial "mermaid-sanitize.html" .job }}"]
     {{ end }}
   end
   {{ end }}
@@ -45,7 +45,7 @@ flowchart TB
   subgraph operations["Operations"]
     direction LR
     {{ range $operations }}
-    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}<br/><small>{{ partial "mermaid-sanitize.html" .job }}</small>"]
+    {{ .node }}["{{ partial "mermaid-sanitize.html" .name }}\n{{ partial "mermaid-sanitize.html" .job }}"]
     {{ end }}
   end
   {{ end }}

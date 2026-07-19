@@ -1,6 +1,7 @@
 using System.Net;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Turpinverse.Core.Export;
 
 namespace Turpinverse.IntegrationTests.Export;
 
@@ -20,11 +21,11 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var contacts = await ParseCsv("/api/export/contacts");
         var deals = await ParseCsv("/api/export/deals");
 
-        var contactIds = contacts.Select(r => r["ContactId"]).ToHashSet();
+        var contactIds = contacts.Select(r => r["contactId"]).ToHashSet();
         foreach (var deal in deals)
         {
-            contactIds.Should().Contain(deal["ContactId"],
-                because: $"deal {deal["DealId"]} references orphan contact");
+            contactIds.Should().Contain(deal["contactId"],
+                because: $"deal {deal["dealId"]} references orphan contact");
         }
     }
 
@@ -34,11 +35,11 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var accounts = await ParseCsv("/api/export/accounts");
         var deals = await ParseCsv("/api/export/deals");
 
-        var accountIds = accounts.Select(r => r["AccountId"]).ToHashSet();
+        var accountIds = accounts.Select(r => r["accountId"]).ToHashSet();
         foreach (var deal in deals)
         {
-            accountIds.Should().Contain(deal["AccountId"],
-                because: $"deal {deal["DealId"]} references orphan account");
+            accountIds.Should().Contain(deal["accountId"],
+                because: $"deal {deal["dealId"]} references orphan account");
         }
     }
 
@@ -49,13 +50,13 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var accounts = await ParseCsv("/api/export/accounts");
         var cases = await ParseCsv("/api/export/cases");
 
-        var contactIds = contacts.Select(r => r["ContactId"]).ToHashSet();
-        var accountIds = accounts.Select(r => r["AccountId"]).ToHashSet();
+        var contactIds = contacts.Select(r => r["contactId"]).ToHashSet();
+        var accountIds = accounts.Select(r => r["accountId"]).ToHashSet();
 
         foreach (var caseRecord in cases)
         {
-            contactIds.Should().Contain(caseRecord["ContactId"]);
-            accountIds.Should().Contain(caseRecord["AccountId"]);
+            contactIds.Should().Contain(caseRecord["contactId"]);
+            accountIds.Should().Contain(caseRecord["accountId"]);
         }
     }
 
@@ -64,16 +65,9 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync(url);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var text = await response.Content.ReadAsStringAsync();
-        text = text.TrimStart('\uFEFF');
-        var lines = text.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries);
-        var headers = lines[0].Split(',');
-
-        return lines.Skip(1).Select(line =>
-        {
-            var values = line.Split(',');
-            return headers.Zip(values, (h, v) => new KeyValuePair<string, string>(h, v.Trim('"')))
-                .ToDictionary(kv => kv.Key, kv => kv.Value);
-        }).ToList();
+        var bytes = await response.Content.ReadAsByteArrayAsync();
+        return CsvExportReader.ParseRows(bytes)
+            .Select(row => row.ToDictionary(kvp => kvp.Key, kvp => kvp.Value))
+            .ToList();
     }
 }

@@ -1,6 +1,7 @@
 using System.Net;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Turpinverse.Core.Export;
 
 namespace Turpinverse.IntegrationTests.Export;
 
@@ -33,9 +34,11 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
         bytes[1].Should().Be(0xBB);
         bytes[2].Should().Be(0xBF);
 
-        var text = System.Text.Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
-        var lines = text.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries);
-        lines.Length.Should().BeGreaterThanOrEqualTo(minRows + 1);
+        var header = CsvExportReader.ParseHeader(bytes);
+        header.Should().Equal(ExportCsvColumns.ForDataset(dataset));
+
+        var rows = CsvExportReader.ParseRows(bytes);
+        rows.Count.Should().BeGreaterThanOrEqualTo(minRows);
     }
 
     [Fact]

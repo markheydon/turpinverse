@@ -3,7 +3,10 @@ namespace Turpinverse.Core.Abstractions;
 public interface IExportService
 {
     Task<byte[]> ExportCsvAsync(string dataset, CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<object>> PreviewAsync(string dataset, int count = 5, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<IReadOnlyDictionary<string, string>>> PreviewAsync(
+        string dataset,
+        int count = 5,
+        CancellationToken cancellationToken = default);
     Task<ExportManifest> GetManifestAsync(CancellationToken cancellationToken = default);
 }
 

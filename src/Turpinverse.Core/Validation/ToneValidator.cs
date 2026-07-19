@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using Turpinverse.Core.Models;
 
@@ -5,6 +6,9 @@ namespace Turpinverse.Core.Validation;
 
 public sealed partial class ToneValidator
 {
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+    private static readonly ConcurrentDictionary<string, Regex> RegexCache = new(StringComparer.Ordinal);
+
     public IReadOnlyList<ValidationViolation> ValidateCanon(Canon canon)
     {
         var violations = new List<ValidationViolation>();
@@ -37,7 +41,7 @@ public sealed partial class ToneValidator
         var violations = new List<ValidationViolation>();
         foreach (var pattern in forbiddenPatterns)
         {
-            if (ForbiddenPatternRegex(pattern).IsMatch(text))
+            if (GetRegex(pattern).IsMatch(text))
             {
                 violations.Add(new ValidationViolation(
                     "TONE-001",
@@ -50,6 +54,9 @@ public sealed partial class ToneValidator
         return violations;
     }
 
-    private static Regex ForbiddenPatternRegex(string pattern) =>
-        new(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static Regex GetRegex(string pattern) =>
+        RegexCache.GetOrAdd(pattern, static p => new Regex(
+            p,
+            RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant,
+            RegexTimeout));
 }

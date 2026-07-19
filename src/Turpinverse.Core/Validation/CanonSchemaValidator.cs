@@ -1,51 +1,30 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using Json.Schema;
 using Turpinverse.Core.Models;
 
 namespace Turpinverse.Core.Validation;
 
 public static class CanonSchemaValidator
 {
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
+    private static readonly Lazy<JsonSchema> Schema = new(LoadSchema);
+
     public static IReadOnlyList<ValidationViolation> Validate(Canon canon)
     {
-        var violations = new List<ValidationViolation>();
+        var element = JsonSerializer.SerializeToElement(canon, JsonOptions);
 
-        if (canon.Personas.Count < 15)
+        var result = Schema.Value.Evaluate(element, new EvaluationOptions
         {
-            violations.Add(new ValidationViolation(
-                "SCHEMA-001", "Personas array requires minimum 15 items", "Canon", "personas"));
-        }
+            OutputFormat = OutputFormat.List
+        });
 
-        if (canon.Organisations.Count < 8)
-        {
-            violations.Add(new ValidationViolation(
-                "SCHEMA-002", "Organisations array requires minimum 8 items", "Canon", "organisations"));
-        }
-
-        if (canon.Events.Count < 10)
-        {
-            violations.Add(new ValidationViolation(
-                "SCHEMA-003", "Events array requires minimum 10 items", "Canon", "events"));
-        }
-
-        if (canon.ToneGuidelines.Principles.Count < 3)
-        {
-            violations.Add(new ValidationViolation(
-                "SCHEMA-004", "Tone guidelines require minimum 3 principles", "Canon", "toneGuidelines"));
-        }
-
-        foreach (var persona in canon.Personas)
-        {
-            if (!persona.Email.EndsWith("@turpinverse.uk", StringComparison.Ordinal))
-            {
-                violations.Add(new ValidationViolation(
-                    "SCHEMA-005",
-                    $"Persona '{persona.Id}' email does not match required pattern",
-                    "Persona",
-                    persona.Id));
-            }
-        }
-
-        return violations;
+        return FlattenViolations(result);
     }
 
     public static bool TryValidateJson(string json, out IReadOnlyList<ValidationViolation> violations)
@@ -53,13 +32,68 @@ public static class CanonSchemaValidator
         violations = [];
         try
         {
-            JsonDocument.Parse(json);
-            return true;
+            using var document = JsonDocument.Parse(json);
+            var result = Schema.Value.Evaluate(document.RootElement, new EvaluationOptions
+            {
+                OutputFormat = OutputFormat.List
+            });
+
+            violations = FlattenViolations(result);
+            return result.IsValid;
         }
         catch (JsonException ex)
         {
             violations = [new ValidationViolation("SCHEMA-000", ex.Message, "Canon", "json")];
             return false;
+        }
+    }
+
+    private static JsonSchema LoadSchema()
+    {
+        var assembly = typeof(CanonSchemaValidator).Assembly;
+        var resourceName = assembly.GetManifestResourceNames()
+            .First(name => name.EndsWith("canon-schema.json", StringComparison.OrdinalIgnoreCase));
+
+        using var stream = assembly.GetManifestResourceStream(resourceName)
+            ?? throw new InvalidOperationException("Embedded canon schema resource not found.");
+        using var reader = new StreamReader(stream);
+        return JsonSchema.FromText(reader.ReadToEnd());
+    }
+
+    private static List<ValidationViolation> FlattenViolations(EvaluationResults result)
+    {
+        var violations = new List<ValidationViolation>();
+        CollectViolations(result, violations);
+        return violations;
+    }
+
+    private static void CollectViolations(EvaluationResults result, List<ValidationViolation> violations)
+    {
+        if (result.IsValid)
+        {
+            return;
+        }
+
+        if (result.Errors is not null)
+        {
+            foreach (var (keyword, message) in result.Errors)
+            {
+                var path = result.InstanceLocation.ToString();
+                var entityId = string.IsNullOrWhiteSpace(path) ? "canon" : path.TrimStart('/');
+                violations.Add(new ValidationViolation(
+                    $"SCHEMA-{keyword.ToUpperInvariant()}",
+                    message,
+                    "Canon",
+                    entityId));
+            }
+        }
+
+        if (result.Details is not null)
+        {
+            foreach (var detail in result.Details)
+            {
+                CollectViolations(detail, violations);
+            }
         }
     }
 }

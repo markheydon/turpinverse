@@ -73,6 +73,24 @@ Returns metadata about available export types and row counts.
 }
 ```
 
+### GET /api/export/{dataset}/preview
+
+Returns the first N rows of a dataset as JSON (camelCase property names matching CSV columns).
+
+**Path parameters**:
+
+| Parameter | Type | Values |
+|-----------|------|--------|
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases` |
+
+**Query parameters**:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `count` | integer | `5` | Number of preview rows (1–100) |
+
+**Response** (200 OK, `application/json`): Array of row objects.
+
 ### GET /api/canon/validate
 
 Runs cross-reference validation (VR-001 through VR-010) and returns results.
@@ -126,7 +144,7 @@ The export dashboard (`/export`) provides:
 |------------|-----------|
 | Dataset cards | One card per export type showing row count and description |
 | Download button | Triggers `GET /api/export/{dataset}` download via browser |
-| Preview table | Shows first 5 rows of selected dataset (server-rendered) |
+| Preview table | Shows first 5 rows of selected dataset via `GET /api/export/{dataset}/preview` |
 | Pipeline chart | Chart.js bar chart of deal stage distribution |
 | Summary chart | Chart.js doughnut chart of entity counts |
 | Validation badge | Green/red indicator from `GET /api/canon/validate` |
