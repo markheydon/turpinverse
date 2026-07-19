@@ -40,12 +40,21 @@ cd site && hugo --minify
 On Windows, use Podman Desktop or Docker Desktop — no local Hugo install needed:
 
 ```powershell
-.\scripts\hugo.ps1 build    # generate content + build to docs/
-.\scripts\hugo.ps1 serve    # live preview at http://localhost:1313
-.\scripts\hugo.ps1 preview  # build + serve docs/ at http://localhost:8080
+.\scripts\Invoke-HugoSite.ps1 build    # generate content + build to docs/
+.\scripts\Invoke-HugoSite.ps1 serve    # live preview at http://localhost:1313
+.\scripts\Invoke-HugoSite.ps1 preview  # build + serve docs/ at http://localhost:8080
 ```
 
 Use `-Runtime docker` if you prefer Docker over Podman. Full details: [site/README.md](site/README.md).
+
+## Scripts
+
+PowerShell scripts in `scripts/` are linted in CI with [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer). Script files must be named `Verb-Noun.ps1` using an approved PowerShell verb.
+
+```powershell
+# Lint scripts locally (requires PSScriptAnalyzer module)
+pwsh -Command "Install-Module PSScriptAnalyzer -Scope CurrentUser -Force; Invoke-ScriptAnalyzer -Path scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1; ./scripts/Test-ScriptConventions.ps1"
+```
 
 ## Tech Stack
 

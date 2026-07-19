@@ -1,0 +1,15 @@
+name: Hugo Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/hugo-build.yml
+    with:
+      deploy: true

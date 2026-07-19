@@ -48,7 +48,7 @@ All exports are generated at runtime from the canonical JSON dataset — no sepa
 dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 
 # Build with Docker/Podman (no local Hugo install required)
-.\scripts\hugo.ps1 build
+.\scripts\Invoke-HugoSite.ps1 build
 
 # Or with Hugo installed locally
 cd site && hugo --minify
@@ -57,7 +57,7 @@ cd site && hugo --minify
 Output is written to `docs/` for GitHub Pages. For a live preview:
 
 ```powershell
-.\scripts\hugo.ps1 serve
+.\scripts\Invoke-HugoSite.ps1 serve
 ```
 
 See [site/README.md](../../README.md) for troubleshooting.

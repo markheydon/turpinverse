@@ -73,8 +73,8 @@ cd ..
 **Without Hugo installed** (Docker / Podman — recommended on Windows):
 
 ```powershell
-.\scripts\hugo.ps1 build
-# or live preview: .\scripts\hugo.ps1 serve
+.\scripts\Invoke-HugoSite.ps1 build
+# or live preview: .\scripts\Invoke-HugoSite.ps1 serve
 ```
 
 See [site/README.md](../../../site/README.md) for container commands and troubleshooting.
@@ -167,11 +167,15 @@ cd site && hugo --minify && cd ..
 
 ## GitHub Pages Deployment
 
-On push to `main`, the `hugo-pages.yml` workflow:
+**Hugo CI** (`hugo-ci.yml`) validates the site on pull requests and `001-*` branch pushes:
+canon validation, content generation, and Hugo build — no deploy.
+
+**Hugo Deploy** (`hugo-deploy.yml`) publishes to `docs/` on push to `main` or via manual
+**workflow_dispatch** in the Actions tab:
 1. Runs canon validation tests
 2. Generates Hugo content from canon JSON
 3. Builds Hugo to `docs/`
-4. Deploys to GitHub Pages
+4. Commits and pushes `docs/` for GitHub Pages
 
 **Verify**: Visit `https://<org>.github.io/turpinverse/` and confirm the site loads with
 canon content.

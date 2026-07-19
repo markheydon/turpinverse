@@ -88,7 +88,9 @@ Turpinverse.slnx
 .github/
 └── workflows/
     ├── ci.yml                   # Build, test, lint .NET solution
-    └── hugo-pages.yml           # Build Hugo → docs/, deploy GitHub Pages
+    ├── hugo-build.yml             # Reusable Hugo build (shared by CI and deploy)
+    ├── hugo-ci.yml                # Validate Hugo build on PRs / feature branches
+    └── hugo-deploy.yml            # Build Hugo → docs/, deploy GitHub Pages
 
 site/                            # Hugo source (NOT served directly)
 ├── hugo.toml

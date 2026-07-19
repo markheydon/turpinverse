@@ -7,6 +7,38 @@ on:
     branches: [main]
 
 jobs:
+  lint-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-powershell@v1
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: Install-Module PSScriptAnalyzer -Force -Scope CurrentUser
+
+      - name: Analyze PowerShell scripts
+        shell: pwsh
+        run: |
+          $issues = Invoke-ScriptAnalyzer -Path scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1 -Severity Warning,Error
+          if ($issues) {
+            $issues | Format-List
+            exit 1
+          }
+
+      - name: Check script naming conventions
+        shell: pwsh
+        run: ./scripts/Test-ScriptConventions.ps1
+
+      - name: Lint shell scripts
+        run: |
+          if compgen -G "scripts/**/*.sh" > /dev/null; then
+            shellcheck scripts/**/*.sh
+          else
+            echo "No shell scripts in scripts/ — skipping shellcheck"
+          fi
+
   build-and-test:
     runs-on: ubuntu-latest
     steps:

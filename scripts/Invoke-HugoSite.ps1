@@ -1,5 +1,5 @@
 # Build or preview the Hugo documentation site via Docker/Podman (no local Hugo install required).
-# Usage: .\scripts\hugo.ps1 build|serve|preview
+# Usage: .\scripts\Invoke-HugoSite.ps1 build|serve|preview
 
 param(
     [Parameter(Position = 0)]
@@ -17,6 +17,10 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 $rootForMount = $repoRoot -replace '\\', '/'
 
 function Test-ContainerRuntime {
+    <#
+    .SYNOPSIS
+        Verifies that the requested container runtime is available on PATH.
+    #>
     param([string]$Name)
     if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
         Write-Error "Container runtime '$Name' not found. Install Podman Desktop or Docker Desktop, or pass -Runtime docker."
@@ -24,6 +28,10 @@ function Test-ContainerRuntime {
 }
 
 function Invoke-HugoContentGenerator {
+    <#
+    .SYNOPSIS
+        Generates Hugo content from canon JSON via the .NET content generator tool.
+    #>
     Write-Host "Generating Hugo content from canon JSON..." -ForegroundColor Cyan
     Push-Location $repoRoot
     try {
@@ -36,6 +44,10 @@ function Invoke-HugoContentGenerator {
 }
 
 function Invoke-HugoBuild {
+    <#
+    .SYNOPSIS
+        Builds the Hugo site into docs/ using a containerized Hugo runtime.
+    #>
     & $Runtime run --rm `
         -v "${rootForMount}:/src:Z" `
         -w /src/site `

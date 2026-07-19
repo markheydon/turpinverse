@@ -34,9 +34,9 @@ git submodule update --init --recursive
 Use the helper scripts from the repo root (recommended on Windows):
 
 ```powershell
-.\scripts\hugo.ps1 build    # writes static site to docs/
-.\scripts\hugo.ps1 serve    # live preview at http://localhost:1313
-.\scripts\hugo.ps1 preview  # build + serve built docs/ at http://localhost:8080
+.\scripts\Invoke-HugoSite.ps1 build    # writes static site to docs/
+.\scripts\Invoke-HugoSite.ps1 serve    # live preview at http://localhost:1313
+.\scripts\Invoke-HugoSite.ps1 preview  # build + serve built docs/ at http://localhost:8080
 ```
 
 Or run the container commands directly:
@@ -84,14 +84,14 @@ Open http://localhost:8080
 
 ## Container image
 
-[`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-pages.yml`).
+[`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-build.yml`).
 
 ## Troubleshooting
 
 | Issue | Fix |
 |-------|-----|
 | `module not found` / PaperMod theme error | Run `git submodule update --init --recursive` from the repo root |
-| `statfs .../docs: no such file or directory` | Hugo build failed or was skipped — run `.\scripts\hugo.ps1 build` first; `docs/` is created by Hugo, not checked into git |
+| `statfs .../docs: no such file or directory` | Hugo build failed or was skipped — run `.\scripts\Invoke-HugoSite.ps1 build` first; `docs/` is created by Hugo, not checked into git |
 | Empty `docs/` or missing pages | Run the content generator before `hugo build` |
 | `site/content/personas/` is empty | `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` |
 | Port already in use | Change `-p 1313:1313` to e.g. `-p 1314:1313` and update `--baseURL` |
@@ -101,10 +101,10 @@ Open http://localhost:8080
 
 ```powershell
 # One command — generates content, builds, and serves
-.\scripts\hugo.ps1 serve
+.\scripts\Invoke-HugoSite.ps1 serve
 
 # Or build then preview static output (like GitHub Pages)
-.\scripts\hugo.ps1 preview
+.\scripts\Invoke-HugoSite.ps1 preview
 ```
 
 Do **not** run the nginx preview command until `docs/index.html` exists.

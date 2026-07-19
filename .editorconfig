@@ -22,6 +22,11 @@ indent_size = 2
 [*.{json,yml,yaml}]
 indent_size = 2
 
+[*.ps1]
+indent_size = 4
+charset = utf-8
+insert_final_newline = true
+
 # Trailing spaces are significant in Markdown (line-break syntax)
 [*.md]
 trim_trailing_whitespace = false

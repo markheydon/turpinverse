@@ -1,14 +1,16 @@
-name: Hugo Pages
+name: Hugo Build
 
 on:
-  push:
-    branches: [main]
-
-permissions:
-  contents: write
+  workflow_call:
+    inputs:
+      deploy:
+        description: Commit and push built site to docs/
+        required: false
+        type: boolean
+        default: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +39,7 @@ jobs:
         working-directory: site
 
       - name: Deploy to docs/
+        if: inputs.deploy
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
