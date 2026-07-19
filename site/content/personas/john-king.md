@@ -6,4 +6,6 @@ email: "john-king@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Highway operations specialist who worked alongside the Essex Gang during peak activity years.
+Enforces field team protocols across Essex corridor operations. Incident reports filed promptly; deviations are not tolerated.
+
+> *Legend basis:* Essex Gang security associate.

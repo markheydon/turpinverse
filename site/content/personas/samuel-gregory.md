@@ -1,9 +1,11 @@
 ﻿---
 title: "Samuel Gregory"
 type: "personas"
-jobTitle: "Regional Operations Lead"
+jobTitle: "Former CEO, Gregory Group (Acquired)"
 email: "samuel-gregory@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Leader of the Gregory Gang before merging operations with Turpin's Essex Gang. Known for organised deer poaching and coordinated rural enterprise.
+Founded the Gregory Group before a 1733 merger created Essex Solutions. Specialises in rural procurement with flexible terms.
+
+> *Legend basis:* Leader of the Gregory Gang prior to Essex Gang consolidation.

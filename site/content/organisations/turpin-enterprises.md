@@ -7,4 +7,4 @@ members: ["dick-turpin","mary-brazier","ned-palmer","black-bess","henry-clayton"
 parent: "essex-gang"
 ---
 
-Flagship consultancy offering route optimisation, identity management, and enterprise transport solutions.
+Flagship consultancy offering route optimisation, identity lifecycle management, and enterprise transport solutions. Post-merger growth driven by aggressive corridor strategy.

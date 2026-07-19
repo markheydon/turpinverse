@@ -7,4 +7,4 @@ members: ["sarah-thornton"]
 parent: ""
 ---
 
-Exclusive society organising race meetings, social gatherings, and premium hospitality events.
+Exclusive society organising race meetings, social gatherings, and premium hospitality events. Guest lists are curated; catering orders are not.

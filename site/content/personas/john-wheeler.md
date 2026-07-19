@@ -1,9 +1,11 @@
 ﻿---
 title: "John Wheeler"
 type: "personas"
-jobTitle: "Supply Chain Associate"
+jobTitle: "Field Operations Associate"
 email: "john-wheeler@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Member of the Essex Gang involved in coordinated rural operations across Epping Forest and surrounding parishes.
+Reliable boots-on-the-ground presence across Epping Forest operations. Rarely in the office; always in the field.
+
+> *Legend basis:* Essex Gang member; minimal historical detail — biography extended for canon completeness.

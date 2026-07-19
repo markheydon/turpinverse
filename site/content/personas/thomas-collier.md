@@ -1,9 +1,11 @@
 ﻿---
 title: "Thomas Collier"
 type: "personas"
-jobTitle: "Route Planning Analyst"
+jobTitle: "Lead Route Analyst"
 email: "thomas-collier@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Scouted coaching routes and identified optimal interception points for highway operations.
+Models intercept probability across coaching corridors. His analytics platform sync failures are a known pain point.
+
+> *Legend basis:* Essex Gang scout for coaching route interception.

@@ -1,9 +1,11 @@
 ﻿---
 title: "Thomas Patten"
 type: "personas"
-jobTitle: "Field Operations Officer"
+jobTitle: "Senior Field Operations Officer"
 email: "thomas-patten@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Essex Gang member executed alongside Turpin. Participated in deer poaching and highway operations in the Epping Forest corridor.
+Long-serving Essex Solutions operative. Employment concluded following a regulatory review in 1739.
+
+> *Legend basis:* Essex Gang member executed alongside Turpin.

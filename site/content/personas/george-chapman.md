@@ -6,4 +6,6 @@ email: "george-chapman@turpinverse.demo"
 organisations: ["king-equine-trading"]
 ---
 
-Maintained horses and coaching equipment for the gang's transport operations.
+Keeps the equine fleet roadworthy. Maintenance schedules are sacred; overdue service tickets are his personal vendetta.
+
+> *Legend basis:* Gang associate maintaining horses and coaching equipment.

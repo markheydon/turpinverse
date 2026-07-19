@@ -161,3 +161,20 @@ and schema validation. bUnit is the standard Blazor testing library.
 **Alternatives considered**:
 - *Playwright E2E only*: Slower feedback; unit/integration tests catch consistency bugs
   faster (SC-002, SC-005).
+
+## 12. Legend-Inspired Content (Not Wikipedia Transcription)
+
+**Decision**: The Dick Turpin legend and Victorian folklore are **research inputs**, not
+output templates. Canon biographies lead with witty modern reframes; `historicalAnchor`
+fields record legend inspiration (e.g. "Turpin legend — Essex Gang leadership") rather
+than Wikipedia section citations. Display names use contemporary forms (`Richard Turpin`);
+stable `id` slugs are preserved for FK integrity.
+
+**Rationale**: Stakeholder feedback (2026-07-19) requested a lighter, more creative
+universe that rewards recognition without reading like an encyclopaedia entry. Humour
+comes from corporate euphemism, alias play, and organisation punchlines — not historical
+accuracy.
+
+**Alternatives considered**:
+- *Wikipedia-faithful biographies*: Reads as transcription; undermines demo humour (SC-001, SC-003).
+- *Renaming all slugs to match display names*: Breaking change across deals, cases, aliases, and tests.

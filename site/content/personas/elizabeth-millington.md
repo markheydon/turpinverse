@@ -1,9 +1,11 @@
 ﻿---
 title: "Elizabeth Millington"
 type: "personas"
-jobTitle: "Innkeeper & Hospitality Director"
+jobTitle: "Head of Discreet Hospitality"
 email: "elizabeth-millington@turpinverse.demo"
 organisations: ["millington-inn","essex-gang"]
 ---
 
-Landlady of the Rose and Crown at Hempstead, where Turpin's father had been landlord. She provided accommodation and intelligence to members of the Essex Gang.
+Runs the Rose & Crown with a loyalty programme that rewards repeat visitors who ask no questions. Discretion is billed as a premium add-on.
+
+> *Legend basis:* Landlady at Hempstead; known Essex Gang associate.

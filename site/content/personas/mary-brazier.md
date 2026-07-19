@@ -1,9 +1,11 @@
 ﻿---
 title: "Mary Brazier"
 type: "personas"
-jobTitle: "Legal Affairs Coordinator"
+jobTitle: "Partner, Identity & Compliance Advisory"
 email: "mary-brazier@turpinverse.demo"
 organisations: ["brazier-legal","turpin-enterprises"]
 ---
 
-Associate of Turpin who assisted with logistics and legal correspondence during his Yorkshire period under the John Palmer alias.
+Boutique legal counsel for clients requiring a fresh identity and a Yorkshire postcode. Documentation quality is impeccable; provenance is not discussed.
+
+> *Legend basis:* Turpin associate during the John Palmer alias period.

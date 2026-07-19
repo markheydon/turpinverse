@@ -7,4 +7,4 @@ members: ["richard-bayes"]
 parent: ""
 ---
 
-Premier riding academy offering advanced horsemanship training for executive transport professionals.
+Premier riding academy offering advanced horsemanship certification for executives with time-sensitive travel requirements.

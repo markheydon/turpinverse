@@ -1,5 +1,5 @@
 ﻿---
-title: "York Assize Legal"
+title: "York Due Diligence Partners"
 type: "organisations"
 industry: "Legal Services"
 status: "active"
@@ -7,4 +7,4 @@ members: ["james-smith"]
 parent: ""
 ---
 
-Premier legal institution providing trial services, compliance auditing, and regulatory oversight.
+Premier regulatory institution providing trial services, compliance auditing, and contract termination proceedings. Thoroughness is our trademark.

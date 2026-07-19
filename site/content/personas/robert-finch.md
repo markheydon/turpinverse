@@ -1,9 +1,11 @@
 ﻿---
 title: "Robert Finch"
 type: "personas"
-jobTitle: "Highway Infrastructure Inspector"
+jobTitle: "Infrastructure Billing Manager"
 email: "robert-finch@turpinverse.demo"
 organisations: ["highway-commission"]
 ---
 
-Turnpike trust official responsible for road maintenance and toll collection on major coaching routes.
+Manages turnpike toll collection and automated billing systems. Malfunctions on the Great North Road are his recurring headache.
+
+> *Legend basis:* Turnpike trust official.

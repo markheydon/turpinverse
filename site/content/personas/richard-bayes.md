@@ -1,9 +1,11 @@
 ﻿---
 title: "Richard Bayes"
 type: "personas"
-jobTitle: "Master Horsemanship Instructor"
+jobTitle: "Principal Instructor, Executive Mobility"
 email: "richard-bayes@turpinverse.demo"
 organisations: ["bayes-horsemanship"]
 ---
 
-York innkeeper who taught Turpin advanced riding techniques during his fugitive years. His expertise was instrumental in Turpin's legendary riding reputation.
+York's premier riding coach for executives who need to cover ground quickly. His alumni list is confidential but widely admired.
+
+> *Legend basis:* Innkeeper who taught Turpin advanced riding during his fugitive years.

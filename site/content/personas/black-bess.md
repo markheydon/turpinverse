@@ -1,11 +1,11 @@
 ﻿---
 title: "Black Bess"
 type: "personas"
-jobTitle: "Chief Transport Asset"
+jobTitle: "Principal Transport Asset (Disputed Mileage)"
 email: "black-bess@turpinverse.demo"
 organisations: ["king-equine-trading","turpin-enterprises"]
 ---
 
-Legendary mare attributed to Turpin in Victorian folklore, famed for the impossible ride from London to York.
+Flagship equine asset with a disputed overnight London-to-York mileage claim. Victorian marketing elevated her to legend status; the finance team has questions.
 
-> *Fictional extension:* Registered as a corporate transport asset in modern CRM demos.
+> *Fictional extension:* Registered as a corporate transport asset. Holds a director title in some jurisdictions.

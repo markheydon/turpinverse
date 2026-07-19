@@ -1,9 +1,11 @@
 ﻿---
 title: "Joseph Bryant"
 type: "personas"
-jobTitle: "Warehouse Supervisor"
+jobTitle: "Inventory Variance Specialist"
 email: "joseph-bryant@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Gang member who managed storage and distribution of poached goods through rural safe houses.
+Owns the warehouse numbers — and the 12-unit discrepancies that nobody can quite explain. Calm under audit pressure.
+
+> *Legend basis:* Essex Gang member managing poached goods storage.

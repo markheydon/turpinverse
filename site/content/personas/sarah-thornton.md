@@ -1,11 +1,11 @@
 ﻿---
 title: "Sarah Thornton"
 type: "personas"
-jobTitle: "Events Coordinator"
+jobTitle: "Director of Premium Events"
 email: "sarah-thornton@turpinverse.demo"
 organisations: ["york-racing-society"]
 ---
 
-York socialite who organised race meetings and social gatherings frequented by Turpin's Yorkshire network.
+Curates York's most exclusive race-day gatherings. Guest lists are selective; catering orders are extravagant.
 
 > *Fictional extension:*

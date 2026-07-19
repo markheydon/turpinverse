@@ -48,15 +48,15 @@
       ],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
-        "displayName": { "type": "string", "maxLength": 100 },
-        "historicalName": { "type": "string", "maxLength": 100 },
+        "displayName": { "type": "string", "maxLength": 100, "description": "Modern user-facing name (e.g. Richard Turpin, not Dick Turpin)" },
+        "historicalName": { "type": "string", "maxLength": 100, "description": "Legendary or historical inspiration name" },
         "aliases": {
           "type": "array",
           "items": { "type": "string", "maxLength": 100 }
         },
         "title": { "type": "string", "maxLength": 80 },
         "biography": { "type": "string" },
-        "historicalAnchor": { "type": "string" },
+        "historicalAnchor": { "type": "string", "description": "Legend inspiration note — not a Wikipedia citation" },
         "isFictionalExtension": { "type": "boolean" },
         "temperament": { "type": "string", "maxLength": 200 },
         "organisationIds": {
@@ -90,7 +90,7 @@
         "legalName": { "type": "string", "maxLength": 200 },
         "description": { "type": "string", "maxLength": 500 },
         "industry": { "type": "string", "maxLength": 60 },
-        "historicalAnchor": { "type": "string" },
+        "historicalAnchor": { "type": "string", "description": "Legend or folklore inspiration note" },
         "parentOrganisationId": { "$ref": "#/$defs/slug" },
         "memberPersonaIds": {
           "type": "array",

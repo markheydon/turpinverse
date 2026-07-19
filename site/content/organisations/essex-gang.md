@@ -1,5 +1,5 @@
 ﻿---
-title: "Essex Gang Holdings"
+title: "Essex Solutions Group"
 type: "organisations"
 industry: "Logistics"
 status: "dissolved"
@@ -7,4 +7,4 @@ members: ["dick-turpin","elizabeth-millington","samuel-gregory","matthew-king","
 parent: ""
 ---
 
-Consolidated operations group specialising in rural procurement, logistics, and highway corridor management across Essex and Hertfordshire.
+Consolidated operations group specialising in rural procurement, corridor management, and unconventional asset redistribution across Essex and Hertfordshire.

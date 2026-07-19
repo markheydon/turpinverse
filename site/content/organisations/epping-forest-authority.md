@@ -7,4 +7,4 @@ members: ["william-hargreaves"]
 parent: ""
 ---
 
-Forest management authority responsible for conservation, poaching enforcement, and rural patrol operations.
+Forest management authority responsible for conservation, poaching enforcement, and sector-level patrol operations. Sector 7 is a priority.

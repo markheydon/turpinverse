@@ -6,4 +6,6 @@ email: "thomas-morris@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Involved in sourcing supplies and equipment for rural operations across the Home Counties.
+Sources supplies and equipment for rural operations. Negotiates aggressively; payment terms are always interesting.
+
+> *Legend basis:* Essex Gang procurement associate.

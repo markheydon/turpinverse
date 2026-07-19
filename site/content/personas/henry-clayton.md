@@ -1,9 +1,11 @@
 ﻿---
 title: "Henry Clayton"
 type: "personas"
-jobTitle: "Risk Assessment Specialist"
+jobTitle: "Principal Risk Assessor"
 email: "henry-clayton@turpinverse.demo"
 organisations: ["highway-commission","turpin-enterprises"]
 ---
 
-Insurance assessor who evaluated coaching route risks for merchant transport companies.
+Evaluates corridor risk for merchant transport clients. The A10 is currently rated Critical — clients have been notified.
+
+> *Fictional extension:*

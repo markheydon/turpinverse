@@ -1,11 +1,11 @@
 ﻿---
 title: "James Smith"
 type: "personas"
-jobTitle: "Compliance Auditor"
+jobTitle: "Senior Compliance Auditor"
 email: "james-smith@turpinverse.demo"
 organisations: ["york-assize-court"]
 ---
 
-Court official involved in the York Assize proceedings that led to Turpin's conviction.
+York Assize's most thorough reviewer. If there is a horse in the transaction, James will find it.
 
-> *Fictional extension:* Now provides regulatory compliance consulting.
+> *Legend basis:* Court official at Turpin's York trial.

@@ -1,9 +1,11 @@
 ﻿---
 title: "John Field"
 type: "personas"
-jobTitle: "Logistics Coordinator"
+jobTitle: "Distribution Network Coordinator"
 email: "john-field@turpinverse.demo"
 organisations: ["essex-gang"]
 ---
 
-Essex Gang associate involved in rural procurement and distribution networks across Hertfordshire.
+Manages last-mile delivery across Hertfordshire parishes. Known for creative routing when standard channels are unavailable.
+
+> *Legend basis:* Essex Gang associate.

@@ -1,11 +1,11 @@
 [
   {
     "id": "essex-gang",
-    "tradingName": "Essex Gang Holdings",
-    "legalName": "Essex Gang Holdings Ltd \u2014 Rural Enterprise Solutions",
-    "description": "Consolidated operations group specialising in rural procurement, logistics, and highway corridor management across Essex and Hertfordshire.",
+    "tradingName": "Essex Solutions Group",
+    "legalName": "Essex Solutions Group Ltd \u2014 Integrated Rural Procurement (Terms Flexible)",
+    "description": "Consolidated operations group specialising in rural procurement, corridor management, and unconventional asset redistribution across Essex and Hertfordshire.",
     "industry": "Logistics",
-    "historicalAnchor": "Wikipedia: Essex Gang",
+    "historicalAnchor": "Essex Gang legend \u2014 Gregory Gang merger and highway operations",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "dick-turpin",
@@ -28,10 +28,10 @@
   {
     "id": "turpin-enterprises",
     "tradingName": "Turpin Enterprises",
-    "legalName": "Turpin Enterprises International \u2014 Strategic Highway Consultancy",
-    "description": "Flagship consultancy offering route optimisation, identity management, and enterprise transport solutions.",
+    "legalName": "Turpin Enterprises International \u2014 Strategic Corridor Consultancy Since 1735",
+    "description": "Flagship consultancy offering route optimisation, identity lifecycle management, and enterprise transport solutions. Post-merger growth driven by aggressive corridor strategy.",
     "industry": "Consulting",
-    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Career overview",
+    "historicalAnchor": "Turpin legend \u2014 career overview and Yorkshire fugitive operations",
     "parentOrganisationId": "essex-gang",
     "memberPersonaIds": [
       "dick-turpin",
@@ -48,10 +48,10 @@
   {
     "id": "millington-inn",
     "tradingName": "Rose \u0026 Crown Hospitality",
-    "legalName": "Millington Inn Group \u2014 Premium Coaching Accommodation",
-    "description": "Historic coaching inn providing premium accommodation, intelligence services, and hospitality management.",
+    "legalName": "Rose \u0026 Crown Hospitality Group \u2014 Where Discretion Is Part of the Room Rate",
+    "description": "Historic coaching inn providing premium accommodation, intelligence services, and a loyalty programme that rewards guests who ask no questions.",
     "industry": "Hospitality",
-    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Rose and Crown, Hempstead",
+    "historicalAnchor": "Turpin legend \u2014 Rose and Crown, Hempstead",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "elizabeth-millington",
@@ -63,11 +63,11 @@
   },
   {
     "id": "york-assize-court",
-    "tradingName": "York Assize Legal",
-    "legalName": "York Assize Court \u2014 Regulatory Compliance Services",
-    "description": "Premier legal institution providing trial services, compliance auditing, and regulatory oversight.",
+    "tradingName": "York Due Diligence Partners",
+    "legalName": "York Due Diligence Partners \u2014 We Always Find the Horse in the Transaction",
+    "description": "Premier regulatory institution providing trial services, compliance auditing, and contract termination proceedings. Thoroughness is our trademark.",
     "industry": "Legal Services",
-    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Trial at York",
+    "historicalAnchor": "Turpin legend \u2014 York Assize trial and conviction",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "james-smith"
@@ -78,11 +78,11 @@
   },
   {
     "id": "king-equine-trading",
-    "tradingName": "King Equine Trading",
-    "legalName": "King Equine Trading Co. \u2014 Premium Horse Acquisition \u0026 Fleet Management",
-    "description": "Specialist equine trading house offering acquisition, maintenance, and fleet management services.",
+    "tradingName": "King Equine Partners",
+    "legalName": "King Equine Partners \u2014 Acquisition Velocity Unmatched Since 1737",
+    "description": "Specialist equine trading house offering rapid acquisition, fleet maintenance, and disputed mileage reconciliation services.",
     "industry": "Equine Trade",
-    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Horse theft operations",
+    "historicalAnchor": "Turpin legend \u2014 horse theft operations with Matthew King",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "matthew-king",
@@ -96,10 +96,10 @@
   {
     "id": "brazier-legal",
     "tradingName": "Brazier Legal Associates",
-    "legalName": "Brazier Legal Associates \u2014 Identity \u0026 Compliance Advisory",
-    "description": "Boutique legal practice specialising in identity documentation, alias management, and compliance advisory.",
+    "legalName": "Brazier Legal Associates \u2014 Identity Documentation With Impeccable Provenance (Undiscussed)",
+    "description": "Boutique legal practice specialising in alias lifecycle management, Yorkshire relocation packages, and compliance advisory for clients starting fresh.",
     "industry": "Legal Services",
-    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Yorkshire legal associates",
+    "historicalAnchor": "Turpin legend \u2014 Yorkshire legal associates and John Palmer alias",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "mary-brazier",
@@ -112,10 +112,10 @@
   {
     "id": "bayes-horsemanship",
     "tradingName": "Bayes Horsemanship Academy",
-    "legalName": "Bayes Horsemanship Academy \u2014 Executive Riding Instruction",
-    "description": "Premier riding academy offering advanced horsemanship training for executive transport professionals.",
+    "legalName": "Bayes Horsemanship Academy \u2014 Executive Mobility for Those Who Need to Cover Ground Quickly",
+    "description": "Premier riding academy offering advanced horsemanship certification for executives with time-sensitive travel requirements.",
     "industry": "Education",
-    "historicalAnchor": "Wikipedia: Dick Turpin \u2014 Richard Bayes riding instruction",
+    "historicalAnchor": "Turpin legend \u2014 Richard Bayes riding instruction",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "richard-bayes"
@@ -127,10 +127,10 @@
   {
     "id": "york-racing-society",
     "tradingName": "York Racing Society",
-    "legalName": "York Racing Society \u2014 Premium Event Management",
-    "description": "Exclusive society organising race meetings, social gatherings, and premium hospitality events.",
+    "legalName": "York Racing Society \u2014 Premium Event Management for Select Guest Lists",
+    "description": "Exclusive society organising race meetings, social gatherings, and premium hospitality events. Guest lists are curated; catering orders are not.",
     "industry": "Events",
-    "historicalAnchor": "Wikipedia: York race meetings \u2014 18th century",
+    "historicalAnchor": "York race meetings \u2014 18th-century social calendar",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "sarah-thornton"
@@ -142,10 +142,10 @@
   {
     "id": "epping-forest-authority",
     "tradingName": "Epping Forest Authority",
-    "legalName": "Epping Forest Authority \u2014 Conservation \u0026 Enforcement",
-    "description": "Forest management authority responsible for conservation, poaching enforcement, and rural patrol operations.",
+    "legalName": "Epping Forest Authority \u2014 Conservation \u0026 Unauthorised Procurement Enforcement",
+    "description": "Forest management authority responsible for conservation, poaching enforcement, and sector-level patrol operations. Sector 7 is a priority.",
     "industry": "Government",
-    "historicalAnchor": "Wikipedia: Epping Forest \u2014 History",
+    "historicalAnchor": "Epping Forest legend \u2014 poaching crackdowns",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "william-hargreaves"
@@ -157,10 +157,10 @@
   {
     "id": "highway-commission",
     "tradingName": "Highway Commission",
-    "legalName": "National Highway Commission \u2014 Infrastructure \u0026 Risk Management",
-    "description": "Turnpike trust consortium managing road infrastructure, toll collection, and transport risk assessment.",
+    "legalName": "National Highway Commission \u2014 Usage-Based Billing \u0026 Corridor Risk Management",
+    "description": "Turnpike trust consortium managing road infrastructure, automated toll collection, and transport risk assessment. Billing disputes are frequent.",
     "industry": "Infrastructure",
-    "historicalAnchor": "Wikipedia: Turnpike trusts \u2014 England",
+    "historicalAnchor": "Turnpike trusts \u2014 toll infrastructure and trade route risk",
     "parentOrganisationId": null,
     "memberPersonaIds": [
       "robert-finch",

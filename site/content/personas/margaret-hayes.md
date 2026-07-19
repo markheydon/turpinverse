@@ -1,9 +1,11 @@
 ﻿---
 title: "Margaret Hayes"
 type: "personas"
-jobTitle: "Accounts Payable Clerk"
+jobTitle: "Accounts Payable Lead"
 email: "margaret-hayes@turpinverse.demo"
 organisations: ["brazier-legal"]
 ---
 
-Managed financial records for the Brazier legal practice during the Yorkshire period.
+Keeps Brazier Legal's books in order. Disputed invoices from Q3 advisory services require her reconciliation skills.
+
+> *Legend basis:* Financial records manager during Yorkshire period.

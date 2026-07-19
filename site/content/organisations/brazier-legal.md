@@ -7,4 +7,4 @@ members: ["mary-brazier","margaret-hayes"]
 parent: ""
 ---
 
-Boutique legal practice specialising in identity documentation, alias management, and compliance advisory.
+Boutique legal practice specialising in alias lifecycle management, Yorkshire relocation packages, and compliance advisory for clients starting fresh.

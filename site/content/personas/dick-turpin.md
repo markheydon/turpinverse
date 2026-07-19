@@ -1,11 +1,11 @@
 ﻿---
-title: "Dick Turpin"
+title: "Richard Turpin"
 type: "personas"
-jobTitle: "Managing Director, Highway Operations"
-email: "dick-turpin@turpinverse.demo"
+jobTitle: "CEO, Strategic Corridor Operations"
+email: "richard.turpin@turpinverse.demo"
 organisations: ["essex-gang","turpin-enterprises"]
 ---
 
-Born in Hempstead, Essex, Turpin began as a butcher before turning to smuggling and highway robbery. He became the most celebrated figure of the Essex Gang era.
+Board-level executive with a reputation for rapid corridor optimisation and unconventional stakeholder engagement. Prefers to be addressed as Richard in all formal correspondence.
 
-> *Fictional extension:* Now leads strategic route optimisation consulting across the Home Counties.
+> *Legend basis:* The celebrated Essex Gang era figure; informal alias 'Dick' retained in legacy systems only.
