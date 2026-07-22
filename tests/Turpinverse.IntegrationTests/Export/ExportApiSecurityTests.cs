@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +30,7 @@ public class ExportApiSecurityTests : IClassFixture<DisabledExportApiWebApplicat
 
 public sealed class DisabledExportApiWebApplicationFactory : WebApplicationFactory<Program>
 {
-    protected override void ConfigureWebHost(IHostBuilder builder)
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment(Environments.Production);
         builder.ConfigureAppConfiguration((_, configuration) =>
