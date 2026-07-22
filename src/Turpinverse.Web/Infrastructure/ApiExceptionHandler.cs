@@ -23,7 +23,7 @@ public sealed class ApiExceptionHandler(
             return false;
         }
 
-        logger.LogError(exception, "Unhandled API exception on {Path}", httpContext.Request.Path);
+        logger.LogError(exception, "Unhandled API exception on an API route");
 
         var problem = new ProblemDetails
         {
