@@ -8,7 +8,7 @@ description: "Task list for Turpinverse Universe & Demo Data"
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: Included per plan.md test strategy and constitution Principle III (canon validation, export contract, integration tests per quickstart.md).
+**Tests**: Included per plan.md test strategy and constitution Principle III (canon validation, export contract, integration tests per quickstart.md). Constitution v2 alignment tracked in `specs/002-constitution-alignment/`.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
