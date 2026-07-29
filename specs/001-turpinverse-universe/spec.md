@@ -137,6 +137,30 @@ records at least 3/5 on "would use in a client demo" professionalism.
 - What happens when a demo requires non-English locales? Initial release is English-only;
   names and humour rely on English cultural recognition.
 
+## Failure Modes & Error Handling *(required when feature defines external boundaries or user-facing failures)*
+
+| Failure Mode | Trigger | Expected Handling | User/System Outcome |
+|--------------|---------|-------------------|----------------------|
+| Invalid dataset type | `GET /api/export/{dataset}` with unknown `dataset` | HTTP 400 `application/problem+json` | Client receives RFC 7807 problem with valid dataset list |
+| Canon load failure | Embedded JSON missing or corrupt | HTTP 500 `application/problem+json` | Client receives generic server error; no stack trace in body |
+| Validation violations | Canon fails cross-reference rules (VR-001–VR-010) | HTTP 422 with `violations[]` array | UI shows red validation badge; violations listed in response |
+| Export API disabled | `Export:PublicApiEnabled` is false | HTTP 404 (endpoints not registered) | No CSV download or validation API on public networks |
+| Preview count out of range | `count` query < 1 or > 100 | Clamped to 1–100 | Preview returns bounded row count |
+
+## Security & Access *(required when feature handles sensitive data, authentication, or external exposure)*
+
+| Asset / Surface | Threat | Access Control | Verification |
+|-----------------|--------|----------------|--------------|
+| `/api/export/*` | Unauthorized bulk download of demo CRM CSV on a public network | `Export:PublicApiEnabled` (default true in Development, false in Production); `RequireAuthorization("DemoExport")` policy | Integration test: 404 when disabled; CodeQL alert [#3](https://github.com/markheydon/turpinverse/security/code-scanning/3) remediated |
+| `/api/canon/validate` | Information disclosure (canon structure, violation details) | Same gate as export API | Same integration test |
+| Blazor UI (`/`, `/contacts`, …) | CSRF on interactive components | ASP.NET Core antiforgery for Blazor Server | Framework default; no state-changing API in v1 |
+| Health checks (`/health`, `/alive`) | Infrastructure reconnaissance | Mapped only in Development (Aspire ServiceDefaults) | Not exposed in non-Development environments |
+| Canon JSON (embedded) | N/A — fictional demo data, no PII | Read-only embedded resources | No user-supplied canon input in v1 |
+
+**Threat model note**: Demo data is intentionally fictional. The export API is
+designed for local Aspire demos and must not be deployed to a public network
+without authentication or network restrictions.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements

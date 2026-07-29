@@ -1,104 +1,127 @@
 <!--
 Sync Impact Report
-- Version change: (template) → 1.0.0
-- Modified principles: N/A (initial ratification)
-- Added sections: Core Principles (5), Technology & Workflow Constraints, Development Workflow, Governance
-- Removed sections: None
+- Version change: 1.1.0 → 2.0.0
+- Modified principles:
+  - I. Spec-Driven Development → I. Spec-Driven Traceability
+  - II. Incremental Delivery → II. Incremental Independence
+  - III. Test-First → III. Verifiable Testability
+  - IV. Simplicity & Justified Complexity → IV. Separation of Concerns (new)
+  - V. Documentation as Contract → V. Explicit Error Handling (new)
+  - (added) VI. Security by Design
+  - (added) VII. Justified Complexity
+  - (added) VIII. Documentation Contract
+- Added sections: Compliance Gates (verifiable yes/no checks)
+- Removed sections: Technology & Workflow Constraints, Development Workflow
 - Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ aligned (Constitution Check gate present)
-  - .specify/templates/spec-template.md ✅ aligned (user stories, requirements, success criteria)
-  - .specify/templates/tasks-template.md ✅ aligned (user-story phases, test-first notes)
-  - .specify/templates/checklist-template.md ✅ aligned (no constitution-specific changes needed)
+  - .specify/templates/plan-template.md ✅ updated (yes/no Constitution Check gates)
+  - .specify/templates/spec-template.md ✅ updated (security & error-handling sections)
+  - .specify/templates/tasks-template.md ✅ aligned (traceability and testability notes)
+  - .specify/templates/checklist-template.md ✅ aligned (no constitution-specific changes)
   - .specify/templates/commands/*.md ⚠ not present (N/A)
-  - README.md ⚠ not present (create when project scope is defined)
-- Follow-up TODOs: Define technology stack in first feature plan; add README when project scope is clarified
+  - README.md ✅ aligned (tech stack and testing standards remain in README, not constitution)
+- Follow-up TODOs: None
 -->
 
 # Turpinverse Constitution
 
 ## Core Principles
 
-### I. Spec-Driven Development
+### I. Spec-Driven Traceability
 
-Every feature MUST begin with a specification in `specs/[###-feature-name]/spec.md`
-before any implementation work begins. Specifications MUST define prioritized user
-stories, functional requirements, and measurable success criteria. Plans,
-tasks, and implementation MUST trace back to spec artifacts.
+Every feature MUST have a specification before implementation begins.
+Specifications MUST define prioritized user stories, functional requirements, and
+measurable success criteria. Plans, tasks, and pull requests MUST trace to spec
+artifacts.
 
-**Rationale**: Specs are the contract between intent and delivery. Building
-without them leads to scope drift and untestable outcomes.
+**Rationale**: Traceability prevents scope drift and makes every change auditable
+against stated intent.
 
-### II. Incremental Delivery
+### II. Incremental Independence
 
-Features MUST be decomposed into prioritized, independently testable user
-stories (P1, P2, P3, …). Each story MUST deliver standalone value as a viable
-MVP increment. No story may depend on a lower-priority story for its core
-functionality.
+Features MUST decompose into prioritized, independently testable increments
+(P1, P2, P3, …). Each increment MUST deliver standalone value. No increment
+may depend on a lower-priority increment for its core functionality.
 
 **Rationale**: Independent slices enable early validation, parallel work, and
 safe rollback of individual increments.
 
-### III. Test-First (NON-NEGOTIABLE)
+### III. Verifiable Testability (NON-NEGOTIABLE)
 
-When testing is in scope for a feature, tests MUST be written and confirmed
-failing before implementation begins. The Red-Green-Refactor cycle MUST be
-followed. Contract and integration tests are REQUIRED for new API surfaces,
-schema changes, and inter-service communication.
+When testing is in scope for a feature, automated tests MUST exist and be
+confirmed failing before implementation begins. External boundaries (APIs,
+schemas, inter-component contracts) MUST have contract or integration test
+coverage.
 
-**Rationale**: Tests written after implementation confirm existing behavior,
-not desired behavior. Failing-first tests prove the test is meaningful.
+**Rationale**: Tests written after implementation confirm existing behavior, not
+desired behavior. Failing-first tests prove the test is meaningful.
 
-### IV. Simplicity & Justified Complexity
+### IV. Separation of Concerns
 
-Start with the simplest solution that satisfies the current requirement. YAGNI
-applies: do not build for hypothetical future needs. Any deviation from this
-principle MUST be documented in the plan's Complexity Tracking table with a
+Each component MUST have one clear responsibility. Presentation, domain logic,
+persistence, and infrastructure MUST NOT be entangled in the same module
+without documented justification in the plan's Complexity Tracking table.
+
+**Rationale**: Clear boundaries reduce coupling, simplify testing, and keep
+changes localized.
+
+### V. Explicit Error Handling
+
+Every specified failure mode MUST have an explicit handling path. Errors at
+system boundaries MUST NOT be swallowed, ignored, or propagated without
+defined behavior documented in the spec, plan, or contract.
+
+**Rationale**: Silent or undefined failures erode reliability and make incidents
+harder to diagnose.
+
+### VI. Security by Design
+
+Features that access sensitive data, authenticate users, or expose external
+interfaces MUST identify threats and access controls in the specification or
+plan before implementation begins.
+
+**Rationale**: Security retrofitted after implementation consistently misses
+threats that are cheaper to address during design.
+
+### VII. Justified Complexity
+
+The simplest solution that satisfies the current requirement MUST be chosen.
+Any deviation MUST be documented in the plan's Complexity Tracking table with a
 rejected simpler alternative and explicit justification.
 
 **Rationale**: Unjustified complexity compounds maintenance cost and obscures
 intent. Documented exceptions preserve accountability.
 
-### V. Documentation as Contract
+### VIII. Documentation Contract
 
-Specifications, plans, data models, API contracts, and quickstart guides MUST
-remain current with implementation. Files in `specs/[###-feature]/contracts/`
-are authoritative for API behavior. When implementation diverges from docs,
-either update the docs or revert the code—never leave them out of sync.
+Specifications, contracts, and quickstart guides MUST match implemented behavior.
+When implementation diverges from docs, either update the docs or revert the
+code—never leave them out of sync.
 
 **Rationale**: Stale documentation is worse than none; it erodes trust and
 blocks onboarding.
 
-## Technology & Workflow Constraints
+## Compliance Gates
 
-- Feature work MUST follow the Spec Kit workflow: constitution → specify →
-  clarify → plan → tasks → implement.
-- Feature branches MUST follow the `###-feature-name` naming convention
-  (sequential numbering per `.specify/extensions/git/git-config.yml`).
-- Technology stack choices (language, framework, storage) are deferred to
-  per-feature `plan.md` until a project-wide stack is established by the first
-  feature.
-- All automated .NET tests MUST use **xUnit v3**, **NSubstitute** for mocks/stubs/test
-  doubles, and built-in xUnit `Assert` methods only. Keep test dependencies to a
-  minimum. Do not introduce FluentAssertions, AwesomeAssertions, Shouldly, Moq,
-  NUnit, or MSTest unless explicitly requested.
-- All feature artifacts live under `specs/[###-feature-name]/`; shared project
-  governance lives under `.specify/`.
+Every `plan.md` MUST include a Constitution Check with a yes/no result for each
+principle before Phase 0 research and again after Phase 1 design. Plans that
+fail any principle without Complexity Tracking justification MUST NOT proceed.
 
-## Development Workflow
+Every pull request MUST be reviewable against these gates:
 
-1. **Constitution Check** — Every `plan.md` MUST include a Constitution Check
-   gate before Phase 0 research and again after Phase 1 design. Plans that
-   violate principles without Complexity Tracking justification MUST NOT
-   proceed.
-2. **Branch per feature** — Create a feature branch before specification work
-   (`/speckit-specify` triggers branch creation via git extension).
-3. **Checkpoint validation** — After each user story phase, validate the story
-   independently before starting the next priority.
-4. **Commit discipline** — Commit at logical checkpoints (per task group or
-   story completion). Use the git extension auto-commit hooks or manual commits
-   with descriptive messages.
-5. **Review readiness** — Before marking a feature complete, run quickstart
-   validation and verify all spec success criteria are met.
+| Gate | Question |
+|------|----------|
+| Traceability | Does every change trace to a spec requirement or task? |
+| Independence | Can each delivered increment be validated on its own? |
+| Testability | When tests are in scope, do they exist, fail first, and cover boundaries? |
+| Separation | Does each module have a single, clear responsibility? |
+| Error handling | Is every specified failure mode handled explicitly? |
+| Security | Are threats and access controls defined for sensitive or exposed features? |
+| Complexity | Is added complexity justified with a rejected simpler alternative? |
+| Documentation | Do specs, contracts, and quickstart match the implementation? |
+
+Technology choices, libraries, frameworks, and conventions belong in
+`README.md`, `docs/tech-stack.md`, guidelines, or decision logs—not in this
+constitution.
 
 ## Governance
 
@@ -113,7 +136,5 @@ templates.
 
 All pull requests and plan reviews MUST verify compliance with active
 principles. Complexity without documented justification is grounds for rejection.
-Runtime development guidance SHOULD be maintained in project docs (e.g.,
-`README.md`, `docs/`) as the stack matures.
 
-**Version**: 1.1.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-07-19
+**Version**: 2.0.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-07-22

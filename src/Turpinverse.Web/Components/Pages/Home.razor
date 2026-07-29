@@ -1,9 +1,11 @@
 ﻿@page "/"
 @rendermode InteractiveServer
-@inject HttpClient Http
-@using System.Net.Http.Json
+@inject IExportService ExportService
+@inject ICanonRepository CanonRepository
+@inject CanonValidator CanonValidator
 @using Turpinverse.Core.Abstractions
 @using Turpinverse.Core.Export
+@using Turpinverse.Core.Validation
 
 <PageTitle>Turpinverse</PageTitle>
 
@@ -63,7 +65,7 @@
 
 @code {
     private IReadOnlyList<ExportDatasetInfo>? orderedDatasets;
-    private CanonValidationResponse? validationResult;
+    private CanonValidationResult? validationResult;
     private Dictionary<string, int>? summaryCounts;
     private string? loadError;
     private bool loading = true;
@@ -72,14 +74,9 @@
     {
         try
         {
-            var manifest = await Http.GetFromJsonAsync<ExportManifest>("/api/export/manifest");
-            validationResult = await Http.GetFromJsonAsync<CanonValidationResponse>("/api/canon/validate");
-
-            if (manifest is null)
-            {
-                loadError = "Failed to load export manifest.";
-                return;
-            }
+            var manifest = await ExportService.GetManifestAsync();
+            var canon = await CanonRepository.LoadAsync();
+            validationResult = CanonValidator.Validate(canon);
 
             if (!TryGetOrderedDatasets(manifest, out var datasets, out var error))
             {
@@ -124,10 +121,5 @@
         error = string.Empty;
         return true;
     }
-
-    private sealed class CanonValidationResponse
-    {
-        public bool Valid { get; set; }
-    }
 }
-
+

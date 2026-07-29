@@ -40,7 +40,21 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Answer **Yes** or **No** for each principle. Any **No** without a Complexity
+Tracking justification blocks the gate.
+
+| Principle | Pre-Design | Post-Design | Evidence |
+|-----------|------------|-------------|----------|
+| I. Spec-Driven Traceability | Yes / No | Yes / No | [spec.md user stories, FRs, tasks] |
+| II. Incremental Independence | Yes / No | Yes / No | [P1/P2/P3 slices, independent tests] |
+| III. Verifiable Testability | Yes / No / N/A | Yes / No / N/A | [failing-first tests, boundary coverage] |
+| IV. Separation of Concerns | Yes / No | Yes / No | [module responsibilities] |
+| V. Explicit Error Handling | Yes / No | Yes / No | [failure modes and handling paths] |
+| VI. Security by Design | Yes / No / N/A | Yes / No / N/A | [threats, access controls] |
+| VII. Justified Complexity | Yes / No | Yes / No | [Complexity Tracking or simplest path] |
+| VIII. Documentation Contract | Yes / No | Yes / No | [contracts/, quickstart.md] |
+
+**Gate result**: PASS / FAIL
 
 ## Project Structure
 

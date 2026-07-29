@@ -35,6 +35,7 @@ Download a CSV export for the specified dataset type.
 |--------|-------------|------|
 | 200 OK | `text/csv; charset=utf-8` | CSV with UTF-8 BOM |
 | 400 Bad Request | `application/problem+json` | Invalid dataset type |
+| 404 Not Found | N/A | Export API disabled (`Export:PublicApiEnabled` is false) |
 | 500 Internal Server Error | `application/problem+json` | Canon load or validation failure |
 
 **Response headers**:
@@ -158,6 +159,27 @@ Shared UI elements:
 | Summary chart | `SummaryChart.razor` on `/` | Chart.js doughnut chart of dataset row counts |
 | Validation badge | `Home.razor` | Green/red indicator from `GET /api/canon/validate` |
 | Navigation | `NavMenu.razor` | Lucide icons and links to home and each dataset page |
+
+## Security Model
+
+The export API exposes **fictional demo CRM data** with no personally identifiable
+information. Access is intentionally anonymous when enabled for local development
+and demos.
+
+| Setting | Development default | Production default |
+|---------|-------------------|-------------------|
+| `Export:PublicApiEnabled` | `true` | `false` |
+
+When `Export:PublicApiEnabled` is `false`, export and validation endpoints are
+**not registered** — requests return **404 Not Found**.
+
+When enabled, endpoints require the `DemoExport` authorization policy, which
+succeeds only while the flag is true. This documents intentional anonymous
+access for CodeQL and security review (see
+[code scanning alert #3](https://github.com/markheydon/turpinverse/security/code-scanning/3)).
+
+**Deployment rule**: Do not set `Export:PublicApiEnabled` to `true` on a public
+network without additional authentication or network restrictions.
 
 ## Error Responses
 

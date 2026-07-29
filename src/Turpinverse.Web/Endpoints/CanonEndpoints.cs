@@ -1,13 +1,17 @@
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Validation;
 
+using Turpinverse.Web.DependencyInjection;
+
 namespace Turpinverse.Web.Endpoints;
 
 public static class CanonEndpoints
 {
     public static IEndpointRouteBuilder MapCanonEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/canon/validate", async (
+        app.MapGroup("/api/canon")
+            .RequireAuthorization(WebServiceCollectionExtensions.DemoExportPolicy)
+            .MapGet("/validate", async (
             ICanonRepository repository,
             CanonValidator validator,
             CancellationToken ct) =>

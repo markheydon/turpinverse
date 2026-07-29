@@ -16,9 +16,15 @@ universe. It provides:
 
 ## API security note
 
-The Blazor export app exposes `/api/export/*` and `/api/canon/validate` without authentication.
-This is intentional for local demos and Aspire development. Do not deploy the export app to a
-public network without adding authentication or network restrictions.
+The Blazor export app exposes `/api/export/*` and `/api/canon/validate` when
+`Export:PublicApiEnabled` is `true` (default in Development, `false` in
+Production). Endpoints use the `DemoExport` authorization policy and are not
+registered when disabled. This is intentional for local demos and Aspire
+development. Do not enable the public export API on a network-accessible
+deployment without adding authentication or network restrictions.
+
+See [spec security table](specs/001-turpinverse-universe/spec.md#security--access-required-when-feature-handles-sensitive-data-authentication-or-external-exposure)
+and [code scanning alert #3](https://github.com/markheydon/turpinverse/security/code-scanning/3).
 
 ## Quickstart
 

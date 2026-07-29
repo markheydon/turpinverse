@@ -47,15 +47,21 @@ content sections; 4 CSV export types; org-chart and timeline pages
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-| Principle | Pre-Design Status | Post-Design Status |
-|-----------|-------------------|-------------------|
-| I. Spec-Driven Development | ✅ Plan traces to spec.md user stories FR-001–FR-014 | ✅ Data model and contracts map to every FR |
-| II. Incremental Delivery | ✅ P1 canon/Hugo → P2 Blazor export → P3 tone validation | ✅ Phased implementation order preserved in quickstart |
-| III. Test-First | ✅ Contract tests for canon schema & export; integration tests for cross-ref validation (SC-002) | ✅ Test projects defined; export contract enables failing-first tests |
-| IV. Simplicity & YAGNI | ⚠️ Aspire + 4 .NET projects — see Complexity Tracking | ✅ Justified; no DB, no extra formats beyond CSV in v1 |
-| V. Documentation as Contract | ✅ contracts/ directory planned | ✅ JSON schemas + export API contract authored |
+Answer **Yes** or **No** for each principle. Any **No** without a Complexity
+Tracking justification blocks the gate.
 
-**Gate result**: PASS (with documented complexity exceptions)
+| Principle | Pre-Design | Post-Design | Evidence |
+|-----------|------------|-------------|----------|
+| I. Spec-Driven Traceability | Yes | Yes | spec.md FR-001–FR-014; contracts/; tasks.md |
+| II. Incremental Independence | Yes | Yes | P1 canon/Hugo → P2 Blazor export → P3 tone validation |
+| III. Verifiable Testability | Yes | Yes | Contract + integration tests per quickstart.md |
+| IV. Separation of Concerns | Yes | Yes | Data / Core / Web / Tools project split |
+| V. Explicit Error Handling | No | Yes | ⚠️ Pre: RFC 7807 at boundary only; Post: see `002-constitution-alignment` |
+| VI. Security by Design | No | Yes | ⚠️ Pre: unauthenticated API undocumented; Post: `002` gating + spec table |
+| VII. Justified Complexity | Yes | Yes | Complexity Tracking table below |
+| VIII. Documentation Contract | Yes | Yes | contracts/ + quickstart.md authoritative |
+
+**Gate result**: PASS (Principles V–VI remediated in `002-constitution-alignment`)
 
 ## Project Structure
 

@@ -78,6 +78,29 @@
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
 
+## Failure Modes & Error Handling *(required when feature defines external boundaries or user-facing failures)*
+
+<!--
+  Constitution Principle V: Every specified failure mode MUST have an explicit
+  handling path. Document each failure mode and the expected system response.
+-->
+
+| Failure Mode | Trigger | Expected Handling | User/System Outcome |
+|--------------|---------|-------------------|----------------------|
+| [e.g., invalid input] | [condition] | [reject, retry, fallback] | [observable result] |
+
+## Security & Access *(required when feature handles sensitive data, authentication, or external exposure)*
+
+<!--
+  Constitution Principle VI: Identify threats and access controls before
+  implementation. Mark N/A only when the feature has no sensitive data,
+  authentication, or external interfaces.
+-->
+
+| Asset / Surface | Threat | Access Control | Verification |
+|-----------------|--------|----------------|--------------|
+| [e.g., user data] | [e.g., unauthorized read] | [e.g., auth required] | [how to verify] |
+
 ## Requirements *(mandatory)*
 
 <!--

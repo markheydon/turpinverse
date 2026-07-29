@@ -1,5 +1,6 @@
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Export;
+using Turpinverse.Web.DependencyInjection;
 
 namespace Turpinverse.Web.Endpoints;
 
@@ -7,7 +8,8 @@ public static class ExportEndpoints
 {
     public static IEndpointRouteBuilder MapExportEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/export");
+        var group = app.MapGroup("/api/export")
+            .RequireAuthorization(WebServiceCollectionExtensions.DemoExportPolicy);
 
         group.MapGet("/manifest", async (IExportService exportService, CancellationToken ct) =>
         {
