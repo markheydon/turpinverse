@@ -1,6 +1,5 @@
-@inject HttpClient Http
+@inject IExportService ExportService
 @inject IJSRuntime JS
-@using System.Net.Http.Json
 @using Turpinverse.Core.Abstractions
 @using Turpinverse.Core.Export
 
@@ -65,20 +64,10 @@
     {
         try
         {
-            var manifest = await Http.GetFromJsonAsync<ExportManifest>("/api/export/manifest");
-            rowCount = manifest?.Datasets.FirstOrDefault(d => d.Type == DatasetType)?.RowCount;
+            var manifest = await ExportService.GetManifestAsync();
+            rowCount = manifest.Datasets.FirstOrDefault(d => d.Type == DatasetType)?.RowCount;
 
-            var preview = await Http.GetFromJsonAsync<List<Dictionary<string, string>>>(
-                $"/api/export/{DatasetType}/preview?count=100");
-            if (preview is null)
-            {
-                loadError = $"Failed to load {GetDisplayName().ToLowerInvariant()} data.";
-                return;
-            }
-
-            rows = preview
-                .Select(row => (IReadOnlyDictionary<string, string>)row)
-                .ToList();
+            rows = await ExportService.PreviewAsync(DatasetType, 100);
 
             if (ShowPipelineChart)
             {
@@ -108,4 +97,4 @@
         await JS.InvokeVoidAsync("open", $"/api/export/{DatasetType}", "_blank");
     }
 }
-
+

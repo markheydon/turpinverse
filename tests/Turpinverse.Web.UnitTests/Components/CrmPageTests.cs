@@ -1,8 +1,12 @@
-using System.Net;
-using System.Text;
 using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using Turpinverse.Core.Abstractions;
+using Turpinverse.Core.Models;
+using Turpinverse.Core.Validation;
+using Turpinverse.Data.DependencyInjection;
 using Turpinverse.Web.Components.Pages;
 
 namespace Turpinverse.Web.UnitTests.Components;
@@ -17,7 +21,7 @@ public class HomePageTests : BunitContext
     [Fact]
     public void HomePage_RendersOverviewHeading()
     {
-        Services.AddScoped(_ => new HttpClient(CrmTestHttpFactory.CreateSuccessHandler()) { BaseAddress = new Uri("http://localhost") });
+        RegisterHomeServices(CrmTestData.CreateManifest(), valid: true);
         var cut = Render<Home>();
         Assert.Contains("Turpinverse", cut.Markup);
         Assert.Contains("Canon Valid", cut.Markup);
@@ -28,7 +32,7 @@ public class HomePageTests : BunitContext
     [Fact]
     public void HomePage_ShowsErrorWhenManifestIsIncomplete()
     {
-        Services.AddScoped(_ => new HttpClient(CrmTestHttpFactory.CreateIncompleteManifestHandler()) { BaseAddress = new Uri("http://localhost") });
+        RegisterHomeServices(CrmTestData.CreateIncompleteManifest(), valid: true);
         var cut = Render<Home>();
         Assert.Contains("Manifest is missing the 'cases' dataset.", cut.Markup);
     }
@@ -36,10 +40,47 @@ public class HomePageTests : BunitContext
     [Fact]
     public void HomePage_ShowsAlertIconWhenCanonInvalid()
     {
-        Services.AddScoped(_ => new HttpClient(CrmTestHttpFactory.CreateInvalidCanonHandler()) { BaseAddress = new Uri("http://localhost") });
+        RegisterHomeServices(CrmTestData.CreateManifest(), valid: false);
         var cut = Render<Home>();
         Assert.Contains("Canon Issues", cut.Markup);
     }
+
+    private void RegisterHomeServices(ExportManifest manifest, bool valid)
+    {
+        var exportService = Substitute.For<IExportService>();
+        exportService.GetManifestAsync(Arg.Any<CancellationToken>()).Returns(manifest);
+        Services.AddSingleton(exportService);
+
+        if (valid)
+        {
+            Services.AddTurpinverseData();
+        }
+        else
+        {
+            var canonRepository = Substitute.For<ICanonRepository>();
+            canonRepository.LoadAsync(Arg.Any<CancellationToken>()).Returns(CreateInvalidCanon());
+            Services.AddSingleton(canonRepository);
+        }
+
+        Services.AddSingleton<CanonValidator>();
+    }
+
+    private static Canon CreateInvalidCanon() =>
+        new()
+        {
+            Version = "1.0.0",
+            Personas = [],
+            Organisations = [],
+            Events = [],
+            Aliases = [],
+            ToneGuidelines = new ToneGuidelines
+            {
+                Version = "1.0.0",
+                Principles = [],
+                Examples = [],
+                ForbiddenPatterns = []
+            }
+        };
 }
 
 public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
@@ -58,7 +99,9 @@ public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
     [Fact]
     public void ContactsPage_ShowsErrorWhenPreviewFails()
     {
-        var cut = RenderPage(CrmTestHttpFactory.CreatePreviewFailureHandler("contacts"));
+        var cut = RenderPage(exportService => exportService
+            .PreviewAsync("contacts", 100, Arg.Any<CancellationToken>())
+            .ThrowsAsync(new InvalidOperationException("preview failed")));
         Assert.Contains("Failed to load contacts data.", cut.Markup);
     }
 }
@@ -115,82 +158,98 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
 
     protected abstract string DatasetType { get; }
 
-    protected IRenderedComponent<TPage> RenderPage(HttpMessageHandler? handler = null)
+    protected IRenderedComponent<TPage> RenderPage(Action<IExportService>? configure = null)
     {
-        Services.AddScoped(_ => new HttpClient(handler ?? CrmTestHttpFactory.CreateSuccessHandler())
-        {
-            BaseAddress = new Uri("http://localhost")
-        });
+        var exportService = Substitute.For<IExportService>();
+        exportService.GetManifestAsync(Arg.Any<CancellationToken>()).Returns(CrmTestData.CreateManifest());
+        exportService.PreviewAsync("accounts", 100, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("accounts"));
+        exportService.PreviewAsync("contacts", 100, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("contacts"));
+        exportService.PreviewAsync("deals", 100, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("deals"));
+        exportService.PreviewAsync("cases", 100, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("cases"));
+        configure?.Invoke(exportService);
+        Services.AddSingleton(exportService);
         return Render<TPage>();
     }
 }
 
-internal static class CrmTestHttpFactory
+internal static class CrmTestData
 {
-    private const string ManifestJson = """{"version":"1.0.0","datasets":[{"type":"accounts","filename":"turpinverse-accounts.csv","rowCount":10,"columns":["accountId"]},{"type":"contacts","filename":"turpinverse-contacts.csv","rowCount":25,"columns":["contactId"]},{"type":"deals","filename":"turpinverse-deals.csv","rowCount":22,"columns":["dealId"]},{"type":"cases","filename":"turpinverse-cases.csv","rowCount":17,"columns":["caseId"]}]}""";
+    public static ExportManifest CreateManifest() =>
+        new(
+            "1.0.0",
+            [
+                new ExportDatasetInfo("accounts", "turpinverse-accounts.csv", 10, ["accountId"]),
+                new ExportDatasetInfo("contacts", "turpinverse-contacts.csv", 25, ["contactId"]),
+                new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"]),
+                new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"])
+            ]);
 
-    public static HttpMessageHandler CreateSuccessHandler() => new FakeHandler(path => path switch
-    {
-        "/api/export/manifest" => ManifestJson,
-        "/api/canon/validate" => """{"valid":true}""",
-        var preview when preview.StartsWith("/api/export/accounts/preview") =>
-            """[{"accountId":"org1","accountName":"Turpin & Co","industry":"Retail","status":"active","website":"https://turpinverse.uk"}]""",
-        var preview when preview.StartsWith("/api/export/contacts/preview") =>
-            """[{"contactId":"p1","firstName":"Test","lastName":"User","title":"Title","email":"test@turpinverse.uk","phone":"","accountId":"org1","status":"active","notes":""}]""",
-        var preview when preview.StartsWith("/api/export/deals/preview") =>
-            """[{"dealId":"d1","dealName":"Warehouse Expansion","stage":"Proposal","amount":"50000","closeDate":"2026-12-31","accountId":"org1"}]""",
-        var preview when preview.StartsWith("/api/export/cases/preview") =>
-            """[{"caseId":"c1","subject":"Delivery delay","status":"open","priority":"high","contactId":"p1","accountId":"org1"}]""",
-        _ => "{}"
-    });
+    public static ExportManifest CreateIncompleteManifest() =>
+        new(
+            "1.0.0",
+            [
+                new ExportDatasetInfo("accounts", "turpinverse-accounts.csv", 10, ["accountId"]),
+                new ExportDatasetInfo("contacts", "turpinverse-contacts.csv", 25, ["contactId"]),
+                new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"])
+            ]);
 
-    public static HttpMessageHandler CreateIncompleteManifestHandler() => new FakeHandler(path => path switch
-    {
-        "/api/export/manifest" =>
-            """{"version":"1.0.0","datasets":[{"type":"accounts","filename":"turpinverse-accounts.csv","rowCount":10,"columns":["accountId"]},{"type":"contacts","filename":"turpinverse-contacts.csv","rowCount":25,"columns":["contactId"]},{"type":"deals","filename":"turpinverse-deals.csv","rowCount":22,"columns":["dealId"]}]}""",
-        "/api/canon/validate" => """{"valid":true}""",
-        _ => "{}"
-    });
-
-    public static HttpMessageHandler CreateInvalidCanonHandler() => new FakeHandler(path => path switch
-    {
-        "/api/export/manifest" => ManifestJson,
-        "/api/canon/validate" => """{"valid":false}""",
-        _ => "{}"
-    });
-
-    public static HttpMessageHandler CreatePreviewFailureHandler(string datasetType) => new FakeHandler(path =>
-    {
-        if (path.StartsWith($"/api/export/{datasetType}/preview", StringComparison.Ordinal))
+    public static IReadOnlyList<IReadOnlyDictionary<string, string>> CreatePreviewRows(string datasetType) =>
+        datasetType switch
         {
-            return null;
-        }
-
-        return path switch
-        {
-            "/api/export/manifest" => ManifestJson,
-            _ => "{}"
+            "accounts" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["accountId"] = "org1",
+                    ["accountName"] = "Turpin & Co",
+                    ["industry"] = "Retail",
+                    ["status"] = "active",
+                    ["website"] = "https://turpinverse.uk"
+                }
+            ],
+            "contacts" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["contactId"] = "p1",
+                    ["firstName"] = "Test",
+                    ["lastName"] = "User",
+                    ["title"] = "Title",
+                    ["email"] = "test@turpinverse.uk",
+                    ["phone"] = "",
+                    ["accountId"] = "org1",
+                    ["status"] = "active",
+                    ["notes"] = ""
+                }
+            ],
+            "deals" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["dealId"] = "d1",
+                    ["dealName"] = "Warehouse Expansion",
+                    ["stage"] = "Proposal",
+                    ["amount"] = "50000",
+                    ["closeDate"] = "2026-12-31",
+                    ["accountId"] = "org1"
+                }
+            ],
+            "cases" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["caseId"] = "c1",
+                    ["subject"] = "Delivery delay",
+                    ["status"] = "open",
+                    ["priority"] = "high",
+                    ["contactId"] = "p1",
+                    ["accountId"] = "org1"
+                }
+            ],
+            _ => []
         };
-    });
-
-    private sealed class FakeHandler(Func<string, string?> responder) : HttpMessageHandler
-    {
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
-        {
-            var path = request.RequestUri?.AbsolutePath ?? string.Empty;
-            var content = responder(path);
-
-            if (content is null)
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
-            }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(content, Encoding.UTF8, "application/json")
-            });
-        }
-    }
 }

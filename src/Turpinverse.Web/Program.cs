@@ -14,11 +14,6 @@ builder.Services.AddTurpinverseData();
 builder.Services.AddTurpinverseWeb(builder.Configuration);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddScoped(sp =>
-{
-    var navigationManager = sp.GetRequiredService<Microsoft.AspNetCore.Components.NavigationManager>();
-    return new HttpClient { BaseAddress = new Uri(navigationManager.BaseUri) };
-});
 
 var app = builder.Build();
 
