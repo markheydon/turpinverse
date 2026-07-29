@@ -27,7 +27,7 @@ function Test-ContainerRuntime {
     }
 }
 
-function Ensure-HugoThemeSubmodule {
+function Initialize-HugoThemeSubmodule {
     <#
     .SYNOPSIS
         Ensures the PaperMod Hugo theme submodule is checked out before build/serve.
@@ -94,7 +94,7 @@ function Invoke-HugoBuild {
 }
 
 Test-ContainerRuntime -Name $Runtime
-Ensure-HugoThemeSubmodule
+Initialize-HugoThemeSubmodule
 
 switch ($Command) {
     "build" {
