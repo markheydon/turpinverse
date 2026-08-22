@@ -71,6 +71,7 @@ Same underlying records, different channel jobs. This is not two competing showc
 - Timeline events
 - Career history and portfolio on persona pages (experience, education, projects, achievements)
 - Deals and cases (dedicated indexes and detail pages with named bidirectional links)
+- Articles and galleries (team journal list/detail pages, persona article lists, captioned gallery with lightbox)
 
 **Blazor / CSV only today:**
 
@@ -85,7 +86,7 @@ These are product facts, not blockers for the channel split above:
 | Hugo pages for deals and cases | **Shipped** — generated from canon with nav and home links |
 | Technical IDs in Hugo body copy | **Addressed** — display-name partials and fallbacks; join keys remain in front matter / data JSON only |
 | Blazor filtering / faceting | **Shipped** — dataset pages filter preview and CSV download via shared `ExportFilter` |
-| Hugo completeness vs canon | Generator and layouts must grow as new human-readable entity types are added |
+| Hugo completeness vs canon | Generator and layouts must grow as new human-readable entity types are added — articles and galleries **shipped** on Hugo |
 
 ## Related docs
 

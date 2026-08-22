@@ -28,8 +28,12 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "deals"));
         Directory.CreateDirectory(Path.Combine(contentDir, "cases"));
         Directory.CreateDirectory(Path.Combine(contentDir, "projects"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "galleries"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
         Directory.CreateDirectory(dataDir);
+
+        var personaNames = canon.Personas.ToDictionary(p => p.Id, p => p.DisplayName);
 
         foreach (var persona in canon.Personas)
         {
@@ -232,6 +236,119 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "projects.json"),
             JsonSerializer.Serialize(canon.Projects, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var publishedArticles = canon.Articles.Where(a => !a.Draft).ToList();
+
+        var articlesIndexContent = """
+            ---
+            title: Articles
+            ---
+
+            Thought leadership and team journal pieces from the Turpinverse canon — bylines, collection labels, and in-universe copy.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "articles", "_index.md"),
+            articlesIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var article in publishedArticles)
+        {
+            var authorName = personaNames.GetValueOrDefault(article.AuthorPersonaId, article.AuthorPersonaId);
+            var tagsLine = article.Tags.Count > 0
+                ? $"tags: {JsonSerializer.Serialize(article.Tags)}\n"
+                : string.Empty;
+            var featuredImageLine = !string.IsNullOrWhiteSpace(article.FeaturedImage)
+                ? $"featuredImage: \"{EscapeYaml(article.FeaturedImage)}\"\n"
+                : string.Empty;
+            var excerptLine = !string.IsNullOrWhiteSpace(article.Excerpt)
+                ? $"excerpt: \"{EscapeYaml(article.Excerpt)}\"\n"
+                : string.Empty;
+            var showTocLine = article.ShowTableOfContents == true
+                ? "showToc: true\n"
+                : string.Empty;
+            var relatedProjectLine = !string.IsNullOrWhiteSpace(article.RelatedProjectId)
+                ? $"relatedProjectId: \"{article.RelatedProjectId}\"\n"
+                : string.Empty;
+            var relatedCaseLine = !string.IsNullOrWhiteSpace(article.RelatedCaseId)
+                ? $"relatedCaseId: \"{article.RelatedCaseId}\"\n"
+                : string.Empty;
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(article.Title)}"
+                type: "articles"
+                publishedAt: "{article.PublishedAt}"
+                authorPersonaId: "{article.AuthorPersonaId}"
+                authorName: "{EscapeYaml(authorName)}"
+                collection: "{EscapeYaml(article.Collection)}"
+                {tagsLine}{featuredImageLine}{excerptLine}{showTocLine}{relatedProjectLine}{relatedCaseLine}---
+
+                {article.Body}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "articles", $"{article.Id}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "articles.json"),
+            JsonSerializer.Serialize(publishedArticles, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var galleriesIndexContent = """
+            ---
+            title: Gallery
+            ---
+
+            Team and workplace imagery from the Turpinverse canon — captioned galleries with optional lightbox viewing.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "galleries", "_index.md"),
+            galleriesIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var gallery in canon.Galleries)
+        {
+            var descriptionLine = !string.IsNullOrWhiteSpace(gallery.Description)
+                ? $"description: \"{EscapeYaml(gallery.Description)}\"\n"
+                : string.Empty;
+            var viewerModeLine = !string.IsNullOrWhiteSpace(gallery.Viewer.Mode)
+                ? $"viewerMode: \"{EscapeYaml(gallery.Viewer.Mode)}\"\n"
+                : string.Empty;
+            var body = !string.IsNullOrWhiteSpace(gallery.Description)
+                ? gallery.Description
+                : string.Empty;
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(gallery.Title)}"
+                type: "galleries"
+                galleryId: "{gallery.Id}"
+                subject: "{gallery.Subject}"
+                viewerEnabled: {gallery.Viewer.Enabled.ToString().ToLowerInvariant()}
+                {descriptionLine}{viewerModeLine}---
+
+                {body}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "galleries", $"{gallery.Id}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "galleries.json"),
+            JsonSerializer.Serialize(canon.Galleries, JsonOptions),
             Utf8NoBom,
             cancellationToken);
 

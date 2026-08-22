@@ -24,6 +24,14 @@
       <span class="turpin-stat-label">Projects</span>
     </div>
     <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "articles") }}</span>
+      <span class="turpin-stat-label">Articles</span>
+    </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "galleries") }}</span>
+      <span class="turpin-stat-label">Galleries</span>
+    </div>
+    <div class="turpin-stat">
       <span class="turpin-stat-value">{{ len hugo.Data.events }}</span>
       <span class="turpin-stat-label">Events</span>
     </div>
@@ -54,6 +62,14 @@
   <a class="turpin-quick-link" href="{{ "/projects/" | relURL }}">
     <strong>Projects</strong>
     Portfolio catalog linked to accounts and contacts
+  </a>
+  <a class="turpin-quick-link" href="{{ "/articles/" | relURL }}">
+    <strong>Articles</strong>
+    Team journal and thought-leadership pieces
+  </a>
+  <a class="turpin-quick-link" href="{{ "/galleries/" | relURL }}">
+    <strong>Gallery</strong>
+    Team and workplace imagery with captions
   </a>
   <a class="turpin-quick-link" href="{{ "/timeline/" | relURL }}">
     <strong>Timeline</strong>

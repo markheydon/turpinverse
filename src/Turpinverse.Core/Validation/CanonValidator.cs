@@ -31,6 +31,7 @@ public sealed partial class CanonValidator
         ValidateMinimumVolumes(canon, violations);
         ValidateEventDateConsistency(canon, violations);
         ValidateCareerPortfolio(canon, personaIds, organisationIds, violations);
+        ValidateArticlesAndGalleries(canon, personaIds, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -43,7 +44,9 @@ public sealed partial class CanonValidator
             ["experience"] = canon.Experience.Count,
             ["education"] = canon.Education.Count,
             ["projects"] = canon.Projects.Count,
-            ["achievements"] = canon.Achievements.Count
+            ["achievements"] = canon.Achievements.Count,
+            ["articles"] = canon.Articles.Count,
+            ["galleries"] = canon.Galleries.Count
         };
 
         return new CanonValidationResult(
@@ -724,6 +727,219 @@ public sealed partial class CanonValidator
         year = 0;
         var match = YearRegex().Match(date);
         return match.Success && int.TryParse(match.Value, out year);
+    }
+
+    private static void ValidateArticlesAndGalleries(
+        Canon canon,
+        HashSet<string> personaIds,
+        List<ValidationViolation> violations)
+    {
+        const string turpinEnterprisesId = "turpin-enterprises";
+        const string primaryAuthorId = "dick-turpin";
+        const string blackBessProjectId = "black-bess-route-optimiser";
+
+        var teOrg = canon.Organisations.FirstOrDefault(o => o.Id == turpinEnterprisesId);
+        var teMemberIds = teOrg?.MemberPersonaIds.ToHashSet() ?? [];
+        var projectIds = canon.Projects.Select(p => p.Id).ToHashSet();
+        var casesById = canon.Cases.ToDictionary(c => c.CaseId);
+
+        var articleIds = new HashSet<string>();
+        foreach (var article in canon.Articles)
+        {
+            if (!articleIds.Add(article.Id))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-028",
+                    $"Duplicate article id '{article.Id}'",
+                    "Article",
+                    article.Id));
+            }
+
+            if (string.IsNullOrWhiteSpace(article.Title) || string.IsNullOrWhiteSpace(article.Body))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-028",
+                    $"Article '{article.Id}' requires non-empty title and body",
+                    "Article",
+                    article.Id));
+            }
+
+            if (!personaIds.Contains(article.AuthorPersonaId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-029",
+                    $"Article '{article.Id}' references unknown author '{article.AuthorPersonaId}'",
+                    "Article",
+                    article.Id));
+            }
+            else if (!teMemberIds.Contains(article.AuthorPersonaId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-029",
+                    $"Article '{article.Id}' author '{article.AuthorPersonaId}' is not a Turpin Enterprises member",
+                    "Article",
+                    article.Id));
+            }
+
+            if (!string.IsNullOrWhiteSpace(article.RelatedProjectId)
+                && !projectIds.Contains(article.RelatedProjectId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-034",
+                    $"Article '{article.Id}' references unknown project '{article.RelatedProjectId}'",
+                    "Article",
+                    article.Id));
+            }
+
+            if (!string.IsNullOrWhiteSpace(article.RelatedCaseId))
+            {
+                if (!casesById.TryGetValue(article.RelatedCaseId, out var relatedCase))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-034",
+                        $"Article '{article.Id}' references unknown case '{article.RelatedCaseId}'",
+                        "Article",
+                        article.Id));
+                }
+                else if (!string.Equals(relatedCase.AccountId, turpinEnterprisesId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-034",
+                        $"Article '{article.Id}' related case '{article.RelatedCaseId}' is not a Turpin Enterprises case",
+                        "Article",
+                        article.Id));
+                }
+            }
+        }
+
+        var published = canon.Articles.Where(a => !a.Draft).ToList();
+        if (published.Count != 10)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-030",
+                $"Exactly 10 published articles required, found {published.Count}",
+                "Article",
+                "articles"));
+        }
+
+        var dickCount = published.Count(a => a.AuthorPersonaId == primaryAuthorId);
+        if (dickCount != 3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-030",
+                $"Exactly 3 published articles by '{primaryAuthorId}' required, found {dickCount}",
+                "Article",
+                primaryAuthorId));
+        }
+
+        var otherTeCount = published.Count(a =>
+            a.AuthorPersonaId != primaryAuthorId && teMemberIds.Contains(a.AuthorPersonaId));
+        if (otherTeCount != 7)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-030",
+                $"Exactly 7 published articles by other Turpin Enterprises members required, found {otherTeCount}",
+                "Article",
+                turpinEnterprisesId));
+        }
+
+        var blackBessCount = published.Count(a =>
+            string.Equals(a.RelatedProjectId, blackBessProjectId, StringComparison.Ordinal));
+        if (blackBessCount != 1)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-031",
+                $"Exactly one published article must relate to project '{blackBessProjectId}', found {blackBessCount}",
+                "Article",
+                blackBessProjectId));
+        }
+
+        var caseGroups = published
+            .Where(a => !string.IsNullOrWhiteSpace(a.RelatedCaseId))
+            .GroupBy(a => a.RelatedCaseId!)
+            .ToList();
+        var teCasePair = caseGroups.FirstOrDefault(g => g.Count() == 2);
+        if (teCasePair is null)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-031",
+                "Exactly two published articles must share the same related case id",
+                "Article",
+                "articles"));
+        }
+
+        var hasMetadataExample = published.Any(a =>
+            a.Tags.Count > 0
+            && !string.IsNullOrWhiteSpace(a.FeaturedImage)
+            && !string.IsNullOrWhiteSpace(a.Excerpt)
+            && a.ShowTableOfContents == true);
+        if (!hasMetadataExample)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-032",
+                "At least one published article must include tags, featuredImage, excerpt, and showTableOfContents true",
+                "Article",
+                "articles"));
+        }
+
+        var validSubjects = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "team", "workplace", "brand"
+        };
+
+        var qualifyingGalleryFound = false;
+        foreach (var gallery in canon.Galleries)
+        {
+            if (!validSubjects.Contains(gallery.Subject))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-035",
+                    $"Gallery '{gallery.Id}' has invalid subject '{gallery.Subject}'",
+                    "Gallery",
+                    gallery.Id));
+            }
+
+            foreach (var image in gallery.Images)
+            {
+                if (string.IsNullOrWhiteSpace(image.Src))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-035",
+                        $"Gallery '{gallery.Id}' has an image with empty src",
+                        "Gallery",
+                        gallery.Id));
+                }
+
+                if (string.IsNullOrWhiteSpace(image.Caption) && string.IsNullOrWhiteSpace(image.Alt))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-033",
+                        $"Gallery '{gallery.Id}' image requires caption or alt text",
+                        "Gallery",
+                        gallery.Id));
+                }
+            }
+
+            var meetsGalleryRules = !string.IsNullOrWhiteSpace(gallery.Title)
+                && gallery.Images.Count >= 4
+                && gallery.Images.All(i =>
+                    !string.IsNullOrWhiteSpace(i.Src)
+                    && (!string.IsNullOrWhiteSpace(i.Caption) || !string.IsNullOrWhiteSpace(i.Alt)))
+                && gallery.Viewer.Enabled;
+            if (meetsGalleryRules)
+            {
+                qualifyingGalleryFound = true;
+            }
+        }
+
+        if (!qualifyingGalleryFound)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-033",
+                "At least one gallery with title, four captioned images, and viewer.enabled true is required",
+                "Gallery",
+                "galleries"));
+        }
     }
 
     [GeneratedRegex(@"\d{4}")]

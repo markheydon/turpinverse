@@ -39,6 +39,26 @@ public class HugoShowcaseLinkTests
             var caseElement = cases.EnumerateArray()
                 .First(element => element.GetProperty("caseId").GetString() == caseWithEvent.CaseId);
             Assert.Equal(caseWithEvent.RelatedEventId, caseElement.GetProperty("relatedEventId").GetString());
+
+            var articlesJson = await File.ReadAllTextAsync(
+                Path.Combine(siteRoot, "data", "articles.json"),
+                cancellationToken);
+            var articles = JsonSerializer.Deserialize<JsonElement>(articlesJson);
+            var articleWithProject = canon.Articles.First(a =>
+                !a.Draft && a.RelatedProjectId == "black-bess-route-optimiser");
+            var articleElement = articles.EnumerateArray()
+                .First(element => element.GetProperty("id").GetString() == articleWithProject.Id);
+            Assert.Equal("black-bess-route-optimiser", articleElement.GetProperty("relatedProjectId").GetString());
+
+            var caseArticles = articles.EnumerateArray()
+                .Where(element =>
+                    element.TryGetProperty("relatedCaseId", out var caseId)
+                    && caseId.ValueKind == JsonValueKind.String
+                    && !string.IsNullOrWhiteSpace(caseId.GetString()))
+                .ToList();
+            Assert.Equal(2, caseArticles.Count);
+            Assert.All(caseArticles, element =>
+                Assert.Equal("case-007", element.GetProperty("relatedCaseId").GetString()));
         }
         finally
         {

@@ -49,6 +49,16 @@ public class HugoIdentityRulesTests
                 Assert.DoesNotContain($"title: \"{project.Id}\"", content);
                 Assert.DoesNotContain($"title: \"{project.OrganisationId}\"", content);
             }
+
+            foreach (var article in canon.Articles.Where(a => !a.Draft))
+            {
+                var content = await File.ReadAllTextAsync(
+                    Path.Combine(siteRoot, "content", "articles", $"{article.Id}.md"),
+                    cancellationToken);
+                Assert.Contains($"title: \"{article.Title}\"", content);
+                Assert.DoesNotContain($"title: \"{article.Id}\"", content);
+                Assert.DoesNotContain($"title: \"{article.AuthorPersonaId}\"", content);
+            }
         }
         finally
         {

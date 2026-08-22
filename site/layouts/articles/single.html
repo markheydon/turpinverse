@@ -1,0 +1,23 @@
+{{ define "main" }}
+<article class="article post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p class="card-meta">
+      {{ with .Params.publishedAt }}<time datetime="{{ . }}">{{ . }}</time>{{ end }}
+      {{ with .Params.authorPersonaId }}
+      &nbsp;·&nbsp;By <a href="{{ "/personas/" | relURL }}{{ . }}/">{{ $.Params.authorName }}</a>
+      {{ end }}
+    </p>
+    {{ partial "article-collection.html" . }}
+    {{ with .Params.tags }}<ul class="chip-list">{{ range . }}<li class="chip">{{ . }}</li>{{ end }}</ul>{{ end }}
+  </header>
+
+  {{ with .Params.featuredImage }}
+  <img class="article-featured-image" src="{{ . }}" alt="{{ $.Title }}" loading="lazy" width="960" height="540">
+  {{ end }}
+
+  <div class="post-content">{{ .Content }}</div>
+
+  {{ partial "article-related-links.html" . }}
+</article>
+{{ end }}

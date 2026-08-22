@@ -34,9 +34,9 @@ description: "Task list for Generic Article and Gallery Demo Data feature implem
 
 **Purpose**: Canon file scaffolding and feature branch readiness
 
-- [ ] T001 Create empty canon array files `articles.json` and `galleries.json` in `src/Turpinverse.Data/canon/` (each `[]` until authored)
-- [ ] T002 Verify embedded resource glob in `src/Turpinverse.Data/Turpinverse.Data.csproj` includes new canon files via `canon\*.json`
-- [ ] T003 Confirm feature branch `005-article-gallery-content` is active and `specs/005-article-gallery-content/` design artifacts are present
+- [x] T001 Create empty canon array files `articles.json` and `galleries.json` in `src/Turpinverse.Data/canon/` (each `[]` until authored)
+- [x] T002 Verify embedded resource glob in `src/Turpinverse.Data/Turpinverse.Data.csproj` includes new canon files via `canon\*.json`
+- [x] T003 Confirm feature branch `005-article-gallery-content` is active and `specs/005-article-gallery-content/` design artifacts are present
 
 ---
 
@@ -50,23 +50,23 @@ description: "Task list for Generic Article and Gallery Demo Data feature implem
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T004 [P] Add failing CanonValidator article/gallery fixture tests (VR-028–VR-035) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
-- [ ] T005 [P] Add failing CanonSchemaValidator tests for Article, Gallery, GalleryImage, and ViewerHint in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGallerySchemaValidatorTests.cs`
-- [ ] T006 [P] Add failing JsonCanonRepository load tests for `articles.json` and `galleries.json` in `tests/Turpinverse.Core.UnitTests/Data/JsonCanonRepositoryTests.cs`
-- [ ] T007 [P] Add failing validate-response count assertions for `articles` and `galleries` in `tests/Turpinverse.Core.UnitTests/Validation/CanonValidatorTests.cs` (or API integration test targeting `src/Turpinverse.Web/Endpoints/CanonEndpoints.cs`)
+- [x] T004 [P] Add failing CanonValidator article/gallery fixture tests (VR-028–VR-035) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
+- [x] T005 [P] Add failing CanonSchemaValidator tests for Article, Gallery, GalleryImage, and ViewerHint in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGallerySchemaValidatorTests.cs`
+- [x] T006 [P] Add failing JsonCanonRepository load tests for `articles.json` and `galleries.json` in `tests/Turpinverse.Core.UnitTests/Data/JsonCanonRepositoryTests.cs`
+- [x] T007 [P] Add failing validate-response count assertions for `articles` and `galleries` in `tests/Turpinverse.Core.UnitTests/Validation/CanonValidatorTests.cs` (or API integration test targeting `src/Turpinverse.Web/Endpoints/CanonEndpoints.cs`)
 
 ### Implementation for Foundational
 
-- [ ] T008 [P] Create `GalleryImage` model in `src/Turpinverse.Core/Models/GalleryImage.cs`
-- [ ] T009 [P] Create `ViewerHint` model in `src/Turpinverse.Core/Models/ViewerHint.cs`
-- [ ] T010 [P] Create `Article` model in `src/Turpinverse.Core/Models/Article.cs`
-- [ ] T011 [P] Create `Gallery` model in `src/Turpinverse.Core/Models/Gallery.cs`
-- [ ] T012 Extend `Canon` with `Articles` and `Galleries` collections in `src/Turpinverse.Core/Models/Canon.cs`
-- [ ] T013 Update `JsonCanonRepository` to load `articles.json` and `galleries.json` in `src/Turpinverse.Data/Repositories/JsonCanonRepository.cs`
-- [ ] T014 Merge additive types from `specs/005-article-gallery-content/contracts/article-gallery-schema.json` into `specs/001-turpinverse-universe/contracts/canon-schema.json` (`articles`, `galleries` required arrays and `$defs`)
-- [ ] T015 Extend `CanonSchemaValidator` for Article and Gallery entity types in `src/Turpinverse.Core/Validation/CanonSchemaValidator.cs`
-- [ ] T016 Implement VR-028–VR-035 validation methods and add `articles` and `galleries` to result counts in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T017 Add `articles` and `galleries` keys to `/api/canon/validate` response counts in `src/Turpinverse.Web/Endpoints/CanonEndpoints.cs`
+- [x] T008 [P] Create `GalleryImage` model in `src/Turpinverse.Core/Models/GalleryImage.cs`
+- [x] T009 [P] Create `ViewerHint` model in `src/Turpinverse.Core/Models/ViewerHint.cs`
+- [x] T010 [P] Create `Article` model in `src/Turpinverse.Core/Models/Article.cs`
+- [x] T011 [P] Create `Gallery` model in `src/Turpinverse.Core/Models/Gallery.cs`
+- [x] T012 Extend `Canon` with `Articles` and `Galleries` collections in `src/Turpinverse.Core/Models/Canon.cs`
+- [x] T013 Update `JsonCanonRepository` to load `articles.json` and `galleries.json` in `src/Turpinverse.Data/Repositories/JsonCanonRepository.cs`
+- [x] T014 Merge additive types from `specs/005-article-gallery-content/contracts/article-gallery-schema.json` into `specs/001-turpinverse-universe/contracts/canon-schema.json` (`articles`, `galleries` required arrays and `$defs`)
+- [x] T015 Extend `CanonSchemaValidator` for Article and Gallery entity types in `src/Turpinverse.Core/Validation/CanonSchemaValidator.cs`
+- [x] T016 Implement VR-028–VR-035 validation methods and add `articles` and `galleries` to result counts in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [x] T017 Add `articles` and `galleries` keys to `/api/canon/validate` response counts in `src/Turpinverse.Web/Endpoints/CanonEndpoints.cs`
 
 **Checkpoint**: Foundation ready — models load, schema validates structure, validator tests fail on empty/missing volume until data ships
 
@@ -80,16 +80,16 @@ description: "Task list for Generic Article and Gallery Demo Data feature implem
 
 ### Tests for User Story 1 (failing-first) ⚠️
 
-- [ ] T018 [P] [US1] Add failing article volume and author-split integration test (VR-030) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
-- [ ] T019 [P] [US1] Add failing topic-mix and FR-005 metadata example tests (VR-031, VR-032) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
+- [x] T018 [P] [US1] Add failing article volume and author-split integration test (VR-030) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
+- [x] T019 [P] [US1] Add failing topic-mix and FR-005 metadata example tests (VR-031, VR-032) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Author ten published articles in `src/Turpinverse.Data/canon/articles.json` (3× `dick-turpin`; 7× other `turpin-enterprises` members; shared `collection` label; in-universe copy per FR-008)
-- [ ] T021 [US1] Set `relatedProjectId` to `black-bess-route-optimiser` on exactly one published article in `src/Turpinverse.Data/canon/articles.json`
-- [ ] T022 [US1] Set the same `relatedCaseId` (recommended `case-007`) on exactly two published articles in `src/Turpinverse.Data/canon/articles.json`
-- [ ] T023 [US1] Exercise FR-005 on at least one published article (non-empty `tags`, `featuredImage`, `excerpt`, `showTableOfContents: true`) in `src/Turpinverse.Data/canon/articles.json`
-- [ ] T024 [US1] Confirm `CanonValidator.Validate` passes VR-028–VR-032 and VR-034 for articles with `Category=CanonValidation` in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
+- [x] T020 [US1] Author ten published articles in `src/Turpinverse.Data/canon/articles.json` (3× `dick-turpin`; 7× other `turpin-enterprises` members; shared `collection` label; in-universe copy per FR-008)
+- [x] T021 [US1] Set `relatedProjectId` to `black-bess-route-optimiser` on exactly one published article in `src/Turpinverse.Data/canon/articles.json`
+- [x] T022 [US1] Set the same `relatedCaseId` (recommended `case-007`) on exactly two published articles in `src/Turpinverse.Data/canon/articles.json`
+- [x] T023 [US1] Exercise FR-005 on at least one published article (non-empty `tags`, `featuredImage`, `excerpt`, `showTableOfContents: true`) in `src/Turpinverse.Data/canon/articles.json`
+- [x] T024 [US1] Confirm `CanonValidator.Validate` passes VR-028–VR-032 and VR-034 for articles with `Category=CanonValidation` in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
 
 **Checkpoint**: User Story 1 fully functional — ten published articles in canon; article completeness rules pass; records are listable as generic content without a consumer theme tree
 
@@ -103,14 +103,14 @@ description: "Task list for Generic Article and Gallery Demo Data feature implem
 
 ### Tests for User Story 2 (failing-first) ⚠️
 
-- [ ] T025 [P] [US2] Add failing gallery minimum and caption tests (VR-033, VR-035) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
+- [x] T025 [P] [US2] Add failing gallery minimum and caption tests (VR-033, VR-035) in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Author one workplace/team/brand gallery with four placeholder or remote images in `src/Turpinverse.Data/canon/galleries.json`
-- [ ] T027 [US2] Set `viewer.enabled` true and generic `mode` (e.g. `lightbox`) on the required gallery in `src/Turpinverse.Data/canon/galleries.json`
-- [ ] T028 [US2] Ensure every gallery image has non-empty `caption` or `alt` in `src/Turpinverse.Data/canon/galleries.json`
-- [ ] T029 [US2] Confirm full canon validation passes including galleries (`valid == true`, zero violations) via `Category=CanonValidation` in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
+- [x] T026 [US2] Author one workplace/team/brand gallery with four placeholder or remote images in `src/Turpinverse.Data/canon/galleries.json`
+- [x] T027 [US2] Set `viewer.enabled` true and generic `mode` (e.g. `lightbox`) on the required gallery in `src/Turpinverse.Data/canon/galleries.json`
+- [x] T028 [US2] Ensure every gallery image has non-empty `caption` or `alt` in `src/Turpinverse.Data/canon/galleries.json`
+- [x] T029 [US2] Confirm full canon validation passes including galleries (`valid == true`, zero violations) via `Category=CanonValidation` in `tests/Turpinverse.Core.UnitTests/Validation/ArticleGalleryValidatorTests.cs`
 
 **Checkpoint**: User Story 2 fully functional — gallery record meets volume, caption, subject, and viewer rules; full canon validation passes
 
@@ -124,28 +124,28 @@ description: "Task list for Generic Article and Gallery Demo Data feature implem
 
 ### Tests for User Story 3 (failing-first) ⚠️
 
-- [ ] T030 [P] [US3] Add failing HugoContentGenerator article emission tests (published-only, draft omitted, collection and author front matter) in `tests/Turpinverse.Core.UnitTests/Hugo/ArticleGalleryHugoTests.cs`
-- [ ] T031 [P] [US3] Add failing HugoContentGenerator gallery emission tests (ordered images, viewer hint, data JSON) in `tests/Turpinverse.Core.UnitTests/Hugo/ArticleGalleryHugoTests.cs`
-- [ ] T032 [P] [US3] Add failing Hugo identity and named related-link tests for articles in `tests/Turpinverse.Core.UnitTests/Hugo/HugoIdentityRulesTests.cs` and `tests/Turpinverse.Core.UnitTests/Hugo/HugoShowcaseLinkTests.cs`
-- [ ] T033 [P] [US3] Add failing persona published-articles list and omit-empty tests in `tests/Turpinverse.Core.UnitTests/Hugo/ArticleGalleryHugoTests.cs`
+- [x] T030 [P] [US3] Add failing HugoContentGenerator article emission tests (published-only, draft omitted, collection and author front matter) in `tests/Turpinverse.Core.UnitTests/Hugo/ArticleGalleryHugoTests.cs`
+- [x] T031 [P] [US3] Add failing HugoContentGenerator gallery emission tests (ordered images, viewer hint, data JSON) in `tests/Turpinverse.Core.UnitTests/Hugo/ArticleGalleryHugoTests.cs`
+- [x] T032 [P] [US3] Add failing Hugo identity and named related-link tests for articles in `tests/Turpinverse.Core.UnitTests/Hugo/HugoIdentityRulesTests.cs` and `tests/Turpinverse.Core.UnitTests/Hugo/HugoShowcaseLinkTests.cs`
+- [x] T033 [P] [US3] Add failing persona published-articles list and omit-empty tests in `tests/Turpinverse.Core.UnitTests/Hugo/ArticleGalleryHugoTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Extend `HugoContentGenerator` to emit `content/articles/_index.md`, `content/articles/{id}.md` (published only), and `site/data/articles.json` in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
-- [ ] T035 [US3] Extend `HugoContentGenerator` to emit `content/galleries/_index.md`, `content/galleries/{id}.md`, and `site/data/galleries.json` in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
-- [ ] T036 [US3] Map `showTableOfContents` to generated front matter (e.g. `ShowToc`) without storing theme keys in canon in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
-- [ ] T037 [P] [US3] Create article list layout `site/layouts/articles/list.html` with collection label per item and published-only entries
-- [ ] T038 [P] [US3] Create article detail layout `site/layouts/articles/single.html` with author as named person link, collection label, and named project/case partials
-- [ ] T039 [P] [US3] Create gallery list layout `site/layouts/galleries/list.html`
-- [ ] T040 [P] [US3] Create gallery detail layout `site/layouts/galleries/single.html` with visible captions/alt and generic lightbox behaviour when `viewer.enabled`
-- [ ] T041 [US3] Add published-articles section with omit-empty to `site/layouts/personas/single.html` driven by `site/data/articles.json`
-- [ ] T042 [P] [US3] Create partials for collection label and related project/case named links in `site/layouts/partials/` (e.g. `article-collection.html`, `article-related-links.html`)
-- [ ] T043 [US3] Add Articles and Gallery entries to `menu.main` in `site/hugo.toml` (same discoverability as people, organisations, deals)
-- [ ] T044 [US3] Add article and gallery quick links and/or home stats to `site/layouts/index.html`
-- [ ] T045 [US3] Run `src/Turpinverse.Tools.GenerateHugoContent` and commit generated `site/content/articles/`, `site/content/galleries/`, and updated `site/data/` artifacts
-- [ ] T046 [P] [US3] Add optional repo-only mapping note in `docs/article-gallery-mapping.md` (no named theme as source of truth; not Hugo content)
-- [ ] T047 [US3] Update Hugo inventory for articles and galleries in `docs/product-surfaces.md`
-- [ ] T048 [US3] Confirm `ExportDatasets` and Blazor export surfaces still omit articles and galleries (FR-012) in `src/Turpinverse.Core/Export/` (no new dataset types)
+- [x] T034 [US3] Extend `HugoContentGenerator` to emit `content/articles/_index.md`, `content/articles/{id}.md` (published only), and `site/data/articles.json` in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
+- [x] T035 [US3] Extend `HugoContentGenerator` to emit `content/galleries/_index.md`, `content/galleries/{id}.md`, and `site/data/galleries.json` in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
+- [x] T036 [US3] Map `showTableOfContents` to generated front matter (e.g. `ShowToc`) without storing theme keys in canon in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
+- [x] T037 [P] [US3] Create article list layout `site/layouts/articles/list.html` with collection label per item and published-only entries
+- [x] T038 [P] [US3] Create article detail layout `site/layouts/articles/single.html` with author as named person link, collection label, and named project/case partials
+- [x] T039 [P] [US3] Create gallery list layout `site/layouts/galleries/list.html`
+- [x] T040 [P] [US3] Create gallery detail layout `site/layouts/galleries/single.html` with visible captions/alt and generic lightbox behaviour when `viewer.enabled`
+- [x] T041 [US3] Add published-articles section with omit-empty to `site/layouts/personas/single.html` driven by `site/data/articles.json`
+- [x] T042 [P] [US3] Create partials for collection label and related project/case named links in `site/layouts/partials/` (e.g. `article-collection.html`, `article-related-links.html`)
+- [x] T043 [US3] Add Articles and Gallery entries to `menu.main` in `site/hugo.toml` (same discoverability as people, organisations, deals)
+- [x] T044 [US3] Add article and gallery quick links and/or home stats to `site/layouts/index.html`
+- [x] T045 [US3] Run `src/Turpinverse.Tools.GenerateHugoContent` and commit generated `site/content/articles/`, `site/content/galleries/`, and updated `site/data/` artifacts
+- [x] T046 [P] [US3] Add optional repo-only mapping note in `docs/article-gallery-mapping.md` (no named theme as source of truth; not Hugo content)
+- [x] T047 [US3] Update Hugo inventory for articles and galleries in `docs/product-surfaces.md`
+- [x] T048 [US3] Confirm `ExportDatasets` and Blazor export surfaces still omit articles and galleries (FR-012) in `src/Turpinverse.Core/Export/` (no new dataset types)
 
 **Checkpoint**: User Story 3 fully functional — public site showcases articles and galleries per contracts/hugo-showcase.md; persona, nav, and related-link rules hold
 
@@ -155,11 +155,11 @@ description: "Task list for Generic Article and Gallery Demo Data feature implem
 
 **Purpose**: End-to-end validation, channel charter, and documentation sync
 
-- [ ] T049 Run full `Category=CanonValidation` and `FullyQualifiedName~Hugo` test suites per `specs/005-article-gallery-content/quickstart.md`
-- [ ] T050 [P] Walk Hugo article and gallery pages for SC-005 (no export/download controls; no technical ids as primary identity)
-- [ ] T051 [P] Content review pass on article titles/bodies and gallery image choices for SC-006 plausibility and fictional-PII rules in `src/Turpinverse.Data/canon/articles.json` and `src/Turpinverse.Data/canon/galleries.json`
-- [ ] T052 Confirm no Hugo collection taxonomy or `/collections/` index routes were added under `site/`
-- [ ] T053 Verify `docs/article-gallery-mapping.md` (if present) is not published as Hugo content and SC-007 holds
+- [x] T049 Run full `Category=CanonValidation` and `FullyQualifiedName~Hugo` test suites per `specs/005-article-gallery-content/quickstart.md`
+- [x] T050 [P] Walk Hugo article and gallery pages for SC-005 (no export/download controls; no technical ids as primary identity)
+- [x] T051 [P] Content review pass on article titles/bodies and gallery image choices for SC-006 plausibility and fictional-PII rules in `src/Turpinverse.Data/canon/articles.json` and `src/Turpinverse.Data/canon/galleries.json`
+- [x] T052 Confirm no Hugo collection taxonomy or `/collections/` index routes were added under `site/`
+- [x] T053 Verify `docs/article-gallery-mapping.md` (if present) is not published as Hugo content and SC-007 holds
 
 ---
 
