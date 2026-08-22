@@ -122,7 +122,10 @@ h1 {
 }
 
 .contact-card,
-.account-card {
+.account-card,
+.deal-card,
+.case-card,
+.project-card {
   display: block;
   padding: 1.25rem;
   background: var(--entry);
@@ -134,7 +137,10 @@ h1 {
 }
 
 .contact-card:hover,
-.account-card:hover {
+.account-card:hover,
+.deal-card:hover,
+.case-card:hover,
+.project-card:hover {
   border-color: var(--turpin-amber);
   box-shadow: 0 2px 8px rgba(217, 119, 6, 0.12);
 }
@@ -191,6 +197,22 @@ h1 {
   margin-top: 0.5rem;
 }
 
+.card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 0 0.75rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--turpin-border);
+  background: var(--turpin-cream);
+}
+
+.project-card .chip-list {
+  margin: 0.5rem 0;
+}
+
+.status-featured { background: #fef3c7; color: #92400e; }
+
 /* Status badges */
 .status-badge {
   display: inline-block;
@@ -207,6 +229,27 @@ h1 {
 .status-legend { background: #fef3c7; color: #92400e; }
 .status-archived { background: #e0e7ff; color: #3730a3; }
 .status-dissolved { background: #fee2e2; color: #991b1b; }
+
+/* Deal pipeline stages */
+.status-closed-won { background: #dcfce7; color: #166534; }
+.status-closed-lost { background: #fee2e2; color: #991b1b; }
+.status-negotiation { background: #fef3c7; color: #92400e; }
+.status-proposal { background: #e0e7ff; color: #3730a3; }
+.status-qualification { background: #f1f5f9; color: #475569; }
+.status-prospecting { background: #f8fafc; color: #64748b; }
+
+/* Case status */
+.status-resolved,
+.status-closed { background: #dcfce7; color: #166534; }
+.status-new { background: #dbeafe; color: #1e40af; }
+.status-in-progress { background: #fef3c7; color: #92400e; }
+.status-on-hold { background: #f1f5f9; color: #475569; }
+
+/* Case priority */
+.priority-critical { background: #fee2e2; color: #991b1b; }
+.priority-high { background: #ffedd5; color: #9a3412; }
+.priority-medium { background: #fef3c7; color: #92400e; }
+.priority-low { background: #f1f5f9; color: #475569; }
 
 .category-badge {
   display: inline-block;
@@ -469,14 +512,16 @@ h1 {
 
 /* Career & portfolio sections (persona / contact detail parity) */
 .career-section,
-.related-orgs {
+.related-orgs,
+.related-records {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--turpin-border);
 }
 
 .career-section h2,
-.related-orgs h2 {
+.related-orgs h2,
+.related-records h2 {
   font-size: 1.25rem;
   margin: 0 0 1.25rem;
   color: var(--turpin-slate);
@@ -620,6 +665,34 @@ h1 {
   text-decoration: underline;
 }
 
+.project-entry h3 a {
+  color: var(--turpin-amber);
+  text-decoration: none;
+}
+
+.project-entry h3 a:hover {
+  text-decoration: underline;
+}
+
+.project-hero {
+  max-width: 24rem;
+  margin-bottom: 1.25rem;
+}
+
+.project-tags,
+.project-links {
+  margin: 1rem 0;
+}
+
+.record-card-tags {
+  margin: 0.5rem 0;
+}
+
+.record-card-tags .chip {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+}
+
 .institution,
 .project-account,
 .grade {
@@ -663,4 +736,93 @@ h1 {
 
 .related-orgs .chip-list {
   margin-top: 0;
+}
+
+/* Related deals, cases, and parties on detail pages */
+.related-parties .chip-list {
+  margin-top: 0;
+}
+
+.record-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.record-card {
+  display: block;
+  padding: 1rem 1.1rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.record-card:hover {
+  border-color: var(--turpin-amber);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.1);
+}
+
+.record-card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+  color: var(--primary);
+  line-height: 1.35;
+}
+
+.record-card-meta {
+  font-size: 0.8rem;
+  color: var(--secondary);
+  margin: 0.35rem 0 0;
+}
+
+.record-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.timeline-related-cases {
+  margin-top: 1rem;
+}
+
+.timeline-related-cases h4 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--secondary);
+  margin: 0 0 0.5rem;
+}
+
+.timeline-related-cases .chip-list {
+  margin-top: 0;
+}
+
+/* GitHub repo link in primary navigation */
+.menu {
+  align-items: center;
+}
+
+.menu a[href*="github.com/markheydon/turpinverse"] {
+  display: inline-flex;
+  align-items: center;
+}
+
+.menu a[href*="github.com/markheydon/turpinverse"] span {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.menu a[href*="github.com/markheydon/turpinverse"] > svg {
+  display: none;
+}
+
+.menu a[href*="github.com/markheydon/turpinverse"] .nav-github-icon {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
 }

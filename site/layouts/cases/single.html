@@ -1,0 +1,15 @@
+{{ define "main" }}
+<article class="case post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p class="card-meta">
+      {{ with .Params.status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+      {{ with .Params.priority }}&nbsp;·&nbsp;<span class="status-badge priority-{{ . | urlize }}">{{ . }}</span>{{ end }}
+    </p>
+  </header>
+
+  <div class="post-content">{{ .Content }}</div>
+
+  {{ partial "related-parties.html" . }}
+</article>
+{{ end }}

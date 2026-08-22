@@ -1,0 +1,48 @@
+{{ define "main" }}
+{{ $projectId := .File.BaseFileName }}
+{{ $project := index (where hugo.Data.projects "id" $projectId) 0 }}
+<article class="project post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.featured }}
+    <p class="card-meta"><span class="status-badge status-featured">Featured</span></p>
+    {{ end }}
+  </header>
+
+  {{ with .Params.image }}
+  <img class="career-image project-image project-hero" src="{{ . }}" alt="{{ $.Title }}" loading="lazy" width="640" height="360">
+  {{ end }}
+
+  <div class="post-content">{{ .Content }}</div>
+
+  {{ with .Params.tags }}
+  <ul class="chip-list project-tags">
+    {{ range . }}<li class="chip">{{ . }}</li>{{ end }}
+  </ul>
+  {{ end }}
+
+  {{ with $project.links }}
+  <ul class="featured-links project-links">
+    {{ range . }}
+    <li><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></li>
+    {{ end }}
+  </ul>
+  {{ end }}
+
+  {{ with $project.featuredCta }}
+  <p class="featured-cta"><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></p>
+  {{ end }}
+
+  <section class="related-records related-parties">
+    <h2>Related parties</h2>
+    <ul class="chip-list">
+      {{ with .Params.organisationId }}
+      <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
+      {{ end }}
+      {{ range .Params.personaIds }}
+      <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
+      {{ end }}
+    </ul>
+  </section>
+</article>
+{{ end }}

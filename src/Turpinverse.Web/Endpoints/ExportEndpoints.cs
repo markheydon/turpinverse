@@ -20,6 +20,7 @@ public static class ExportEndpoints
         group.MapGet("/{dataset}/preview", async (
             string dataset,
             int? count,
+            HttpRequest request,
             IExportService exportService,
             CancellationToken ct) =>
         {
@@ -33,12 +34,14 @@ public static class ExportEndpoints
             }
 
             var previewCount = Math.Clamp(count ?? 5, 1, 100);
-            var rows = await exportService.PreviewAsync(dataset, previewCount, ct);
+            var filter = ExportFilter.FromQuery(ToQueryDictionary(request.Query));
+            var rows = await exportService.PreviewAsync(dataset, previewCount, filter, ct);
             return Results.Ok(rows);
         });
 
         group.MapGet("/{dataset}", async (
             string dataset,
+            HttpRequest request,
             IExportService exportService,
             CancellationToken ct) =>
         {
@@ -51,10 +54,33 @@ public static class ExportEndpoints
                     type: "https://turpinverse.dev/errors/invalid-dataset");
             }
 
-            var bytes = await exportService.ExportCsvAsync(dataset, ct);
-            return Results.File(bytes, "text/csv; charset=utf-8", filename);
+            var filter = ExportFilter.FromQuery(ToQueryDictionary(request.Query));
+            try
+            {
+                var bytes = await exportService.ExportCsvAsync(dataset, filter, ct);
+                return Results.File(bytes, "text/csv; charset=utf-8", filename);
+            }
+            catch (EmptyFilterMatchException)
+            {
+                return Results.Problem(
+                    title: "No matching rows",
+                    detail: "The current filters matched no rows. Download was not written.",
+                    statusCode: StatusCodes.Status409Conflict,
+                    type: "https://turpinverse.dev/errors/empty-filter-match");
+            }
         });
 
         return app;
+    }
+
+    private static Dictionary<string, string?> ToQueryDictionary(IQueryCollection query)
+    {
+        var dictionary = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+        foreach (var pair in query)
+        {
+            dictionary[pair.Key] = pair.Value.FirstOrDefault();
+        }
+
+        return dictionary;
     }
 }

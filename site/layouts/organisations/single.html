@@ -20,6 +20,11 @@
   {{ partial "org-member-chart.html" . }}
   {{ partial "org-history.html" . }}
 
+  {{ $orgId := .File.BaseFileName }}
+  {{ partial "related-deals-grid.html" (where hugo.Data.deals "accountId" $orgId) }}
+  {{ partial "related-cases-grid.html" (where hugo.Data.cases "accountId" $orgId) }}
+  {{ partial "related-projects-grid.html" (where hugo.Data.projects "organisationId" $orgId) }}
+
   {{ partial "mermaid-init.html" . }}
 </article>
 {{ end }}

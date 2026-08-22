@@ -15,11 +15,30 @@
         }
       </div>
     </div>
-    <button class="download-btn" @onclick="DownloadCsv" disabled="@loading">
+    <button class="download-btn" @onclick="DownloadCsv" disabled="@(loading || downloadDisabled)">
       <LucideIcon Name="download" />
       Download CSV
     </button>
   </div>
+
+  @if (FacetColumns is { Count: > 0 })
+  {
+    <div class="facet-controls">
+      @foreach (var facet in FacetColumns)
+      {
+        <label class="facet-control">
+          <span class="facet-label">@FormatFacetLabel(facet)</span>
+          <select class="facet-select" value="@GetFacetValue(facet)" @onchange="e => OnFacetChanged(facet, e)">
+            <option value="">All</option>
+            @foreach (var option in GetFacetOptions(facet))
+            {
+              <option value="@option">@option</option>
+            }
+          </select>
+        </label>
+      }
+    </div>
+  }
 
   @if (ShowPipelineChart && deals is not null)
   {
@@ -36,6 +55,10 @@
   {
     <p class="error-message">@loadError</p>
   }
+  else if (rows.Count == 0 && filter is not null)
+  {
+    <p class="empty-filter-state">Nothing matched the current filters.</p>
+  }
   else
   {
     <DataTable Rows="rows" Columns="Columns" Loading="loading"
@@ -47,6 +70,7 @@
 @code {
     [Parameter, EditorRequired] public string DatasetType { get; set; } = string.Empty;
     [Parameter] public IReadOnlyList<string>? Columns { get; set; }
+    [Parameter] public IReadOnlyList<string>? FacetColumns { get; set; }
     [Parameter] public bool ShowPipelineChart { get; set; }
     [Parameter] public string? RowLinkColumn { get; set; }
     [Parameter] public string? RowLinkPathPrefix { get; set; }
@@ -54,10 +78,14 @@
 
     private ExportDatasetDefinition definition = new(string.Empty, string.Empty, "file", "/", string.Empty);
     private IReadOnlyList<IReadOnlyDictionary<string, string>> rows = [];
+    private IReadOnlyList<IReadOnlyDictionary<string, string>> sourceRows = [];
     private IReadOnlyList<PipelineChart.DealPreview>? deals;
     private int? rowCount;
     private string? loadError;
     private bool loading = true;
+    private ExportFilter? filter;
+    private readonly Dictionary<string, string> facetValues = new(StringComparer.OrdinalIgnoreCase);
+    private bool downloadDisabled;
 
     protected override void OnParametersSet()
     {
@@ -71,8 +99,47 @@
         {
             var manifest = await ExportService.GetManifestAsync();
             rowCount = manifest.Datasets.FirstOrDefault(d => d.Type == DatasetType)?.RowCount;
+            sourceRows = await ExportService.PreviewAsync(DatasetType, 100);
+            await ApplyFilterAsync();
+        }
+        catch
+        {
+            loadError = $"Failed to load {GetDisplayName().ToLowerInvariant()} data.";
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
 
-            rows = await ExportService.PreviewAsync(DatasetType, 100);
+    private string GetDisplayName() =>
+        string.IsNullOrEmpty(definition.Title) ? DatasetType : definition.Title;
+
+    private async Task OnFacetChanged(string facet, ChangeEventArgs args)
+    {
+        var value = args.Value?.ToString() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            facetValues.Remove(facet);
+        }
+        else
+        {
+            facetValues[facet] = value;
+        }
+
+        await ApplyFilterAsync();
+    }
+
+    private async Task ApplyFilterAsync()
+    {
+        filter = BuildFilter();
+        loading = true;
+        loadError = null;
+
+        try
+        {
+            rows = await ExportService.PreviewAsync(DatasetType, 100, filter);
+            downloadDisabled = filter is not null && rows.Count == 0;
 
             if (ShowPipelineChart)
             {
@@ -94,12 +161,81 @@
         }
     }
 
-    private string GetDisplayName() =>
-        string.IsNullOrEmpty(definition.Title) ? DatasetType : definition.Title;
+    private ExportFilter? BuildFilter()
+    {
+        if (FacetColumns is null || facetValues.Count == 0)
+        {
+            return null;
+        }
+
+        return new ExportFilter
+        {
+            Status = facetValues.GetValueOrDefault("status"),
+            Stage = facetValues.GetValueOrDefault("stage"),
+            Priority = facetValues.GetValueOrDefault("priority"),
+            AccountId = facetValues.GetValueOrDefault("accountId"),
+            Industry = facetValues.GetValueOrDefault("industry")
+        };
+    }
+
+    private string GetFacetValue(string facet) =>
+        facetValues.GetValueOrDefault(facet, string.Empty);
+
+    private IEnumerable<string> GetFacetOptions(string facet) =>
+        sourceRows
+            .Select(row => row.GetValueOrDefault(facet, string.Empty))
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(value => value, StringComparer.OrdinalIgnoreCase);
+
+    private static string FormatFacetLabel(string facet) =>
+        facet switch
+        {
+            "accountId" => "Account",
+            _ => char.ToUpperInvariant(facet[0]) + facet[1..]
+        };
 
     private async Task DownloadCsv()
     {
-        await JS.InvokeVoidAsync("open", $"/api/export/{DatasetType}", "_blank");
+        var url = BuildDownloadUrl();
+        await JS.InvokeVoidAsync("open", url, "_blank");
+    }
+
+    private string BuildDownloadUrl()
+    {
+        if (filter is null)
+        {
+            return $"/api/export/{DatasetType}";
+        }
+
+        var query = new List<string>();
+        if (!string.IsNullOrWhiteSpace(filter.Status))
+        {
+            query.Add($"status={Uri.EscapeDataString(filter.Status)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Stage))
+        {
+            query.Add($"stage={Uri.EscapeDataString(filter.Stage)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Priority))
+        {
+            query.Add($"priority={Uri.EscapeDataString(filter.Priority)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.AccountId))
+        {
+            query.Add($"accountId={Uri.EscapeDataString(filter.AccountId)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Industry))
+        {
+            query.Add($"industry={Uri.EscapeDataString(filter.Industry)}");
+        }
+
+        return query.Count == 0
+            ? $"/api/export/{DatasetType}"
+            : $"/api/export/{DatasetType}?{string.Join("&", query)}";
     }
 }
-

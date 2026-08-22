@@ -14,7 +14,7 @@
 
   <div class="post-content">{{ .Content }}</div>
 
-  {{ $career := index .Site.Data.career .File.BaseFileName }}
+  {{ $career := index hugo.Data.career .File.BaseFileName }}
   {{ with $career.experience }}
   <section class="career-section experience-section">
     <h2>Experience</h2>
@@ -86,7 +86,7 @@
         {{ with $project.image }}
         <img class="career-image project-image" src="{{ $project.image }}" alt="{{ $project.title }}" loading="lazy" width="640" height="360">
         {{ end }}
-        <h3>{{ $project.title }}</h3>
+        <h3><a href="{{ "/projects/" | relURL }}{{ $project.id }}/">{{ $project.title }}</a></h3>
         <p class="project-summary">{{ $project.summary }}</p>
         <p class="project-account">Account: <a href="{{ "/organisations/" | relURL }}{{ $project.organisationId }}/">{{ partial "org-title.html" $project.organisationId }}</a></p>
         {{ with $project.tags }}<ul class="chip-list">{{ range . }}<li class="chip">{{ . }}</li>{{ end }}</ul>{{ end }}
@@ -133,5 +133,9 @@
     </ul>
   </section>
   {{ end }}
+
+  {{ $personaId := .File.BaseFileName }}
+  {{ partial "related-deals-grid.html" (where hugo.Data.deals "contactId" $personaId) }}
+  {{ partial "related-cases-grid.html" (where hugo.Data.cases "contactId" $personaId) }}
 </article>
 {{ end }}

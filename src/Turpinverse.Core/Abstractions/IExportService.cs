@@ -1,11 +1,17 @@
+using Turpinverse.Core.Export;
+
 namespace Turpinverse.Core.Abstractions;
 
 public interface IExportService
 {
-    Task<byte[]> ExportCsvAsync(string dataset, CancellationToken cancellationToken = default);
+    Task<byte[]> ExportCsvAsync(
+        string dataset,
+        ExportFilter? filter = null,
+        CancellationToken cancellationToken = default);
     Task<IReadOnlyList<IReadOnlyDictionary<string, string>>> PreviewAsync(
         string dataset,
         int count = 5,
+        ExportFilter? filter = null,
         CancellationToken cancellationToken = default);
     Task<ExportManifest> GetManifestAsync(CancellationToken cancellationToken = default);
 }

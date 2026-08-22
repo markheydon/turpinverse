@@ -1,0 +1,8 @@
+{{/* Resolve a project slug to its title */}}
+{{- $slug := . -}}
+{{- $page := site.GetPage (printf "/projects/%s" $slug) -}}
+{{- if $page -}}
+  {{- $page.Title -}}
+{{- else -}}
+  {{- "Unknown related party" -}}
+{{- end -}}

@@ -5,6 +5,7 @@
 
 <CrmEntityPage DatasetType="contacts"
                Columns="@ContactsColumns"
+               FacetColumns="@ContactsFacets"
                RowLinkColumn="firstName"
                RowLinkIdColumn="contactId"
                RowLinkPathPrefix="/contacts" />
@@ -14,4 +15,6 @@
     [
         "firstName", "lastName", "title", "email", "accountId", "status"
     ];
+
+    private static readonly string[] ContactsFacets = ["status", "accountId"];
 }

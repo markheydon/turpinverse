@@ -3,11 +3,13 @@
 
 <PageTitle>Accounts - Turpinverse</PageTitle>
 
-<CrmEntityPage DatasetType="accounts" Columns="@AccountsColumns" />
+<CrmEntityPage DatasetType="accounts" Columns="@AccountsColumns" FacetColumns="@AccountsFacets" />
 
 @code {
     private static readonly string[] AccountsColumns =
     [
         "accountName", "industry", "status", "website"
     ];
+
+    private static readonly string[] AccountsFacets = ["status", "industry"];
 }

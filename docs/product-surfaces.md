@@ -29,7 +29,7 @@ Canon JSON
 
 **Responsibilities:**
 
-- Showcase all demo data a human would want to read — personas, organisations, timeline, career history, portfolio, and (when built) human-readable views of deals and cases
+- Showcase all demo data a human would want to read — personas, organisations, timeline, career history, portfolio, deals, and cases
 - Present narrative, relationships, and copy in a browsable, linkable form
 - Omit technical identifiers from reader-facing body copy (no `contactId`, foreign-key slugs, or export column names as primary content)
 - Point readers who need importable files to the Blazor app
@@ -45,7 +45,7 @@ See [site/README.md](../site/README.md) for build and deploy.
 **Responsibilities:**
 
 - Interactive browse and preview of CRM datasets (contacts, accounts, deals, cases)
-- Filtering and faceting (intended direction; not all surfaces exist yet)
+- Filtering and faceting on dataset pages (preview and CSV download share the same server-side filter)
 - Per-contact detail for exploration ahead of export
 - Download CSV (and future import formats) with technical identifiers and cross-references intact for external systems
 
@@ -70,16 +70,11 @@ Same underlying records, different channel jobs. This is not two competing showc
 - Organisations (profiles, org charts)
 - Timeline events
 - Career history and portfolio on persona pages (experience, education, projects, achievements)
-
-**Target on Hugo (not complete yet):**
-
-- Human-readable pages for deals and cases (and any other CRM-derived entities worth reading, not just tabulating)
-- Consistent omission of technical IDs from body copy wherever they still appear
+- Deals and cases (dedicated indexes and detail pages with named bidirectional links)
 
 **Blazor / CSV only today:**
 
-- Tabular deals and cases datasets
-- Machine-oriented identifier columns in previews and exports
+- Tabular deals and cases datasets with machine-oriented identifier columns in previews and exports (by design for the export channel)
 
 ## Known gaps
 
@@ -87,9 +82,9 @@ These are product facts, not blockers for the channel split above:
 
 | Gap | Status |
 |-----|--------|
-| Hugo pages for deals and cases | Not built — data available via Blazor and CSV |
-| Technical IDs in Hugo body copy | Should be removed where they leak |
-| Blazor filtering / faceting | Intended; not fully built |
+| Hugo pages for deals and cases | **Shipped** — generated from canon with nav and home links |
+| Technical IDs in Hugo body copy | **Addressed** — display-name partials and fallbacks; join keys remain in front matter / data JSON only |
+| Blazor filtering / faceting | **Shipped** — dataset pages filter preview and CSV download via shared `ExportFilter` |
 | Hugo completeness vs canon | Generator and layouts must grow as new human-readable entity types are added |
 
 ## Related docs
