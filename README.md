@@ -1,7 +1,8 @@
 # Turpinverse
 
 An open-source Dick Turpin universe for CRM demos — canonical characters, organisations,
-and timeline data with a Hugo documentation site and Blazor Server CSV export app.
+and timeline data published through a public Hugo reference site and a Blazor interactive
+export app.
 
 ## What is Turpinverse?
 
@@ -10,9 +11,13 @@ universe. It provides:
 
 - **Canon dataset** — 15+ personas, 8+ organisations, timeline events, and alias maps
   grounded in Wikipedia history with clearly marked fictional extensions
-- **Documentation site** — Hugo static site published to [turpinverse.uk](https://turpinverse.uk) via GitHub Pages
-- **CRM demo data** — Blazor Server app exporting contacts, accounts, deals, and cases
-  as CSV files with intact cross-references
+- **Public reference site (Hugo)** — browsable showcase of human-readable demo data at
+  [turpinverse.uk](https://turpinverse.uk); for reading the universe, using sample copy in
+  presentations, or just enjoying the fiction
+- **Interactive export app (Blazor)** — explore, filter, and download contacts, accounts,
+  deals, and cases as CSV for import into CRMs and similar systems
+
+Channel responsibilities are defined in [docs/product-surfaces.md](docs/product-surfaces.md).
 
 ## API security note
 

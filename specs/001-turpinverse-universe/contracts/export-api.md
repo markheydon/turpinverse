@@ -139,6 +139,14 @@ Runs cross-reference validation (VR-001 through VR-010) and returns results.
 
 ## Blazor UI Contract
 
+The Blazor app is Turpinverse's **interactive export surface**: users explore what demo
+data exists, preview records (including technical identifier columns where needed for
+import), and download CSV. Filtering and faceting are the intended direction for dataset
+pages; v1 delivers overview, per-dataset preview tables, charts where useful, and download.
+Contact detail (`/contacts/{id}`) supports exploration of a single person — including
+career and portfolio — before export. Channel intent is defined in
+[`docs/product-surfaces.md`](../../../docs/product-surfaces.md).
+
 The CRM data browser is split across a home overview and per-dataset pages:
 
 | Route | Component | Behaviour |

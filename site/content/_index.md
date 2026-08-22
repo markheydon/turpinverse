@@ -6,8 +6,10 @@ title: "Turpinverse"
 
 Turpinverse is a **fictional universe** inspired by the legend of Richard Turpin and his associates — reframed as tongue-in-cheek business personas, organisations, and timeline events.
 
-It exists to provide **consistent, demo-ready CRM sample data**: contacts, accounts, deals, and cases that look plausible in a product walkthrough, but reward a second look with knowing references to highwayman folklore.
+It exists to provide **consistent, demo-ready sample data** you can browse here or download for your own use: populating a CRM with plausible contacts and accounts, illustrating workflows in presentations and public docs (without real people's confidential details), or simply enjoying what someone has built around the Dick Turpin myth.
 
-This site documents the canon — who the characters are, which organisations they belong to, and what happened when. If you are looking for historical fact, you are in the wrong pub.
+**This site** is the human-readable showcase — who the characters are, which organisations they belong to, what happened when, and the career and portfolio records that make them feel like real demo subjects. If you are looking for historical fact, you are in the wrong pub.
 
-Browse the **Personas** and **Organisations** below, or read [Getting Started](/guides/getting-started/) if you want to run the project locally or export CSV data.
+To **explore datasets interactively and download CSV** for import into a CRM or similar system, run the Blazor app locally — see [Getting Started](/guides/getting-started/).
+
+Browse the **Personas** and **Organisations** below, or read [Getting Started](/guides/getting-started/) to run the project locally.
