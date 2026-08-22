@@ -31,6 +31,18 @@ public class JsonCanonRepositoryTests
     }
 
     [Fact]
+    public async Task LoadAsync_LoadsArticleAndGalleryCanonFiles()
+    {
+        var repository = new JsonCanonRepository();
+        var canon = await repository.LoadAsync(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(canon.Articles);
+        Assert.NotNull(canon.Galleries);
+        Assert.NotEmpty(canon.Articles);
+        Assert.NotEmpty(canon.Galleries);
+    }
+
+    [Fact]
     public async Task LoadAsync_PersonasHaveValidEmails()
     {
         var repository = new JsonCanonRepository();

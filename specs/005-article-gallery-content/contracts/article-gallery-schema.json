@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/article-gallery/v1",
+  "title": "Turpinverse Article and Gallery Canon (additive)",
+  "description": "Additive types for articles and galleries. Runtime validation uses the merged canon schema at specs/001-turpinverse-universe/contracts/canon-schema.json.",
+  "type": "object",
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "maxLength": 64
+    },
+    "isoDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "GalleryImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src"],
+      "properties": {
+        "src": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "caption": { "type": "string", "maxLength": 400 },
+        "alt": { "type": "string", "maxLength": 400 }
+      }
+    },
+    "ViewerHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "mode": { "type": "string", "maxLength": 40 },
+        "options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean"]
+          }
+        }
+      }
+    },
+    "Article": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "publishedAt",
+        "draft",
+        "body",
+        "authorPersonaId",
+        "collection"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "publishedAt": { "$ref": "#/$defs/isoDate" },
+        "draft": { "type": "boolean" },
+        "body": { "type": "string", "minLength": 1 },
+        "authorPersonaId": { "$ref": "#/$defs/slug" },
+        "collection": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 40 }
+        },
+        "featuredImage": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "showTableOfContents": { "type": "boolean" },
+        "enableSpecialRendering": { "type": "boolean" },
+        "relatedProjectId": { "$ref": "#/$defs/slug" },
+        "relatedCaseId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+      }
+    },
+    "Gallery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "subject", "images", "viewer"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "subject": { "type": "string", "enum": ["team", "workplace", "brand"] },
+        "images": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "$ref": "#/$defs/GalleryImage" }
+        },
+        "viewer": { "$ref": "#/$defs/ViewerHint" }
+      }
+    }
+  }
+}

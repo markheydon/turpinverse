@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="post-content">{{ .Content }}</div>
+  <div class="post-content md-content">{{ .Content }}</div>
 
   {{ $career := index hugo.Data.career .File.BaseFileName }}
   {{ with $career.experience }}
@@ -137,5 +137,6 @@
   {{ $personaId := .File.BaseFileName }}
   {{ partial "related-deals-grid.html" (where hugo.Data.deals "contactId" $personaId) }}
   {{ partial "related-cases-grid.html" (where hugo.Data.cases "contactId" $personaId) }}
+  {{ partial "related-articles-grid.html" (where hugo.Data.articles "authorPersonaId" $personaId) }}
 </article>
 {{ end }}

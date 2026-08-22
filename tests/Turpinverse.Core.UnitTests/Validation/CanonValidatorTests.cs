@@ -57,4 +57,16 @@ public class CanonValidatorTests
         Assert.True(canon.Deals.Count >= 20);
         Assert.True(canon.Cases.Count >= 15);
     }
+
+    [Fact]
+    public async Task Validate_LoadedCanon_IncludesArticleAndGalleryCounts()
+    {
+        var canon = await _repository.LoadAsync(TestContext.Current.CancellationToken);
+        var result = _validator.Validate(canon);
+
+        Assert.True(result.Counts.ContainsKey("articles"));
+        Assert.True(result.Counts.ContainsKey("galleries"));
+        Assert.Equal(canon.Articles.Count, result.Counts["articles"]);
+        Assert.Equal(canon.Galleries.Count, result.Counts["galleries"]);
+    }
 }

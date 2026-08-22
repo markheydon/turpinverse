@@ -1,0 +1,29 @@
+{{ define "main" }}
+{{ $galleryId := .File.BaseFileName }}
+{{ $gallery := index (where hugo.Data.galleries "id" $galleryId) 0 }}
+<article class="gallery post-single{{ if .Params.viewerEnabled }} gallery-lightbox-enabled{{ end }}">
+  <div class="showcase-panel">
+    <header class="page-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.subject }}<p class="card-meta"><span class="status-badge">{{ . }}</span></p>{{ end }}
+    </header>
+
+    {{ with .Content }}
+    <div class="post-content md-content">{{ . }}</div>
+    {{ end }}
+
+    {{ with $gallery }}
+    <section class="gallery-images"{{ if $.Params.viewerEnabled }} data-viewer-mode="{{ $.Params.viewerMode | default "lightbox" }}"{{ end }}>
+      {{ range .images }}
+      <figure class="gallery-figure">
+        <a href="{{ .src }}" class="gallery-image-link"{{ if $.Params.viewerEnabled }} data-lightbox="gallery"{{ end }}>
+          <img src="{{ .src }}" alt="{{ or .alt .caption }}" loading="lazy" width="960" height="640">
+        </a>
+        {{ with .caption }}<figcaption>{{ . }}</figcaption>{{ else }}{{ with .alt }}<figcaption>{{ . }}</figcaption>{{ end }}{{ end }}
+      </figure>
+      {{ end }}
+    </section>
+    {{ end }}
+  </div>
+</article>
+{{ end }}

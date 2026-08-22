@@ -1,0 +1,35 @@
+[
+  {
+    "id": "te-workplace-gallery",
+    "title": "Life at Turpin Enterprises",
+    "description": "A glimpse of the team, the workplace, and the brand moments we actually show to clients.",
+    "subject": "workplace",
+    "images": [
+      {
+        "src": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
+        "caption": "Morning stand-up in the corridor strategy room \u2014 whiteboards, coffee, and no heroic shortcuts.",
+        "alt": "Team meeting in a bright office space"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800",
+        "caption": "Cross-functional working session on client discretion and service design.",
+        "alt": "Colleagues collaborating around a laptop"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800",
+        "caption": "The workplace kitchen \u2014 where half our best routing arguments are settled.",
+        "alt": "Modern office kitchen area"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800",
+        "caption": "Brand wall refresh in progress; guidelines arrive on schedule for once.",
+        "alt": "Office wall with brand graphics"
+      }
+    ],
+    "viewer": {
+      "enabled": true,
+      "mode": "lightbox",
+      "options": null
+    }
+  }
+]

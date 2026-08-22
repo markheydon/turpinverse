@@ -1,0 +1,14 @@
+{{ $hasLinks := or .Params.relatedProjectId .Params.relatedCaseId }}
+{{ if $hasLinks }}
+<section class="related-records article-related-links">
+  <h2>Related records</h2>
+  <ul class="chip-list">
+    {{ with .Params.relatedProjectId }}
+    <li><a class="chip" href="{{ "/projects/" | relURL }}{{ . }}/">{{ partial "project-title.html" . }}</a></li>
+    {{ end }}
+    {{ with .Params.relatedCaseId }}
+    <li><a class="chip" href="{{ "/cases/" | relURL }}{{ . }}/">{{ partial "case-title.html" . }}</a></li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

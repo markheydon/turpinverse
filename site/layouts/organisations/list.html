@@ -5,8 +5,16 @@
 </header>
 
 <div class="card-grid">
-  {{ range .Pages.ByTitle }}
-  <a class="account-card" href="{{ .RelPermalink }}">
+  {{ $pinnedOrg := "turpin-enterprises" }}
+  {{ $ordered := slice }}
+  {{ range where .Pages "File.BaseFileName" $pinnedOrg }}
+    {{ $ordered = $ordered | append . }}
+  {{ end }}
+  {{ range (where .Pages "File.BaseFileName" "ne" $pinnedOrg).ByTitle }}
+    {{ $ordered = $ordered | append . }}
+  {{ end }}
+  {{ range $ordered }}
+  <a class="account-card{{ if eq .File.BaseFileName $pinnedOrg }} account-card-pinned{{ end }}" href="{{ .RelPermalink }}">
     <div class="card-header">
       <div>
         <p class="card-title">{{ .Title }}</p>
