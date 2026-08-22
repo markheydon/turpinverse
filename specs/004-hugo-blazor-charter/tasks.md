@@ -249,6 +249,6 @@ With multiple developers:
 
 ## Phase 7: Convergence
 
-- [ ] T033 Update `site/README.md` Hugo scope and generator output list to include deals/cases showcase pages and `site/data/deals.json` / `site/data/cases.json` per FR-007 and Constitution VIII (partial)
-- [ ] T034 Update `site/content/guides/getting-started.md` “Two ways to use Turpinverse” Hugo channel row to list deals and cases alongside personas, organisations, timeline, and career/portfolio per FR-007 (partial)
-- [ ] T035 Update `site/content/_index.md` welcome copy so the showcase description and browse CTA mention deals and cases (not only personas and organisations) per FR-007 and SC-001 (partial)
+- [X] T033 Update `site/README.md` Hugo scope and generator output list to include deals/cases showcase pages and `site/data/deals.json` / `site/data/cases.json` per FR-007 and Constitution VIII (partial)
+- [X] T034 Update `site/content/guides/getting-started.md` “Two ways to use Turpinverse” Hugo channel row to list deals and cases alongside personas, organisations, timeline, and career/portfolio per FR-007 (partial)
+- [X] T035 Update `site/content/_index.md` welcome copy so the showcase description and browse CTA mention deals and cases (not only personas and organisations) per FR-007 and SC-001 (partial)

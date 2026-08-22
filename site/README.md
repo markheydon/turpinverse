@@ -1,7 +1,7 @@
 # Turpinverse documentation site (Hugo)
 
 The public Hugo site is Turpinverse's **browsable reference**: human-readable personas,
-organisations, timeline, and career/portfolio content for anyone who wants to read or
+organisations, timeline, career/portfolio, deals, and cases for anyone who wants to read or
 reuse the fiction without running the export app. For interactive explore/filter/download,
 see the Blazor app described in [docs/product-surfaces.md](../docs/product-surfaces.md).
 
@@ -24,7 +24,7 @@ Run from the repository root:
 dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 ```
 
-This writes markdown under `site/content/` and `site/data/organisations.json` and `events.json`.
+This writes markdown under `site/content/` (including `deals/` and `cases/`) and `site/data/organisations.json`, `events.json`, `deals.json`, and `cases.json`.
 
 Career portfolio images live in `site/static/images/` (projects and achievements). The same SVGs are mirrored under `src/Turpinverse.Web/wwwroot/images/` for Blazor contact detail parity — keep both in sync when adding assets.
 

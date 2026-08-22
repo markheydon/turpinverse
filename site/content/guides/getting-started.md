@@ -14,7 +14,7 @@ All data comes from a single canon dataset in `src/Turpinverse.Data/canon/`.
 
 | Channel | What it is for |
 |---------|----------------|
-| **This site (Hugo)** | Browse and read human-readable demo data — personas, organisations, timeline, career and portfolio. No export plumbing. |
+| **This site (Hugo)** | Browse and read human-readable demo data — personas, organisations, timeline, career and portfolio, deals, and cases. No export plumbing. |
 | **Blazor app** | Explore datasets interactively, preview records, and download CSV for import into a CRM or similar tool. |
 
 Run the Blazor app when you need importable files; stay on this site when you want to read the universe.
