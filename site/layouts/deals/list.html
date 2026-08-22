@@ -1,0 +1,24 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>Deals</h1>
+  <p class="section-intro">Sales opportunities from the Turpinverse canon — pipeline stages, amounts, and the relationships behind each deal.</p>
+</header>
+
+<div class="card-grid">
+  {{ range .Pages.ByTitle }}
+  <a class="deal-card" href="{{ .RelPermalink }}">
+    <div class="card-header">
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ with .Params.stage }}
+        <span class="status-badge status-{{ . | urlize }}">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ with .Params.amount }}<p class="card-meta">£{{ . }}</p>{{ end }}
+    {{ with .Params.closeDate }}<p class="card-meta">Close: {{ . }}</p>{{ end }}
+    {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

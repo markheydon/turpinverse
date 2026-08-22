@@ -3,11 +3,13 @@
 
 <PageTitle>Cases - Turpinverse</PageTitle>
 
-<CrmEntityPage DatasetType="cases" Columns="@CasesColumns" />
+<CrmEntityPage DatasetType="cases" Columns="@CasesColumns" FacetColumns="@CasesFacets" />
 
 @code {
     private static readonly string[] CasesColumns =
     [
         "subject", "status", "priority", "contactId", "accountId"
     ];
+
+    private static readonly string[] CasesFacets = ["status", "priority", "accountId"];
 }

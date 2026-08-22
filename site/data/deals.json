@@ -1,0 +1,222 @@
+[
+  {
+    "dealId": "deal-001",
+    "dealName": "Epping Forest Corridor Licence",
+    "accountId": "essex-gang",
+    "contactId": "dick-turpin",
+    "stage": "Closed Won",
+    "amount": 15000,
+    "closeDate": "1733-06-15",
+    "description": "Exclusive corridor management rights across Epping Forest transport routes. Terms flexible."
+  },
+  {
+    "dealId": "deal-002",
+    "dealName": "Rose \u0026 Crown Franchise \u2014 Discretion Add-On",
+    "accountId": "millington-inn",
+    "contactId": "elizabeth-millington",
+    "stage": "Closed Won",
+    "amount": 8500,
+    "closeDate": "1732-03-20",
+    "description": "Premium coaching inn franchise with intelligence-sharing provisions and loyalty programme."
+  },
+  {
+    "dealId": "deal-003",
+    "dealName": "King Equine Fleet Modernisation",
+    "accountId": "king-equine-trading",
+    "contactId": "matthew-king",
+    "stage": "Closed Lost",
+    "amount": 22000,
+    "closeDate": "1737-04-10",
+    "description": "Fleet upgrade programme terminated following principal\u0027s departure at Whitechapel."
+  },
+  {
+    "dealId": "deal-004",
+    "dealName": "Project Yorkshire \u2014 Identity Package",
+    "accountId": "brazier-legal",
+    "contactId": "mary-brazier",
+    "stage": "Closed Won",
+    "amount": 3200,
+    "closeDate": "1737-11-01",
+    "description": "Complete alias documentation and SSO provisioning for Yorkshire relocation."
+  },
+  {
+    "dealId": "deal-005",
+    "dealName": "Executive Mobility Certification",
+    "accountId": "bayes-horsemanship",
+    "contactId": "richard-bayes",
+    "stage": "Closed Won",
+    "amount": 1800,
+    "closeDate": "1738-02-14",
+    "description": "Advanced horsemanship certification for executives with time-sensitive travel requirements."
+  },
+  {
+    "dealId": "deal-006",
+    "dealName": "Highway Risk Assessment Q1",
+    "accountId": "highway-commission",
+    "contactId": "henry-clayton",
+    "stage": "Negotiation",
+    "amount": 12000,
+    "closeDate": "2026-09-30",
+    "description": "Quarterly route risk analysis for major coaching corridors. A10 rated Critical."
+  },
+  {
+    "dealId": "deal-007",
+    "dealName": "Black Bess Brand Licensing",
+    "accountId": "turpin-enterprises",
+    "contactId": "black-bess",
+    "stage": "Proposal",
+    "amount": 45000,
+    "closeDate": "2026-12-15",
+    "description": "Legend-based brand licensing for transport marketing campaigns. Mileage claims disputed."
+  },
+  {
+    "dealId": "deal-008",
+    "dealName": "Forest Patrol Outsourcing \u2014 Sector 7",
+    "accountId": "epping-forest-authority",
+    "contactId": "henry-clayton",
+    "stage": "Qualification",
+    "amount": 7500,
+    "closeDate": "2026-11-01",
+    "description": "Supplementary patrol services for high-risk unauthorised procurement zones."
+  },
+  {
+    "dealId": "deal-009",
+    "dealName": "Race Day Hospitality Suite",
+    "accountId": "york-racing-society",
+    "contactId": "sarah-thornton",
+    "stage": "Prospecting",
+    "amount": 9800,
+    "closeDate": "2026-10-20",
+    "description": "Premium hospitality package for York race meeting season. Guest list curated."
+  },
+  {
+    "dealId": "deal-010",
+    "dealName": "York Due Diligence Retainer",
+    "accountId": "york-assize-court",
+    "contactId": "james-smith",
+    "stage": "Closed Won",
+    "amount": 5500,
+    "closeDate": "1739-01-15",
+    "description": "Regulatory compliance review for transport operations. Horse found in transaction."
+  },
+  {
+    "dealId": "deal-011",
+    "dealName": "Rural Procurement Framework",
+    "accountId": "essex-gang",
+    "contactId": "samuel-gregory",
+    "stage": "Closed Won",
+    "amount": 11000,
+    "closeDate": "1731-08-22",
+    "description": "Framework agreement for rural goods procurement across Essex parishes."
+  },
+  {
+    "dealId": "deal-012",
+    "dealName": "Warehouse Variance Remediation",
+    "accountId": "essex-gang",
+    "contactId": "joseph-bryant",
+    "stage": "Closed Won",
+    "amount": 4200,
+    "closeDate": "1734-05-10",
+    "description": "12-unit inventory discrepancy investigation and distribution network redesign."
+  },
+  {
+    "dealId": "deal-013",
+    "dealName": "Route Planning SaaS Pilot",
+    "accountId": "turpin-enterprises",
+    "contactId": "henry-clayton",
+    "stage": "Negotiation",
+    "amount": 28000,
+    "closeDate": "2026-08-30",
+    "description": "Pilot deployment of intercept probability analytics platform. Sync issues noted."
+  },
+  {
+    "dealId": "deal-014",
+    "dealName": "Identity Management Platform",
+    "accountId": "turpin-enterprises",
+    "contactId": "catherine-bell",
+    "stage": "Proposal",
+    "amount": 15000,
+    "closeDate": "2026-07-31",
+    "description": "Enterprise identity and alias lifecycle management software licence."
+  },
+  {
+    "dealId": "deal-015",
+    "dealName": "Overnight London-York Feasibility Study",
+    "accountId": "turpin-enterprises",
+    "contactId": "catherine-bell",
+    "stage": "Qualification",
+    "amount": 35000,
+    "closeDate": "2026-11-30",
+    "description": "Brand storytelling campaign leveraging Black Bess legend. Results disputed by finance."
+  },
+  {
+    "dealId": "deal-016",
+    "dealName": "Equine Maintenance Contract",
+    "accountId": "king-equine-trading",
+    "contactId": "george-chapman",
+    "stage": "Closed Won",
+    "amount": 3600,
+    "closeDate": "1736-09-01",
+    "description": "Annual fleet maintenance contract for equine transport assets. Three units overdue."
+  },
+  {
+    "dealId": "deal-017",
+    "dealName": "Legal Advisory Retainer",
+    "accountId": "brazier-legal",
+    "contactId": "margaret-hayes",
+    "stage": "Closed Won",
+    "amount": 2400,
+    "closeDate": "1738-06-30",
+    "description": "Ongoing accounts and compliance advisory. Q3 invoice under reconciliation."
+  },
+  {
+    "dealId": "deal-018",
+    "dealName": "Turnpike Pass-Through Billing Review",
+    "accountId": "highway-commission",
+    "contactId": "henry-clayton",
+    "stage": "Prospecting",
+    "amount": 8900,
+    "closeDate": "2026-10-15",
+    "description": "Infrastructure condition assessment and automated toll billing fault analysis."
+  },
+  {
+    "dealId": "deal-019",
+    "dealName": "VIP Guest Loyalty Programme",
+    "accountId": "millington-inn",
+    "contactId": "anna-ward",
+    "stage": "Negotiation",
+    "amount": 6200,
+    "closeDate": "2026-09-01",
+    "description": "Loyalty programme design for premium coaching inn clientele. Discretion tier included."
+  },
+  {
+    "dealId": "deal-020",
+    "dealName": "Territory Expansion \u2014 Hertfordshire",
+    "accountId": "essex-gang",
+    "contactId": "edward-grant",
+    "stage": "Closed Won",
+    "amount": 7800,
+    "closeDate": "1734-11-20",
+    "description": "Sales territory expansion into Hertfordshire rural parishes. Mapping update pending."
+  },
+  {
+    "dealId": "deal-021",
+    "dealName": "Security Operations Upgrade",
+    "accountId": "essex-gang",
+    "contactId": "john-king",
+    "stage": "Closed Won",
+    "amount": 5100,
+    "closeDate": "1735-07-04",
+    "description": "Enhanced security protocols for field operations teams. Breach incident remediated."
+  },
+  {
+    "dealId": "deal-022",
+    "dealName": "Transport Asset Insurance \u2014 Disputed Mileage",
+    "accountId": "king-equine-trading",
+    "contactId": "black-bess",
+    "stage": "Proposal",
+    "amount": 18000,
+    "closeDate": "2026-12-01",
+    "description": "Comprehensive insurance package for flagship equine transport assets. Overnight ride claim under review."
+  }
+]

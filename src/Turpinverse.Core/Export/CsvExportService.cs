@@ -23,7 +23,10 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public async Task<byte[]> ExportCsvAsync(string dataset, CancellationToken cancellationToken = default)
+    public async Task<byte[]> ExportCsvAsync(
+        string dataset,
+        ExportFilter? filter = null,
+        CancellationToken cancellationToken = default)
     {
         var canon = await canonRepository.LoadAsync(cancellationToken);
         using var memoryStream = new MemoryStream();
@@ -33,25 +36,19 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             NewLine = "\r\n"
         });
 
-        switch (dataset.ToLowerInvariant())
+        var rowCount = dataset.ToLowerInvariant() switch
         {
-            case "contacts":
-                await csv.WriteRecordsAsync(ExportMapper.MapContacts(canon), cancellationToken);
-                break;
-            case "accounts":
-                await csv.WriteRecordsAsync(ExportMapper.MapAccounts(canon), cancellationToken);
-                break;
-            case "deals":
-                await csv.WriteRecordsAsync(ExportMapper.MapDeals(canon), cancellationToken);
-                break;
-            case "cases":
-                await csv.WriteRecordsAsync(ExportMapper.MapCases(canon), cancellationToken);
-                break;
-            case "projects":
-                await csv.WriteRecordsAsync(ExportMapper.MapProjects(canon), cancellationToken);
-                break;
-            default:
-                throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset));
+            "contacts" => await WriteContactsAsync(csv, canon, filter, cancellationToken),
+            "accounts" => await WriteAccountsAsync(csv, canon, filter, cancellationToken),
+            "deals" => await WriteDealsAsync(csv, canon, filter, cancellationToken),
+            "cases" => await WriteCasesAsync(csv, canon, filter, cancellationToken),
+            "projects" => await WriteProjectsAsync(csv, canon, filter, cancellationToken),
+            _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
+        };
+
+        if (filter is not null && rowCount == 0)
+        {
+            throw new EmptyFilterMatchException();
         }
 
         await writer.FlushAsync(cancellationToken);
@@ -61,18 +58,21 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
     public async Task<IReadOnlyList<IReadOnlyDictionary<string, string>>> PreviewAsync(
         string dataset,
         int count = 5,
+        ExportFilter? filter = null,
         CancellationToken cancellationToken = default)
     {
         var canon = await canonRepository.LoadAsync(cancellationToken);
-        return dataset.ToLowerInvariant() switch
+        IEnumerable<object> rows = dataset.ToLowerInvariant() switch
         {
-            "contacts" => ToPreviewRows(ExportMapper.MapContacts(canon).Take(count)),
-            "accounts" => ToPreviewRows(ExportMapper.MapAccounts(canon).Take(count)),
-            "deals" => ToPreviewRows(ExportMapper.MapDeals(canon).Take(count)),
-            "cases" => ToPreviewRows(ExportMapper.MapCases(canon).Take(count)),
-            "projects" => ToPreviewRows(ExportMapper.MapProjects(canon).Take(count)),
+            "contacts" => GetContacts(canon, filter),
+            "accounts" => GetAccounts(canon, filter),
+            "deals" => GetDeals(canon, filter),
+            "cases" => GetCases(canon, filter),
+            "projects" => GetProjects(canon, filter),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
+
+        return ToPreviewRows(rows.Take(count));
     }
 
     public async Task<ExportManifest> GetManifestAsync(CancellationToken cancellationToken = default)
@@ -92,10 +92,90 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
     public static bool TryGetFilename(string dataset, out string filename) =>
         Filenames.TryGetValue(dataset.ToLowerInvariant(), out filename!);
 
+    private static async Task<int> WriteContactsAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetContacts(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static async Task<int> WriteAccountsAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetAccounts(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static async Task<int> WriteDealsAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetDeals(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static async Task<int> WriteCasesAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetCases(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static async Task<int> WriteProjectsAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetProjects(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static IReadOnlyList<ContactExport> GetContacts(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapContacts(canon)
+            : filter.ApplyToContacts(ExportMapper.MapContacts(canon));
+
+    private static IReadOnlyList<AccountExport> GetAccounts(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapAccounts(canon)
+            : filter.ApplyToAccounts(ExportMapper.MapAccounts(canon));
+
+    private static IReadOnlyList<DealExport> GetDeals(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapDeals(canon)
+            : filter.ApplyToDeals(ExportMapper.MapDeals(canon));
+
+    private static IReadOnlyList<CaseExport> GetCases(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapCases(canon)
+            : filter.ApplyToCases(ExportMapper.MapCases(canon));
+
+    private static IReadOnlyList<ProjectExport> GetProjects(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapProjects(canon)
+            : filter.ApplyToProjects(ExportMapper.MapProjects(canon));
+
     private static ExportDatasetInfo CreateDatasetInfo(string type, int rowCount) =>
         new(type, Filenames[type], rowCount, ExportCsvColumns.ForDataset(type));
 
-    private static IReadOnlyList<IReadOnlyDictionary<string, string>> ToPreviewRows<T>(IEnumerable<T> rows) =>
+    private static IReadOnlyList<IReadOnlyDictionary<string, string>> ToPreviewRows(IEnumerable<object> rows) =>
         rows.Select(row =>
         {
             var json = JsonSerializer.SerializeToElement(row, PreviewJsonOptions);

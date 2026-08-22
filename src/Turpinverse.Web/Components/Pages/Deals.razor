@@ -5,6 +5,7 @@
 
 <CrmEntityPage DatasetType="deals"
                  Columns="@DealsColumns"
+                 FacetColumns="@DealsFacets"
                  ShowPipelineChart="true" />
 
 @code {
@@ -12,4 +13,6 @@
     [
         "dealName", "stage", "amount", "closeDate", "accountId"
     ];
+
+    private static readonly string[] DealsFacets = ["stage", "accountId"];
 }

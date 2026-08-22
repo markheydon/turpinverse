@@ -1,0 +1,25 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>Cases</h1>
+  <p class="section-intro">Support cases from the Turpinverse canon — subjects, priorities, and the people and events they touch.</p>
+</header>
+
+<div class="card-grid">
+  {{ range .Pages.ByTitle }}
+  <a class="case-card" href="{{ .RelPermalink }}">
+    <div class="card-header">
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ with .Params.status }}
+        <span class="status-badge status-{{ . | urlize }}">{{ . }}</span>
+        {{ end }}
+        {{ with .Params.priority }}
+        <span class="status-badge priority-{{ . | urlize }}">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

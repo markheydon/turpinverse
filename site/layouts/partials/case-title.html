@@ -1,0 +1,8 @@
+{{/* Resolve a case slug to its subject */}}
+{{- $slug := . -}}
+{{- $page := site.GetPage (printf "/cases/%s" $slug) -}}
+{{- if $page -}}
+  {{- $page.Title -}}
+{{- else -}}
+  {{- "Unknown related party" -}}
+{{- end -}}

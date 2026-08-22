@@ -53,9 +53,17 @@ publishDir = "public"
     url = "/timeline/"
     weight = 4
   [[menu.main]]
+    name = "Deals"
+    url = "/deals/"
+    weight = 5
+  [[menu.main]]
+    name = "Cases"
+    url = "/cases/"
+    weight = 6
+  [[menu.main]]
     name = "Getting Started"
     url = "/guides/getting-started/"
-    weight = 5
+    weight = 7
 
 [markup]
   [markup.goldmark]

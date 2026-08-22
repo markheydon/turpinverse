@@ -20,6 +20,31 @@
   {{ partial "org-member-chart.html" . }}
   {{ partial "org-history.html" . }}
 
+  {{ $orgId := .File.BaseFileName }}
+  {{ $deals := where site.Data.deals "accountId" $orgId }}
+  {{ if $deals }}
+  <section class="related-deals">
+    <h2>Deals</h2>
+    <ul class="related-list">
+      {{ range $deals }}
+      <li><a href="{{ "/deals/" | relURL }}{{ .dealId }}/">{{ .dealName }}</a></li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ $cases := where site.Data.cases "accountId" $orgId }}
+  {{ if $cases }}
+  <section class="related-cases">
+    <h2>Cases</h2>
+    <ul class="related-list">
+      {{ range $cases }}
+      <li><a href="{{ "/cases/" | relURL }}{{ .caseId }}/">{{ .subject }}</a></li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
   {{ partial "mermaid-init.html" . }}
 </article>
 {{ end }}

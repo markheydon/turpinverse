@@ -15,6 +15,14 @@
       <span class="turpin-stat-value">{{ len hugo.Data.events }}</span>
       <span class="turpin-stat-label">Events</span>
     </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "deals") }}</span>
+      <span class="turpin-stat-label">Deals</span>
+    </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "cases") }}</span>
+      <span class="turpin-stat-label">Cases</span>
+    </div>
   </div>
 </section>
 
@@ -34,6 +42,14 @@
   <a class="turpin-quick-link" href="{{ "/timeline/" | relURL }}">
     <strong>Timeline</strong>
     Historical, legendary, and fictional events
+  </a>
+  <a class="turpin-quick-link" href="{{ "/deals/" | relURL }}">
+    <strong>Deals</strong>
+    Pipeline opportunities from the canon
+  </a>
+  <a class="turpin-quick-link" href="{{ "/cases/" | relURL }}">
+    <strong>Cases</strong>
+    Support cases and their relationships
   </a>
   <a class="turpin-quick-link" href="{{ "/guides/getting-started/" | relURL }}">
     <strong>Getting Started</strong>

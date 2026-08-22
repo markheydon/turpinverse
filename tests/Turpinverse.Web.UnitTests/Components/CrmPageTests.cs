@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Turpinverse.Core.Abstractions;
+using Turpinverse.Core.Export;
 using Turpinverse.Core.Models;
 using Turpinverse.Core.Validation;
 using Turpinverse.Data.DependencyInjection;
@@ -114,7 +115,7 @@ public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
     public void ContactsPage_ShowsErrorWhenPreviewFails()
     {
         var cut = RenderPage(exportService => exportService
-            .PreviewAsync("contacts", 100, Arg.Any<CancellationToken>())
+            .PreviewAsync("contacts", 100, null, Arg.Any<CancellationToken>())
             .ThrowsAsync(new InvalidOperationException("preview failed")));
         Assert.Contains("Failed to load contacts data.", cut.Markup);
     }
@@ -181,7 +182,7 @@ public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
     public void ProjectsPage_ShowsErrorWhenPreviewFails()
     {
         var cut = RenderPage(exportService => exportService
-            .PreviewAsync("projects", 100, Arg.Any<CancellationToken>())
+            .PreviewAsync("projects", 100, null, Arg.Any<CancellationToken>())
             .ThrowsAsync(new InvalidOperationException("preview failed")));
         Assert.Contains("Failed to load projects data.", cut.Markup);
     }
@@ -200,16 +201,22 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
     {
         var exportService = Substitute.For<IExportService>();
         exportService.GetManifestAsync(Arg.Any<CancellationToken>()).Returns(CrmTestData.CreateManifest());
-        exportService.PreviewAsync("accounts", 100, Arg.Any<CancellationToken>())
+        exportService.PreviewAsync("accounts", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("accounts"));
-        exportService.PreviewAsync("contacts", 100, Arg.Any<CancellationToken>())
+        exportService.PreviewAsync("contacts", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("contacts"));
-        exportService.PreviewAsync("deals", 100, Arg.Any<CancellationToken>())
+        exportService.PreviewAsync("deals", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("deals"));
-        exportService.PreviewAsync("cases", 100, Arg.Any<CancellationToken>())
+        exportService.PreviewAsync("cases", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("cases"));
-        exportService.PreviewAsync("projects", 100, Arg.Any<CancellationToken>())
+        exportService.PreviewAsync("projects", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("projects"));
+        exportService.PreviewAsync(Arg.Any<string>(), 100, Arg.Any<ExportFilter?>(), Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                var dataset = callInfo.ArgAt<string>(0);
+                return CrmTestData.CreatePreviewRows(dataset);
+            });
         configure?.Invoke(exportService);
         Services.AddSingleton(exportService);
         return Render<TPage>();

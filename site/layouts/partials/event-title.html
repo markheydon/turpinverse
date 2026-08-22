@@ -1,0 +1,9 @@
+{{/* Resolve an event id to its title from site data */}}
+{{- $id := . -}}
+{{- $events := site.Data.events -}}
+{{- $match := index (where $events "id" $id) 0 -}}
+{{- if $match -}}
+  {{- $match.title -}}
+{{- else -}}
+  {{- "Unknown related party" -}}
+{{- end -}}
