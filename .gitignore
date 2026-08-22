@@ -24,6 +24,7 @@ yarn-error.log*
 ## Hugo
 site/resources/
 site/public/
+site/_vendor/
 .hugo_build.lock
 
 ## IDE

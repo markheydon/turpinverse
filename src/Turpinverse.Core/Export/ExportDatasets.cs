@@ -11,8 +11,8 @@ public static class ExportDatasets
 {
     public static readonly IReadOnlyList<ExportDatasetDefinition> All =
     [
-        new("accounts", "Accounts", "building", "/accounts", "Organisations mapped to CRM account records"),
         new("contacts", "Contacts", "users", "/contacts", "Personas mapped to CRM contact records"),
+        new("accounts", "Accounts", "building", "/accounts", "Organisations mapped to CRM account records"),
         new("deals", "Deals", "handshake", "/deals", "Commerce scenarios with pipeline stages"),
         new("cases", "Cases", "ticket", "/cases", "Support tickets derived from canon events"),
         new("projects", "Projects", "folder", "/projects", "Portfolio catalog items linked to accounts and contacts"),

@@ -49,20 +49,20 @@ publishDir = "public"
     url = "/organisations/"
     weight = 3
   [[menu.main]]
-    name = "Timeline"
-    url = "/timeline/"
-    weight = 4
-  [[menu.main]]
     name = "Deals"
     url = "/deals/"
-    weight = 5
+    weight = 4
   [[menu.main]]
     name = "Cases"
     url = "/cases/"
-    weight = 6
+    weight = 5
   [[menu.main]]
     name = "Projects"
     url = "/projects/"
+    weight = 6
+  [[menu.main]]
+    name = "Timeline"
+    url = "/timeline/"
     weight = 7
   [[menu.main]]
     identifier = "github"

@@ -74,7 +74,7 @@ A demonstrator needs **projects** and **achievements** for the same primary prof
 
 ### User Story 3 - Consumer-agnostic records with a mapping note (Priority: P3)
 
-A developer preparing a later profile-site demo (for example a Hugo Matters test site) needs confidence that Turpinverse stores **generic** career and portfolio entities, plus a short note showing those entities *can* be mapped to a typical personal-site profile layout (experience, education, projects, achievements) without Turpinverse treating that layout as the source of truth.
+A developer preparing a later personal-site or CMS demo needs confidence that Turpinverse stores **generic** career and portfolio entities, plus a short note showing those entities *can* be mapped to a typical personal-site layout (experience, education, projects, achievements) without Turpinverse treating that layout as the source of truth.
 
 **Why this priority**: Mapping is validation and documentation, not the demo content itself. Content in P1 and P2 remains useful even if mapping is a stub.
 
@@ -182,9 +182,9 @@ This feature adds **fictional** career and portfolio demo content on the same su
 - Descriptions MAY use lightweight markup; summaries MAY be plain text. Exact formatting is a documentation choice, not a consumer-specific template.
 - Dates may be stored as display strings and/or structured start/end; both are acceptable if humans can read a range and consistency checks can detect end-before-start when structured dates exist. Career and education dates are a contemporary overlay; they are not required to fit historical persona life spans.
 - Placeholder image paths (for example under a projects or achievements images folder on a future consumer site) are sufficient; shipping binary assets with a downstream site is out of scope.
-- Mapping to a specific personal-site theme (including Hugo Profile-style sections used by a Hugo Matters test site) is a documented projection only, not an implementation of that site in this feature. The mapping note lives in repository developer docs, not on the public/reference site.
+- Mapping to a specific personal-site theme is a documented projection only, not an implementation of that site in this feature. The mapping note lives in repository developer docs, not on the public/reference site. No named CMS or theme is a Turpinverse export requirement.
 - CRM contact/account/deal/case **tabular** datasets are unchanged except insofar as new canon entities must remain consistent with existing personas and organisations. Person/contact **detail** views that already show a person MUST also show that person’s career and portfolio where this feature requires publication parity.
-- Career and portfolio MUST appear on existing human-facing publication channels (public/reference site and in-product web app) in the same spirit as other records; a Hugo Matters / profile-theme test site remains out of scope. See [`docs/product-surfaces.md`](../../docs/product-surfaces.md) for how dual publication fits the Hugo showcase vs Blazor explore/export split.
+- Career and portfolio MUST appear on existing human-facing publication channels (public/reference site and in-product web app) in the same spirit as other records; a separate downstream personal-site or CMS demo remains out of scope. See [`docs/product-surfaces.md`](../../docs/product-surfaces.md) for how dual publication fits the Hugo showcase vs Blazor explore/export split.
 - Completeness for this feature is a machine gate (same spirit as existing canon cross-reference rules), not a reviewer-only checklist.
 - No new public download or authentication surface is required for this increment.
 - English-only copy, consistent with the existing canon.

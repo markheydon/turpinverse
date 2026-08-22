@@ -88,7 +88,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-  margin: 2rem 0;
+  margin: 0 0 2rem;
 }
 
 .turpin-quick-link {
@@ -493,7 +493,7 @@ h1 {
 }
 
 .turpin-welcome {
-  margin: 0 0 2rem;
+  margin: 0 0 3rem;
   padding: 1.5rem;
   background: var(--entry);
   border: 1px solid var(--turpin-border);
@@ -503,7 +503,13 @@ h1 {
 
 .turpin-welcome h2 {
   margin-top: 0;
+  margin-bottom: 1rem;
   font-size: 1.25rem;
+}
+
+.turpin-welcome p:not(:last-child),
+.turpin-welcome ul:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 .turpin-welcome p:last-child {

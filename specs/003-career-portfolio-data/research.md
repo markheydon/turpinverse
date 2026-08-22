@@ -61,8 +61,8 @@ unit tests and the validate endpoint; a second checker would split the gate.
   site theme.
 - **In-product web app**: Add a **contact detail** route on the existing Blazor app
   (`/contacts/{contactId}`), linked from the contacts table. Show the same four section
-  types with the same omit-empty rule. Do **not** add CSV columns or a Hugo Matters /
-  profile-theme site.
+  types with the same omit-empty rule. Do **not** add CSV columns or a separate
+  downstream personal-site / CMS demo.
 
 **Rationale**: FR-012–FR-013 and SC-006 require the same channels that already show
 people, not records-only JSON and not a new downstream demo. The contacts page is a
