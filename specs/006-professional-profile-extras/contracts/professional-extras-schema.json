@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/professional-extras/v1",
+  "title": "Turpinverse Professional Profile Extras (additive)",
+  "description": "Additive types for professional extras. Runtime validation uses the merged canon schema at specs/001-turpinverse-universe/contracts/canon-schema.json.",
+  "type": "object",
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "maxLength": 64
+    },
+    "FeaturedLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "label": { "type": "string", "maxLength": 80 },
+        "name": { "type": "string", "maxLength": 80 },
+        "icon": { "type": "string", "maxLength": 80 },
+        "tooltip": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "IntroCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shortIntro", "headline", "subtitle"],
+      "properties": {
+        "shortIntro": { "type": "string", "minLength": 1 },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "subtitle": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "photo": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "cta": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "ContactExtras": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["copy", "email"],
+      "properties": {
+        "copy": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "cta": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "ProfessionalSocial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network", "url"],
+      "properties": {
+        "network": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "url": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "ProfessionalExtras": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["personaId"],
+      "properties": {
+        "personaId": { "$ref": "#/$defs/slug" },
+        "intro": { "$ref": "#/$defs/IntroCopy" },
+        "about": { "type": "string", "minLength": 1 },
+        "skillsHeading": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "skills": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "contact": { "$ref": "#/$defs/ContactExtras" },
+        "socials": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ProfessionalSocial" }
+        }
+      }
+    }
+  }
+}
