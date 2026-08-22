@@ -21,12 +21,17 @@ dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 
 This writes markdown under `site/content/` and `site/data/organisations.json` and `events.json`.
 
-The site uses the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme as a git submodule at `site/themes/PaperMod`, with Turpinverse brand styling in `assets/css/extended/turpinverse.css`.
+Career portfolio images live in `site/static/images/` (projects and achievements). The same SVGs are mirrored under `src/Turpinverse.Web/wwwroot/images/` for Blazor contact detail parity — keep both in sync when adding assets.
 
-After cloning the repository, initialise submodules:
+The site uses the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme via [Hugo modules](https://gohugo.io/hugo-modules/), with Turpinverse brand styling in `assets/css/extended/turpinverse.css`.
+
+Hugo downloads the theme automatically on first build (`hugo mod get` is optional after clone). Module metadata lives in `site/go.mod` and `site/go.sum`.
+
+To update PaperMod:
 
 ```powershell
-git submodule update --init --recursive
+cd site
+hugo mod get -u github.com/adityatelange/hugo-PaperMod
 ```
 
 ## 2. Build or preview with a container
@@ -84,7 +89,7 @@ Open http://localhost:8080
 
 ## Container image
 
-[`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-build.yml`, currently **0.164.0**).
+[`hugomods/hugo`](https://hub.docker.com/r/hugomods/hugo) — Hugo **Extended** edition, matching CI (`.github/workflows/hugo-build.yml`, currently **0.165.0**).
 
 ## Custom domain (turpinverse.uk)
 
@@ -117,7 +122,7 @@ After merge and **Hugo Deploy**, verify `https://turpinverse.uk` loads.
 
 | Issue | Fix |
 |-------|-----|
-| `module not found` / PaperMod theme error | Run `git submodule update --init --recursive` from the repo root |
+| `module not found` / PaperMod theme error | From `site/`, run `hugo mod get` (or rebuild — Hugo fetches modules on build) |
 | `statfs .../site/public: no such file or directory` | Hugo build failed or was skipped — run `.\scripts\Invoke-HugoSite.ps1 build` first; `site/public/` is created by Hugo, not checked into git |
 | Empty `site/public/` or missing pages | Run the content generator before `hugo build` |
 | `site/content/personas/` is empty | `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` |

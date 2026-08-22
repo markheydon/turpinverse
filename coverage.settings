@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <CodeCoverage>
+    <!-- Static instrumentation corrupts async state machine metadata on Linux (.NET 10 MTP). -->
+    <EnableStaticManagedInstrumentation>false</EnableStaticManagedInstrumentation>
+    <EnableDynamicManagedInstrumentation>true</EnableDynamicManagedInstrumentation>
+  </CodeCoverage>
+</Configuration>

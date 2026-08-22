@@ -14,7 +14,8 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         ["contacts"] = "turpinverse-contacts.csv",
         ["accounts"] = "turpinverse-accounts.csv",
         ["deals"] = "turpinverse-deals.csv",
-        ["cases"] = "turpinverse-cases.csv"
+        ["cases"] = "turpinverse-cases.csv",
+        ["projects"] = "turpinverse-projects.csv"
     };
 
     private static readonly JsonSerializerOptions PreviewJsonOptions = new()
@@ -46,6 +47,9 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             case "cases":
                 await csv.WriteRecordsAsync(ExportMapper.MapCases(canon), cancellationToken);
                 break;
+            case "projects":
+                await csv.WriteRecordsAsync(ExportMapper.MapProjects(canon), cancellationToken);
+                break;
             default:
                 throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset));
         }
@@ -66,6 +70,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "accounts" => ToPreviewRows(ExportMapper.MapAccounts(canon).Take(count)),
             "deals" => ToPreviewRows(ExportMapper.MapDeals(canon).Take(count)),
             "cases" => ToPreviewRows(ExportMapper.MapCases(canon).Take(count)),
+            "projects" => ToPreviewRows(ExportMapper.MapProjects(canon).Take(count)),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
     }
@@ -79,7 +84,8 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
                 CreateDatasetInfo("accounts", ExportMapper.MapAccounts(canon).Count),
                 CreateDatasetInfo("contacts", ExportMapper.MapContacts(canon).Count),
                 CreateDatasetInfo("deals", ExportMapper.MapDeals(canon).Count),
-                CreateDatasetInfo("cases", ExportMapper.MapCases(canon).Count)
+                CreateDatasetInfo("cases", ExportMapper.MapCases(canon).Count),
+                CreateDatasetInfo("projects", ExportMapper.MapProjects(canon).Count)
             ]);
     }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Essex Procurement Hub</title>
+  <desc id="desc">Marketplace grid for rural asset redistribution platform</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" rx="16" fill="url(#bg)"/>
+  <g fill="#ffffff" stroke="#d97706" stroke-width="2">
+    <rect x="200" y="120" width="110" height="90" rx="10"/>
+    <rect x="330" y="120" width="110" height="90" rx="10"/>
+    <rect x="460" y="120" width="110" height="90" rx="10"/>
+    <rect x="200" y="230" width="110" height="90" rx="10"/>
+    <rect x="330" y="230" width="110" height="90" rx="10"/>
+    <rect x="460" y="230" width="110" height="90" rx="10"/>
+  </g>
+  <rect x="48" y="148" width="120" height="14" rx="7" fill="#d97706"/>
+  <rect x="48" y="176" width="96" height="10" rx="5" fill="#cbd5e1"/>
+  <rect x="48" y="198" width="108" height="10" rx="5" fill="#cbd5e1"/>
+  <text x="48" y="72" fill="#1e293b" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Procurement Hub</text>
+  <text x="48" y="104" fill="#64748b" font-family="system-ui,sans-serif" font-size="16">Marketplace - legacy merger platform</text>
+</svg>

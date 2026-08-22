@@ -27,37 +27,6 @@ function Test-ContainerRuntime {
     }
 }
 
-function Initialize-HugoThemeSubmodule {
-    <#
-    .SYNOPSIS
-        Ensures the PaperMod Hugo theme submodule is checked out before build/serve.
-    #>
-    $themeMarker = Join-Path $repoRoot "site/themes/PaperMod/layouts/_partials/head.html"
-    if (Test-Path $themeMarker) {
-        return
-    }
-
-    Write-Host "PaperMod theme submodule is missing; initialising..." -ForegroundColor Yellow
-    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-        Write-Error "PaperMod theme not found at site/themes/PaperMod. Install Git and run: git submodule update --init --recursive"
-    }
-
-    Push-Location $repoRoot
-    try {
-        git submodule update --init --recursive site/themes/PaperMod
-        if ($LASTEXITCODE -ne 0) {
-            Write-Error "Failed to initialise PaperMod theme submodule. Run from the repo root: git submodule update --init --recursive"
-        }
-    }
-    finally {
-        Pop-Location
-    }
-
-    if (-not (Test-Path $themeMarker)) {
-        Write-Error "PaperMod theme still missing after submodule init. Run: git submodule update --init --recursive"
-    }
-}
-
 function Invoke-HugoContentGenerator {
     <#
     .SYNOPSIS
@@ -94,7 +63,6 @@ function Invoke-HugoBuild {
 }
 
 Test-ContainerRuntime -Name $Runtime
-Initialize-HugoThemeSubmodule
 
 switch ($Command) {
     "build" {

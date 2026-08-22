@@ -1,0 +1,60 @@
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+
+@if (Items.Count > 0)
+{
+    <section class="career-section education-section">
+        <h2>Education</h2>
+        <ul class="education-list">
+            @foreach (var entry in Items)
+            {
+                <li class="education-entry">
+                    <h3>@entry.Title</h3>
+                    <p class="institution">@entry.InstitutionName</p>
+                    @{
+                        var dateRange = FormatDateRange(entry);
+                    }
+                    @if (!string.IsNullOrWhiteSpace(dateRange))
+                    {
+                        <p class="date-range">@dateRange</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(entry.Grade))
+                    {
+                        <p class="grade">@entry.Grade</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(entry.Description))
+                    {
+                        <p class="education-description">@entry.Description</p>
+                    }
+                    @if (entry.FeaturedLink is { } link)
+                    {
+                        <p>
+                            <a href="@CareerLinkResolver.ResolveForPublication(link.Url)">@(link.Name ?? link.Label ?? "Learn more")</a>
+                        </p>
+                    }
+                </li>
+            }
+        </ul>
+    </section>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<Education> Items { get; set; } = [];
+
+    private static string? FormatDateRange(Education entry)
+    {
+        if (!string.IsNullOrWhiteSpace(entry.DisplayRange))
+        {
+            return entry.DisplayRange;
+        }
+
+        if (string.IsNullOrWhiteSpace(entry.Start))
+        {
+            return null;
+        }
+
+        return string.IsNullOrWhiteSpace(entry.End)
+            ? $"{entry.Start} – Present"
+            : $"{entry.Start} – {entry.End}";
+    }
+}

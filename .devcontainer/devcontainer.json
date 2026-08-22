@@ -17,7 +17,7 @@
         "SSL_CERT_DIR": "/home/vscode/.aspnet/dev-certs/trust:/usr/lib/ssl/certs",
         "ASPNETCORE_ENVIRONMENT": "Development"
     },
-    "postCreateCommand": "git submodule update --init --recursive",
+    "postCreateCommand": "dotnet restore Turpinverse.slnx",
     "updateContentCommand": "dotnet restore Turpinverse.slnx",
     "hostRequirements": {
         "cpus": 4,

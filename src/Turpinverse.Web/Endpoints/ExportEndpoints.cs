@@ -27,7 +27,7 @@ public static class ExportEndpoints
             {
                 return Results.Problem(
                     title: "Invalid dataset type",
-                    detail: $"Dataset '{dataset}' is not supported. Valid values: contacts, accounts, deals, cases.",
+                    detail: $"Dataset '{dataset}' is not supported. Valid values: contacts, accounts, deals, cases, projects.",
                     statusCode: StatusCodes.Status400BadRequest,
                     type: "https://turpinverse.dev/errors/invalid-dataset");
             }
@@ -46,7 +46,7 @@ public static class ExportEndpoints
             {
                 return Results.Problem(
                     title: "Invalid dataset type",
-                    detail: $"Dataset '{dataset}' is not supported. Valid values: contacts, accounts, deals, cases.",
+                    detail: $"Dataset '{dataset}' is not supported. Valid values: contacts, accounts, deals, cases, projects.",
                     statusCode: StatusCodes.Status400BadRequest,
                     type: "https://turpinverse.dev/errors/invalid-dataset");
             }

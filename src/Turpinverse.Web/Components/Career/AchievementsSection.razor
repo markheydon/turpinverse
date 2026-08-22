@@ -1,0 +1,35 @@
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+
+@if (Items.Count > 0)
+{
+    <section class="career-section achievements-section">
+        <h2>Achievements</h2>
+        <ul class="achievements-list">
+            @foreach (var achievement in Items)
+            {
+                <li class="achievement-entry">
+                    @if (!string.IsNullOrWhiteSpace(achievement.Image))
+                    {
+                        <img class="career-image achievement-image" src="@achievement.Image" alt="@achievement.Title" loading="lazy" width="640" height="360" />
+                    }
+                    <h3>
+                        @if (!string.IsNullOrWhiteSpace(achievement.Url))
+                        {
+                            <a href="@CareerLinkResolver.ResolveForPublication(achievement.Url)">@achievement.Title</a>
+                        }
+                        else
+                        {
+                            @achievement.Title
+                        }
+                    </h3>
+                    <p class="achievement-summary">@achievement.Summary</p>
+                </li>
+            }
+        </ul>
+    </section>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<Achievement> Items { get; set; } = [];
+}

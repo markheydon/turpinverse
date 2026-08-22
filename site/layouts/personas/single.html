@@ -14,6 +14,115 @@
 
   <div class="post-content">{{ .Content }}</div>
 
+  {{ $career := index .Site.Data.career .File.BaseFileName }}
+  {{ with $career.experience }}
+  <section class="career-section experience-section">
+    <h2>Experience</h2>
+    {{ range . }}
+    <div class="experience-grouping">
+      <h3>
+        {{ if .organisationId }}
+        <a href="{{ "/organisations/" | relURL }}{{ .organisationId }}/">{{ .organisationName }}</a>
+        {{ else }}
+        {{ .organisationName }}
+        {{ end }}
+      </h3>
+      {{ range .roles }}
+      <div class="role">
+        <h4>{{ .title }}</h4>
+        <p class="date-range">
+          {{ if .displayRange }}{{ .displayRange }}{{ else }}{{ .start }}{{ with .end }} – {{ . }}{{ else }} – Present{{ end }}{{ end }}
+        </p>
+        <div class="role-description">{{ .description | markdownify }}</div>
+        {{ with .extraInfo }}<p class="role-extra" title="{{ . }}">{{ . }}</p>{{ end }}
+        {{ with .featuredLinks }}
+        <ul class="featured-links">
+          {{ range . }}
+          <li>
+            <a href="{{ partial "resolve-career-url.html" .url }}"{{ with .tooltip }} title="{{ . }}"{{ end }}>
+              {{ partial "featured-link-text.html" . }}
+            </a>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+    {{ end }}
+  </section>
+  {{ end }}
+
+  {{ with $career.education }}
+  <section class="career-section education-section">
+    <h2>Education</h2>
+    <ul class="education-list">
+      {{ range . }}
+      <li class="education-entry">
+        <h3>{{ .title }}</h3>
+        <p class="institution">{{ .institutionName }}</p>
+        {{ if .displayRange }}
+        <p class="date-range">{{ .displayRange }}</p>
+        {{ else if .start }}
+        <p class="date-range">{{ .start }}{{ with .end }} – {{ . }}{{ else }} – Present{{ end }}</p>
+        {{ end }}
+        {{ with .grade }}<p class="grade">{{ . }}</p>{{ end }}
+        {{ with .description }}<div class="education-description">{{ . | markdownify }}</div>{{ end }}
+        {{ with .featuredLink }}
+        <p class="education-cta"><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></p>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with $career.projects }}
+  <section class="career-section projects-section">
+    <h2>Projects</h2>
+    <ul class="projects-list">
+      {{ range $project := . }}
+      <li class="project-entry">
+        {{ with $project.image }}
+        <img class="career-image project-image" src="{{ $project.image }}" alt="{{ $project.title }}" loading="lazy" width="640" height="360">
+        {{ end }}
+        <h3>{{ $project.title }}</h3>
+        <p class="project-summary">{{ $project.summary }}</p>
+        <p class="project-account">Account: <a href="{{ "/organisations/" | relURL }}{{ $project.organisationId }}/">{{ partial "org-title.html" $project.organisationId }}</a></p>
+        {{ with $project.tags }}<ul class="chip-list">{{ range . }}<li class="chip">{{ . }}</li>{{ end }}</ul>{{ end }}
+        {{ with $project.links }}
+        <ul class="featured-links">
+          {{ range . }}
+          <li><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></li>
+          {{ end }}
+        </ul>
+        {{ end }}
+        {{ with $project.featuredCta }}
+        <p class="featured-cta"><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></p>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with $career.achievements }}
+  <section class="career-section achievements-section">
+    <h2>Achievements</h2>
+    <ul class="achievements-list">
+      {{ range $achievement := . }}
+      <li class="achievement-entry">
+        {{ with $achievement.image }}
+        <img class="career-image achievement-image" src="{{ $achievement.image }}" alt="{{ $achievement.title }}" loading="lazy" width="640" height="360">
+        {{ end }}
+        <h3>{{ if $achievement.url }}<a href="{{ partial "resolve-career-url.html" $achievement.url }}">{{ $achievement.title }}</a>{{ else }}{{ $achievement.title }}{{ end }}</h3>
+        <p class="achievement-summary">{{ $achievement.summary }}</p>
+      </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
   {{ with .Params.organisations }}
   <section class="related-orgs">
     <h2>Organisations</h2>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Palmer Identity Vault</title>
+  <desc id="desc">Shield and credential vault icon for identity lifecycle tooling</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" rx="16" fill="url(#bg)"/>
+  <path d="M320 70 L420 110 V190 C420 250 320 290 320 290 C320 290 220 250 220 190 V110 Z" fill="#1e293b"/>
+  <path d="M320 95 L395 128 V188 C395 236 320 268 320 268 C320 268 245 236 245 188 V128 Z" fill="#d97706"/>
+  <rect x="290" y="165" width="60" height="48" rx="8" fill="#fef3c7"/>
+  <circle cx="320" cy="186" r="10" fill="#1e293b"/>
+  <text x="48" y="72" fill="#1e293b" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Identity Vault</text>
+  <text x="48" y="104" fill="#64748b" font-family="system-ui,sans-serif" font-size="16">SSO - alias lifecycle - audit-ready</text>
+</svg>

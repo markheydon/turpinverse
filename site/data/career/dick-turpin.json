@@ -1,0 +1,250 @@
+{
+  "experience": [
+    {
+      "id": "dick-turpin-turpin-enterprises",
+      "personaId": "dick-turpin",
+      "organisationId": "turpin-enterprises",
+      "organisationName": "Turpin Enterprises",
+      "organisationUrl": "/organisations/turpin-enterprises/",
+      "roles": [
+        {
+          "title": "Chief Corridor Strategy Officer",
+          "start": "2022-01",
+          "end": null,
+          "displayRange": null,
+          "description": "Leads enterprise route optimisation, corridor licensing, and strategic asset redistribution across the Home Counties. Owns the executive dashboard for discretionary travel approvals.",
+          "extraInfo": null,
+          "featuredLinks": [
+            {
+              "url": "/organisations/turpin-enterprises/",
+              "label": "Corridor strategy brief",
+              "name": null,
+              "icon": null,
+              "tooltip": "Internal strategy overview \u2014 demo access only"
+            }
+          ]
+        },
+        {
+          "title": "Regional Operations Lead",
+          "start": "2018-03",
+          "end": "2021-06",
+          "displayRange": null,
+          "description": "Ran field operations for Essex and Hertfordshire procurement lanes. Introduced KPIs for acquisition velocity and stakeholder discretion.",
+          "extraInfo": null,
+          "featuredLinks": []
+        },
+        {
+          "title": "Consultant, Corridor Advisory",
+          "start": "2015-09",
+          "end": "2017-12",
+          "displayRange": null,
+          "description": "Returned after a structured sabbatical to rebuild the Yorkshire corridor practice. Rehired into a broader remit covering identity lifecycle touchpoints.",
+          "extraInfo": null,
+          "featuredLinks": []
+        }
+      ]
+    },
+    {
+      "id": "dick-turpin-essex-gang",
+      "personaId": "dick-turpin",
+      "organisationId": "essex-gang",
+      "organisationName": "Essex Solutions Group",
+      "organisationUrl": "/organisations/essex-gang/",
+      "roles": [
+        {
+          "title": "Director of Integrated Procurement",
+          "start": "2012-04",
+          "end": "2015-08",
+          "displayRange": null,
+          "description": "Oversaw rural procurement networks and merger integration after the Gregory Gang consolidation. Standardised corridor handoff playbooks across member cells.",
+          "extraInfo": "Board minutes note a preference for \u0027terms-flexible\u0027 contracting language.",
+          "featuredLinks": []
+        }
+      ]
+    },
+    {
+      "id": "dick-turpin-king-equine",
+      "personaId": "dick-turpin",
+      "organisationId": "king-equine-trading",
+      "organisationName": "King Equine Partners",
+      "organisationUrl": "/organisations/king-equine-trading/",
+      "roles": [
+        {
+          "title": "Fleet Acquisition Specialist",
+          "start": "2009-01",
+          "end": "2012-03",
+          "displayRange": null,
+          "description": "Managed rapid equine acquisition programmes and disputed mileage reconciliation for corridor clients. Partnered with Matthew King on high-velocity trading windows.",
+          "extraInfo": null,
+          "featuredLinks": []
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "dick-turpin-mba-corridor",
+      "personaId": "dick-turpin",
+      "title": "MBA, Strategic Corridor Management",
+      "institutionName": "Open University Business School",
+      "institutionUrl": "https://www.open.ac.uk/business",
+      "organisationId": null,
+      "start": "2016-09",
+      "end": "2018-06",
+      "displayRange": null,
+      "grade": "Distinction",
+      "description": "Dissertation on discretionary logistics and reputation risk in regulated transport corridors. Coursework framed legend-as-business case studies for client workshops.",
+      "featuredLink": {
+        "url": "https://www.open.ac.uk/business/mba",
+        "label": null,
+        "name": "View programme",
+        "icon": null,
+        "tooltip": null
+      }
+    },
+    {
+      "id": "dick-turpin-bsc-operations",
+      "personaId": "dick-turpin",
+      "title": "BSc Operations \u0026 Supply Chain",
+      "institutionName": "University of Hertfordshire",
+      "institutionUrl": "https://www.herts.ac.uk",
+      "organisationId": null,
+      "start": "2005-09",
+      "end": "2008-06",
+      "displayRange": null,
+      "grade": "2:1",
+      "description": "Focused on last-mile redistribution, inventory variance, and stakeholder communication under ambiguous regulatory conditions.",
+      "featuredLink": null
+    }
+  ],
+  "projects": [
+    {
+      "id": "black-bess-route-optimiser",
+      "title": "Black Bess Route Optimiser",
+      "summary": "Real-time corridor planning suite for high-velocity equine logistics. Reduces discretionary delay windows across Epping Forest lanes.",
+      "image": "/images/projects/black-bess-route-optimiser.svg",
+      "tags": [
+        "logistics",
+        "corridor",
+        "SaaS"
+      ],
+      "links": [
+        {
+          "url": "/organisations/turpin-enterprises/",
+          "label": "Product overview",
+          "name": null,
+          "icon": null,
+          "tooltip": null
+        }
+      ],
+      "organisationId": "turpin-enterprises",
+      "personaIds": [
+        "dick-turpin",
+        "ned-palmer"
+      ],
+      "featuredCta": {
+        "url": "/organisations/turpin-enterprises/",
+        "label": null,
+        "name": "Request demo",
+        "icon": null,
+        "tooltip": null
+      },
+      "featured": true
+    },
+    {
+      "id": "essex-procurement-hub",
+      "title": "Essex Procurement Hub",
+      "summary": "Consolidated marketplace for rural asset redistribution with flexible contracting templates. Legacy platform from the Essex Solutions merger.",
+      "image": "/images/projects/essex-procurement-hub.svg",
+      "tags": [
+        "procurement",
+        "marketplace",
+        "legacy"
+      ],
+      "links": [
+        {
+          "url": "/organisations/essex-gang/",
+          "label": "Archive notice",
+          "name": null,
+          "icon": null,
+          "tooltip": null
+        }
+      ],
+      "organisationId": "essex-gang",
+      "personaIds": [
+        "dick-turpin"
+      ],
+      "featuredCta": null,
+      "featured": null
+    },
+    {
+      "id": "palmer-identity-vault",
+      "title": "Palmer Identity Vault",
+      "summary": "SSO and alias lifecycle tooling for clients relocating under fresh credentials. Keeps Yorkshire and Essex personas cleanly separated in audit logs.",
+      "image": "/images/projects/palmer-identity-vault.svg",
+      "tags": [
+        "identity",
+        "compliance",
+        "SSO"
+      ],
+      "links": [
+        {
+          "url": "/organisations/brazier-legal/",
+          "label": "Product overview",
+          "name": null,
+          "icon": "shield",
+          "tooltip": null
+        }
+      ],
+      "organisationId": "brazier-legal",
+      "personaIds": [
+        "dick-turpin"
+      ],
+      "featuredCta": null,
+      "featured": null
+    }
+  ],
+  "achievements": [
+    {
+      "id": "corridor-innovation-award-2024",
+      "title": "Corridor Innovation Award 2024",
+      "summary": "Recognised for enterprise route optimisation and discretionary travel governance across the Home Counties corridor network.",
+      "url": "/organisations/turpin-enterprises/",
+      "image": "/images/achievements/corridor-innovation-2024.svg",
+      "personaIds": [
+        "dick-turpin",
+        "ned-palmer"
+      ]
+    },
+    {
+      "id": "equine-velocity-certification",
+      "title": "Equine Velocity Certification",
+      "summary": "Industry credential for rapid fleet acquisition programmes delivered with King Equine Partners.",
+      "url": "/organisations/king-equine-trading/",
+      "image": null,
+      "personaIds": [
+        "dick-turpin"
+      ]
+    },
+    {
+      "id": "essex-merger-integration-excellence",
+      "title": "Essex Merger Integration Excellence",
+      "summary": "Citation for post-merger procurement standardisation after the Gregory Gang consolidation programme.",
+      "url": null,
+      "image": null,
+      "personaIds": [
+        "dick-turpin"
+      ]
+    },
+    {
+      "id": "rose-crown-hospitality-patron",
+      "title": "Rose \u0026 Crown Patron Programme",
+      "summary": "Long-standing patron recognition for discretion-forward hospitality partnerships along the Hempstead corridor.",
+      "url": null,
+      "image": null,
+      "personaIds": [
+        "dick-turpin"
+      ]
+    }
+  ]
+}

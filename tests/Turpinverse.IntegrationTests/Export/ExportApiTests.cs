@@ -23,7 +23,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
 
         var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>(cancellationToken);
         Assert.NotNull(manifest);
-        Assert.Equal(4, manifest!.Datasets.Count);
+        Assert.Equal(5, manifest!.Datasets.Count);
         Assert.Equal(ExportDatasets.DisplayOrder, manifest.Datasets.Select(d => d.Type));
     }
 
@@ -32,6 +32,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("accounts", "accountId")]
     [InlineData("deals", "dealId")]
     [InlineData("cases", "caseId")]
+    [InlineData("projects", "projectId")]
     public async Task Manifest_UsesCamelCaseColumnNames(string datasetType, string firstColumn)
     {
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -69,6 +70,11 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.NotNull(result);
         Assert.True(result!.Valid);
         Assert.True(result.Counts.ContainsKey("personas"));
+        Assert.True(result.Counts.ContainsKey("experience"));
+        Assert.True(result.Counts.ContainsKey("education"));
+        Assert.True(result.Counts.ContainsKey("projects"));
+        Assert.True(result.Counts.ContainsKey("achievements"));
+        Assert.True(result.Counts["experience"] > 0);
     }
 
     private sealed class ManifestResponse

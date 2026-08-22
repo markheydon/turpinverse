@@ -1,0 +1,65 @@
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+
+@if (Items.Count > 0)
+{
+    <section class="career-section experience-section">
+        <h2>Experience</h2>
+        @foreach (var grouping in Items)
+        {
+            <div class="experience-grouping">
+                <h3>
+                    @if (!string.IsNullOrWhiteSpace(grouping.OrganisationId))
+                    {
+                        <a href="/organisations/@grouping.OrganisationId">@grouping.OrganisationName</a>
+                    }
+                    else
+                    {
+                        @grouping.OrganisationName
+                    }
+                </h3>
+                @foreach (var role in grouping.Roles)
+                {
+                    <div class="role">
+                        <h4>@role.Title</h4>
+                        <p class="date-range">@FormatDateRange(role)</p>
+                        <p class="role-description">@role.Description</p>
+                        @if (!string.IsNullOrWhiteSpace(role.ExtraInfo))
+                        {
+                            <p class="role-extra" title="@role.ExtraInfo">@role.ExtraInfo</p>
+                        }
+                        @if (role.FeaturedLinks.Count > 0)
+                        {
+                            <ul class="featured-links">
+                                @foreach (var link in role.FeaturedLinks)
+                                {
+                                    <li>
+                                        <a href="@CareerLinkResolver.ResolveForPublication(link.Url)" title="@link.Tooltip">
+                                            @(link.Label ?? link.Name ?? (string.IsNullOrWhiteSpace(link.Icon) ? "Link" : "View details"))
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </section>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<Experience> Items { get; set; } = [];
+
+    private static string FormatDateRange(Role role)
+    {
+        if (!string.IsNullOrWhiteSpace(role.DisplayRange))
+        {
+            return role.DisplayRange;
+        }
+
+        return string.IsNullOrWhiteSpace(role.End)
+            ? $"{role.Start} – Present"
+            : $"{role.Start} – {role.End}";
+    }
+}

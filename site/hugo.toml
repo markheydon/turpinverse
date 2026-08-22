@@ -3,8 +3,18 @@ locale = "en-gb"
 direction = "ltr"
 label = "English (UK)"
 title = "Turpinverse"
-theme = "PaperMod"
 publishDir = "public"
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.146.0"
+  [[module.imports]]
+    path = "github.com/adityatelange/hugo-PaperMod"
+
+[caches]
+  [caches.images]
+    dir = ":cacheDir/images"
 
 [params]
   env = "production"

@@ -88,7 +88,7 @@ jobs:
         run: dotnet build Turpinverse.slnx --configuration Release --no-restore
 
       - name: Test with coverage
-        run: dotnet test --solution Turpinverse.slnx --configuration Release --no-build --coverage --coverage-output-format cobertura --results-directory ./coverage
+        run: dotnet test --solution Turpinverse.slnx --configuration Release --no-build --coverage --coverage-output-format cobertura --coverage-settings coverage.settings --results-directory ./coverage
 
       - name: Upload coverage
         uses: actions/upload-artifact@v7

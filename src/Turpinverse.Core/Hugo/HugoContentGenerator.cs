@@ -1,11 +1,13 @@
 using System.Text;
 using System.Text.Json;
 using Turpinverse.Core.Abstractions;
+using Turpinverse.Core.Career;
 
 namespace Turpinverse.Core.Hugo;
 
 public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHugoContentGenerator
 {
+    private readonly CareerPortfolioPresenter _presenter = new();
     private static readonly UTF8Encoding Utf8NoBom = new(encoderShouldEmitUTF8Identifier: false);
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -23,6 +25,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "personas"));
         Directory.CreateDirectory(Path.Combine(contentDir, "organisations"));
         Directory.CreateDirectory(Path.Combine(contentDir, "timeline"));
+        Directory.CreateDirectory(Path.Combine(dataDir, "career"));
         Directory.CreateDirectory(dataDir);
 
         foreach (var persona in canon.Personas)
@@ -97,6 +100,36 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             JsonSerializer.Serialize(canon.Events, JsonOptions),
             Utf8NoBom,
             cancellationToken);
+
+        foreach (var persona in canon.Personas)
+        {
+            if (!_presenter.HasCareerOrPortfolioContent(canon, persona.Id))
+            {
+                continue;
+            }
+
+            var careerData = new
+            {
+                experience = _presenter.GetExperienceForPersona(canon, persona.Id)
+                    .Select(CareerLinkResolver.ResolveExperience)
+                    .ToList(),
+                education = _presenter.GetEducationForPersona(canon, persona.Id)
+                    .Select(CareerLinkResolver.ResolveEducation)
+                    .ToList(),
+                projects = _presenter.GetProjectsForPersona(canon, persona.Id)
+                    .Select(CareerLinkResolver.ResolveProject)
+                    .ToList(),
+                achievements = _presenter.GetAchievementsForPersona(canon, persona.Id)
+                    .Select(CareerLinkResolver.ResolveAchievement)
+                    .ToList()
+            };
+
+            await File.WriteAllTextAsync(
+                Path.Combine(dataDir, "career", $"{persona.Id}.json"),
+                JsonSerializer.Serialize(careerData, JsonOptions),
+                Utf8NoBom,
+                cancellationToken);
+        }
     }
 
     private static string ExtractSummary(string biography)

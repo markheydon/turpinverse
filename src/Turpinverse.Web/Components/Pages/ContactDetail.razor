@@ -1,0 +1,74 @@
+@page "/contacts/{ContactId}"
+@rendermode InteractiveServer
+@inject ICanonRepository CanonRepository
+@inject CareerPortfolioPresenter Presenter
+@using Turpinverse.Core.Abstractions
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+@using Turpinverse.Web.Components.Career
+
+<PageTitle>@pageTitle - Turpinverse</PageTitle>
+
+<div class="page-container contact-detail">
+    @if (loading)
+    {
+        <p>Loading contact...</p>
+    }
+    else if (persona is null)
+    {
+        <h1>Contact not found</h1>
+        <p>No persona matches contact id <code>@ContactId</code>.</p>
+        <a href="/contacts">Back to contacts</a>
+    }
+    else
+    {
+        <div class="contact-detail-header">
+            <a class="back-link" href="/contacts">← Contacts</a>
+            <h1>@persona.DisplayName</h1>
+            <p class="contact-title">@persona.Title</p>
+            <p class="contact-email">@persona.Email</p>
+            <span class="status-badge status-@persona.Status">@persona.Status</span>
+        </div>
+
+        <div class="contact-detail-body">
+            <section class="biography-section">
+                <h2>Biography</h2>
+                <p class="biography">@persona.Biography</p>
+            </section>
+
+            <ExperienceSection Items="experience" />
+            <EducationSection Items="education" />
+            <ProjectsSection Items="projects" />
+            <AchievementsSection Items="achievements" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string ContactId { get; set; } = string.Empty;
+
+    private Persona? persona;
+    private IReadOnlyList<Experience> experience = [];
+    private IReadOnlyList<Education> education = [];
+    private IReadOnlyList<Project> projects = [];
+    private IReadOnlyList<Achievement> achievements = [];
+    private string pageTitle = "Contact";
+    private bool loading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        loading = true;
+        var canon = await CanonRepository.LoadAsync();
+        persona = canon.Personas.FirstOrDefault(p => p.Id == ContactId);
+        if (persona is not null)
+        {
+            pageTitle = persona.DisplayName;
+            experience = Presenter.GetExperienceForPersona(canon, ContactId);
+            education = Presenter.GetEducationForPersona(canon, ContactId);
+            projects = Presenter.GetProjectsForPersona(canon, ContactId);
+            achievements = Presenter.GetAchievementsForPersona(canon, ContactId);
+        }
+
+        loading = false;
+    }
+}

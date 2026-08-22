@@ -38,7 +38,9 @@
   }
   else
   {
-    <DataTable Rows="rows" Columns="Columns" Loading="loading" />
+    <DataTable Rows="rows" Columns="Columns" Loading="loading"
+               RowLinkColumn="@RowLinkColumn" RowLinkPathPrefix="@RowLinkPathPrefix"
+               RowLinkIdColumn="@RowLinkIdColumn" />
   }
 </div>
 
@@ -46,6 +48,9 @@
     [Parameter, EditorRequired] public string DatasetType { get; set; } = string.Empty;
     [Parameter] public IReadOnlyList<string>? Columns { get; set; }
     [Parameter] public bool ShowPipelineChart { get; set; }
+    [Parameter] public string? RowLinkColumn { get; set; }
+    [Parameter] public string? RowLinkPathPrefix { get; set; }
+    [Parameter] public string? RowLinkIdColumn { get; set; }
 
     private ExportDatasetDefinition definition = new(string.Empty, string.Empty, "file", "/", string.Empty);
     private IReadOnlyList<IReadOnlyDictionary<string, string>> rows = [];

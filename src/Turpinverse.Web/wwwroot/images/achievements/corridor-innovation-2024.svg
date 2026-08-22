@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Corridor Innovation Award 2024</title>
+  <desc id="desc">Award medal for corridor innovation excellence</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fffbeb"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" rx="16" fill="url(#bg)"/>
+  <circle cx="420" cy="190" r="88" fill="#d97706"/>
+  <circle cx="420" cy="190" r="68" fill="#fef3c7"/>
+  <polygon points="420,130 438,176 486,176 448,206 462,252 420,224 378,252 392,206 354,176 402,176" fill="#1e293b"/>
+  <rect x="392" y="276" width="56" height="18" rx="4" fill="#1e293b"/>
+  <text x="48" y="72" fill="#1e293b" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Innovation Award</text>
+  <text x="48" y="104" fill="#64748b" font-family="system-ui,sans-serif" font-size="16">2024 - corridor governance</text>
+  <text x="48" y="190" fill="#1e293b" font-family="Georgia,serif" font-size="22">Corridor Innovation</text>
+</svg>

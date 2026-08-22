@@ -1,0 +1,53 @@
+[
+  {
+    "id": "black-bess-route-optimiser",
+    "title": "Black Bess Route Optimiser",
+    "summary": "Real-time corridor planning suite for high-velocity equine logistics. Reduces discretionary delay windows across Epping Forest lanes.",
+    "image": "/images/projects/black-bess-route-optimiser.svg",
+    "tags": ["logistics", "corridor", "SaaS"],
+    "links": [
+      {
+        "label": "Product overview",
+        "url": "https://turpin-enterprises.turpinverse.uk/products/black-bess"
+      }
+    ],
+    "organisationId": "turpin-enterprises",
+    "personaIds": ["dick-turpin", "ned-palmer"],
+    "featuredCta": {
+      "name": "Request demo",
+      "url": "https://turpin-enterprises.turpinverse.uk/demo/black-bess"
+    },
+    "featured": true
+  },
+  {
+    "id": "palmer-identity-vault",
+    "title": "Palmer Identity Vault",
+    "summary": "SSO and alias lifecycle tooling for clients relocating under fresh credentials. Keeps Yorkshire and Essex personas cleanly separated in audit logs.",
+    "image": "/images/projects/palmer-identity-vault.svg",
+    "tags": ["identity", "compliance", "SSO"],
+    "links": [
+      {
+        "label": "Product overview",
+        "icon": "shield",
+        "url": "https://brazier-legal.turpinverse.uk/products/identity-vault"
+      }
+    ],
+    "organisationId": "brazier-legal",
+    "personaIds": ["dick-turpin"]
+  },
+  {
+    "id": "essex-procurement-hub",
+    "title": "Essex Procurement Hub",
+    "summary": "Consolidated marketplace for rural asset redistribution with flexible contracting templates. Legacy platform from the Essex Solutions merger.",
+    "image": "/images/projects/essex-procurement-hub.svg",
+    "tags": ["procurement", "marketplace", "legacy"],
+    "links": [
+      {
+        "label": "Archive notice",
+        "url": "https://essex-gang.turpinverse.uk/hub"
+      }
+    ],
+    "organisationId": "essex-gang",
+    "personaIds": ["dick-turpin"]
+  }
+]

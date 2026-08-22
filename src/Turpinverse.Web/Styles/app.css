@@ -402,3 +402,132 @@ h1:focus {
 .blazor-error-boundary::after {
   content: "An error has occurred.";
 }
+
+/* Career & portfolio sections */
+.career-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(30, 41, 59, 0.12);
+}
+
+.career-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.experience-grouping {
+  margin-bottom: 1.5rem;
+}
+
+.experience-grouping h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.role {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.role h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.date-range {
+  color: rgba(30, 41, 59, 0.7);
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+}
+
+.role-extra {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(30, 41, 59, 0.75);
+}
+
+.featured-links,
+.education-list,
+.projects-list,
+.achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.education-entry,
+.project-entry,
+.achievement-entry {
+  margin-bottom: 1.25rem;
+}
+
+.career-image {
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+  margin: 0 0 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(30, 41, 59, 0.12);
+}
+
+.achievement-image {
+  max-width: 16rem;
+}
+
+.contact-detail-header {
+  margin-bottom: 2rem;
+}
+
+.contact-detail-header .back-link {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: var(--color-turpin-amber);
+  text-decoration: none;
+}
+
+.contact-title,
+.contact-email {
+  margin: 0.25rem 0;
+}
+
+.status-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  background: rgba(30, 41, 59, 0.08);
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  background: rgba(217, 119, 6, 0.15);
+  font-size: 0.8rem;
+}
+
+.featured-cta a {
+  font-weight: 600;
+  color: var(--color-turpin-amber);
+}
+
+.data-table a {
+  color: var(--color-turpin-amber);
+  text-decoration: none;
+}
+
+.data-table a:hover {
+  text-decoration: underline;
+}
