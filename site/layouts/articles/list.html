@@ -11,8 +11,10 @@
     <img class="card-image" src="{{ . }}" alt="{{ $.Title }}" loading="lazy" width="640" height="360">
     {{ end }}
     <div class="card-header">
-      <p class="card-title">{{ .Title }}</p>
-      {{ partial "article-collection.html" . }}
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ partial "article-collection.html" . }}
+      </div>
     </div>
     {{ with .Params.publishedAt }}<p class="card-meta">{{ . }}</p>{{ end }}
     {{ with .Params.excerpt }}<p class="card-summary">{{ . }}</p>{{ else }}{{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}{{ end }}

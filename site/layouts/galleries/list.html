@@ -15,8 +15,10 @@
     {{ end }}
     {{ end }}
     <div class="card-header">
-      <p class="card-title">{{ .Title }}</p>
-      {{ with .Params.subject }}<span class="status-badge">{{ . }}</span>{{ end }}
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ with .Params.subject }}<span class="status-badge">{{ . }}</span>{{ end }}
+      </div>
     </div>
     {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
   </a>

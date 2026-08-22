@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="post-content">{{ .Content }}</div>
+  <div class="post-content md-content">{{ .Content }}</div>
 
   {{ $career := index hugo.Data.career .File.BaseFileName }}
   {{ with $career.experience }}
@@ -123,23 +123,6 @@
   </section>
   {{ end }}
 
-  {{ $personaId := .File.BaseFileName }}
-  {{ $publishedArticles := where hugo.Data.articles "authorPersonaId" $personaId }}
-  {{ with $publishedArticles }}
-  <section class="career-section articles-section">
-    <h2>Published articles</h2>
-    <ul class="articles-list">
-      {{ range . }}
-      <li class="article-entry">
-        <h3><a href="{{ "/articles/" | relURL }}{{ .id }}/">{{ .title }}</a></h3>
-        <p class="date-range">{{ .publishedAt }}</p>
-        {{ partial "article-collection.html" (dict "Params" (dict "collection" .collection)) }}
-      </li>
-      {{ end }}
-    </ul>
-  </section>
-  {{ end }}
-
   {{ with .Params.organisations }}
   <section class="related-orgs">
     <h2>Organisations</h2>
@@ -151,7 +134,9 @@
   </section>
   {{ end }}
 
+  {{ $personaId := .File.BaseFileName }}
   {{ partial "related-deals-grid.html" (where hugo.Data.deals "contactId" $personaId) }}
   {{ partial "related-cases-grid.html" (where hugo.Data.cases "contactId" $personaId) }}
+  {{ partial "related-articles-grid.html" (where hugo.Data.articles "authorPersonaId" $personaId) }}
 </article>
 {{ end }}

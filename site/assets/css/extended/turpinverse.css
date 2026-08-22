@@ -18,12 +18,25 @@
   --code-block-bg: #f8fafc;
 }
 
-.dark {
+.dark,
+[data-theme="dark"] {
   --theme: #0f172a;
   --entry: #1e293b;
   --primary: #f1f5f9;
   --secondary: #94a3b8;
+  --tertiary: #64748b;
+  --content: #e2e8f0;
   --turpin-cream: #1e293b;
+  --turpin-border: #334155;
+  --border: var(--turpin-border);
+  --hljs-bg: #1e293b;
+  --code-bg: #334155;
+  --code-block-bg: #1e293b;
+}
+
+[data-theme="dark"] .turpin-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #172554 100%);
+  border-color: var(--turpin-border);
 }
 
 body {
@@ -48,7 +61,7 @@ h1 {
 .turpin-hero h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  color: var(--turpin-slate);
+  color: var(--primary);
 }
 
 .turpin-tagline {
@@ -125,7 +138,9 @@ h1 {
 .account-card,
 .deal-card,
 .case-card,
-.project-card {
+.project-card,
+.article-card,
+.gallery-card {
   display: block;
   padding: 1.25rem;
   background: var(--entry);
@@ -140,9 +155,24 @@ h1 {
 .account-card:hover,
 .deal-card:hover,
 .case-card:hover,
-.project-card:hover {
+.project-card:hover,
+.article-card:hover,
+.gallery-card:hover {
   border-color: var(--turpin-amber);
   box-shadow: 0 2px 8px rgba(217, 119, 6, 0.12);
+}
+
+.contact-card-pinned,
+.account-card-pinned {
+  border-color: var(--turpin-amber);
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 640px) {
+  .contact-card-pinned,
+  .account-card-pinned {
+    grid-column: span 2;
+  }
 }
 
 .card-header {
@@ -188,6 +218,46 @@ h1 {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.collection-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--secondary);
+  margin: 0.15rem 0 0.35rem;
+}
+
+.article-featured-image {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  margin: 0 0 1.25rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--turpin-border);
+}
+
+.showcase-panel .post-content {
+  margin-top: 0;
+}
+
+.post-single .post-content,
+.showcase-panel .post-content {
+  line-height: 1.6;
+}
+
+.showcase-panel .post-content p:not(:last-child),
+.post-single .post-content p:not(:last-child) {
+  margin-bottom: var(--content-gap, 1.25rem);
+}
+
+.showcase-panel .related-records {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--turpin-border);
 }
 
 .card-email {
@@ -492,7 +562,8 @@ h1 {
   margin-bottom: 0;
 }
 
-.turpin-welcome {
+.turpin-welcome,
+.showcase-panel {
   margin: 0 0 3rem;
   padding: 1.5rem;
   background: var(--entry);
@@ -501,8 +572,12 @@ h1 {
   line-height: 1.6;
 }
 
-.turpin-welcome h2 {
+.turpin-welcome h2,
+.showcase-panel .page-header h1 {
   margin-top: 0;
+}
+
+.turpin-welcome h2 {
   margin-bottom: 1rem;
   font-size: 1.25rem;
 }
@@ -530,7 +605,7 @@ h1 {
 .related-records h2 {
   font-size: 1.25rem;
   margin: 0 0 1.25rem;
-  color: var(--turpin-slate);
+  color: var(--primary);
 }
 
 .experience-grouping {
@@ -783,6 +858,17 @@ h1 {
   font-size: 0.8rem;
   color: var(--secondary);
   margin: 0.35rem 0 0;
+}
+
+.record-card-summary {
+  font-size: 0.8rem;
+  color: var(--secondary);
+  margin: 0.5rem 0 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .record-card-badges {
