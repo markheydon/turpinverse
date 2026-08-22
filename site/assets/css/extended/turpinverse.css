@@ -466,3 +466,201 @@ h1 {
 .turpin-welcome p:last-child {
   margin-bottom: 0;
 }
+
+/* Career & portfolio sections (persona / contact detail parity) */
+.career-section,
+.related-orgs {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--turpin-border);
+}
+
+.career-section h2,
+.related-orgs h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1.25rem;
+  color: var(--turpin-slate);
+}
+
+.experience-grouping {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.experience-grouping h3 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.experience-grouping h3 a {
+  color: var(--turpin-amber);
+  text-decoration: none;
+}
+
+.experience-grouping h3 a:hover {
+  text-decoration: underline;
+}
+
+.role {
+  margin: 0 0 1.25rem 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--turpin-amber-light);
+}
+
+.role:last-child {
+  margin-bottom: 0;
+}
+
+.role h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.date-range {
+  color: var(--secondary);
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+}
+
+.role-description,
+.education-description {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--content);
+}
+
+.role-description p:last-child,
+.education-description p:last-child {
+  margin-bottom: 0;
+}
+
+.role-extra {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--secondary);
+  margin: 0.5rem 0 0;
+}
+
+.featured-links,
+.education-list,
+.projects-list,
+.achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.featured-links li {
+  margin: 0.35rem 0;
+}
+
+.featured-links a,
+.education-cta a,
+.featured-cta a {
+  color: var(--turpin-amber);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.featured-links a:hover,
+.education-cta a:hover,
+.featured-cta a:hover {
+  text-decoration: underline;
+}
+
+.education-entry,
+.project-entry,
+.achievement-entry {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.career-image {
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+  margin: 0 0 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--turpin-border);
+  background: var(--turpin-cream);
+}
+
+.achievement-image {
+  max-width: 16rem;
+}
+
+.education-entry:last-child,
+.project-entry:last-child,
+.achievement-entry:last-child {
+  margin-bottom: 0;
+}
+
+.education-entry h3,
+.project-entry h3,
+.achievement-entry h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.achievement-entry h3 a {
+  color: var(--turpin-amber);
+  text-decoration: none;
+}
+
+.achievement-entry h3 a:hover {
+  text-decoration: underline;
+}
+
+.institution,
+.project-account,
+.grade {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  margin: 0.25rem 0;
+}
+
+.project-summary,
+.achievement-summary {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0.5rem 0;
+  color: var(--content);
+}
+
+.project-account a {
+  color: var(--turpin-amber);
+  text-decoration: none;
+}
+
+.project-account a:hover {
+  text-decoration: underline;
+}
+
+.projects-list .chip-list {
+  margin: 0.75rem 0;
+}
+
+.projects-list .chip-list .chip {
+  list-style: none;
+}
+
+.featured-cta {
+  margin: 0.75rem 0 0;
+}
+
+.education-cta {
+  margin: 0.75rem 0 0;
+}
+
+.related-orgs .chip-list {
+  margin-top: 0;
+}

@@ -17,7 +17,16 @@
                         <tr>
                             @foreach (var header in headers)
                             {
-                                <td>@GetValue(row, header)</td>
+                                <td>
+                                    @if (ShouldLinkRow(header, row, out var href))
+                                    {
+                                        <a href="@href">@GetValue(row, header)</a>
+                                    }
+                                    else
+                                    {
+                                        @GetValue(row, header)
+                                    }
+                                </td>
                             }
                         </tr>
                     }
@@ -35,6 +44,9 @@ else if (!Loading)
     [Parameter, EditorRequired] public IReadOnlyList<IReadOnlyDictionary<string, string>> Rows { get; set; } = [];
     [Parameter] public IReadOnlyList<string>? Columns { get; set; }
     [Parameter] public bool Loading { get; set; }
+    [Parameter] public string? RowLinkColumn { get; set; }
+    [Parameter] public string? RowLinkPathPrefix { get; set; }
+    [Parameter] public string? RowLinkIdColumn { get; set; }
 
     private IReadOnlyList<string> headers = [];
 
@@ -61,6 +73,26 @@ else if (!Loading)
     private static string GetValue(IReadOnlyDictionary<string, string> row, string header) =>
         row.TryGetValue(header, out var value) ? value : string.Empty;
 
+    private bool ShouldLinkRow(string header, IReadOnlyDictionary<string, string> row, out string href)
+    {
+        href = string.Empty;
+        if (string.IsNullOrWhiteSpace(RowLinkColumn)
+            || string.IsNullOrWhiteSpace(RowLinkPathPrefix)
+            || !string.Equals(header, RowLinkColumn, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var idColumn = string.IsNullOrWhiteSpace(RowLinkIdColumn) ? RowLinkColumn : RowLinkIdColumn;
+        if (!row.TryGetValue(idColumn, out var id) || string.IsNullOrWhiteSpace(id))
+        {
+            return false;
+        }
+
+        href = $"{RowLinkPathPrefix.TrimEnd('/')}/{id}";
+        return true;
+    }
+
     private static string FormatLabel(string column)
     {
         if (string.IsNullOrEmpty(column))
@@ -74,6 +106,8 @@ else if (!Loading)
             "accountId" => "Account ID",
             "dealId" => "Deal ID",
             "caseId" => "Case ID",
+            "projectId" => "Project ID",
+            "contactIds" => "Contact IDs",
             "firstName" => "First Name",
             "lastName" => "Last Name",
             "accountName" => "Account Name",
@@ -88,4 +122,4 @@ else if (!Loading)
         };
     }
 }
-
+

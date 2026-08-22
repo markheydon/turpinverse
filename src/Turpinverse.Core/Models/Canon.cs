@@ -10,4 +10,8 @@ public sealed record Canon
     public required ToneGuidelines ToneGuidelines { get; init; }
     public IReadOnlyList<Deal> Deals { get; init; } = [];
     public IReadOnlyList<Case> Cases { get; init; } = [];
+    public IReadOnlyList<Experience> Experience { get; init; } = [];
+    public IReadOnlyList<Education> Education { get; init; } = [];
+    public IReadOnlyList<Project> Projects { get; init; } = [];
+    public IReadOnlyList<Achievement> Achievements { get; init; } = [];
 }

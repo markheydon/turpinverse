@@ -12,7 +12,11 @@
     "aliases",
     "toneGuidelines",
     "deals",
-    "cases"
+    "cases",
+    "experience",
+    "education",
+    "projects",
+    "achievements"
   ],
   "properties": {
     "version": {
@@ -50,6 +54,22 @@
       "type": "array",
       "minItems": 15,
       "items": { "$ref": "#/$defs/Case" }
+    },
+    "experience": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Experience" }
+    },
+    "education": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Education" }
+    },
+    "projects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Project" }
+    },
+    "achievements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Achievement" }
     }
   },
   "$defs": {
@@ -57,6 +77,132 @@
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
       "maxLength": 64
+    },
+    "isoDateOrMonth": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$"
+    },
+    "FeaturedLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "maxLength": 80 },
+        "name": { "type": "string", "maxLength": 80 },
+        "icon": { "type": "string", "maxLength": 40 },
+        "tooltip": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "start", "description"],
+      "properties": {
+        "title": { "type": "string", "maxLength": 120 },
+        "start": { "$ref": "#/$defs/isoDateOrMonth" },
+        "end": { "$ref": "#/$defs/isoDateOrMonth" },
+        "displayRange": { "type": "string", "maxLength": 80 },
+        "description": { "type": "string" },
+        "extraInfo": { "type": "string", "maxLength": 400 },
+        "featuredLinks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/FeaturedLink" }
+        }
+      }
+    },
+    "Experience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "personaId", "organisationName", "roles"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "organisationId": { "$ref": "#/$defs/slug" },
+        "organisationName": { "type": "string", "maxLength": 80 },
+        "organisationUrl": { "type": "string", "minLength": 1 },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/Role" }
+        }
+      }
+    },
+    "Education": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "personaId", "title", "institutionName"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "maxLength": 160 },
+        "institutionName": { "type": "string", "maxLength": 120 },
+        "institutionUrl": { "type": "string", "minLength": 1 },
+        "organisationId": { "$ref": "#/$defs/slug" },
+        "start": { "$ref": "#/$defs/isoDateOrMonth" },
+        "end": { "$ref": "#/$defs/isoDateOrMonth" },
+        "displayRange": { "type": "string", "maxLength": 80 },
+        "grade": { "type": "string", "maxLength": 40 },
+        "description": { "type": "string" },
+        "featuredLink": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "summary",
+        "image",
+        "tags",
+        "links",
+        "organisationId",
+        "personaIds"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string" },
+        "image": { "type": "string", "minLength": 1 },
+        "tags": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "maxLength": 40 }
+        },
+        "links": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/FeaturedLink" }
+        },
+        "organisationId": { "$ref": "#/$defs/slug" },
+        "personaIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "featuredCta": { "$ref": "#/$defs/FeaturedLink" },
+        "featured": { "type": "boolean" }
+      }
+    },
+    "Achievement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "summary", "personaIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string" },
+        "url": { "type": "string", "minLength": 1 },
+        "image": { "type": "string", "minLength": 1 },
+        "personaIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        }
+      }
     },
     "Persona": {
       "type": "object",

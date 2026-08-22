@@ -65,7 +65,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SITE_DIR="$REPO_ROOT/site"
 PUBLIC_PATH="$SITE_DIR/public"
-THEME_MARKER="$SITE_DIR/themes/PaperMod/layouts/_partials/head.html"
 HUGO_IMAGE="docker.io/hugomods/hugo:latest"
 NGINX_IMAGE="docker.io/library/nginx:alpine"
 
@@ -108,28 +107,6 @@ volume_mount() {
     fi
 }
 
-initialize_hugo_theme_submodule() {
-    if [[ -f "$THEME_MARKER" ]]; then
-        return
-    fi
-
-    echo "PaperMod theme submodule is missing; initialising..." >&2
-    if ! command -v git >/dev/null 2>&1; then
-        echo "error: PaperMod theme not found at site/themes/PaperMod. Install Git and run: git submodule update --init --recursive" >&2
-        exit 1
-    fi
-
-    if ! (cd "$REPO_ROOT" && git submodule update --init --recursive site/themes/PaperMod); then
-        echo "error: failed to initialise PaperMod theme submodule. Run from the repo root: git submodule update --init --recursive" >&2
-        exit 1
-    fi
-
-    if [[ ! -f "$THEME_MARKER" ]]; then
-        echo "error: PaperMod theme still missing after submodule init. Run: git submodule update --init --recursive" >&2
-        exit 1
-    fi
-}
-
 generate_hugo_content() {
     echo "Generating Hugo content from canon JSON..."
     if ! (cd "$REPO_ROOT" && dotnet run --project src/Turpinverse.Tools.GenerateHugoContent); then
@@ -159,7 +136,6 @@ if [[ ! -d "$SITE_DIR" ]]; then
 fi
 
 resolve_runtime
-initialize_hugo_theme_submodule
 
 case "$COMMAND" in
     build)

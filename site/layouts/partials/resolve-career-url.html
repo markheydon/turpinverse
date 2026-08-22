@@ -1,0 +1,6 @@
+{{- $url := . -}}
+{{- with findRESubmatch `^https://([a-z0-9-]+)\.turpinverse\.uk` $url -}}
+  {{- printf "/organisations/%s/" (index . 1) | relURL -}}
+{{- else -}}
+  {{- $url -}}
+{{- end -}}

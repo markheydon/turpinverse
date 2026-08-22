@@ -1,0 +1,66 @@
+[
+  {
+    "id": "dick-turpin-turpin-enterprises",
+    "personaId": "dick-turpin",
+    "organisationId": "turpin-enterprises",
+    "organisationName": "Turpin Enterprises",
+    "organisationUrl": "https://turpin-enterprises.turpinverse.uk",
+    "roles": [
+      {
+        "title": "Chief Corridor Strategy Officer",
+        "start": "2022-01",
+        "description": "Leads enterprise route optimisation, corridor licensing, and strategic asset redistribution across the Home Counties. Owns the executive dashboard for discretionary travel approvals.",
+        "featuredLinks": [
+          {
+            "label": "Corridor strategy brief",
+            "url": "https://turpin-enterprises.turpinverse.uk/strategy",
+            "tooltip": "Internal strategy overview — demo access only"
+          }
+        ]
+      },
+      {
+        "title": "Regional Operations Lead",
+        "start": "2018-03",
+        "end": "2021-06",
+        "description": "Ran field operations for Essex and Hertfordshire procurement lanes. Introduced KPIs for acquisition velocity and stakeholder discretion."
+      },
+      {
+        "title": "Consultant, Corridor Advisory",
+        "start": "2015-09",
+        "end": "2017-12",
+        "description": "Returned after a structured sabbatical to rebuild the Yorkshire corridor practice. Rehired into a broader remit covering identity lifecycle touchpoints."
+      }
+    ]
+  },
+  {
+    "id": "dick-turpin-essex-gang",
+    "personaId": "dick-turpin",
+    "organisationId": "essex-gang",
+    "organisationName": "Essex Solutions Group",
+    "organisationUrl": "https://essex-gang.turpinverse.uk",
+    "roles": [
+      {
+        "title": "Director of Integrated Procurement",
+        "start": "2012-04",
+        "end": "2015-08",
+        "description": "Oversaw rural procurement networks and merger integration after the Gregory Gang consolidation. Standardised corridor handoff playbooks across member cells.",
+        "extraInfo": "Board minutes note a preference for 'terms-flexible' contracting language."
+      }
+    ]
+  },
+  {
+    "id": "dick-turpin-king-equine",
+    "personaId": "dick-turpin",
+    "organisationId": "king-equine-trading",
+    "organisationName": "King Equine Partners",
+    "organisationUrl": "https://king-equine-trading.turpinverse.uk",
+    "roles": [
+      {
+        "title": "Fleet Acquisition Specialist",
+        "start": "2009-01",
+        "end": "2012-03",
+        "description": "Managed rapid equine acquisition programmes and disputed mileage reconciliation for corridor clients. Partnered with Matthew King on high-velocity trading windows."
+      }
+    ]
+  }
+]

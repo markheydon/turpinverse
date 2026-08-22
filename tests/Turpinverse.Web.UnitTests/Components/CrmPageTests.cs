@@ -27,6 +27,7 @@ public class HomePageTests : BunitContext
         Assert.Contains("Canon Valid", cut.Markup);
         Assert.Contains("Accounts", cut.Markup);
         Assert.Contains("Cases", cut.Markup);
+        Assert.Contains("Projects", cut.Markup);
     }
 
     [Fact]
@@ -79,10 +80,15 @@ public class HomePageTests : BunitContext
                 Principles = [],
                 Examples = [],
                 ForbiddenPatterns = []
-            }
+            },
+            Experience = [],
+            Education = [],
+            Projects = [],
+            Achievements = []
         };
 }
 
+[Trait("Category", "CareerPortfolio")]
 public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
 {
     protected override string DatasetType => "contacts";
@@ -94,6 +100,14 @@ public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
         Assert.Contains("Contacts", cut.Markup);
         Assert.Contains("Download CSV", cut.Markup);
         Assert.Contains("First Name", cut.Markup);
+    }
+
+    [Fact]
+    public void ContactsPage_LinksFirstNameToContactDetail()
+    {
+        var cut = RenderPage();
+        Assert.Contains("href=\"/contacts/p1\"", cut.Markup);
+        Assert.Contains(">Test</a>", cut.Markup);
     }
 
     [Fact]
@@ -149,6 +163,30 @@ public class CasesPageTests : CrmEntityPageTestBase<Cases>
     }
 }
 
+public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
+{
+    protected override string DatasetType => "projects";
+
+    [Fact]
+    public void ProjectsPage_RendersTableHeaders()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Projects", cut.Markup);
+        Assert.Contains("Title", cut.Markup);
+        Assert.Contains("Account ID", cut.Markup);
+        Assert.Contains("Black Bess Route Optimiser", cut.Markup);
+    }
+
+    [Fact]
+    public void ProjectsPage_ShowsErrorWhenPreviewFails()
+    {
+        var cut = RenderPage(exportService => exportService
+            .PreviewAsync("projects", 100, Arg.Any<CancellationToken>())
+            .ThrowsAsync(new InvalidOperationException("preview failed")));
+        Assert.Contains("Failed to load projects data.", cut.Markup);
+    }
+}
+
 public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : IComponent
 {
     protected CrmEntityPageTestBase()
@@ -170,6 +208,8 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
             .Returns(CrmTestData.CreatePreviewRows("deals"));
         exportService.PreviewAsync("cases", 100, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("cases"));
+        exportService.PreviewAsync("projects", 100, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("projects"));
         configure?.Invoke(exportService);
         Services.AddSingleton(exportService);
         return Render<TPage>();
@@ -185,7 +225,8 @@ internal static class CrmTestData
                 new ExportDatasetInfo("accounts", "turpinverse-accounts.csv", 10, ["accountId"]),
                 new ExportDatasetInfo("contacts", "turpinverse-contacts.csv", 25, ["contactId"]),
                 new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"]),
-                new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"])
+                new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"]),
+                new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>
@@ -248,6 +289,19 @@ internal static class CrmTestData
                     ["priority"] = "high",
                     ["contactId"] = "p1",
                     ["accountId"] = "org1"
+                }
+            ],
+            "projects" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["projectId"] = "black-bess-route-optimiser",
+                    ["title"] = "Black Bess Route Optimiser",
+                    ["summary"] = "Corridor planning suite",
+                    ["accountId"] = "turpin-enterprises",
+                    ["contactIds"] = "dick-turpin; ned-palmer",
+                    ["tags"] = "logistics; corridor",
+                    ["featured"] = "true"
                 }
             ],
             _ => []

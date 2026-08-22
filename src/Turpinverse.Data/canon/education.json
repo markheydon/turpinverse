@@ -1,0 +1,28 @@
+[
+  {
+    "id": "dick-turpin-mba-corridor",
+    "personaId": "dick-turpin",
+    "title": "MBA, Strategic Corridor Management",
+    "institutionName": "Open University Business School",
+    "institutionUrl": "https://www.open.ac.uk/business",
+    "start": "2016-09",
+    "end": "2018-06",
+    "grade": "Distinction",
+    "description": "Dissertation on discretionary logistics and reputation risk in regulated transport corridors. Coursework framed legend-as-business case studies for client workshops.",
+    "featuredLink": {
+      "name": "View programme",
+      "url": "https://www.open.ac.uk/business/mba"
+    }
+  },
+  {
+    "id": "dick-turpin-bsc-operations",
+    "personaId": "dick-turpin",
+    "title": "BSc Operations & Supply Chain",
+    "institutionName": "University of Hertfordshire",
+    "institutionUrl": "https://www.herts.ac.uk",
+    "start": "2005-09",
+    "end": "2008-06",
+    "grade": "2:1",
+    "description": "Focused on last-mile redistribution, inventory variance, and stakeholder communication under ambiguous regulatory conditions."
+  }
+]

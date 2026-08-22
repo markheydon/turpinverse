@@ -16,6 +16,9 @@ public static class ExportMapper
     public static IReadOnlyList<CaseExport> MapCases(Canon canon) =>
         canon.Cases.Select(MapCase).ToList();
 
+    public static IReadOnlyList<ProjectExport> MapProjects(Canon canon) =>
+        canon.Projects.Select(MapProject).ToList();
+
     public static ContactExport MapContact(Persona persona)
     {
         var (firstName, lastName) = SplitName(persona.DisplayName);
@@ -70,6 +73,18 @@ public static class ExportMapper
             ContactId = caseRecord.ContactId,
             AccountId = caseRecord.AccountId,
             RelatedEventId = caseRecord.RelatedEventId ?? string.Empty
+        };
+
+    public static ProjectExport MapProject(Project project) =>
+        new()
+        {
+            ProjectId = project.Id,
+            Title = project.Title,
+            Summary = project.Summary,
+            AccountId = project.OrganisationId,
+            ContactIds = string.Join("; ", project.PersonaIds),
+            Tags = string.Join("; ", project.Tags),
+            Featured = project.Featured == true ? "true" : "false"
         };
 
     private static (string FirstName, string LastName) SplitName(string displayName)

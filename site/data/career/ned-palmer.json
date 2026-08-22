@@ -1,0 +1,52 @@
+{
+  "experience": [],
+  "education": [],
+  "projects": [
+    {
+      "id": "black-bess-route-optimiser",
+      "title": "Black Bess Route Optimiser",
+      "summary": "Real-time corridor planning suite for high-velocity equine logistics. Reduces discretionary delay windows across Epping Forest lanes.",
+      "image": "/images/projects/black-bess-route-optimiser.svg",
+      "tags": [
+        "logistics",
+        "corridor",
+        "SaaS"
+      ],
+      "links": [
+        {
+          "url": "/organisations/turpin-enterprises/",
+          "label": "Product overview",
+          "name": null,
+          "icon": null,
+          "tooltip": null
+        }
+      ],
+      "organisationId": "turpin-enterprises",
+      "personaIds": [
+        "dick-turpin",
+        "ned-palmer"
+      ],
+      "featuredCta": {
+        "url": "/organisations/turpin-enterprises/",
+        "label": null,
+        "name": "Request demo",
+        "icon": null,
+        "tooltip": null
+      },
+      "featured": true
+    }
+  ],
+  "achievements": [
+    {
+      "id": "corridor-innovation-award-2024",
+      "title": "Corridor Innovation Award 2024",
+      "summary": "Recognised for enterprise route optimisation and discretionary travel governance across the Home Counties corridor network.",
+      "url": "/organisations/turpin-enterprises/",
+      "image": "/images/achievements/corridor-innovation-2024.svg",
+      "personaIds": [
+        "dick-turpin",
+        "ned-palmer"
+      ]
+    }
+  ]
+}

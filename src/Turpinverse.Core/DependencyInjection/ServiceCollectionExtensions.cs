@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turpinverse.Core.Abstractions;
+using Turpinverse.Core.Career;
 using Turpinverse.Core.Export;
 using Turpinverse.Core.Hugo;
 using Turpinverse.Core.Validation;
@@ -11,6 +12,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddTurpinverseCore(this IServiceCollection services)
     {
         services.AddSingleton<CanonValidator>();
+        services.AddSingleton<CareerPortfolioPresenter>();
         services.AddSingleton<ToneValidator>();
         services.AddSingleton<IExportService, CsvExportService>();
         services.AddSingleton<IHugoContentGenerator, HugoContentGenerator>();

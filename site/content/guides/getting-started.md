@@ -16,11 +16,7 @@ All data is generated from a single canon dataset in `src/Turpinverse.Data/canon
 - Node.js 20+ (for Tailwind CSS build in the web app)
 - Hugo Extended **or** Docker/Podman (for building this documentation site — see [site README](../../README.md))
 
-After cloning, initialise the PaperMod theme submodule:
-
-```powershell
-git submodule update --init --recursive
-```
+Hugo fetches the PaperMod theme via modules on first build; no submodule setup is required.
 
 ## Quick Start
 

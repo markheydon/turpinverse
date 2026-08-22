@@ -28,6 +28,10 @@ public sealed class JsonCanonRepository : ICanonRepository
             ?? throw new InvalidOperationException("tone-guidelines.json is required.");
         var deals = await ReadArrayAsync<Deal>("deals.json", cancellationToken);
         var cases = await ReadArrayAsync<Case>("cases.json", cancellationToken);
+        var experience = await ReadArrayAsync<Experience>("experience.json", cancellationToken);
+        var education = await ReadArrayAsync<Education>("education.json", cancellationToken);
+        var projects = await ReadArrayAsync<Project>("projects.json", cancellationToken);
+        var achievements = await ReadArrayAsync<Achievement>("achievements.json", cancellationToken);
 
         return new Canon
         {
@@ -38,7 +42,11 @@ public sealed class JsonCanonRepository : ICanonRepository
             Aliases = aliases,
             ToneGuidelines = toneGuidelines,
             Deals = deals,
-            Cases = cases
+            Cases = cases,
+            Experience = experience,
+            Education = education,
+            Projects = projects,
+            Achievements = achievements
         };
     }
 

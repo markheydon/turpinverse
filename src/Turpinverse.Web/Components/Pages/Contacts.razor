@@ -3,7 +3,11 @@
 
 <PageTitle>Contacts - Turpinverse</PageTitle>
 
-<CrmEntityPage DatasetType="contacts" Columns="@ContactsColumns" />
+<CrmEntityPage DatasetType="contacts"
+               Columns="@ContactsColumns"
+               RowLinkColumn="firstName"
+               RowLinkIdColumn="contactId"
+               RowLinkPathPrefix="/contacts" />
 
 @code {
     private static readonly string[] ContactsColumns =

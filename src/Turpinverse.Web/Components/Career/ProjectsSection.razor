@@ -1,0 +1,55 @@
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+
+@if (Items.Count > 0)
+{
+    <section class="career-section projects-section">
+        <h2>Projects</h2>
+        <ul class="projects-list">
+            @foreach (var project in Items)
+            {
+                <li class="project-entry">
+                    @if (!string.IsNullOrWhiteSpace(project.Image))
+                    {
+                        <img class="career-image project-image" src="@project.Image" alt="@project.Title" loading="lazy" width="640" height="360" />
+                    }
+                    <h3>@project.Title</h3>
+                    <p class="project-summary">@project.Summary</p>
+                    <p class="project-account">
+                        Account: <a href="/organisations/@project.OrganisationId">@project.OrganisationId</a>
+                    </p>
+                    @if (project.Tags.Count > 0)
+                    {
+                        <ul class="chip-list">
+                            @foreach (var tag in project.Tags)
+                            {
+                                <li class="chip">@tag</li>
+                            }
+                        </ul>
+                    }
+                    @if (project.Links.Count > 0)
+                    {
+                        <ul class="featured-links">
+                            @foreach (var link in project.Links)
+                            {
+                                <li>
+                                    <a href="@CareerLinkResolver.ResolveForPublication(link.Url)">@(link.Label ?? link.Name ?? (string.IsNullOrWhiteSpace(link.Icon) ? "Link" : "View details"))</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    @if (project.FeaturedCta is { } cta)
+                    {
+                        <p class="featured-cta">
+                            <a href="@CareerLinkResolver.ResolveForPublication(cta.Url)">@(cta.Name ?? cta.Label ?? "View project")</a>
+                        </p>
+                    }
+                </li>
+            }
+        </ul>
+    </section>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<Project> Items { get; set; } = [];
+}

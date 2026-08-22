@@ -1,0 +1,13 @@
+@page "/projects"
+@rendermode InteractiveServer
+
+<PageTitle>Projects - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="projects" Columns="@ProjectsColumns" />
+
+@code {
+    private static readonly string[] ProjectsColumns =
+    [
+        "title", "accountId", "contactIds", "tags", "featured"
+    ];
+}

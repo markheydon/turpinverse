@@ -13,13 +13,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.164.0
+      GO_VERSION: 1.26.5
+      HUGO_VERSION: 0.165.0
+      TZ: Europe/London
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          submodules: recursive
           fetch-depth: 0
+          lfs: false
 
       - name: Setup Pages
         if: inputs.deploy
@@ -31,6 +33,16 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Create a local tools directory
+        run: mkdir -p "${HOME}/.local"
+
+      - name: Install Go
+        if: hashFiles('site/go.mod') != ''
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: site/go.sum
+
       - name: Install Hugo
         run: |
           echo "Installing Hugo ${HUGO_VERSION} (extended)..."
@@ -41,8 +53,20 @@ jobs:
 
       - name: Log tool versions
         run: |
+          echo "Logging tool versions..."
           dotnet --version
-          hugo version
+          command -v go &> /dev/null && echo "Go: $(go version)" || echo "Go: not installed"
+          command -v hugo &> /dev/null && echo "Hugo: $(hugo version)" || echo "Hugo: not installed"
+
+      - name: Configure Git
+        run: git config --global core.quotepath false
+
+      - name: Fetch full Git history
+        run: |
+          if [[ $(git rev-parse --is-shallow-repository) == true ]]; then
+            echo "Fetching full Git history..."
+            git fetch --unshallow
+          fi
 
       - name: Validate canon
         run: dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation" --configuration Release
@@ -50,19 +74,41 @@ jobs:
       - name: Generate Hugo content
         run: dotnet run --project src/Turpinverse.Tools.GenerateHugoContent --configuration Release
 
+      - name: Cache restore
+        id: cache-restore
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ runner.temp }}/.cache/hugo
+          key: hugo-${{ github.run_id }}
+          restore-keys: hugo-
+
       - name: Build
         working-directory: site
         run: |
           if [ "${{ inputs.deploy }}" = "true" ]; then
-            hugo build --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+            hugo build \
+              --gc \
+              --minify \
+              --baseURL "${{ steps.pages.outputs.base_url }}/" \
+              --cacheDir "${{ runner.temp }}/.cache/hugo"
           else
-            hugo build --gc --minify
+            hugo build \
+              --gc \
+              --minify \
+              --cacheDir "${{ runner.temp }}/.cache/hugo"
           fi
+
+      - name: Cache save
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ runner.temp }}/.cache/hugo
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
 
       - name: Upload artifact
         if: inputs.deploy
         uses: actions/upload-pages-artifact@v5
         with:
+          include-hidden-files: false
           path: site/public
 
   deploy:

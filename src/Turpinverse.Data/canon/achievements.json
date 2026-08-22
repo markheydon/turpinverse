@@ -1,0 +1,29 @@
+[
+  {
+    "id": "corridor-innovation-award-2024",
+    "title": "Corridor Innovation Award 2024",
+    "summary": "Recognised for enterprise route optimisation and discretionary travel governance across the Home Counties corridor network.",
+    "url": "https://turpin-enterprises.turpinverse.uk/awards/corridor-innovation-2024",
+    "image": "/images/achievements/corridor-innovation-2024.svg",
+    "personaIds": ["dick-turpin", "ned-palmer"]
+  },
+  {
+    "id": "essex-merger-integration-excellence",
+    "title": "Essex Merger Integration Excellence",
+    "summary": "Citation for post-merger procurement standardisation after the Gregory Gang consolidation programme.",
+    "personaIds": ["dick-turpin"]
+  },
+  {
+    "id": "equine-velocity-certification",
+    "title": "Equine Velocity Certification",
+    "summary": "Industry credential for rapid fleet acquisition programmes delivered with King Equine Partners.",
+    "url": "https://king-equine-trading.turpinverse.uk/certification",
+    "personaIds": ["dick-turpin"]
+  },
+  {
+    "id": "rose-crown-hospitality-patron",
+    "title": "Rose & Crown Patron Programme",
+    "summary": "Long-standing patron recognition for discretion-forward hospitality partnerships along the Hempstead corridor.",
+    "personaIds": ["dick-turpin"]
+  }
+]

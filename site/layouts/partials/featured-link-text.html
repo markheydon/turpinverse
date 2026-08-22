@@ -1,0 +1,12 @@
+{{- /*
+  Human-readable link text for FeaturedLink objects (label, name, or icon-only fallback).
+*/ -}}
+{{- if .label -}}
+  {{- .label -}}
+{{- else if .name -}}
+  {{- .name -}}
+{{- else if .icon -}}
+  View details
+{{- else -}}
+  Link
+{{- end -}}
