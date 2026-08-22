@@ -7,13 +7,15 @@
 ## Summary
 
 Build an open-source Turpinverse platform comprising two deliverables: (1) a Hugo
-static site published to GitHub Pages from `docs/`, presenting the canon universe with
-hyperlinked personas, organisations, timelines, and org charts; and (2) a .NET 10 Blazor
-Server application (`Turpinverse`) orchestrated by .NET Aspire that exports CRM-ready
-sample datasets (CSV initially) derived from the same canonical data source. Canon data
-lives in structured JSON under `src/Turpinverse.Data/` and is consumed by both the Hugo
-content generator and the Blazor export engine, ensuring consistency across documentation
-and demo data.
+static site published to GitHub Pages, showcasing human-readable demo data — the
+browsable public reference at turpinverse.uk; and (2) a .NET 10 Blazor Server
+application (`Turpinverse`) orchestrated by .NET Aspire for interactive explore,
+filter, and CSV download of CRM-ready sample datasets derived from the same canonical
+data source. Canon data lives in structured JSON under `src/Turpinverse.Data/` and is
+consumed by both the Hugo content generator and the Blazor export engine, ensuring
+consistency across the showcase and import surfaces.
+
+Channel responsibilities are defined in [`docs/product-surfaces.md`](../../docs/product-surfaces.md).
 
 ## Technical Context
 

@@ -1,24 +1,12 @@
 <!--
 Sync Impact Report
-- Version change: 1.1.0 → 2.0.0
-- Modified principles:
-  - I. Spec-Driven Development → I. Spec-Driven Traceability
-  - II. Incremental Delivery → II. Incremental Independence
-  - III. Test-First → III. Verifiable Testability
-  - IV. Simplicity & Justified Complexity → IV. Separation of Concerns (new)
-  - V. Documentation as Contract → V. Explicit Error Handling (new)
-  - (added) VI. Security by Design
-  - (added) VII. Justified Complexity
-  - (added) VIII. Documentation Contract
-- Added sections: Compliance Gates (verifiable yes/no checks)
-- Removed sections: Technology & Workflow Constraints, Development Workflow
-- Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ updated (yes/no Constitution Check gates)
-  - .specify/templates/spec-template.md ✅ updated (security & error-handling sections)
-  - .specify/templates/tasks-template.md ✅ aligned (traceability and testability notes)
-  - .specify/templates/checklist-template.md ✅ aligned (no constitution-specific changes)
-  - .specify/templates/commands/*.md ⚠ not present (N/A)
-  - README.md ✅ aligned (tech stack and testing standards remain in README, not constitution)
+- Version change: 2.0.0 → 2.1.0
+- Modified principles: None (titles unchanged)
+- Added principles:
+  - IX. Human-Facing Channel Charter
+- Added sections: None
+- Removed sections: None
+- Compliance Gates: added Channel charter row
 - Follow-up TODOs: None
 -->
 
@@ -100,6 +88,27 @@ code—never leave them out of sync.
 **Rationale**: Stale documentation is worse than none; it erodes trust and
 blocks onboarding.
 
+### IX. Human-Facing Channel Charter
+
+Human-facing delivery channels MUST keep distinct purposes:
+
+- The public Hugo site is the browsable reference that showcases human-readable
+  demo data for reuse (CRM samples, presentations/docs, and amusement).
+  Reader-facing pages MUST NOT present technical identifiers or export plumbing
+  as primary content.
+- The Blazor application is the interactive explore / filter / download surface
+  for importing demo data into external systems. Technical identifiers and
+  machine-oriented formats belong here.
+
+Specs and plans that publish or reshape human-facing content MUST state which
+channel(s) they affect and how the change respects this split. Shared canon
+remains the single source of truth for both. Operational detail lives in
+`docs/product-surfaces.md`.
+
+**Rationale**: Without an explicit channel charter, features drift toward
+duplicate showcase UIs or an incomplete public site that under-represents the
+dataset.
+
 ## Compliance Gates
 
 Every `plan.md` MUST include a Constitution Check with a yes/no result for each
@@ -118,6 +127,7 @@ Every pull request MUST be reviewable against these gates:
 | Security | Are threats and access controls defined for sensitive or exposed features? |
 | Complexity | Is added complexity justified with a rejected simpler alternative? |
 | Documentation | Do specs, contracts, and quickstart match the implementation? |
+| Channel charter | Do human-facing changes name affected channel(s) and respect Hugo showcase vs Blazor explore/export? |
 
 Technology choices, libraries, frameworks, and conventions belong in
 `README.md`, `docs/tech-stack.md`, guidelines, or decision logs—not in this
@@ -137,4 +147,4 @@ templates.
 All pull requests and plan reviews MUST verify compliance with active
 principles. Complexity without documented justification is grounds for rejection.
 
-**Version**: 2.0.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-07-22
+**Version**: 2.1.0 | **Ratified**: 2026-07-18 | **Last Amended**: 2026-08-22

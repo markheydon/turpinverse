@@ -6,9 +6,18 @@ title: "Getting Started"
 
 # Getting Started with Turpinverse
 
-Turpinverse is an open-source project that provides a fictional universe (documented on this site) and tooling to export **CRM-style sample data** from it — contacts, accounts, deals, and cases suitable for product demos.
+Turpinverse is an open-source project that provides a fictional universe and **CRM-style sample data** derived from it — contacts, accounts, deals, and cases suitable for product demos, presentations, and import into external systems.
 
-All data is generated from a single canon dataset in `src/Turpinverse.Data/canon/`. This site is the human-readable view of that canon; the Blazor app is the export interface.
+All data comes from a single canon dataset in `src/Turpinverse.Data/canon/`.
+
+## Two ways to use Turpinverse
+
+| Channel | What it is for |
+|---------|----------------|
+| **This site (Hugo)** | Browse and read human-readable demo data — personas, organisations, timeline, career and portfolio. No export plumbing. |
+| **Blazor app** | Explore datasets interactively, preview records, and download CSV for import into a CRM or similar tool. |
+
+Run the Blazor app when you need importable files; stay on this site when you want to read the universe.
 
 ## Prerequisites
 
@@ -27,13 +36,22 @@ dotnet test --filter "Category=CanonValidation"
 dotnet run --project src/Turpinverse.AppHost
 ```
 
-The Aspire AppHost starts the Blazor web app. Navigate to `/export` for the CRM export dashboard.
+The Aspire AppHost starts the Blazor web app. Open the URL shown in the Aspire dashboard (or the app endpoint) and use:
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Overview and dataset summary |
+| `/contacts` | Contacts preview and CSV download |
+| `/accounts` | Accounts preview and CSV download |
+| `/deals` | Deals preview and CSV download |
+| `/cases` | Cases preview and CSV download |
+| `/contacts/{id}` | Contact detail (including career and portfolio where present) |
 
 ## Export CRM Data
 
 1. Start the app via Aspire (`dotnet run --project src/Turpinverse.AppHost`)
-2. Open the export dashboard at `/export`
-3. Download contacts, accounts, deals, and cases as CSV files
+2. Open `/` or a dataset page (`/contacts`, `/accounts`, `/deals`, `/cases`)
+3. Use **Download CSV** on any dataset page
 
 All exports are generated at runtime from the canonical JSON dataset — no separate database required.
 
@@ -63,6 +81,6 @@ See [site/README.md](../../README.md) for troubleshooting.
 | Path | Purpose |
 |------|---------|
 | `src/Turpinverse.Data/canon/` | Canon JSON — single source of truth |
-| `src/Turpinverse.Web/` | Blazor Server app with CSV export UI |
-| `site/` | Hugo documentation site (this site) |
-| `specs/001-turpinverse-universe/` | Feature specification and design artifacts |
+| `src/Turpinverse.Web/` | Blazor Server app — explore, preview, and download |
+| `site/` | Hugo public reference site (this site) |
+| `docs/` | Product and developer documentation |

@@ -1,5 +1,10 @@
 # Turpinverse documentation site (Hugo)
 
+The public Hugo site is Turpinverse's **browsable reference**: human-readable personas,
+organisations, timeline, and career/portfolio content for anyone who wants to read or
+reuse the fiction without running the export app. For interactive explore/filter/download,
+see the Blazor app described in [docs/product-surfaces.md](../docs/product-surfaces.md).
+
 Hugo source lives here. Built output goes to `public/` (gitignored; deployed via GitHub Actions to [turpinverse.uk](https://turpinverse.uk)).
 
 You do **not** need Hugo installed locally if you use Docker or Podman.

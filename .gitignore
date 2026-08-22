@@ -56,5 +56,5 @@ coverage/
 *.coverage
 *.coveragexml
 
-## Docs (generated locally; CI commits to docs/)
-docs/
+## Hugo site build output (local preview)
+site/public/

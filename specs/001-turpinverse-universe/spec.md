@@ -21,6 +21,20 @@ These conventions govern all Turpinverse content. They take precedence over hist
 7. **Victorian myth is fair game** — Romanticised additions (Black Bess overnight ride, Ainsworth romance) are in-universe marketing lore, not errors.
 8. **Euphemism over explicitness** — Prefer corporate jargon ("rapid asset redistribution", "corridor optimisation") over overt criminal language.
 
+## Publication surfaces
+
+Turpinverse publishes through two channels with distinct jobs. Detail lives in
+[`docs/product-surfaces.md`](../../docs/product-surfaces.md).
+
+| Surface | Responsibility |
+|---------|----------------|
+| **Hugo (public reference site)** | Browsable showcase of human-readable demo data; omit technical IDs from reader-facing copy |
+| **Blazor (interactive export app)** | Explore, preview, filter (as built), and download importable datasets (CSV) |
+
+Person-level narrative content (e.g. career and portfolio) may appear on both channels:
+Hugo for reading, Blazor contact detail for exploration ahead of export. Same data,
+different channel purpose.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Establish the Turpinverse Canon (Priority: P1)

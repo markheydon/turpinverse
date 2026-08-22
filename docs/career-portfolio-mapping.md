@@ -1,164 +1,79 @@
-# Career and portfolio field mapping
+# Career and portfolio mapping
 
-Developer reference for how generic profile/resume fields map onto Turpinverse canon
-entities and publication surfaces. **Source of truth is canon JSON** under
-`src/Turpinverse.Data/canon/` — not Hugo `params`, theme config, or Blazor hard-coded
-copy.
+Turpinverse stores **generic** career and portfolio entities in canon JSON. They are first-class domain records, not a copy of any one personal-site theme or CMS schema.
 
-Related spec: `specs/003-career-portfolio-data/`. Runtime schema:
-`specs/001-turpinverse-universe/contracts/canon-schema.json`.
+This note shows how those entities can be **projected** onto a typical personal-site or profile layout (experience, education, projects, achievements). The projection is illustrative — Turpinverse remains the source of truth.
 
-## Canon files and entities
+Canon files involved:
 
-| Canon file | Entity | Typical profile section |
-|------------|--------|-------------------------|
-| `experience.json` | Experience (grouping) + nested Role | Work history / employment |
-| `education.json` | Education | Education / qualifications |
-| `projects.json` | Project (shared catalog) | Portfolio / projects |
-| `achievements.json` | Achievement (shared catalog) | Awards, certifications, highlights |
+| File | Entity |
+|------|--------|
+| `experience.json` | Work history grouped by employer |
+| `education.json` | Schools and programmes |
+| `projects.json` | Shared project catalog (many personas per project) |
+| `achievements.json` | Shared achievement catalog (many personas per achievement) |
 
-Contacts and accounts CSV exports are unchanged. Career data is authored canon, loaded
-by `JsonCanonRepository`, validated by `CanonValidator` (VR-020–VR-027), ordered by
-`CareerPortfolioPresenter` (FR-015), and projected to Hugo and Blazor.
+## Experience → “Work” / “Experience” section
 
-## Field mapping
+| Turpinverse field | Typical profile slot |
+|-------------------|----------------------|
+| `organisationName` | Company name heading |
+| `organisationUrl` | Company link |
+| `organisationId` (resolved) | Link to organisation page in Turpinverse |
+| `roles[].title` | Job title |
+| `roles[].start` / `roles[].end` | Date range |
+| `roles[].description` | Role summary |
+| `roles[].featuredLinks` | Optional links or badges on a role |
 
-### Experience grouping → employer block
+One `Experience` record = one employer grouping. Multiple roles at the same employer (including rehire) live under `roles[]` on a single record.
 
-| Generic field | Canon field | Notes |
-|---------------|-------------|-------|
-| Company name | `organisationName` | Required display name |
-| Company URL | `organisationUrl` | Optional when no canon org page |
-| CRM account link | `organisationId` | Optional; must resolve to `Organisation.id` |
-| Person | `personaId` | Must resolve to `Persona.id` |
-| Stable key | `id` | Slug; unique among experience rows |
-| Multiple jobs at same employer | `roles[]` | Rehire = another role, not a second grouping |
+## Education → “Education” section
 
-One grouping per persona per organisation key (`organisationId` or normalised
-`organisationName`). Duplicate keys fail VR-025.
+| Turpinverse field | Typical profile slot |
+|-------------------|----------------------|
+| `title` | Degree or programme name |
+| `institutionName` | School name |
+| `institutionUrl` | School link |
+| `organisationId` (when set) | Link to Turpinverse organisation |
+| `start` / `end` / `displayRange` | Dates |
+| `grade` | Grade or classification |
+| `description` | Programme summary |
+| `featuredLink` | Optional CTA (e.g. certificate link) |
 
-### Role → job within employer
+## Projects → “Projects” section
 
-| Generic field | Canon field | Notes |
-|---------------|-------------|-------|
-| Job title | `title` | Required |
-| Start date | `start` | `YYYY-MM` or `YYYY-MM-DD` |
-| End date | `end` | Omit for current role |
-| Display range | `displayRange` | Optional human override of structured dates |
-| Description | `description` | Markdown allowed |
-| Tooltip / extra line | `extraInfo` | Optional |
-| Related links | `featuredLinks[]` | `FeaturedLink` objects |
+| Turpinverse field | Typical profile slot |
+|-------------------|----------------------|
+| `title` | Project name |
+| `summary` | Short description |
+| `image` | Thumbnail or hero image |
+| `tags` | Tech or topic tags |
+| `links` | Demo, repo, or case-study links |
+| `featuredCta` | Primary call-to-action |
+| `organisationId` | Sponsoring company (CRM account) |
+| `personaIds` | Contributors or owners |
 
-### Education → qualification row
+Projects are a **shared catalog**: filter by `personaIds` to show only projects for a given person.
 
-| Generic field | Canon field | Notes |
-|---------------|-------------|-------|
-| Degree / programme | `title` | Required |
-| Institution | `institutionName` | Required |
-| Institution URL | `institutionUrl` | Optional |
-| CRM org link | `organisationId` | Optional |
-| Dates | `start`, `end`, `displayRange` | Same formats as Role |
-| Grade / GPA | `grade` | Optional |
-| Description | `description` | Markdown allowed |
-| CTA link | `featuredLink` | Single `FeaturedLink` |
+## Achievements → “Achievements” / “Awards” section
 
-### Project → portfolio item
+| Turpinverse field | Typical profile slot |
+|-------------------|----------------------|
+| `title` | Award or milestone name |
+| `summary` | Description |
+| `url` | External link |
+| `image` | Badge or illustration |
+| `personaIds` | Recipients |
 
-| Generic field | Canon field | Notes |
-|---------------|-------------|-------|
-| Title | `title` | Required |
-| Summary | `summary` | Required |
-| Thumbnail | `image` | Path or URL |
-| Tags / badges | `tags[]` | Min one |
-| Links | `links[]` | Min one `FeaturedLink` |
-| Client / account | `organisationId` | Required; CRM account |
-| Contributors | `personaIds[]` | Min one persona; shared catalog |
-| Featured CTA | `featuredCta` | Optional `FeaturedLink` |
-| Home highlight | `featured` | Optional boolean |
+Achievements are also shared; filter by `personaIds` for a given person.
 
-### Achievement → award / highlight
+## Where records appear in Turpinverse
 
-| Generic field | Canon field | Notes |
-|---------------|-------------|-------|
-| Title | `title` | Required |
-| Summary | `summary` | Required |
-| Link | `url` | Optional |
-| Image | `image` | Optional |
-| People | `personaIds[]` | Min one persona; shared catalog |
+| Channel | Location |
+|---------|----------|
+| Hugo | Persona page sections (omit empty section types) |
+| Blazor | Contact detail at `/contacts/{id}` (omit empty section types) |
 
-### FeaturedLink (shared)
+Person-level narrative content is published on both channels for the same records; see [product-surfaces.md](./product-surfaces.md) for why Hugo and Blazor both show person detail without duplicating the same product purpose.
 
-| Generic field | Canon field | Notes |
-|---------------|-------------|-------|
-| URL | `url` | Required |
-| Label | `label` or `name` | At least one of label, name, or icon |
-| Icon key | `icon` | e.g. Lucide name |
-| Tooltip | `tooltip` | Optional |
-
-## Projection examples
-
-### Experience: grouping vs flat jobs
-
-**Canon (grouped)** — one employer, multiple roles in `experience.json`:
-
-```json
-{
-  "id": "dick-turpin-turpin-enterprises",
-  "personaId": "dick-turpin",
-  "organisationId": "turpin-enterprises",
-  "organisationName": "Turpin Enterprises",
-  "roles": [
-    { "title": "Chief Corridor Strategy Officer", "start": "2022-01", "description": "..." },
-    { "title": "Regional Operations Lead", "start": "2018-03", "end": "2021-06", "description": "..." }
-  ]
-}
-```
-
-**Hugo** (`site/data/career/{personaId}.json`) — same structure after
-`CareerPortfolioPresenter` sorts groupings and roles most-recent-first. Rendered in
-`site/layouts/personas/single.html` under **Experience** (omit section when empty).
-
-**Blazor** — `ExperienceSection.razor` on `/contacts/{contactId}` maps `contactId` to
-`personaId` and renders the same grouped model.
-
-### Project detail page (catalog membership)
-
-Projects live once in `projects.json` with `personaIds: ["dick-turpin", "ned-palmer"]`.
-Both persona pages show the **same** `id` and `title` (FR-014 shared catalog). Hugo
-lists cards on the persona page; there is no separate per-persona project copy. A
-future dedicated project URL would still read the single catalog row by `id`.
-
-### Omit-empty publication
-
-If a persona has no rows of a type, that section heading is **not** rendered (Hugo
-`{{ with }}` blocks; Blazor section components return early). PaperMod remains the
-public theme; career content comes from generated `site/data/career/*.json`, not theme
-params.
-
-## Static assets
-
-Project and achievement images ship under `site/static/images/` (SVG, Turpinverse-branded).
-Canon `image` fields use site-root paths such as `/images/projects/black-bess-route-optimiser.svg`.
-Hugo copies `static/` into `public/` on build; Blazor serves the same paths from `wwwroot` when mirrored there for parity.
-
-In-universe `*.turpinverse.uk` URLs in canon are rewritten to `/organisations/{id}/` at publication time
-(`CareerLinkResolver` in Core; `resolve-career-url.html` in Hugo).
-
-## Regenerating published data
-
-```bash
-dotnet run --project src/Turpinverse.Tools.GenerateHugoContent --configuration Release
-```
-
-Validate canon first:
-
-```bash
-dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation"
-```
-
-## What is not the source of truth
-
-- Hugo front matter / `params` on persona markdown files (biography only)
-- PaperMod or other theme configuration
-- Blazor component markup or CSS class names
-- Generated `site/data/career/*.json` (build output; regenerate after canon edits)
+CSV exports for contacts, accounts, deals, and cases are unchanged by career/portfolio data. Career and portfolio are human-facing narrative demo data, not additional CRM export columns in the current design.
