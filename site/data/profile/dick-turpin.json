@@ -1,0 +1,44 @@
+{
+  "intro": {
+    "shortIntro": "Board-level executive with a reputation for rapid corridor optimisation and unconventional stakeholder engagement.",
+    "headline": "Richard Turpin",
+    "subtitle": "CEO, Strategic Corridor Operations",
+    "photo": null,
+    "cta": {
+      "url": "/organisations/turpin-enterprises/",
+      "label": "Turpin Enterprises",
+      "name": null,
+      "icon": null,
+      "tooltip": null
+    }
+  },
+  "about": "Board-level executive with a reputation for rapid corridor optimisation and unconventional stakeholder engagement. Prefers to be addressed as Richard in all formal correspondence.\n\nLegend basis: The celebrated Essex Gang era figure; informal alias \u0027Dick\u0027 retained in legacy systems only.",
+  "skillsHeading": "Core competencies",
+  "skills": [
+    "Strategic corridor planning",
+    "Stakeholder engagement",
+    "Equine logistics",
+    "Risk assessment",
+    "Executive leadership"
+  ],
+  "contact": {
+    "copy": "For corridor strategy enquiries and speaking invitations, reach Richard directly.",
+    "email": "richard.turpin@turpinverse.uk",
+    "phone": "01707-555-0101",
+    "cta": null
+  },
+  "socials": [
+    {
+      "network": "LinkedIn",
+      "url": "https://linkedin.turpinverse.uk/in/richard-turpin"
+    },
+    {
+      "network": "Twitter",
+      "url": "https://twitter.turpinverse.uk/richardturpin"
+    },
+    {
+      "network": "GitHub",
+      "url": "https://github.turpinverse.uk/richard-turpin"
+    }
+  ]
+}

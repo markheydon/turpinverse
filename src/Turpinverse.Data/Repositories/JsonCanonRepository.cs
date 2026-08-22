@@ -34,6 +34,7 @@ public sealed class JsonCanonRepository : ICanonRepository
         var achievements = await ReadArrayAsync<Achievement>("achievements.json", cancellationToken);
         var articles = await ReadArrayAsync<Article>("articles.json", cancellationToken);
         var galleries = await ReadArrayAsync<Gallery>("galleries.json", cancellationToken);
+        var professionalExtras = await ReadArrayAsync<ProfessionalExtras>("professional-extras.json", cancellationToken);
 
         return new Canon
         {
@@ -50,7 +51,8 @@ public sealed class JsonCanonRepository : ICanonRepository
             Projects = projects,
             Achievements = achievements,
             Articles = articles,
-            Galleries = galleries
+            Galleries = galleries,
+            ProfessionalExtras = professionalExtras
         };
     }
 

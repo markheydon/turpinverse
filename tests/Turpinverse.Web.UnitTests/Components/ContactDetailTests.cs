@@ -6,7 +6,6 @@ using Turpinverse.Web.Components.Pages;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
-[Trait("Category", "CareerPortfolio")]
 public class ContactDetailTests : BunitContext
 {
     public ContactDetailTests()
@@ -15,6 +14,7 @@ public class ContactDetailTests : BunitContext
     }
 
     [Fact]
+    [Trait("Category", "CareerPortfolio")]
     public void ContactDetail_RendersExperienceAndEducationForPrimarySubject()
     {
         Services.AddTurpinverseCore();
@@ -28,6 +28,7 @@ public class ContactDetailTests : BunitContext
     }
 
     [Fact]
+    [Trait("Category", "CareerPortfolio")]
     public void ContactDetail_RendersPortfolioSectionsForPrimarySubject()
     {
         Services.AddTurpinverseCore();
@@ -41,6 +42,7 @@ public class ContactDetailTests : BunitContext
     }
 
     [Fact]
+    [Trait("Category", "CareerPortfolio")]
     public void ContactDetail_OmitsEmptySectionsForPersonaWithoutCareerData()
     {
         Services.AddTurpinverseCore();
@@ -54,6 +56,7 @@ public class ContactDetailTests : BunitContext
     }
 
     [Fact]
+    [Trait("Category", "CareerPortfolio")]
     public void ContactDetail_ShowsSharedCatalogProjectForDeputyPersona()
     {
         Services.AddTurpinverseCore();
@@ -62,5 +65,70 @@ public class ContactDetailTests : BunitContext
 
         Assert.Contains("Black Bess Route Optimiser", cut.Markup);
         Assert.DoesNotContain("Experience", cut.Markup);
+    }
+
+    [Fact]
+    [Trait("Category", "ProfessionalExtras")]
+    public void ContactDetail_RendersIntroHeaderAndSuppressesTitleForPrimarySubject()
+    {
+        Services.AddTurpinverseCore();
+        Services.AddTurpinverseData();
+        var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "dick-turpin"));
+
+        Assert.Contains("Richard Turpin", cut.Markup);
+        Assert.Contains("CEO, Strategic Corridor Operations", cut.Markup);
+        Assert.Contains("Board-level executive with a reputation for rapid corridor optimisation", cut.Markup);
+        Assert.DoesNotContain("contact-title", cut.Markup);
+    }
+
+    [Fact]
+    [Trait("Category", "ProfessionalExtras")]
+    public void ContactDetail_RendersAboutAndSkillsBeforeCareerSections()
+    {
+        Services.AddTurpinverseCore();
+        Services.AddTurpinverseData();
+        var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "dick-turpin"));
+
+        Assert.Contains("about-section", cut.Markup);
+        Assert.Contains("Core competencies", cut.Markup);
+        Assert.Contains("Strategic corridor planning", cut.Markup);
+        Assert.DoesNotContain("Biography", cut.Markup);
+
+        var aboutIndex = cut.Markup.IndexOf("about-section", StringComparison.Ordinal);
+        var skillsIndex = cut.Markup.IndexOf("Core competencies", StringComparison.Ordinal);
+        var experienceIndex = cut.Markup.IndexOf("Experience", StringComparison.Ordinal);
+
+        Assert.True(skillsIndex > aboutIndex);
+        Assert.True(experienceIndex > skillsIndex);
+    }
+
+    [Fact]
+    [Trait("Category", "ProfessionalExtras")]
+    public void ContactDetail_RendersContactAndSocialsAfterCareerSections()
+    {
+        Services.AddTurpinverseCore();
+        Services.AddTurpinverseData();
+        var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "dick-turpin"));
+
+        var achievementsIndex = cut.Markup.IndexOf("Achievements", StringComparison.Ordinal);
+        var contactIndex = cut.Markup.IndexOf("For corridor strategy enquiries", StringComparison.Ordinal);
+        var socialsIndex = cut.Markup.IndexOf("LinkedIn", StringComparison.Ordinal);
+
+        Assert.True(contactIndex > achievementsIndex);
+        Assert.True(socialsIndex > contactIndex);
+        Assert.Contains("richard.turpin@turpinverse.uk", cut.Markup);
+    }
+
+    [Fact]
+    [Trait("Category", "ProfessionalExtras")]
+    public void ContactDetail_OmitsProfessionalExtrasSectionsForDeputyWithoutExtras()
+    {
+        Services.AddTurpinverseCore();
+        Services.AddTurpinverseData();
+        var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "john-king"));
+
+        Assert.DoesNotContain("Core competencies", cut.Markup);
+        Assert.DoesNotContain("Socials", cut.Markup);
+        Assert.Contains("Biography", cut.Markup);
     }
 }

@@ -43,6 +43,17 @@ public class JsonCanonRepositoryTests
     }
 
     [Fact]
+    public async Task LoadAsync_LoadsProfessionalExtrasCanonFile()
+    {
+        var repository = new JsonCanonRepository();
+        var canon = await repository.LoadAsync(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(canon.ProfessionalExtras);
+        Assert.Single(canon.ProfessionalExtras);
+        Assert.Equal("dick-turpin", canon.ProfessionalExtras[0].PersonaId);
+    }
+
+    [Fact]
     public async Task LoadAsync_PersonasHaveValidEmails()
     {
         var repository = new JsonCanonRepository();

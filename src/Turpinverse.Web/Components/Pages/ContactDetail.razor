@@ -2,10 +2,13 @@
 @rendermode InteractiveServer
 @inject ICanonRepository CanonRepository
 @inject CareerPortfolioPresenter Presenter
+@inject ProfessionalExtrasPresenter ExtrasPresenter
 @using Turpinverse.Core.Abstractions
 @using Turpinverse.Core.Career
 @using Turpinverse.Core.Models
+@using Turpinverse.Core.Profile
 @using Turpinverse.Web.Components.Career
+@using Turpinverse.Web.Components.Profile
 
 <PageTitle>@pageTitle - Turpinverse</PageTitle>
 
@@ -25,21 +28,38 @@
         <div class="contact-detail-header">
             <a class="back-link" href="/contacts">← Contacts</a>
             <h1>@persona.DisplayName</h1>
-            <p class="contact-title">@persona.Title</p>
-            <p class="contact-email">@persona.Email</p>
+            @if (!suppressTitle)
+            {
+                <p class="contact-title">@persona.Title</p>
+            }
+            @if (!suppressHeaderEmail)
+            {
+                <p class="contact-email">@persona.Email</p>
+            }
             <span class="status-badge status-@persona.Status">@persona.Status</span>
         </div>
 
         <div class="contact-detail-body">
-            <section class="biography-section">
-                <h2>Biography</h2>
-                <p class="biography">@persona.Biography</p>
-            </section>
+            <IntroSection Intro="extras?.Intro" />
+
+            @if (!suppressBiography)
+            {
+                <section class="biography-section">
+                    <h2>Biography</h2>
+                    <p class="biography">@persona.Biography</p>
+                </section>
+            }
+
+            <AboutSection Text="@extras?.About" />
+            <SkillsSection SectionHeading="@extras?.SkillsHeading" SkillItems="@(extras?.Skills ?? [])" />
 
             <ExperienceSection Items="experience" />
             <EducationSection Items="education" />
             <ProjectsSection Items="projects" />
             <AchievementsSection Items="achievements" />
+
+            <ContactExtrasSection Contact="extras?.Contact" />
+            <SocialsSection Socials="@(extras?.Socials ?? [])" />
         </div>
     }
 </div>
@@ -48,10 +68,14 @@
     [Parameter] public string ContactId { get; set; } = string.Empty;
 
     private Persona? persona;
+    private ProfessionalExtras? extras;
     private IReadOnlyList<Experience> experience = [];
     private IReadOnlyList<Education> education = [];
     private IReadOnlyList<Project> projects = [];
     private IReadOnlyList<Achievement> achievements = [];
+    private bool suppressTitle;
+    private bool suppressBiography;
+    private bool suppressHeaderEmail;
     private string pageTitle = "Contact";
     private bool loading = true;
 
@@ -63,6 +87,10 @@
         if (persona is not null)
         {
             pageTitle = persona.DisplayName;
+            extras = ExtrasPresenter.GetExtrasForPersona(canon, ContactId);
+            suppressTitle = ExtrasPresenter.ShouldSuppressTitle(extras);
+            suppressBiography = ExtrasPresenter.ShouldSuppressBiography(extras);
+            suppressHeaderEmail = ExtrasPresenter.ShouldSuppressHeaderEmail(extras);
             experience = Presenter.GetExperienceForPersona(canon, ContactId);
             education = Presenter.GetEducationForPersona(canon, ContactId);
             projects = Presenter.GetProjectsForPersona(canon, ContactId);

@@ -531,3 +531,55 @@ h1:focus {
 .data-table a:hover {
   text-decoration: underline;
 }
+
+.profile-section {
+  margin-bottom: 2rem;
+}
+
+.intro-short {
+  font-size: 1.05rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.intro-headline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.intro-subtitle {
+  color: rgba(30, 41, 59, 0.75);
+  margin: 0.25rem 0;
+}
+
+.intro-photo {
+  margin-top: 0.75rem;
+  border-radius: 0.5rem;
+  max-width: 10rem;
+}
+
+.intro-cta a,
+.contact-cta a {
+  font-weight: 600;
+  color: var(--color-turpin-amber);
+}
+
+.skills-list,
+.socials-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.skills-list li,
+.socials-list li {
+  padding: 0.25rem 0;
+}
+
+.about-text {
+  white-space: pre-line;
+}
+
+.contact-copy {
+  margin-bottom: 0.5rem;
+}

@@ -18,7 +18,8 @@
     "projects",
     "achievements",
     "articles",
-    "galleries"
+    "galleries",
+    "professionalExtras"
   ],
   "properties": {
     "version": {
@@ -80,6 +81,10 @@
     "galleries": {
       "type": "array",
       "items": { "$ref": "#/$defs/Gallery" }
+    },
+    "professionalExtras": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ProfessionalExtras" }
     }
   },
   "$defs": {
@@ -464,6 +469,60 @@
           "items": { "$ref": "#/$defs/GalleryImage" }
         },
         "viewer": { "$ref": "#/$defs/ViewerHint" }
+      }
+    },
+    "IntroCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shortIntro", "headline", "subtitle"],
+      "properties": {
+        "shortIntro": { "type": "string", "minLength": 1 },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "subtitle": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "photo": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "cta": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "ContactExtras": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["copy", "email"],
+      "properties": {
+        "copy": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "cta": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "ProfessionalSocial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network", "url"],
+      "properties": {
+        "network": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "url": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "ProfessionalExtras": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["personaId"],
+      "properties": {
+        "personaId": { "$ref": "#/$defs/slug" },
+        "intro": { "$ref": "#/$defs/IntroCopy" },
+        "about": { "type": "string", "minLength": 1 },
+        "skillsHeading": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "skills": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "contact": { "$ref": "#/$defs/ContactExtras" },
+        "socials": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ProfessionalSocial" }
+        }
       }
     }
   }

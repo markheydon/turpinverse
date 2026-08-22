@@ -16,4 +16,5 @@ public sealed record Canon
     public IReadOnlyList<Achievement> Achievements { get; init; } = [];
     public IReadOnlyList<Article> Articles { get; init; } = [];
     public IReadOnlyList<Gallery> Galleries { get; init; } = [];
+    public IReadOnlyList<ProfessionalExtras> ProfessionalExtras { get; init; } = [];
 }

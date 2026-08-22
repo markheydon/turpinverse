@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Turpinverse.Core.Models;
+using Turpinverse.Core.Profile;
 
 namespace Turpinverse.Core.Validation;
 
@@ -32,6 +33,7 @@ public sealed partial class CanonValidator
         ValidateEventDateConsistency(canon, violations);
         ValidateCareerPortfolio(canon, personaIds, organisationIds, violations);
         ValidateArticlesAndGalleries(canon, personaIds, violations);
+        ValidateProfessionalExtras(canon, personaIds, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -46,7 +48,8 @@ public sealed partial class CanonValidator
             ["projects"] = canon.Projects.Count,
             ["achievements"] = canon.Achievements.Count,
             ["articles"] = canon.Articles.Count,
-            ["galleries"] = canon.Galleries.Count
+            ["galleries"] = canon.Galleries.Count,
+            ["professionalExtras"] = canon.ProfessionalExtras.Count
         };
 
         return new CanonValidationResult(
@@ -939,6 +942,157 @@ public sealed partial class CanonValidator
                 "At least one gallery with title, four captioned images, and viewer.enabled true is required",
                 "Gallery",
                 "galleries"));
+        }
+    }
+
+    private static readonly HashSet<string> ForbiddenProfessionalExtrasProperties = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "brandTitle", "favicon", "navigation", "sticky", "sections",
+        "formEndpoint", "cms", "recentPosts", "experience", "education", "projects", "achievements"
+    };
+
+    private static void ValidateProfessionalExtras(
+        Canon canon,
+        HashSet<string> personaIds,
+        List<ValidationViolation> violations)
+    {
+        var personaById = canon.Personas.ToDictionary(p => p.Id);
+        var seenPersonaIds = new Dictionary<string, string>(StringComparer.Ordinal);
+
+        foreach (var extras in canon.ProfessionalExtras)
+        {
+            if (!personaIds.Contains(extras.PersonaId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-036",
+                    $"Professional extras references unknown persona '{extras.PersonaId}'",
+                    "ProfessionalExtras",
+                    extras.PersonaId));
+            }
+
+            if (seenPersonaIds.TryGetValue(extras.PersonaId, out var existingId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-037",
+                    $"Duplicate professional extras for persona '{extras.PersonaId}' ('{existingId}' and '{extras.PersonaId}')",
+                    "ProfessionalExtras",
+                    extras.PersonaId));
+            }
+            else
+            {
+                seenPersonaIds[extras.PersonaId] = extras.PersonaId;
+            }
+
+            if (extras.ExtensionData is not null)
+            {
+                foreach (var key in extras.ExtensionData.Keys)
+                {
+                    if (ForbiddenProfessionalExtrasProperties.Contains(key))
+                    {
+                        violations.Add(new ValidationViolation(
+                            "VR-043",
+                            $"Professional extras for '{extras.PersonaId}' contains forbidden property '{key}'",
+                            "ProfessionalExtras",
+                            extras.PersonaId));
+                    }
+                }
+            }
+
+            if (extras.Skills.Count > 0)
+            {
+                var skillKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var skill in extras.Skills)
+                {
+                    if (!skillKeys.Add(skill.Trim()))
+                    {
+                        violations.Add(new ValidationViolation(
+                            "VR-038",
+                            $"Professional extras for '{extras.PersonaId}' has duplicate skill name '{skill}'",
+                            "ProfessionalExtras",
+                            extras.PersonaId));
+                    }
+                }
+            }
+
+            if (extras.Socials.Count > 0)
+            {
+                var networkKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var social in extras.Socials)
+                {
+                    if (!networkKeys.Add(social.Network.Trim()))
+                    {
+                        violations.Add(new ValidationViolation(
+                            "VR-039",
+                            $"Professional extras for '{extras.PersonaId}' has duplicate social network '{social.Network}'",
+                            "ProfessionalExtras",
+                            extras.PersonaId));
+                    }
+                }
+            }
+
+            if (extras.Contact is not null
+                && personaById.TryGetValue(extras.PersonaId, out var persona)
+                && !string.Equals(extras.Contact.Email, persona.Email, StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-042",
+                    $"Professional extras contact email for '{extras.PersonaId}' must match persona email",
+                    "ProfessionalExtras",
+                    extras.PersonaId));
+            }
+        }
+
+        ValidatePrimaryProfessionalExtrasVolumes(canon, violations);
+    }
+
+    private static void ValidatePrimaryProfessionalExtrasVolumes(
+        Canon canon,
+        List<ValidationViolation> violations)
+    {
+        const string primaryId = ProfessionalExtrasPresenter.PrimaryPersonaId;
+        var extras = canon.ProfessionalExtras.FirstOrDefault(e => e.PersonaId == primaryId);
+
+        if (extras?.Intro is not { ShortIntro: { Length: > 0 }, Headline: { Length: > 0 }, Subtitle: { Length: > 0 } })
+        {
+            violations.Add(new ValidationViolation(
+                "VR-040",
+                $"Primary persona '{primaryId}' requires intro with short intro, headline, and subtitle",
+                "Persona",
+                primaryId));
+        }
+
+        var distinctSkills = extras?.Skills
+            .Select(s => s.Trim())
+            .Where(s => s.Length > 0)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Count() ?? 0;
+
+        if (extras is null
+            || string.IsNullOrWhiteSpace(extras.About)
+            || string.IsNullOrWhiteSpace(extras.SkillsHeading)
+            || distinctSkills < 5)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-041",
+                $"Primary persona '{primaryId}' requires about text, skills heading, and at least 5 distinct skills",
+                "Persona",
+                primaryId));
+        }
+
+        var distinctSocials = extras?.Socials
+            .Select(s => s.Network.Trim())
+            .Where(n => n.Length > 0)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Count() ?? 0;
+
+        if (extras?.Contact is not { Copy: { Length: > 0 }, Email: { Length: > 0 } }
+            || distinctSocials < 3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-042",
+                $"Primary persona '{primaryId}' requires contact copy, matching email, and at least 3 distinct social networks",
+                "Persona",
+                primaryId));
         }
     }
 
