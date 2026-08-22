@@ -1,0 +1,15 @@
+{{/* Expects a slice of project records from hugo.Data.projects */}}
+{{ if . }}
+<section class="related-records related-projects">
+  <h2>Projects</h2>
+  <div class="record-card-grid">
+    {{ range . }}
+    <a class="record-card project-record" href="{{ "/projects/" | relURL }}{{ .id }}/">
+      <p class="record-card-title">{{ .title }}</p>
+      {{ with .tags }}<ul class="chip-list record-card-tags">{{ range . }}<li class="chip">{{ . }}</li>{{ end }}</ul>{{ end }}
+      <p class="record-card-meta">Account: {{ partial "org-title.html" .organisationId }}</p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

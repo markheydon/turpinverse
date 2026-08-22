@@ -27,6 +27,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "timeline"));
         Directory.CreateDirectory(Path.Combine(contentDir, "deals"));
         Directory.CreateDirectory(Path.Combine(contentDir, "cases"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "projects"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
         Directory.CreateDirectory(dataDir);
 
@@ -188,6 +189,49 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "cases.json"),
             JsonSerializer.Serialize(canon.Cases, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var projectsIndexContent = """
+            ---
+            title: Projects
+            ---
+
+            Portfolio catalog from the Turpinverse canon — products, platforms, and programmes linked to accounts and contacts.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "projects", "_index.md"),
+            projectsIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var project in canon.Projects)
+        {
+            var featuredLine = project.Featured == true ? "featured: true\n" : string.Empty;
+            var content = $"""
+                ---
+                title: "{EscapeYaml(project.Title)}"
+                type: "projects"
+                projectId: "{project.Id}"
+                organisationId: "{project.OrganisationId}"
+                personaIds: {JsonSerializer.Serialize(project.PersonaIds)}
+                tags: {JsonSerializer.Serialize(project.Tags)}
+                image: "{project.Image}"
+                {featuredLine}---
+
+                {project.Summary}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "projects", $"{project.Id}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "projects.json"),
+            JsonSerializer.Serialize(canon.Projects, JsonOptions),
             Utf8NoBom,
             cancellationToken);
 

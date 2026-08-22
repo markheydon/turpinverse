@@ -1,0 +1,18 @@
+{{/* Expects a page context with contactId, accountId, and optional relatedEventId params */}}
+{{ $hasParties := or .Params.contactId .Params.accountId .Params.relatedEventId }}
+{{ if $hasParties }}
+<section class="related-records related-parties">
+  <h2>Related parties</h2>
+  <ul class="chip-list">
+    {{ with .Params.contactId }}
+    <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
+    {{ end }}
+    {{ with .Params.accountId }}
+    <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
+    {{ end }}
+    {{ with .Params.relatedEventId }}
+    <li><a class="chip" href="{{ "/timeline/" | relURL }}#{{ . }}">{{ partial "event-title.html" . }}</a></li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

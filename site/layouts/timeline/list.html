@@ -16,13 +16,13 @@
       <h3>{{ .title }}</h3>
       {{ with .location }}<p class="timeline-location">{{ . }}</p>{{ end }}
       <div class="timeline-description">{{ .description | markdownify }}</div>
-      {{ $cases := where site.Data.cases "relatedEventId" .id }}
+      {{ $cases := where hugo.Data.cases "relatedEventId" .id }}
       {{ if $cases }}
       <div class="timeline-related-cases">
         <h4>Related cases</h4>
-        <ul class="related-list">
+        <ul class="chip-list">
           {{ range $cases }}
-          <li><a href="{{ "/cases/" | relURL }}{{ .caseId }}/">{{ partial "case-title.html" .caseId }}</a></li>
+          <li><a class="chip" href="{{ "/cases/" | relURL }}{{ .caseId }}/">{{ .subject }}</a></li>
           {{ end }}
         </ul>
       </div>

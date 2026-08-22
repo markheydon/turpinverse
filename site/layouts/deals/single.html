@@ -11,16 +11,6 @@
 
   <div class="post-content">{{ .Content }}</div>
 
-  <section class="related-records">
-    <h2>Related parties</h2>
-    <ul class="related-list">
-      {{ with .Params.contactId }}
-      <li>Contact: <a href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
-      {{ end }}
-      {{ with .Params.accountId }}
-      <li>Organisation: <a href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
-      {{ end }}
-    </ul>
-  </section>
+  {{ partial "related-parties.html" . }}
 </article>
 {{ end }}

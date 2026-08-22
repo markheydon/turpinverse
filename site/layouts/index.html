@@ -23,6 +23,10 @@
       <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "cases") }}</span>
       <span class="turpin-stat-label">Cases</span>
     </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "projects") }}</span>
+      <span class="turpin-stat-label">Projects</span>
+    </div>
   </div>
 </section>
 
@@ -51,9 +55,9 @@
     <strong>Cases</strong>
     Support cases and their relationships
   </a>
-  <a class="turpin-quick-link" href="{{ "/guides/getting-started/" | relURL }}">
-    <strong>Getting Started</strong>
-    Run locally and export CRM data
+  <a class="turpin-quick-link" href="{{ "/projects/" | relURL }}">
+    <strong>Projects</strong>
+    Portfolio catalog linked to accounts and contacts
   </a>
 </div>
 {{ end }}

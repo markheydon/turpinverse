@@ -1,0 +1,87 @@
+[
+  {
+    "id": "black-bess-route-optimiser",
+    "title": "Black Bess Route Optimiser",
+    "summary": "Real-time corridor planning suite for high-velocity equine logistics. Reduces discretionary delay windows across Epping Forest lanes.",
+    "image": "/images/projects/black-bess-route-optimiser.svg",
+    "tags": [
+      "logistics",
+      "corridor",
+      "SaaS"
+    ],
+    "links": [
+      {
+        "url": "https://turpin-enterprises.turpinverse.uk/products/black-bess",
+        "label": "Product overview",
+        "name": null,
+        "icon": null,
+        "tooltip": null
+      }
+    ],
+    "organisationId": "turpin-enterprises",
+    "personaIds": [
+      "dick-turpin",
+      "ned-palmer"
+    ],
+    "featuredCta": {
+      "url": "https://turpin-enterprises.turpinverse.uk/demo/black-bess",
+      "label": null,
+      "name": "Request demo",
+      "icon": null,
+      "tooltip": null
+    },
+    "featured": true
+  },
+  {
+    "id": "palmer-identity-vault",
+    "title": "Palmer Identity Vault",
+    "summary": "SSO and alias lifecycle tooling for clients relocating under fresh credentials. Keeps Yorkshire and Essex personas cleanly separated in audit logs.",
+    "image": "/images/projects/palmer-identity-vault.svg",
+    "tags": [
+      "identity",
+      "compliance",
+      "SSO"
+    ],
+    "links": [
+      {
+        "url": "https://brazier-legal.turpinverse.uk/products/identity-vault",
+        "label": "Product overview",
+        "name": null,
+        "icon": "shield",
+        "tooltip": null
+      }
+    ],
+    "organisationId": "brazier-legal",
+    "personaIds": [
+      "dick-turpin"
+    ],
+    "featuredCta": null,
+    "featured": null
+  },
+  {
+    "id": "essex-procurement-hub",
+    "title": "Essex Procurement Hub",
+    "summary": "Consolidated marketplace for rural asset redistribution with flexible contracting templates. Legacy platform from the Essex Solutions merger.",
+    "image": "/images/projects/essex-procurement-hub.svg",
+    "tags": [
+      "procurement",
+      "marketplace",
+      "legacy"
+    ],
+    "links": [
+      {
+        "url": "https://essex-gang.turpinverse.uk/hub",
+        "label": "Archive notice",
+        "name": null,
+        "icon": null,
+        "tooltip": null
+      }
+    ],
+    "organisationId": "essex-gang",
+    "personaIds": [
+      "dick-turpin"
+    ],
+    "featuredCta": null,
+    "featured": null
+  }
+]

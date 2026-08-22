@@ -1,0 +1,16 @@
+{{/* Expects a slice of deal records from hugo.Data.deals */}}
+{{ if . }}
+<section class="related-records related-deals">
+  <h2>Deals</h2>
+  <div class="record-card-grid">
+    {{ range . }}
+    <a class="record-card deal-record" href="{{ "/deals/" | relURL }}{{ .dealId }}/">
+      <p class="record-card-title">{{ .dealName }}</p>
+      {{ with .stage }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+      {{ with .amount }}<p class="record-card-meta">£{{ . }}</p>{{ end }}
+      {{ with .closeDate }}<p class="record-card-meta">Close: {{ . }}</p>{{ end }}
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
