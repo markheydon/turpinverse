@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Turpinverse.Core.Abstractions;
-using Turpinverse.Core.Career;
 using Turpinverse.Core.Models;
 using Turpinverse.Core.Profile;
 using Turpinverse.Core.Validation;

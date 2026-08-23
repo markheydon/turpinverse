@@ -1,5 +1,4 @@
 using Turpinverse.Core.Career;
-using Turpinverse.Core.Models;
 using Turpinverse.Core.Profile;
 using Turpinverse.Data.Repositories;
 
