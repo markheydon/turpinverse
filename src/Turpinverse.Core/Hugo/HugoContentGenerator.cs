@@ -2,12 +2,14 @@ using System.Text;
 using System.Text.Json;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Career;
+using Turpinverse.Core.Profile;
 
 namespace Turpinverse.Core.Hugo;
 
 public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHugoContentGenerator
 {
     private readonly CareerPortfolioPresenter _presenter = new();
+    private readonly ProfessionalExtrasPresenter _extrasPresenter = new();
     private static readonly UTF8Encoding Utf8NoBom = new(encoderShouldEmitUTF8Identifier: false);
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -31,6 +33,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
         Directory.CreateDirectory(Path.Combine(contentDir, "galleries"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
+        Directory.CreateDirectory(Path.Combine(dataDir, "profile"));
         Directory.CreateDirectory(dataDir);
 
         var personaNames = canon.Personas.ToDictionary(p => p.Id, p => p.DisplayName);
@@ -378,6 +381,43 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             await File.WriteAllTextAsync(
                 Path.Combine(dataDir, "career", $"{persona.Id}.json"),
                 JsonSerializer.Serialize(careerData, JsonOptions),
+                Utf8NoBom,
+                cancellationToken);
+        }
+
+        foreach (var extras in canon.ProfessionalExtras)
+        {
+            if (!_extrasPresenter.HasExtrasContent(extras))
+            {
+                continue;
+            }
+
+            var profileData = new
+            {
+                intro = extras.Intro is null ? null : new
+                {
+                    extras.Intro.ShortIntro,
+                    extras.Intro.Headline,
+                    extras.Intro.Subtitle,
+                    extras.Intro.Photo,
+                    cta = extras.Intro.Cta is null ? null : CareerLinkResolver.ResolveLink(extras.Intro.Cta)
+                },
+                about = extras.About,
+                skillsHeading = extras.SkillsHeading,
+                skills = _extrasPresenter.GetSkills(extras),
+                contact = extras.Contact is null ? null : new
+                {
+                    extras.Contact.Copy,
+                    extras.Contact.Email,
+                    extras.Contact.Phone,
+                    cta = extras.Contact.Cta is null ? null : CareerLinkResolver.ResolveLink(extras.Contact.Cta)
+                },
+                socials = _extrasPresenter.GetSocials(extras)
+            };
+
+            await File.WriteAllTextAsync(
+                Path.Combine(dataDir, "profile", $"{extras.PersonaId}.json"),
+                JsonSerializer.Serialize(profileData, JsonOptions),
                 Utf8NoBom,
                 cancellationToken);
         }

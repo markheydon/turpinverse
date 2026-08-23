@@ -55,12 +55,15 @@ Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/cont
 
 ## Dual publication on person pages
 
-Career and portfolio content (experience, education, projects, achievements) may appear on **both**:
+Career and portfolio content (experience, education, projects, achievements) and
+**professional profile extras** (intro, about, skills, contact, socials) may appear on **both**:
 
 - Hugo persona pages — as part of the browsable showcase
 - Blazor contact detail — as part of interactive exploration before export
 
 Same underlying records, different channel jobs. This is not two competing showcase products; Hugo is for reading, Blazor is for working with data you might export.
+
+Professional extras publish in sandwich order on both channels: intro header → about → skills → career/portfolio → contact → socials. Empty types are omitted; competing title, biography, and header-email lines are suppressed when extras exist.
 
 ## What “all human-readable demo data” means
 
@@ -70,6 +73,7 @@ Same underlying records, different channel jobs. This is not two competing showc
 - Organisations (profiles, org charts)
 - Timeline events
 - Career history and portfolio on persona pages (experience, education, projects, achievements)
+- Professional profile extras on persona pages (intro, about, skills, contact, socials)
 - Deals and cases (dedicated indexes and detail pages with named bidirectional links)
 - Articles and galleries (team journal list/detail pages, persona article lists, captioned gallery with lightbox)
 

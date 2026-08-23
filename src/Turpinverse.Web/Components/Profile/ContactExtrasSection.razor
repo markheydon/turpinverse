@@ -1,0 +1,27 @@
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+
+@if (Contact is not null)
+{
+    <section class="profile-section contact-extras-section">
+        <h2>Contact</h2>
+        <p class="contact-copy">@Contact.Copy</p>
+        <p class="contact-email"><a href="mailto:@Contact.Email">@Contact.Email</a></p>
+        @if (!string.IsNullOrWhiteSpace(Contact.Phone))
+        {
+            <p class="contact-phone">@Contact.Phone</p>
+        }
+        @if (Contact.Cta is not null)
+        {
+            <p class="contact-cta">
+                <a href="@CareerLinkResolver.ResolveForPublication(Contact.Cta.Url)">
+                    @(Contact.Cta.Label ?? Contact.Cta.Name ?? "Get in touch")
+                </a>
+            </p>
+        }
+    </section>
+}
+
+@code {
+    [Parameter] public ContactExtras? Contact { get; set; }
+}

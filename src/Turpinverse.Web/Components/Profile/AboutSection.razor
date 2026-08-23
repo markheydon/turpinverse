@@ -1,0 +1,11 @@
+@if (!string.IsNullOrWhiteSpace(Text))
+{
+    <section class="profile-section about-section">
+        <h2>About</h2>
+        <div class="about-text">@Text</div>
+    </section>
+}
+
+@code {
+    [Parameter] public string? Text { get; set; }
+}

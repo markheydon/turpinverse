@@ -1,0 +1,17 @@
+@if (SkillItems.Count > 0 && !string.IsNullOrWhiteSpace(SectionHeading))
+{
+    <section class="profile-section skills-section">
+        <h2>@SectionHeading</h2>
+        <ul class="chip-list skills-chip-list">
+            @foreach (var skill in SkillItems)
+            {
+                <li class="chip">@skill</li>
+            }
+        </ul>
+    </section>
+}
+
+@code {
+    [Parameter] public string? SectionHeading { get; set; }
+    [Parameter] public IReadOnlyList<string> SkillItems { get; set; } = [];
+}

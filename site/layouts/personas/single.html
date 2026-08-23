@@ -1,18 +1,48 @@
 {{ define "main" }}
+{{ $profile := index hugo.Data.profile .File.BaseFileName }}
 <article class="persona post-single">
   <div class="profile-header">
-    <div class="profile-avatar">{{ partial "initials.html" .Title }}</div>
+    <div class="profile-avatar">
+      {{ partial "persona-avatar.html" . }}
+    </div>
     <div class="profile-meta">
       <h1>{{ .Title }}</h1>
+      {{ with $profile.intro }}
+      <p class="intro-short">{{ .shortIntro }}</p>
+      <p class="intro-headline">{{ .headline }}</p>
+      <p class="intro-subtitle">{{ .subtitle }}</p>
+      {{ with .cta }}
+      <p class="intro-cta"><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></p>
+      {{ end }}
+      {{ else }}
       {{ with .Params.jobTitle }}<p class="profile-title">{{ . }}</p>{{ end }}
+      {{ end }}
+      {{ if not $profile.contact }}
       {{ with .Params.email }}<p class="profile-email">{{ . }}</p>{{ end }}
+      {{ end }}
       {{ with .Params.status }}
       <span class="status-badge status-{{ . }}">{{ . }}</span>
       {{ end }}
     </div>
   </div>
 
+  {{ with $profile.about }}
+  <section class="profile-section about-section">
+    <h2>About</h2>
+    <div class="about-text">{{ . | markdownify }}</div>
+  </section>
+  {{ else }}
   <div class="post-content md-content">{{ .Content }}</div>
+  {{ end }}
+
+  {{ with $profile.skills }}
+  <section class="profile-section skills-section">
+    <h2>{{ $profile.skillsHeading }}</h2>
+    <ul class="chip-list skills-chip-list">
+      {{ range . }}<li class="chip">{{ . }}</li>{{ end }}
+    </ul>
+  </section>
+  {{ end }}
 
   {{ $career := index hugo.Data.career .File.BaseFileName }}
   {{ with $career.experience }}
@@ -118,6 +148,29 @@
         <h3>{{ if $achievement.url }}<a href="{{ partial "resolve-career-url.html" $achievement.url }}">{{ $achievement.title }}</a>{{ else }}{{ $achievement.title }}{{ end }}</h3>
         <p class="achievement-summary">{{ $achievement.summary }}</p>
       </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with $profile.contact }}
+  <section class="profile-section contact-extras-section">
+    <h2>Contact</h2>
+    <p class="contact-copy">{{ .copy }}</p>
+    <p class="contact-email"><a href="mailto:{{ .email }}">{{ .email }}</a></p>
+    {{ with .phone }}<p class="contact-phone">{{ . }}</p>{{ end }}
+    {{ with .cta }}
+    <p class="contact-cta"><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></p>
+    {{ end }}
+  </section>
+  {{ end }}
+
+  {{ with $profile.socials }}
+  <section class="profile-section socials-section">
+    <h2>Socials</h2>
+    <ul class="chip-list socials-chip-list">
+      {{ range . }}
+      <li><a class="chip" href="{{ .url }}" rel="noopener noreferrer">{{ .network }}</a></li>
       {{ end }}
     </ul>
   </section>

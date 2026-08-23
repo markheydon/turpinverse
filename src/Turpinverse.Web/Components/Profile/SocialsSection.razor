@@ -1,0 +1,20 @@
+@using Turpinverse.Core.Models
+
+@if (Socials.Count > 0)
+{
+    <section class="profile-section socials-section">
+        <h2>Socials</h2>
+        <ul class="chip-list socials-chip-list">
+            @foreach (var social in Socials)
+            {
+                <li>
+                    <a class="chip" href="@social.Url" rel="noopener noreferrer">@social.Network</a>
+                </li>
+            }
+        </ul>
+    </section>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<ProfessionalSocial> Socials { get; set; } = [];
+}

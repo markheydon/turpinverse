@@ -3,6 +3,7 @@ using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Career;
 using Turpinverse.Core.Export;
 using Turpinverse.Core.Hugo;
+using Turpinverse.Core.Profile;
 using Turpinverse.Core.Validation;
 
 namespace Turpinverse.Core.DependencyInjection;
@@ -13,6 +14,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<CanonValidator>();
         services.AddSingleton<CareerPortfolioPresenter>();
+        services.AddSingleton<ProfessionalExtrasPresenter>();
         services.AddSingleton<ToneValidator>();
         services.AddSingleton<IExportService, CsvExportService>();
         services.AddSingleton<IHugoContentGenerator, HugoContentGenerator>();

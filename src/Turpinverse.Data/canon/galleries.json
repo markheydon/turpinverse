@@ -24,6 +24,11 @@
         "src": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800",
         "caption": "Brand wall refresh in progress; guidelines arrive on schedule for once.",
         "alt": "Office wall with brand graphics"
+      },
+      {
+        "src": "/images/personas/richard-turpin-profile.png",
+        "caption": "Corridor legend portrait — the highwayman look we keep for internal brand storytelling, not the board headshot.",
+        "alt": "Richard Turpin in historical highwayman attire"
       }
     ],
     "viewer": {

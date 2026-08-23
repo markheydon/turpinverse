@@ -1,0 +1,23 @@
+@using Turpinverse.Core.Career
+@using Turpinverse.Core.Models
+
+@if (Intro is not null)
+{
+    <section class="profile-section intro-section">
+        <p class="intro-short">@Intro.ShortIntro</p>
+        <p class="intro-headline">@Intro.Headline</p>
+        <p class="intro-subtitle">@Intro.Subtitle</p>
+        @if (Intro.Cta is not null)
+        {
+            <p class="intro-cta">
+                <a href="@CareerLinkResolver.ResolveForPublication(Intro.Cta.Url)">
+                    @(Intro.Cta.Label ?? Intro.Cta.Name ?? "Learn more")
+                </a>
+            </p>
+        }
+    </section>
+}
+
+@code {
+    [Parameter] public IntroCopy? Intro { get; set; }
+}
