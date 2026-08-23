@@ -479,6 +479,36 @@ h1:focus {
   margin-bottom: 2rem;
 }
 
+.contact-detail-header .profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.contact-detail-header .profile-avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(217, 119, 6, 0.15);
+  border: 2px solid rgba(30, 41, 59, 0.12);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.contact-detail-header .profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.contact-detail-header .profile-meta h1 {
+  margin: 0 0 0.25rem;
+}
+
 .contact-detail-header .back-link {
   display: inline-block;
   margin-bottom: 0.75rem;
@@ -534,52 +564,65 @@ h1:focus {
 
 .profile-section {
   margin-bottom: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(30, 41, 59, 0.12);
+}
+
+.profile-section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.35rem;
 }
 
 .intro-short {
   font-size: 1.05rem;
+  line-height: 1.5;
   margin: 0.5rem 0 0.25rem;
 }
 
 .intro-headline {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin: 0.25rem 0;
 }
 
 .intro-subtitle {
   color: rgba(30, 41, 59, 0.75);
+  font-weight: 500;
   margin: 0.25rem 0;
-}
-
-.intro-photo {
-  margin-top: 0.75rem;
-  border-radius: 0.5rem;
-  max-width: 10rem;
 }
 
 .intro-cta a,
 .contact-cta a {
   font-weight: 600;
   color: var(--color-turpin-amber);
+  text-decoration: none;
 }
 
-.skills-list,
-.socials-list {
-  list-style: none;
-  padding: 0;
-  margin: 0.5rem 0;
+.intro-cta a:hover,
+.contact-cta a:hover {
+  text-decoration: underline;
 }
 
-.skills-list li,
-.socials-list li {
-  padding: 0.25rem 0;
+.skills-chip-list,
+.socials-chip-list {
+  margin-top: 0.25rem;
 }
 
 .about-text {
   white-space: pre-line;
+  line-height: 1.65;
 }
 
 .contact-copy {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.55;
+}
+
+.contact-extras-section .contact-email a {
+  color: var(--color-turpin-amber);
+  text-decoration: none;
+}
+
+.contact-extras-section .contact-email a:hover {
+  text-decoration: underline;
 }

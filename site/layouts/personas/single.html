@@ -2,14 +2,15 @@
 {{ $profile := index hugo.Data.profile .File.BaseFileName }}
 <article class="persona post-single">
   <div class="profile-header">
-    <div class="profile-avatar">{{ partial "initials.html" .Title }}</div>
+    <div class="profile-avatar">
+      {{ partial "persona-avatar.html" . }}
+    </div>
     <div class="profile-meta">
       <h1>{{ .Title }}</h1>
       {{ with $profile.intro }}
       <p class="intro-short">{{ .shortIntro }}</p>
       <p class="intro-headline">{{ .headline }}</p>
       <p class="intro-subtitle">{{ .subtitle }}</p>
-      {{ with .photo }}<img class="intro-photo" src="{{ . }}" alt="{{ $.Title }}" loading="lazy" width="160" height="160">{{ end }}
       {{ with .cta }}
       <p class="intro-cta"><a href="{{ partial "resolve-career-url.html" .url }}">{{ partial "featured-link-text.html" . }}</a></p>
       {{ end }}
@@ -37,8 +38,8 @@
   {{ with $profile.skills }}
   <section class="profile-section skills-section">
     <h2>{{ $profile.skillsHeading }}</h2>
-    <ul class="skills-list">
-      {{ range . }}<li>{{ . }}</li>{{ end }}
+    <ul class="chip-list skills-chip-list">
+      {{ range . }}<li class="chip">{{ . }}</li>{{ end }}
     </ul>
   </section>
   {{ end }}
@@ -167,9 +168,9 @@
   {{ with $profile.socials }}
   <section class="profile-section socials-section">
     <h2>Socials</h2>
-    <ul class="socials-list">
+    <ul class="chip-list socials-chip-list">
       {{ range . }}
-      <li><a href="{{ .url }}" rel="noopener noreferrer">{{ .network }}</a></li>
+      <li><a class="chip" href="{{ .url }}" rel="noopener noreferrer">{{ .network }}</a></li>
       {{ end }}
     </ul>
   </section>

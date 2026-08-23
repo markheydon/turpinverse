@@ -29,6 +29,9 @@ public class ProfessionalExtrasHugoTests
                 "Board-level executive with a reputation for rapid corridor optimisation and unconventional stakeholder engagement.",
                 profile.GetProperty("intro").GetProperty("shortIntro").GetString());
             Assert.Equal("Richard Turpin", profile.GetProperty("intro").GetProperty("headline").GetString());
+            Assert.Equal(
+                "/images/personas/richard-turpin-profile-modern.png",
+                profile.GetProperty("intro").GetProperty("photo").GetString());
             Assert.False(profile.TryGetProperty("jobTitle", out _));
         }
         finally

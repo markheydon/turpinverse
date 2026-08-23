@@ -79,6 +79,7 @@ public class ContactDetailTests : BunitContext
         Assert.Contains("CEO, Strategic Corridor Operations", cut.Markup);
         Assert.Contains("Board-level executive with a reputation for rapid corridor optimisation", cut.Markup);
         Assert.DoesNotContain("contact-title", cut.Markup);
+        Assert.Contains("richard-turpin-profile-modern.png", cut.Markup);
     }
 
     [Fact]

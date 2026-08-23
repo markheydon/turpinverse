@@ -16,7 +16,7 @@
   {{ range $ordered }}
   <a class="contact-card{{ if eq .File.BaseFileName $pinnedPersona }} contact-card-pinned{{ end }}" href="{{ .RelPermalink }}">
     <div class="card-header">
-      <div class="card-avatar">{{ partial "initials.html" .Title }}</div>
+      <div class="card-avatar">{{ partial "persona-avatar.html" . }}</div>
       <div>
         <p class="card-title">{{ .Title }}</p>
         {{ with .Params.jobTitle }}<p class="card-meta">{{ . }}</p>{{ end }}

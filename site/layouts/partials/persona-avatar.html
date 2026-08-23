@@ -1,0 +1,16 @@
+{{/* Profile photo from professional extras, or initials fallback */}}
+{{- $page := . -}}
+{{- $profile := index hugo.Data.profile $page.File.BaseFileName -}}
+{{- with $profile -}}
+  {{- with .intro -}}
+    {{- with .photo -}}
+<img src="{{ . }}" alt="{{ $page.Title }}" loading="lazy" width="80" height="80">
+    {{- else -}}
+{{ partial "initials.html" $page.Title }}
+    {{- end -}}
+  {{- else -}}
+{{ partial "initials.html" $page.Title }}
+  {{- end -}}
+{{- else -}}
+{{ partial "initials.html" $page.Title }}
+{{- end -}}

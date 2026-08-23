@@ -27,16 +27,26 @@
     {
         <div class="contact-detail-header">
             <a class="back-link" href="/contacts">← Contacts</a>
-            <h1>@persona.DisplayName</h1>
-            @if (!suppressTitle)
-            {
-                <p class="contact-title">@persona.Title</p>
-            }
-            @if (!suppressHeaderEmail)
-            {
-                <p class="contact-email">@persona.Email</p>
-            }
-            <span class="status-badge status-@persona.Status">@persona.Status</span>
+            <div class="profile-header">
+                @if (!string.IsNullOrWhiteSpace(extras?.Intro?.Photo))
+                {
+                    <div class="profile-avatar">
+                        <img src="@extras.Intro.Photo" alt="@persona.DisplayName" loading="lazy" width="160" height="160">
+                    </div>
+                }
+                <div class="profile-meta">
+                    <h1>@persona.DisplayName</h1>
+                    @if (!suppressTitle)
+                    {
+                        <p class="contact-title">@persona.Title</p>
+                    }
+                    @if (!suppressHeaderEmail)
+                    {
+                        <p class="contact-email">@persona.Email</p>
+                    }
+                    <span class="status-badge status-@persona.Status">@persona.Status</span>
+                </div>
+            </div>
         </div>
 
         <div class="contact-detail-body">

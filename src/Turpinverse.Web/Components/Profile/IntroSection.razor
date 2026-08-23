@@ -7,10 +7,6 @@
         <p class="intro-short">@Intro.ShortIntro</p>
         <p class="intro-headline">@Intro.Headline</p>
         <p class="intro-subtitle">@Intro.Subtitle</p>
-        @if (!string.IsNullOrWhiteSpace(Intro.Photo))
-        {
-            <img class="intro-photo" src="@Intro.Photo" alt="@Intro.Headline" loading="lazy" width="160" height="160">
-        }
         @if (Intro.Cta is not null)
         {
             <p class="intro-cta">
