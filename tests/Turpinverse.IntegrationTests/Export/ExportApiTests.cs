@@ -77,6 +77,34 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.True(result.Counts["experience"] > 0);
     }
 
+    [Fact]
+    public async Task Preview_Accounts_IncludesRegisteredOfficeTownValues()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/accounts/preview?count=25", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        var turpinRow = rows!.First(r => r["accountId"] == "turpin-enterprises");
+        Assert.Equal("Hempstead", turpinRow["registeredOfficeTown"]);
+    }
+
+    [Fact]
+    public async Task Preview_Contacts_IncludesMailingTownValues()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/contacts/preview?count=25", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        var dickRow = rows!.First(r => r["contactId"] == "dick-turpin");
+        Assert.Equal("York", dickRow["mailingTown"]);
+        var blackBessRow = rows.First(r => r["contactId"] == "black-bess");
+        Assert.Equal(string.Empty, blackBessRow["mailingTown"]);
+    }
+
     private sealed class ManifestResponse
     {
         public string Version { get; set; } = string.Empty;

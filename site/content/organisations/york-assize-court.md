@@ -7,7 +7,7 @@ legalName: "York Due Diligence Partners — We Always Find the Horse in the Tran
 foundedYear: 1700
 members: ["james-smith"]
 parent: ""
-registeredOffice: {
+registeredOffice: '{
   "address1": "Assize Chambers",
   "address2": "Clifford Street",
   "address3": null,
@@ -15,7 +15,7 @@ registeredOffice: {
   "region": "North Yorkshire",
   "postcode": "YO1 9RX",
   "country": "United Kingdom"
-}
+}'
 ---
 
 Premier regulatory institution providing trial services, compliance auditing, and contract termination proceedings. Thoroughness is our trademark.

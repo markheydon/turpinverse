@@ -1,9 +1,9 @@
 {{/* Renders a UK postal address map (address1, town, postcode, country, etc.). */}}
-<div class="postal-address">
+<address class="postal-address">
   <p>{{ .address1 }}</p>
   {{ with .address2 }}<p>{{ . }}</p>{{ end }}
   {{ with .address3 }}<p>{{ . }}</p>{{ end }}
   <p>{{ .town }}{{ with .region }}, {{ . }}{{ end }}</p>
   <p>{{ .postcode }}</p>
   <p>{{ .country }}</p>
-</div>
+</address>

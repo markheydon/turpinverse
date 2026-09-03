@@ -6,7 +6,7 @@ email: "mary-brazier@turpinverse.uk"
 status: "deceased"
 summary: "Boutique legal counsel for clients requiring a fresh identity and a Yorkshire postcode. Documentation quality is impeccable; provenance is not discussed."
 organisations: ["brazier-legal","turpin-enterprises"]
-address: {
+address: '{
   "address1": "8 Silver Street",
   "address2": null,
   "address3": null,
@@ -14,7 +14,7 @@ address: {
   "region": "North Yorkshire",
   "postcode": "HG5 8AD",
   "country": "United Kingdom"
-}
+}'
 ---
 
 Boutique legal counsel for clients requiring a fresh identity and a Yorkshire postcode. Documentation quality is impeccable; provenance is not discussed.

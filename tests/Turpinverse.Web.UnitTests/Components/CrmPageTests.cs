@@ -126,6 +126,7 @@ public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
     {
         var cut = RenderPage();
         Assert.Contains("Mailing Town", cut.Markup);
+        Assert.Contains("York", cut.Markup);
     }
 }
 
@@ -148,6 +149,7 @@ public class AccountsPageTests : CrmEntityPageTestBase<Accounts>
     {
         var cut = RenderPage();
         Assert.Contains("Registered Office Town", cut.Markup);
+        Assert.Contains("Hempstead", cut.Markup);
     }
 }
 

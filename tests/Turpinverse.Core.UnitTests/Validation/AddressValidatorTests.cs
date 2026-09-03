@@ -91,6 +91,115 @@ public class AddressValidatorTests
     }
 
     [Fact]
+    public void Validate_ElizabethMillingtonWithAddress_FailsVr047()
+    {
+        var canon = CreateValidAddressCanon() with
+        {
+            Personas = CreateValidAddressCanon().Personas
+                .Select(p => p.Id == "elizabeth-millington" ? p with { Address = TestAddresses.SampleMailing } : p)
+                .ToList()
+        };
+
+        var result = _validator.Validate(canon);
+        Assert.Contains(result.Violations, v => v.Rule == "VR-047" && v.EntityId == "elizabeth-millington");
+    }
+
+    [Fact]
+    public void Validate_IncompleteOrganisationsWithSamePostcode_DoesNotFailVr049()
+    {
+        var incompleteOffice = new Address
+        {
+            Address1 = "",
+            Town = "Hempstead",
+            Postcode = "CM23 4TA",
+            Country = "United Kingdom"
+        };
+
+        var canon = CreateBaseCanon() with
+        {
+            Organisations =
+            [
+                CreateOrganisation("turpin-enterprises") with { RegisteredOffice = incompleteOffice },
+                CreateOrganisation("brazier-legal") with { RegisteredOffice = incompleteOffice }
+            ]
+        };
+
+        var result = _validator.Validate(canon);
+        Assert.DoesNotContain(result.Violations, v => v.Rule == "VR-049");
+        Assert.Equal(2, result.Violations.Count(v => v.Rule == "VR-044"));
+    }
+
+    [Fact]
+    public void Validate_InvalidCountry_FailsVr044()
+    {
+        var canon = CreateBaseCanon() with
+        {
+            Organisations =
+            [
+                CreateOrganisation("turpin-enterprises") with
+                {
+                    RegisteredOffice = TestAddresses.SampleOffice with { Country = "France" }
+                }
+            ]
+        };
+
+        var result = _validator.Validate(canon);
+        Assert.Contains(result.Violations, v => v.Rule == "VR-044" && v.EntityId == "turpin-enterprises");
+    }
+
+    [Fact]
+    public void Validate_InvalidPostcode_FailsVr044()
+    {
+        var canon = CreateBaseCanon() with
+        {
+            Organisations =
+            [
+                CreateOrganisation("turpin-enterprises") with
+                {
+                    RegisteredOffice = TestAddresses.SampleOffice with { Postcode = "NOT A POSTCODE" }
+                }
+            ]
+        };
+
+        var result = _validator.Validate(canon);
+        Assert.Contains(result.Violations, v => v.Rule == "VR-044" && v.EntityId == "turpin-enterprises");
+    }
+
+    [Fact]
+    public void Validate_IncompleteFourthPersonaAddress_DoesNotCountTowardVr048()
+    {
+        var canon = CreateValidAddressCanon() with
+        {
+            Personas = CreateValidAddressCanon().Personas
+                .Concat(
+                [
+                    CreatePersona("ned-palmer") with
+                    {
+                        Address = new Address
+                        {
+                            Address1 = "1 Example Street",
+                            Town = "",
+                            Postcode = "YO1 7HH",
+                            Country = "United Kingdom"
+                        }
+                    }
+                ])
+                .ToList()
+        };
+
+        var result = _validator.Validate(canon);
+        Assert.Contains(result.Violations, v => v.Rule == "VR-045" && v.EntityId == "ned-palmer");
+        Assert.DoesNotContain(result.Violations, v => v.Rule == "VR-048");
+    }
+
+    [Fact]
+    public void Validate_ValidAddressCanon_PassesAddressRules()
+    {
+        var result = _validator.Validate(CreateValidAddressCanon());
+        Assert.DoesNotContain(result.Violations, v => v.Rule is "VR-044" or "VR-045" or "VR-046" or "VR-047" or "VR-048" or "VR-049" or "VR-050" or "VR-051");
+    }
+
+    [Fact]
     public void Validate_TooManyPersonaAddresses_FailsVr048()
     {
         var baseCanon = CreateValidAddressCanon();

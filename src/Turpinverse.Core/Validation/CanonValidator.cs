@@ -380,32 +380,35 @@ public sealed partial class CanonValidator
                     "Organisation",
                     org.Id));
             }
-            else if (!string.IsNullOrWhiteSpace(org.RegisteredOffice.Address3))
-            {
-                orgWithAddress3 = true;
-            }
-
-            var doorKey = GetDoorKey(org.RegisteredOffice);
-            if (doorKeys.TryGetValue(doorKey, out var existingOrgId))
-            {
-                violations.Add(new ValidationViolation(
-                    "VR-049",
-                    $"Organisation '{org.Id}' shares the same premises as '{existingOrgId}'",
-                    "Organisation",
-                    org.Id));
-            }
             else
             {
-                doorKeys[doorKey] = org.Id;
+                if (!string.IsNullOrWhiteSpace(org.RegisteredOffice.Address3))
+                {
+                    orgWithAddress3 = true;
+                }
+
+                var doorKey = GetDoorKey(org.RegisteredOffice);
+                if (doorKeys.TryGetValue(doorKey, out var existingOrgId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-049",
+                        $"Organisation '{org.Id}' shares the same premises as '{existingOrgId}'",
+                        "Organisation",
+                        org.Id));
+                }
+                else
+                {
+                    doorKeys[doorKey] = org.Id;
+                }
             }
         }
 
         var addressedPersonaCount = 0;
         string? dickTurpinDoorKey = null;
-        string? turpinEnterprisesDoorKey = canon.Organisations
-            .FirstOrDefault(o => o.Id == turpinEnterprisesId)
-            ?.RegisteredOffice is { } office
-            ? GetDoorKey(office)
+        var turpinEnterprises = canon.Organisations.FirstOrDefault(o => o.Id == turpinEnterprisesId);
+        string? turpinEnterprisesDoorKey = turpinEnterprises is not null
+            && IsCompleteAddress(turpinEnterprises.RegisteredOffice)
+            ? GetDoorKey(turpinEnterprises.RegisteredOffice)
             : null;
 
         foreach (var persona in canon.Personas)
@@ -415,8 +418,6 @@ public sealed partial class CanonValidator
                 continue;
             }
 
-            addressedPersonaCount++;
-
             if (!IsCompleteAddress(persona.Address))
             {
                 violations.Add(new ValidationViolation(
@@ -425,14 +426,19 @@ public sealed partial class CanonValidator
                     "Persona",
                     persona.Id));
             }
-            else if (!string.IsNullOrWhiteSpace(persona.Address.Address3))
+            else
             {
-                personaWithAddress3 = true;
-            }
+                addressedPersonaCount++;
 
-            if (persona.Id == dickTurpinId)
-            {
-                dickTurpinDoorKey = GetDoorKey(persona.Address);
+                if (!string.IsNullOrWhiteSpace(persona.Address.Address3))
+                {
+                    personaWithAddress3 = true;
+                }
+
+                if (persona.Id == dickTurpinId)
+                {
+                    dickTurpinDoorKey = GetDoorKey(persona.Address);
+                }
             }
         }
 
@@ -489,12 +495,20 @@ public sealed partial class CanonValidator
         }
     }
 
-    internal static bool IsCompleteAddress(Address? address) =>
+    public static bool IsCompleteAddress(Address? address) =>
         address is not null
         && !string.IsNullOrWhiteSpace(address.Address1)
         && !string.IsNullOrWhiteSpace(address.Town)
         && !string.IsNullOrWhiteSpace(address.Postcode)
-        && !string.IsNullOrWhiteSpace(address.Country);
+        && !string.IsNullOrWhiteSpace(address.Country)
+        && IsUnitedKingdom(address.Country)
+        && IsValidUkPostcode(address.Postcode);
+
+    internal static bool IsUnitedKingdom(string country) =>
+        string.Equals(country.Trim(), "United Kingdom", StringComparison.OrdinalIgnoreCase);
+
+    internal static bool IsValidUkPostcode(string postcode) =>
+        UkPostcodeRegex().IsMatch(postcode.Trim());
 
     internal static string GetDoorKey(Address address) =>
         $"{address.Address1.Trim()}\u001f{address.Postcode.Trim()}";
@@ -1239,4 +1253,7 @@ public sealed partial class CanonValidator
 
     [GeneratedRegex(@"\d{4}")]
     private static partial Regex YearRegex();
+
+    [GeneratedRegex(@"^(GIR 0AA|[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2})$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex UkPostcodeRegex();
 }

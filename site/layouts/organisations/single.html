@@ -14,14 +14,14 @@
     </p>
   </header>
 
-  <div class="post-content md-content">{{ .Content }}</div>
-
   {{ with .Params.registeredOffice }}
   <section class="registered-office-section">
     <h2>Registered office</h2>
     {{ partial "postal-address.html" . }}
   </section>
   {{ end }}
+
+  <div class="post-content md-content">{{ .Content }}</div>
 
   {{ partial "org-structure.html" . }}
   {{ partial "org-member-chart.html" . }}

@@ -7,7 +7,7 @@ legalName: "Bayes Horsemanship Academy — Executive Mobility for Those Who Need
 foundedYear: 1730
 members: ["richard-bayes"]
 parent: ""
-registeredOffice: {
+registeredOffice: '{
   "address1": "The Gallops",
   "address2": "Snailwell Road",
   "address3": null,
@@ -15,7 +15,7 @@ registeredOffice: {
   "region": "Suffolk",
   "postcode": "CB8 0XA",
   "country": "United Kingdom"
-}
+}'
 ---
 
 Premier riding academy offering advanced horsemanship certification for executives with time-sensitive travel requirements.

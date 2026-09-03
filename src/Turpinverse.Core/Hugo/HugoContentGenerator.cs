@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Career;
+using Turpinverse.Core.Models;
 using Turpinverse.Core.Profile;
 
 namespace Turpinverse.Core.Hugo;
@@ -42,7 +43,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         {
             var summary = EscapeYaml(ExtractSummary(persona.Biography));
             var addressYaml = persona.Address is not null
-                ? $"address: {JsonSerializer.Serialize(persona.Address, JsonOptions)}\n"
+                ? FormatAddressYaml("address", persona.Address)
                 : string.Empty;
             var content = $"""
                 ---
@@ -77,7 +78,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 legalName: "{EscapeYaml(legalName)}"
                 {foundedLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
-                registeredOffice: {JsonSerializer.Serialize(org.RegisteredOffice, JsonOptions)}
+                {FormatAddressYaml("registeredOffice", org.RegisteredOffice).TrimEnd()}
                 ---
 
                 {org.Description}
@@ -450,4 +451,10 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             .Replace("\r\n", "\\n")
             .Replace("\n", "\\n")
             .Replace("\r", "\\n");
+
+    private static string FormatAddressYaml(string key, Address address)
+    {
+        var json = JsonSerializer.Serialize(address, JsonOptions);
+        return $"{key}: '{json.Replace("'", "''")}'\n";
+    }
 }
