@@ -454,7 +454,24 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
 
     private static string FormatAddressYaml(string key, Address address)
     {
-        var json = JsonSerializer.Serialize(address, JsonOptions);
-        return $"{key}: '{json.Replace("'", "''")}'\n";
+        var lines = new List<string> { $"{key}:" };
+        AppendAddressField(lines, "address1", address.Address1);
+        AppendAddressField(lines, "address2", address.Address2);
+        AppendAddressField(lines, "address3", address.Address3);
+        AppendAddressField(lines, "town", address.Town);
+        AppendAddressField(lines, "region", address.Region);
+        AppendAddressField(lines, "postcode", address.Postcode);
+        AppendAddressField(lines, "country", address.Country);
+        return string.Join('\n', lines) + '\n';
+    }
+
+    private static void AppendAddressField(List<string> lines, string fieldName, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return;
+        }
+
+        lines.Add($"  {fieldName}: \"{EscapeYaml(value)}\"");
     }
 }

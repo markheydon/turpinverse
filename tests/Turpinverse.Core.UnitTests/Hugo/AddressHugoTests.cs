@@ -23,10 +23,9 @@ public class AddressHugoTests
                 cancellationToken);
 
             Assert.Contains("registeredOffice:", content);
-            Assert.Contains("registeredOffice: '{", content);
-            Assert.Contains("\"address1\": \"Suite 12, Thornbury House\"", content);
-            Assert.Contains("\"town\": \"Hempstead\"", content);
-            Assert.Contains("\"postcode\": \"CM23 4TA\"", content);
+            Assert.Contains("  address1: \"Suite 12, Thornbury House\"", content);
+            Assert.Contains("  town: \"Hempstead\"", content);
+            Assert.Contains("  postcode: \"CM23 4TA\"", content);
         }
         finally
         {
@@ -54,9 +53,8 @@ public class AddressHugoTests
                 cancellationToken);
 
             Assert.Contains("address:", content);
-            Assert.Contains("address: '{", content);
-            Assert.Contains("\"address1\": \"14 Church Lane\"", content);
-            Assert.Contains("\"town\": \"York\"", content);
+            Assert.Contains("  address1: \"14 Church Lane\"", content);
+            Assert.Contains("  town: \"York\"", content);
         }
         finally
         {
