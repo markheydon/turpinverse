@@ -19,14 +19,7 @@
   {{ with .Params.registeredOffice }}
   <section class="registered-office-section">
     <h2>Registered office</h2>
-    <address class="postal-address">
-      <p>{{ .address1 }}</p>
-      {{ with .address2 }}<p>{{ . }}</p>{{ end }}
-      {{ with .address3 }}<p>{{ . }}</p>{{ end }}
-      <p>{{ .town }}{{ with .region }}, {{ . }}{{ end }}</p>
-      <p>{{ .postcode }}</p>
-      <p>{{ .country }}</p>
-    </address>
+    {{ partial "postal-address.html" . }}
   </section>
   {{ end }}
 

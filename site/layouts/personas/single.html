@@ -26,6 +26,13 @@
     </div>
   </div>
 
+  {{ with .Params.address }}
+  <section class="profile-section mailing-address-section">
+    <h2>Mailing address</h2>
+    {{ partial "postal-address.html" . }}
+  </section>
+  {{ end }}
+
   {{ with $profile.about }}
   <section class="profile-section about-section">
     <h2>About</h2>
@@ -150,20 +157,6 @@
       </li>
       {{ end }}
     </ul>
-  </section>
-  {{ end }}
-
-  {{ with .Params.address }}
-  <section class="mailing-address-section">
-    <h2>Mailing address</h2>
-    <address class="postal-address">
-      <p>{{ .address1 }}</p>
-      {{ with .address2 }}<p>{{ . }}</p>{{ end }}
-      {{ with .address3 }}<p>{{ . }}</p>{{ end }}
-      <p>{{ .town }}{{ with .region }}, {{ . }}{{ end }}</p>
-      <p>{{ .postcode }}</p>
-      <p>{{ .country }}</p>
-    </address>
   </section>
   {{ end }}
 
