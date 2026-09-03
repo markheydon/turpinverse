@@ -255,14 +255,29 @@
           "pattern": "^[a-z0-9.-]+@turpinverse\\.uk$"
         },
         "phone": { "type": "string", "maxLength": 30 },
-        "notes": { "type": "string", "maxLength": 500 }
+        "notes": { "type": "string", "maxLength": 500 },
+        "address": { "$ref": "#/$defs/Address" }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address1", "town", "postcode", "country"],
+      "properties": {
+        "address1": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "address2": { "type": "string", "maxLength": 120 },
+        "address3": { "type": "string", "maxLength": 120 },
+        "town": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "region": { "type": "string", "maxLength": 80 },
+        "postcode": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "country": { "type": "string", "minLength": 1, "maxLength": 80 }
       }
     },
     "Organisation": {
       "type": "object",
       "required": [
         "id", "tradingName", "description", "industry",
-        "historicalAnchor", "memberPersonaIds", "status"
+        "historicalAnchor", "memberPersonaIds", "status", "registeredOffice"
       ],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
@@ -286,7 +301,8 @@
           "type": "string",
           "format": "uri",
           "pattern": "^https://[a-z0-9.-]+\\.turpinverse\\.uk$"
-        }
+        },
+        "registeredOffice": { "$ref": "#/$defs/Address" }
       }
     },
     "CanonEvent": {

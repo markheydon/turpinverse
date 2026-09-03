@@ -68,6 +68,27 @@
             <ProjectsSection Items="projects" />
             <AchievementsSection Items="achievements" />
 
+            @if (persona.Address is not null)
+            {
+                <section class="mailing-address-section">
+                    <h2>Mailing address</h2>
+                    <address class="postal-address">
+                        <p>@persona.Address.Address1</p>
+                        @if (!string.IsNullOrWhiteSpace(persona.Address.Address2))
+                        {
+                            <p>@persona.Address.Address2</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(persona.Address.Address3))
+                        {
+                            <p>@persona.Address.Address3</p>
+                        }
+                        <p>@persona.Address.Town@(string.IsNullOrWhiteSpace(persona.Address.Region) ? "" : $", {persona.Address.Region}")</p>
+                        <p>@persona.Address.Postcode</p>
+                        <p>@persona.Address.Country</p>
+                    </address>
+                </section>
+            }
+
             <ContactExtrasSection Contact="extras?.Contact" />
             <SocialsSection Socials="@(extras?.Socials ?? [])" />
         </div>

@@ -70,16 +70,20 @@ Professional extras publish in sandwich order on both channels: intro header →
 **On Hugo today:**
 
 - Personas (biographies, relationships, aliases)
-- Organisations (profiles, org charts)
+- Organisations (profiles, org charts, **registered office** postal layout on every organisation page)
+- Persona **mailing addresses** when canon includes one (omitted when absent — no empty heading)
 - Timeline events
 - Career history and portfolio on persona pages (experience, education, projects, achievements)
 - Professional profile extras on persona pages (intro, about, skills, contact, socials)
 - Deals and cases (dedicated indexes and detail pages with named bidirectional links)
 - Articles and galleries (team journal list/detail pages, persona article lists, captioned gallery with lightbox)
 
-**Blazor / CSV only today:**
+**Blazor / CSV today:**
 
 - Tabular deals and cases datasets with machine-oriented identifier columns in previews and exports (by design for the export channel)
+- Account and contact CSV exports include flattened UK postal columns (`registeredOffice*` / `mailing*`)
+- Blazor `/accounts` preview MAY show `registeredOfficeTown`; `/contacts` preview MAY show `mailingTown`
+- Blazor `/contacts/{id}` shows a mailing address section when the persona has one (outside professional-extras contact)
 
 ## Known gaps
 

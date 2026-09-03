@@ -153,6 +153,20 @@
   </section>
   {{ end }}
 
+  {{ with .Params.address }}
+  <section class="mailing-address-section">
+    <h2>Mailing address</h2>
+    <address class="postal-address">
+      <p>{{ .address1 }}</p>
+      {{ with .address2 }}<p>{{ . }}</p>{{ end }}
+      {{ with .address3 }}<p>{{ . }}</p>{{ end }}
+      <p>{{ .town }}{{ with .region }}, {{ . }}{{ end }}</p>
+      <p>{{ .postcode }}</p>
+      <p>{{ .country }}</p>
+    </address>
+  </section>
+  {{ end }}
+
   {{ with $profile.contact }}
   <section class="profile-section contact-extras-section">
     <h2>Contact</h2>

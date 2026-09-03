@@ -34,9 +34,9 @@ description: "Task list for UK Postal Addresses feature implementation"
 
 **Purpose**: Feature branch readiness and baseline verification
 
-- [ ] T001 Verify feature branch `007-uk-postal-addresses` is active and design artifacts exist under `specs/007-uk-postal-addresses/`
-- [ ] T002 Confirm baseline canon files `src/Turpinverse.Data/canon/organisations.json` and `src/Turpinverse.Data/canon/personas.json` load without `registeredOffice` / `address` fields yet
-- [ ] T003 Confirm merge targets `specs/001-turpinverse-universe/contracts/canon-schema.json` and `specs/001-turpinverse-universe/contracts/crm-export-schema.json` exist per plan.md
+- [X] T001 Verify feature branch `007-uk-postal-addresses` is active and design artifacts exist under `specs/007-uk-postal-addresses/`
+- [X] T002 Confirm baseline canon files `src/Turpinverse.Data/canon/organisations.json` and `src/Turpinverse.Data/canon/personas.json` load without `registeredOffice` / `address` fields yet
+- [X] T003 Confirm merge targets `specs/001-turpinverse-universe/contracts/canon-schema.json` and `specs/001-turpinverse-universe/contracts/crm-export-schema.json` exist per plan.md
 
 ---
 
@@ -50,26 +50,26 @@ description: "Task list for UK Postal Addresses feature implementation"
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T004 [P] Add failing Address canon validation tests (VR-044–VR-051) in `tests/Turpinverse.Core.UnitTests/Validation/AddressValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
-- [ ] T005 [P] Add failing CanonSchemaValidator tests for `$defs.Address`, required `registeredOffice`, and optional `address` in `tests/Turpinverse.Core.UnitTests/Validation/AddressSchemaValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
-- [ ] T006 [P] Add failing ToneValidator address-string scan tests (TONE-001 on `address1` etc.) in `tests/Turpinverse.Core.UnitTests/Validation/ToneValidatorAddressTests.cs`
-- [ ] T007 [P] Add failing ExportMapper address flatten tests (org `registeredOffice*` and contact `mailing*` with empty strings when absent) in `tests/Turpinverse.Core.UnitTests/Export/AddressExportMapperTests.cs`
-- [ ] T008 [P] Add failing `ExportCsvColumns` header assertions for seven `registeredOffice*` and seven `mailing*` columns in `tests/Turpinverse.Core.UnitTests/Export/ExportCsvColumnsTests.cs`
+- [X] T004 [P] Add failing Address canon validation tests (VR-044–VR-051) in `tests/Turpinverse.Core.UnitTests/Validation/AddressValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
+- [X] T005 [P] Add failing CanonSchemaValidator tests for `$defs.Address`, required `registeredOffice`, and optional `address` in `tests/Turpinverse.Core.UnitTests/Validation/AddressSchemaValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
+- [X] T006 [P] Add failing ToneValidator address-string scan tests (TONE-001 on `address1` etc.) in `tests/Turpinverse.Core.UnitTests/Validation/ToneValidatorAddressTests.cs`
+- [X] T007 [P] Add failing ExportMapper address flatten tests (org `registeredOffice*` and contact `mailing*` with empty strings when absent) in `tests/Turpinverse.Core.UnitTests/Export/AddressExportMapperTests.cs`
+- [X] T008 [P] Add failing `ExportCsvColumns` header assertions for seven `registeredOffice*` and seven `mailing*` columns in `tests/Turpinverse.Core.UnitTests/Export/ExportCsvColumnsTests.cs`
 
 ### Implementation for Foundational
 
-- [ ] T009 [P] Create `Address` value object (`address1`, `address2`, `address3`, `town`, `region`, `postcode`, `country`) in `src/Turpinverse.Core/Models/Address.cs`
-- [ ] T010 Extend `Organisation` with required `RegisteredOffice` in `src/Turpinverse.Core/Models/Organisation.cs`
-- [ ] T011 Extend `Persona` with optional `Address` in `src/Turpinverse.Core/Models/Persona.cs`
-- [ ] T012 Merge `$defs.Address` and Organisation/Persona patches from `specs/007-uk-postal-addresses/contracts/address-canon-schema.json` into `specs/001-turpinverse-universe/contracts/canon-schema.json`
-- [ ] T013 Merge account/contact address columns from `specs/007-uk-postal-addresses/contracts/crm-export-schema.json` into `specs/001-turpinverse-universe/contracts/crm-export-schema.json`
-- [ ] T014 Extend `CanonSchemaValidator` for Address entity types in `src/Turpinverse.Core/Validation/CanonSchemaValidator.cs`
-- [ ] T015 Implement VR-044–VR-051 validation methods and door-key helper in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T016 Extend `ToneValidator.ValidateCanon` to run forbidden-pattern checks on every non-empty Address string field in `src/Turpinverse.Core/Validation/ToneValidator.cs`
-- [ ] T017 [P] Add `registeredOfficeAddress1`–`registeredOfficeCountry` properties to `AccountExport` in `src/Turpinverse.Core/Export/AccountExport.cs`
-- [ ] T018 [P] Add `mailingAddress1`–`mailingCountry` properties to `ContactExport` in `src/Turpinverse.Core/Export/ContactExport.cs`
-- [ ] T019 Extend `ExportMapper` to flatten nested addresses; emit `""` for absent optional lines and absent persona address (never copy org office onto contact) in `src/Turpinverse.Core/Export/ExportMapper.cs`
-- [ ] T020 Update `ExportCsvColumns` account and contact column lists to match merged CRM schema in `src/Turpinverse.Core/Export/ExportCsvColumns.cs`
+- [X] T009 [P] Create `Address` value object (`address1`, `address2`, `address3`, `town`, `region`, `postcode`, `country`) in `src/Turpinverse.Core/Models/Address.cs`
+- [X] T010 Extend `Organisation` with required `RegisteredOffice` in `src/Turpinverse.Core/Models/Organisation.cs`
+- [X] T011 Extend `Persona` with optional `Address` in `src/Turpinverse.Core/Models/Persona.cs`
+- [X] T012 Merge `$defs.Address` and Organisation/Persona patches from `specs/007-uk-postal-addresses/contracts/address-canon-schema.json` into `specs/001-turpinverse-universe/contracts/canon-schema.json`
+- [X] T013 Merge account/contact address columns from `specs/007-uk-postal-addresses/contracts/crm-export-schema.json` into `specs/001-turpinverse-universe/contracts/crm-export-schema.json`
+- [X] T014 Extend `CanonSchemaValidator` for Address entity types in `src/Turpinverse.Core/Validation/CanonSchemaValidator.cs`
+- [X] T015 Implement VR-044–VR-051 validation methods and door-key helper in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T016 Extend `ToneValidator.ValidateCanon` to run forbidden-pattern checks on every non-empty Address string field in `src/Turpinverse.Core/Validation/ToneValidator.cs`
+- [X] T017 [P] Add `registeredOfficeAddress1`–`registeredOfficeCountry` properties to `AccountExport` in `src/Turpinverse.Core/Export/AccountExport.cs`
+- [X] T018 [P] Add `mailingAddress1`–`mailingCountry` properties to `ContactExport` in `src/Turpinverse.Core/Export/ContactExport.cs`
+- [X] T019 Extend `ExportMapper` to flatten nested addresses; emit `""` for absent optional lines and absent persona address (never copy org office onto contact) in `src/Turpinverse.Core/Export/ExportMapper.cs`
+- [X] T020 Update `ExportCsvColumns` account and contact column lists to match merged CRM schema in `src/Turpinverse.Core/Export/ExportCsvColumns.cs`
 
 **Checkpoint**: Foundation ready — models deserialize, schema validates structure, validator/export tests fail until canon data ships in user story phases
 
@@ -83,15 +83,15 @@ description: "Task list for UK Postal Addresses feature implementation"
 
 ### Tests for User Story 1 (failing-first) ⚠️
 
-- [ ] T021 [P] [US1] Add failing HugoContentGenerator `registeredOffice` front-matter emission tests in `tests/Turpinverse.Core.UnitTests/Hugo/AddressHugoTests.cs` with `[Trait("Category", "PostalAddress")]`
-- [ ] T022 [P] [US1] Add failing account CSV `registeredOffice*` column integration tests in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs` with `[Trait("Category", "CsvExport")]`
+- [X] T021 [P] [US1] Add failing HugoContentGenerator `registeredOffice` front-matter emission tests in `tests/Turpinverse.Core.UnitTests/Hugo/AddressHugoTests.cs` with `[Trait("Category", "PostalAddress")]`
+- [X] T022 [P] [US1] Add failing account CSV `registeredOffice*` column integration tests in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs` with `[Trait("Category", "CsvExport")]`
 
 ### Implementation for User Story 1
 
-- [ ] T023 [US1] Author complete distinct `registeredOffice` for all ten organisations in `src/Turpinverse.Data/canon/organisations.json` (invented premises from historical anchors; United Kingdom; ≥1 org uses `address3`; no shared door keys)
-- [ ] T024 [US1] Extend `HugoContentGenerator` to emit nested `registeredOffice` into organisation front matter in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
-- [ ] T025 [US1] Add always-visible **Registered office** postal layout block (lines, town, region, postcode, country — no CSV/JSON keys as visible labels) in `site/layouts/organisations/single.html`
-- [ ] T026 [US1] Regenerate organisation markdown under `site/content/organisations/` via `src/Turpinverse.Tools.GenerateHugoContent/Program.cs`
+- [X] T023 [US1] Author complete distinct `registeredOffice` for all ten organisations in `src/Turpinverse.Data/canon/organisations.json` (invented premises from historical anchors; United Kingdom; ≥1 org uses `address3`; no shared door keys)
+- [X] T024 [US1] Extend `HugoContentGenerator` to emit nested `registeredOffice` into organisation front matter in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
+- [X] T025 [US1] Add always-visible **Registered office** postal layout block (lines, town, region, postcode, country — no CSV/JSON keys as visible labels) in `site/layouts/organisations/single.html`
+- [X] T026 [US1] Regenerate organisation markdown under `site/content/organisations/` via `src/Turpinverse.Tools.GenerateHugoContent/Program.cs`
 
 **Checkpoint**: User Story 1 functional — all org offices in canon, Hugo org pages, account CSV; CanonValidation still fails VR-046–VR-048 until contact addresses ship (US2)
 
@@ -105,17 +105,17 @@ description: "Task list for UK Postal Addresses feature implementation"
 
 ### Tests for User Story 2 (failing-first) ⚠️
 
-- [ ] T027 [P] [US2] Add failing Hugo persona `address` emit-when-present / omit-when-absent tests in `tests/Turpinverse.Core.UnitTests/Hugo/AddressHugoTests.cs`
-- [ ] T028 [P] [US2] Add failing Blazor ContactDetail mailing-address present/omit tests in `tests/Turpinverse.Web.UnitTests/Components/ContactDetailTests.cs` with `[Trait("Category", "PostalAddress")]`
-- [ ] T029 [P] [US2] Add failing contact CSV empty-string `mailing*` column tests (columns always present; no org office copy) in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs`
+- [X] T027 [P] [US2] Add failing Hugo persona `address` emit-when-present / omit-when-absent tests in `tests/Turpinverse.Core.UnitTests/Hugo/AddressHugoTests.cs`
+- [X] T028 [P] [US2] Add failing Blazor ContactDetail mailing-address present/omit tests in `tests/Turpinverse.Web.UnitTests/Components/ContactDetailTests.cs` with `[Trait("Category", "PostalAddress")]`
+- [X] T029 [P] [US2] Add failing contact CSV empty-string `mailing*` column tests (columns always present; no org office copy) in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T030 [US2] Author `address` only on `dick-turpin`, `mary-brazier`, and `james-smith` in `src/Turpinverse.Data/canon/personas.json` (Richard door key ≠ `turpin-enterprises`; ≥1 contact uses `address3`; all others omit property)
-- [ ] T031 [US2] Extend `HugoContentGenerator` to emit nested `address` into persona front matter only when `Persona.Address` is set in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
-- [ ] T032 [US2] Add mailing-address block with omit-empty guard (no heading when absent) in `site/layouts/personas/single.html`
-- [ ] T033 [US2] Add mailing-address section to `src/Turpinverse.Web/Components/Pages/ContactDetail.razor` when `Persona.Address` is present (outside `ContactExtras`)
-- [ ] T034 [US2] Regenerate persona markdown under `site/content/personas/` via `src/Turpinverse.Tools.GenerateHugoContent/Program.cs`
+- [X] T030 [US2] Author `address` only on `dick-turpin`, `mary-brazier`, and `james-smith` in `src/Turpinverse.Data/canon/personas.json` (Richard door key ≠ `turpin-enterprises`; ≥1 contact uses `address3`; all others omit property)
+- [X] T031 [US2] Extend `HugoContentGenerator` to emit nested `address` into persona front matter only when `Persona.Address` is set in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
+- [X] T032 [US2] Add mailing-address block with omit-empty guard (no heading when absent) in `site/layouts/personas/single.html`
+- [X] T033 [US2] Add mailing-address section to `src/Turpinverse.Web/Components/Pages/ContactDetail.razor` when `Persona.Address` is present (outside `ContactExtras`)
+- [X] T034 [US2] Regenerate persona markdown under `site/content/personas/` via `src/Turpinverse.Tools.GenerateHugoContent/Program.cs`
 
 **Checkpoint**: User Stories 1 and 2 verifiable — org offices, contact minority, dual-channel persona surfaces; VR-044–VR-051 should pass on full canon
 
@@ -129,15 +129,15 @@ description: "Task list for UK Postal Addresses feature implementation"
 
 ### Tests for User Story 3 (failing-first) ⚠️
 
-- [ ] T035 [P] [US3] Add failing regression test that `ContactExtras` and `professional-extras.json` contain no postal address fields in `tests/Turpinverse.Core.UnitTests/Validation/AddressValidatorTests.cs`
-- [ ] T036 [P] [US3] Add failing optional Blazor list preview column tests for `registeredOfficeTown` and `mailingTown` in `tests/Turpinverse.Web.UnitTests/Components/CrmPageTests.cs` with `[Trait("Category", "PostalAddress")]`
+- [X] T035 [P] [US3] Add failing regression test that `ContactExtras` and `professional-extras.json` contain no postal address fields in `tests/Turpinverse.Core.UnitTests/Validation/AddressValidatorTests.cs`
+- [X] T036 [P] [US3] Add failing optional Blazor list preview column tests for `registeredOfficeTown` and `mailingTown` in `tests/Turpinverse.Web.UnitTests/Components/CrmPageTests.cs` with `[Trait("Category", "PostalAddress")]`
 
 ### Implementation for User Story 3
 
-- [ ] T037 [US3] Add optional `registeredOfficeTown` preview column to `src/Turpinverse.Web/Components/Pages/Accounts.razor`
-- [ ] T038 [US3] Add optional `mailingTown` preview column to `src/Turpinverse.Web/Components/Pages/Contacts.razor`
-- [ ] T039 [US3] Update Hugo showcase vs Blazor explore/export address surfaces in `docs/product-surfaces.md` per `specs/007-uk-postal-addresses/contracts/channel-surfaces.md`
-- [ ] T040 [US3] Bump `version` in `src/Turpinverse.Data/canon/canon.json` when the address dataset ships (if project convention requires)
+- [X] T037 [US3] Add optional `registeredOfficeTown` preview column to `src/Turpinverse.Web/Components/Pages/Accounts.razor`
+- [X] T038 [US3] Add optional `mailingTown` preview column to `src/Turpinverse.Web/Components/Pages/Contacts.razor`
+- [X] T039 [US3] Update Hugo showcase vs Blazor explore/export address surfaces in `docs/product-surfaces.md` per `specs/007-uk-postal-addresses/contracts/channel-surfaces.md`
+- [X] T040 [US3] Bump `version` in `src/Turpinverse.Data/canon/canon.json` when the address dataset ships (if project convention requires)
 
 **Checkpoint**: All three user stories independently testable; FR-003, FR-008, FR-010–FR-012 satisfied; full `Category=CanonValidation` suite passes
 
@@ -147,9 +147,9 @@ description: "Task list for UK Postal Addresses feature implementation"
 
 **Purpose**: End-to-end validation and publication completeness
 
-- [ ] T041 Run quickstart test filters from `specs/007-uk-postal-addresses/quickstart.md` (`CanonValidation`, `Export`, `HugoContentGenerator`, `ContactDetail`, `CsvExport`) and fix any failures
-- [ ] T042 [P] Run Hugo build (`cd site && hugo --minify` or `scripts/Invoke-HugoSite.ps1 build`) and spot-check Scenarios A–C from `specs/007-uk-postal-addresses/quickstart.md`
-- [ ] T043 [P] Verify `GET /api/canon/validate` returns 200 with zero VR-044–VR-051 violations when Development API is running (`src/Turpinverse.Web/Endpoints/CanonEndpoints.cs`)
+- [X] T041 Run quickstart test filters from `specs/007-uk-postal-addresses/quickstart.md` (`CanonValidation`, `Export`, `HugoContentGenerator`, `ContactDetail`, `CsvExport`) and fix any failures
+- [X] T042 [P] Run Hugo build (`cd site && hugo --minify` or `scripts/Invoke-HugoSite.ps1 build`) and spot-check Scenarios A–C from `specs/007-uk-postal-addresses/quickstart.md`
+- [X] T043 [P] Verify `GET /api/canon/validate` returns 200 with zero VR-044–VR-051 violations when Development API is running (`src/Turpinverse.Web/Endpoints/CanonEndpoints.cs`)
 
 ---
 

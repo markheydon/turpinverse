@@ -41,6 +41,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         foreach (var persona in canon.Personas)
         {
             var summary = EscapeYaml(ExtractSummary(persona.Biography));
+            var addressYaml = persona.Address is not null
+                ? $"address: {JsonSerializer.Serialize(persona.Address, JsonOptions)}\n"
+                : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(persona.DisplayName)}"
@@ -50,7 +53,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 status: "{persona.Status}"
                 summary: "{summary}"
                 organisations: {JsonSerializer.Serialize(persona.OrganisationIds)}
-                ---
+                {addressYaml}---
 
                 {persona.Biography}
                 """;
@@ -74,6 +77,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 legalName: "{EscapeYaml(legalName)}"
                 {foundedLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
+                registeredOffice: {JsonSerializer.Serialize(org.RegisteredOffice, JsonOptions)}
                 ---
 
                 {org.Description}

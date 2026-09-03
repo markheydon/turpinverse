@@ -15,7 +15,16 @@
     "status": "deceased",
     "email": "richard.turpin@turpinverse.uk",
     "phone": "01707-555-0101",
-    "notes": "Primary account executive for enterprise corridor logistics. Three active alias records flagged for deduplication review."
+    "notes": "Primary account executive for enterprise corridor logistics. Three active alias records flagged for deduplication review.",
+    "address": {
+      "address1": "14 Church Lane",
+      "address2": "Micklegate",
+      "address3": "Apt over the Smithy",
+      "town": "York",
+      "region": "North Yorkshire",
+      "postcode": "YO1 7HH",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "elizabeth-millington",
@@ -71,7 +80,14 @@
     "organisationIds": ["brazier-legal", "turpin-enterprises"],
     "status": "deceased",
     "email": "mary-brazier@turpinverse.uk",
-    "notes": "Handles compliance documentation and alias lifecycle management."
+    "notes": "Handles compliance documentation and alias lifecycle management.",
+    "address": {
+      "address1": "8 Silver Street",
+      "town": "Knaresborough",
+      "region": "North Yorkshire",
+      "postcode": "HG5 8AD",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "richard-bayes",
@@ -229,7 +245,14 @@
     "organisationIds": ["york-assize-court"],
     "status": "deceased",
     "email": "james-smith@turpinverse.uk",
-    "notes": "Regulatory compliance consulting. Trial preparation docs (case-006) closed successfully."
+    "notes": "Regulatory compliance consulting. Trial preparation docs (case-006) closed successfully.",
+    "address": {
+      "address1": "2 Bootham Terrace",
+      "town": "York",
+      "region": "North Yorkshire",
+      "postcode": "YO30 7EJ",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "william-hargreaves",

@@ -18,4 +18,5 @@ public sealed record Persona
     public required string Email { get; init; }
     public string? Phone { get; init; }
     public string? Notes { get; init; }
+    public Address? Address { get; init; }
 }

@@ -119,6 +119,14 @@ public class ContactsPageTests : CrmEntityPageTestBase<Contacts>
             .ThrowsAsync(new InvalidOperationException("preview failed")));
         Assert.Contains("Failed to load contacts data.", cut.Markup);
     }
+
+    [Fact]
+    [Trait("Category", "PostalAddress")]
+    public void ContactsPage_RendersMailingTownPreviewColumn()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Mailing Town", cut.Markup);
+    }
 }
 
 public class AccountsPageTests : CrmEntityPageTestBase<Accounts>
@@ -132,6 +140,14 @@ public class AccountsPageTests : CrmEntityPageTestBase<Accounts>
         Assert.Contains("Accounts", cut.Markup);
         Assert.Contains("Account Name", cut.Markup);
         Assert.Contains("Industry", cut.Markup);
+    }
+
+    [Fact]
+    [Trait("Category", "PostalAddress")]
+    public void AccountsPage_RendersRegisteredOfficeTownPreviewColumn()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Registered Office Town", cut.Markup);
     }
 }
 
@@ -256,7 +272,8 @@ internal static class CrmTestData
                     ["accountName"] = "Turpin & Co",
                     ["industry"] = "Retail",
                     ["status"] = "active",
-                    ["website"] = "https://turpinverse.uk"
+                    ["website"] = "https://turpinverse.uk",
+                    ["registeredOfficeTown"] = "Hempstead"
                 }
             ],
             "contacts" =>
@@ -271,7 +288,8 @@ internal static class CrmTestData
                     ["phone"] = "",
                     ["accountId"] = "org1",
                     ["status"] = "active",
-                    ["notes"] = ""
+                    ["notes"] = "",
+                    ["mailingTown"] = "York"
                 }
             ],
             "deals" =>

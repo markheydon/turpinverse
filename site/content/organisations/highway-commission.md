@@ -7,6 +7,15 @@ legalName: "National Highway Commission — Usage-Based Billing & Corridor Risk 
 foundedYear: 1700
 members: ["robert-finch","henry-clayton"]
 parent: ""
+registeredOffice: {
+  "address1": "Turnpike House",
+  "address2": "Fore Street",
+  "address3": null,
+  "town": "Edmonton",
+  "region": "Greater London",
+  "postcode": "N18 2TG",
+  "country": "United Kingdom"
+}
 ---
 
 Turnpike trust consortium managing road infrastructure, automated toll collection, and transport risk assessment. Billing disputes are frequent.

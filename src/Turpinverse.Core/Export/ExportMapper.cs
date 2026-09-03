@@ -32,7 +32,14 @@ public static class ExportMapper
             Phone = persona.Phone ?? string.Empty,
             AccountId = persona.OrganisationIds.FirstOrDefault() ?? string.Empty,
             Status = persona.Status,
-            Notes = persona.Notes ?? string.Empty
+            Notes = persona.Notes ?? string.Empty,
+            MailingAddress1 = persona.Address?.Address1 ?? string.Empty,
+            MailingAddress2 = persona.Address?.Address2 ?? string.Empty,
+            MailingAddress3 = persona.Address?.Address3 ?? string.Empty,
+            MailingTown = persona.Address?.Town ?? string.Empty,
+            MailingRegion = persona.Address?.Region ?? string.Empty,
+            MailingPostcode = persona.Address?.Postcode ?? string.Empty,
+            MailingCountry = persona.Address?.Country ?? string.Empty
         };
     }
 
@@ -46,7 +53,14 @@ public static class ExportMapper
             ParentAccountId = organisation.ParentOrganisationId ?? string.Empty,
             Description = organisation.Description,
             Website = organisation.Website ?? string.Empty,
-            Status = organisation.Status
+            Status = organisation.Status,
+            RegisteredOfficeAddress1 = organisation.RegisteredOffice.Address1,
+            RegisteredOfficeAddress2 = organisation.RegisteredOffice.Address2 ?? string.Empty,
+            RegisteredOfficeAddress3 = organisation.RegisteredOffice.Address3 ?? string.Empty,
+            RegisteredOfficeTown = organisation.RegisteredOffice.Town,
+            RegisteredOfficeRegion = organisation.RegisteredOffice.Region ?? string.Empty,
+            RegisteredOfficePostcode = organisation.RegisteredOffice.Postcode,
+            RegisteredOfficeCountry = organisation.RegisteredOffice.Country
         };
 
     public static DealExport MapDeal(Deal deal) =>

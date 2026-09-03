@@ -34,6 +34,7 @@ public sealed partial class CanonValidator
         ValidateCareerPortfolio(canon, personaIds, organisationIds, violations);
         ValidateArticlesAndGalleries(canon, personaIds, violations);
         ValidateProfessionalExtras(canon, personaIds, violations);
+        ValidateAddresses(canon, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -357,6 +358,146 @@ public sealed partial class CanonValidator
             }
         }
     }
+
+    private static void ValidateAddresses(Canon canon, List<ValidationViolation> violations)
+    {
+        const string dickTurpinId = "dick-turpin";
+        const string turpinEnterprisesId = "turpin-enterprises";
+        const string blackBessId = "black-bess";
+        const string elizabethMillingtonId = "elizabeth-millington";
+
+        var doorKeys = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var orgWithAddress3 = false;
+        var personaWithAddress3 = false;
+
+        foreach (var org in canon.Organisations)
+        {
+            if (!IsCompleteAddress(org.RegisteredOffice))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-044",
+                    $"Organisation '{org.Id}' is missing a complete registered office",
+                    "Organisation",
+                    org.Id));
+            }
+            else if (!string.IsNullOrWhiteSpace(org.RegisteredOffice.Address3))
+            {
+                orgWithAddress3 = true;
+            }
+
+            var doorKey = GetDoorKey(org.RegisteredOffice);
+            if (doorKeys.TryGetValue(doorKey, out var existingOrgId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-049",
+                    $"Organisation '{org.Id}' shares the same premises as '{existingOrgId}'",
+                    "Organisation",
+                    org.Id));
+            }
+            else
+            {
+                doorKeys[doorKey] = org.Id;
+            }
+        }
+
+        var addressedPersonaCount = 0;
+        string? dickTurpinDoorKey = null;
+        string? turpinEnterprisesDoorKey = canon.Organisations
+            .FirstOrDefault(o => o.Id == turpinEnterprisesId)
+            ?.RegisteredOffice is { } office
+            ? GetDoorKey(office)
+            : null;
+
+        foreach (var persona in canon.Personas)
+        {
+            if (persona.Address is null)
+            {
+                continue;
+            }
+
+            addressedPersonaCount++;
+
+            if (!IsCompleteAddress(persona.Address))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-045",
+                    $"Persona '{persona.Id}' has an incomplete address",
+                    "Persona",
+                    persona.Id));
+            }
+            else if (!string.IsNullOrWhiteSpace(persona.Address.Address3))
+            {
+                personaWithAddress3 = true;
+            }
+
+            if (persona.Id == dickTurpinId)
+            {
+                dickTurpinDoorKey = GetDoorKey(persona.Address);
+            }
+        }
+
+        var dickTurpin = canon.Personas.FirstOrDefault(p => p.Id == dickTurpinId);
+        if (dickTurpin?.Address is null || !IsCompleteAddress(dickTurpin.Address))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-046",
+                $"Persona '{dickTurpinId}' requires a complete mailing address",
+                "Persona",
+                dickTurpinId));
+        }
+
+        foreach (var personaId in new[] { blackBessId, elizabethMillingtonId })
+        {
+            var persona = canon.Personas.FirstOrDefault(p => p.Id == personaId);
+            if (persona?.Address is not null)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-047",
+                    $"Persona '{personaId}' must not have a mailing address",
+                    "Persona",
+                    personaId));
+            }
+        }
+
+        if (addressedPersonaCount != 3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-048",
+                $"Exactly three personas must have a mailing address, found {addressedPersonaCount}",
+                "Persona",
+                "personas"));
+        }
+
+        if (dickTurpinDoorKey is not null
+            && turpinEnterprisesDoorKey is not null
+            && string.Equals(dickTurpinDoorKey, turpinEnterprisesDoorKey, StringComparison.OrdinalIgnoreCase))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-050",
+                $"Persona '{dickTurpinId}' shares the same premises as organisation '{turpinEnterprisesId}'",
+                "Persona",
+                dickTurpinId));
+        }
+
+        if (!orgWithAddress3 || !personaWithAddress3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-051",
+                "At least one organisation and one persona address must include a third address line",
+                "Address",
+                "address3"));
+        }
+    }
+
+    internal static bool IsCompleteAddress(Address? address) =>
+        address is not null
+        && !string.IsNullOrWhiteSpace(address.Address1)
+        && !string.IsNullOrWhiteSpace(address.Town)
+        && !string.IsNullOrWhiteSpace(address.Postcode)
+        && !string.IsNullOrWhiteSpace(address.Country);
+
+    internal static string GetDoorKey(Address address) =>
+        $"{address.Address1.Trim()}\u001f{address.Postcode.Trim()}";
 
     private void ValidateTone(Canon canon, List<ValidationViolation> violations)
     {

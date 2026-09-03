@@ -5,13 +5,17 @@ public static class ExportCsvColumns
     public static readonly IReadOnlyList<string> Contacts =
     [
         "contactId", "firstName", "lastName", "title", "email",
-        "phone", "accountId", "status", "notes"
+        "phone", "accountId", "status", "notes",
+        "mailingAddress1", "mailingAddress2", "mailingAddress3",
+        "mailingTown", "mailingRegion", "mailingPostcode", "mailingCountry"
     ];
 
     public static readonly IReadOnlyList<string> Accounts =
     [
         "accountId", "accountName", "legalName", "industry",
-        "parentAccountId", "description", "website", "status"
+        "parentAccountId", "description", "website", "status",
+        "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
+        "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
     ];
 
     public static readonly IReadOnlyList<string> Deals =

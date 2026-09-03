@@ -50,4 +50,51 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
             TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task Export_Accounts_IncludesRegisteredOfficeColumnsWithValues()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/accounts", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var header = CsvExportReader.ParseHeader(bytes);
+        Assert.Contains("registeredOfficeAddress1", header);
+        Assert.Contains("registeredOfficeTown", header);
+        Assert.Contains("registeredOfficeCountry", header);
+
+        var rows = CsvExportReader.ParseRows(bytes);
+        var turpinRow = rows.First(r => r["accountId"] == "turpin-enterprises");
+        Assert.Equal("Suite 12, Thornbury House", turpinRow["registeredOfficeAddress1"]);
+        Assert.Equal("Hempstead", turpinRow["registeredOfficeTown"]);
+        Assert.Equal("United Kingdom", turpinRow["registeredOfficeCountry"]);
+    }
+
+    [Fact]
+    public async Task Export_Contacts_IncludesMailingColumnsWithEmptyStringsWhenAbsent()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/contacts", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var header = CsvExportReader.ParseHeader(bytes);
+        Assert.Contains("mailingAddress1", header);
+        Assert.Contains("mailingTown", header);
+        Assert.Contains("mailingCountry", header);
+
+        var rows = CsvExportReader.ParseRows(bytes);
+        var blackBessRow = rows.First(r => r["contactId"] == "black-bess");
+        Assert.Equal(string.Empty, blackBessRow["mailingAddress1"]);
+        Assert.Equal(string.Empty, blackBessRow["mailingTown"]);
+        Assert.Equal(string.Empty, blackBessRow["mailingCountry"]);
+
+        var dickRow = rows.First(r => r["contactId"] == "dick-turpin");
+        Assert.Equal("14 Church Lane", dickRow["mailingAddress1"]);
+        Assert.Equal("York", dickRow["mailingTown"]);
+        Assert.Equal("YO1 7HH", dickRow["mailingPostcode"]);
+    }
 }

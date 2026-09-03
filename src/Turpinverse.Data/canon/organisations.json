@@ -13,7 +13,15 @@
     ],
     "foundedYear": 1730,
     "status": "dissolved",
-    "website": "https://essex-gang.turpinverse.uk"
+    "website": "https://essex-gang.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Warehouse 3, Riverside Yard",
+      "address2": "Victoria Road",
+      "town": "Chelmsford",
+      "region": "Essex",
+      "postcode": "CM1 1LN",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "turpin-enterprises",
@@ -29,7 +37,16 @@
     ],
     "foundedYear": 1735,
     "status": "active",
-    "website": "https://turpin-enterprises.turpinverse.uk"
+    "website": "https://turpin-enterprises.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Suite 12, Thornbury House",
+      "address2": "The High Street",
+      "address3": "Hempstead Green",
+      "town": "Hempstead",
+      "region": "Essex",
+      "postcode": "CM23 4TA",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "millington-inn",
@@ -41,7 +58,15 @@
     "memberPersonaIds": ["elizabeth-millington", "anna-ward"],
     "foundedYear": 1720,
     "status": "active",
-    "website": "https://millington-inn.turpinverse.uk"
+    "website": "https://millington-inn.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "The Rose & Crown",
+      "address2": "Church Street",
+      "town": "Hempstead",
+      "region": "Essex",
+      "postcode": "CM23 1AB",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "york-assize-court",
@@ -53,7 +78,15 @@
     "memberPersonaIds": ["james-smith"],
     "foundedYear": 1700,
     "status": "active",
-    "website": "https://york-assize-court.turpinverse.uk"
+    "website": "https://york-assize-court.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Assize Chambers",
+      "address2": "Clifford Street",
+      "town": "York",
+      "region": "North Yorkshire",
+      "postcode": "YO1 9RX",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "king-equine-trading",
@@ -65,7 +98,15 @@
     "memberPersonaIds": ["matthew-king", "george-chapman", "black-bess"],
     "foundedYear": 1734,
     "status": "dissolved",
-    "website": "https://king-equine-trading.turpinverse.uk"
+    "website": "https://king-equine-trading.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Stable Block 7",
+      "address2": "Longbridge Road",
+      "town": "Barking",
+      "region": "Essex",
+      "postcode": "IG11 8TQ",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "brazier-legal",
@@ -77,7 +118,15 @@
     "memberPersonaIds": ["mary-brazier", "margaret-hayes"],
     "foundedYear": 1736,
     "status": "active",
-    "website": "https://brazier-legal.turpinverse.uk"
+    "website": "https://brazier-legal.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Brazier Chambers",
+      "address2": "Waterside",
+      "town": "Knaresborough",
+      "region": "North Yorkshire",
+      "postcode": "HG5 8AA",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "bayes-horsemanship",
@@ -89,7 +138,15 @@
     "memberPersonaIds": ["richard-bayes"],
     "foundedYear": 1730,
     "status": "active",
-    "website": "https://bayes-horsemanship.turpinverse.uk"
+    "website": "https://bayes-horsemanship.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "The Gallops",
+      "address2": "Snailwell Road",
+      "town": "Newmarket",
+      "region": "Suffolk",
+      "postcode": "CB8 0XA",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "york-racing-society",
@@ -101,7 +158,15 @@
     "memberPersonaIds": ["sarah-thornton"],
     "foundedYear": 1730,
     "status": "active",
-    "website": "https://york-racing-society.turpinverse.uk"
+    "website": "https://york-racing-society.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Racecourse Pavilion",
+      "address2": "Knavesmire Road",
+      "town": "York",
+      "region": "North Yorkshire",
+      "postcode": "YO23 1EX",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "epping-forest-authority",
@@ -113,7 +178,15 @@
     "memberPersonaIds": ["william-hargreaves"],
     "foundedYear": 1700,
     "status": "active",
-    "website": "https://epping-forest-authority.turpinverse.uk"
+    "website": "https://epping-forest-authority.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Forest Gate House",
+      "address2": "High Road",
+      "town": "Loughton",
+      "region": "Essex",
+      "postcode": "IG10 4QN",
+      "country": "United Kingdom"
+    }
   },
   {
     "id": "highway-commission",
@@ -125,6 +198,14 @@
     "memberPersonaIds": ["robert-finch", "henry-clayton"],
     "foundedYear": 1700,
     "status": "active",
-    "website": "https://highway-commission.turpinverse.uk"
+    "website": "https://highway-commission.turpinverse.uk",
+    "registeredOffice": {
+      "address1": "Turnpike House",
+      "address2": "Fore Street",
+      "town": "Edmonton",
+      "region": "Greater London",
+      "postcode": "N18 2TG",
+      "country": "United Kingdom"
+    }
   }
 ]
