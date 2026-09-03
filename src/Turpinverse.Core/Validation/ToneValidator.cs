@@ -22,8 +22,34 @@ public sealed partial class ToneValidator
         foreach (var org in canon.Organisations)
         {
             violations.AddRange(ValidateText(org.Description, patterns, "Organisation", org.Id));
+            violations.AddRange(ValidateAddressFields(org.RegisteredOffice, patterns, "Organisation", org.Id));
         }
 
+        foreach (var persona in canon.Personas)
+        {
+            if (persona.Address is not null)
+            {
+                violations.AddRange(ValidateAddressFields(persona.Address, patterns, "Persona", persona.Id));
+            }
+        }
+
+        return violations;
+    }
+
+    private IReadOnlyList<ValidationViolation> ValidateAddressFields(
+        Address address,
+        IReadOnlyList<string> forbiddenPatterns,
+        string entityType,
+        string entityId)
+    {
+        var violations = new List<ValidationViolation>();
+        violations.AddRange(ValidateText(address.Address1, forbiddenPatterns, entityType, entityId));
+        violations.AddRange(ValidateText(address.Address2, forbiddenPatterns, entityType, entityId));
+        violations.AddRange(ValidateText(address.Address3, forbiddenPatterns, entityType, entityId));
+        violations.AddRange(ValidateText(address.Town, forbiddenPatterns, entityType, entityId));
+        violations.AddRange(ValidateText(address.Region, forbiddenPatterns, entityType, entityId));
+        violations.AddRange(ValidateText(address.Postcode, forbiddenPatterns, entityType, entityId));
+        violations.AddRange(ValidateText(address.Country, forbiddenPatterns, entityType, entityId));
         return violations;
     }
 

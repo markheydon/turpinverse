@@ -244,7 +244,8 @@ public class ArticleGalleryValidatorTests
                     Industry = "Consulting",
                     HistoricalAnchor = "Legend",
                     MemberPersonaIds = [CareerPortfolioPresenter.PrimaryPersonaId],
-                    Status = "active"
+                    Status = "active",
+                    RegisteredOffice = TestAddresses.SampleOffice
                 }
             ],
             Events = [],

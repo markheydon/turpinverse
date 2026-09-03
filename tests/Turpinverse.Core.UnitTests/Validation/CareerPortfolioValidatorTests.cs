@@ -274,7 +274,8 @@ public class CareerPortfolioValidatorTests
                         CareerPortfolioPresenter.PrimaryPersonaId,
                         "ned-palmer"
                     ],
-                    Status = "active"
+                    Status = "active",
+                    RegisteredOffice = TestAddresses.SampleOffice
                 }
             ],
             Events = [],

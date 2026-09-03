@@ -8,6 +8,7 @@
 @using Turpinverse.Core.Models
 @using Turpinverse.Core.Profile
 @using Turpinverse.Web.Components.Career
+@using Turpinverse.Core.Validation
 @using Turpinverse.Web.Components.Profile
 
 <PageTitle>@pageTitle - Turpinverse</PageTitle>
@@ -67,6 +68,27 @@
             <EducationSection Items="education" />
             <ProjectsSection Items="projects" />
             <AchievementsSection Items="achievements" />
+
+            @if (persona.Address is { } mailingAddress && CanonValidator.IsCompleteAddress(mailingAddress))
+            {
+                <section class="mailing-address-section">
+                    <h2>Mailing address</h2>
+                    <address class="postal-address">
+                        <p>@mailingAddress.Address1</p>
+                        @if (!string.IsNullOrWhiteSpace(mailingAddress.Address2))
+                        {
+                            <p>@mailingAddress.Address2</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(mailingAddress.Address3))
+                        {
+                            <p>@mailingAddress.Address3</p>
+                        }
+                        <p>@mailingAddress.Town@(string.IsNullOrWhiteSpace(mailingAddress.Region) ? "" : $", {mailingAddress.Region}")</p>
+                        <p>@mailingAddress.Postcode</p>
+                        <p>@mailingAddress.Country</p>
+                    </address>
+                </section>
+            }
 
             <ContactExtrasSection Contact="extras?.Contact" />
             <SocialsSection Socials="@(extras?.Socials ?? [])" />

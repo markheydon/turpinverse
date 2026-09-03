@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/crm-export/uk-postal-addresses/v1",
+  "title": "Turpinverse CRM export — UK postal address columns (feature 007)",
+  "description": "This feature’s CRM contract for account and contact address columns (FR-011). Implementation MUST merge these properties and exportManifest column lists into the live schema at specs/001-turpinverse-universe/contracts/crm-export-schema.json. Do not rewrite specs/001-turpinverse-universe/spec.md as the only record of this change. Deals, cases, and projects are unchanged.",
+  "$defs": {
+    "Contact": {
+      "type": "object",
+      "required": ["contactId", "firstName", "lastName", "title", "email", "accountId", "status"],
+      "properties": {
+        "contactId": { "type": "string" },
+        "firstName": { "type": "string", "maxLength": 50 },
+        "lastName": { "type": "string", "maxLength": 50 },
+        "title": { "type": "string", "maxLength": 80 },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string", "maxLength": 30 },
+        "accountId": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["active", "deceased", "legend", "archived"]
+        },
+        "notes": { "type": "string", "maxLength": 500 },
+        "mailingAddress1": { "type": "string" },
+        "mailingAddress2": { "type": "string" },
+        "mailingAddress3": { "type": "string" },
+        "mailingTown": { "type": "string" },
+        "mailingRegion": { "type": "string" },
+        "mailingPostcode": { "type": "string" },
+        "mailingCountry": { "type": "string" }
+      }
+    },
+    "Account": {
+      "type": "object",
+      "required": ["accountId", "accountName", "industry", "description", "status"],
+      "properties": {
+        "accountId": { "type": "string" },
+        "accountName": { "type": "string", "maxLength": 80 },
+        "legalName": { "type": "string", "maxLength": 200 },
+        "industry": { "type": "string", "maxLength": 60 },
+        "parentAccountId": { "type": "string" },
+        "description": { "type": "string", "maxLength": 500 },
+        "website": { "type": "string", "format": "uri" },
+        "status": {
+          "type": "string",
+          "enum": ["active", "dissolved", "legend"]
+        },
+        "registeredOfficeAddress1": { "type": "string" },
+        "registeredOfficeAddress2": { "type": "string" },
+        "registeredOfficeAddress3": { "type": "string" },
+        "registeredOfficeTown": { "type": "string" },
+        "registeredOfficeRegion": { "type": "string" },
+        "registeredOfficePostcode": { "type": "string" },
+        "registeredOfficeCountry": { "type": "string" }
+      }
+    }
+  },
+  "exportManifest": {
+    "contacts": {
+      "filename": "turpinverse-contacts.csv",
+      "minRows": 25,
+      "columns": [
+        "contactId", "firstName", "lastName", "title", "email",
+        "phone", "accountId", "status", "notes",
+        "mailingAddress1", "mailingAddress2", "mailingAddress3",
+        "mailingTown", "mailingRegion", "mailingPostcode", "mailingCountry"
+      ],
+      "schema": { "$ref": "#/$defs/Contact" },
+      "emptyWhenNoAddress": [
+        "mailingAddress1", "mailingAddress2", "mailingAddress3",
+        "mailingTown", "mailingRegion", "mailingPostcode", "mailingCountry"
+      ]
+    },
+    "accounts": {
+      "filename": "turpinverse-accounts.csv",
+      "minRows": 10,
+      "columns": [
+        "accountId", "accountName", "legalName", "industry",
+        "parentAccountId", "description", "website", "status",
+        "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
+        "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
+      ],
+      "schema": { "$ref": "#/$defs/Account" }
+    }
+  }
+}

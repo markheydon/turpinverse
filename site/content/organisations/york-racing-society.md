@@ -7,6 +7,13 @@ legalName: "York Racing Society — Premium Event Management for Select Guest Li
 foundedYear: 1730
 members: ["sarah-thornton"]
 parent: ""
+registeredOffice:
+  address1: "Racecourse Pavilion"
+  address2: "Knavesmire Road"
+  town: "York"
+  region: "North Yorkshire"
+  postcode: "YO23 1EX"
+  country: "United Kingdom"
 ---
 
 Exclusive society organising race meetings, social gatherings, and premium hospitality events. Guest lists are curated; catering orders are not.

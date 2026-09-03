@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/uk-postal-address/v1",
+  "title": "Turpinverse UK postal address (additive canon)",
+  "description": "Additive Address type and Organisation/Persona properties. Runtime validation uses the merged canon schema at specs/001-turpinverse-universe/contracts/canon-schema.json. This file is the feature contract; do not treat 001 spec.md as the address feature record.",
+  "type": "object",
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address1", "town", "postcode", "country"],
+      "properties": {
+        "address1": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "address2": { "type": "string", "maxLength": 120 },
+        "address3": { "type": "string", "maxLength": 120 },
+        "town": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "region": { "type": "string", "maxLength": 80 },
+        "postcode": { "type": "string", "minLength": 1, "maxLength": 16, "pattern": "^(GIR 0AA|[A-Za-z]{1,2}[0-9][0-9A-Za-z]? [0-9][A-Za-z]{2})$" },
+        "country": { "type": "string", "const": "United Kingdom" }
+      }
+    },
+    "OrganisationAddressPatch": {
+      "description": "Merge into $defs.Organisation: add registeredOffice to required and properties.",
+      "requiredAddition": ["registeredOffice"],
+      "properties": {
+        "registeredOffice": { "$ref": "#/$defs/Address" }
+      }
+    },
+    "PersonaAddressPatch": {
+      "description": "Merge into $defs.Persona: optional address; omit when the persona has no mailing address.",
+      "properties": {
+        "address": { "$ref": "#/$defs/Address" }
+      }
+    }
+  }
+}

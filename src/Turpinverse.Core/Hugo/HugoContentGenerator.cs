@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Career;
+using Turpinverse.Core.Models;
 using Turpinverse.Core.Profile;
 
 namespace Turpinverse.Core.Hugo;
@@ -41,6 +42,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         foreach (var persona in canon.Personas)
         {
             var summary = EscapeYaml(ExtractSummary(persona.Biography));
+            var addressYaml = persona.Address is not null
+                ? FormatAddressYaml("address", persona.Address)
+                : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(persona.DisplayName)}"
@@ -50,7 +54,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 status: "{persona.Status}"
                 summary: "{summary}"
                 organisations: {JsonSerializer.Serialize(persona.OrganisationIds)}
-                ---
+                {addressYaml}---
 
                 {persona.Biography}
                 """;
@@ -74,6 +78,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 legalName: "{EscapeYaml(legalName)}"
                 {foundedLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
+                {FormatAddressYaml("registeredOffice", org.RegisteredOffice).TrimEnd()}
                 ---
 
                 {org.Description}
@@ -446,4 +451,27 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             .Replace("\r\n", "\\n")
             .Replace("\n", "\\n")
             .Replace("\r", "\\n");
+
+    private static string FormatAddressYaml(string key, Address address)
+    {
+        var lines = new List<string> { $"{key}:" };
+        AppendAddressField(lines, "address1", address.Address1);
+        AppendAddressField(lines, "address2", address.Address2);
+        AppendAddressField(lines, "address3", address.Address3);
+        AppendAddressField(lines, "town", address.Town);
+        AppendAddressField(lines, "region", address.Region);
+        AppendAddressField(lines, "postcode", address.Postcode);
+        AppendAddressField(lines, "country", address.Country);
+        return string.Join('\n', lines) + '\n';
+    }
+
+    private static void AppendAddressField(List<string> lines, string fieldName, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return;
+        }
+
+        lines.Add($"  {fieldName}: \"{EscapeYaml(value)}\"");
+    }
 }

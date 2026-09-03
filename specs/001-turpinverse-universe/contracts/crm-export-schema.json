@@ -19,7 +19,14 @@
           "type": "string",
           "enum": ["active", "deceased", "legend", "archived"]
         },
-        "notes": { "type": "string", "maxLength": 500 }
+        "notes": { "type": "string", "maxLength": 500 },
+        "mailingAddress1": { "type": "string" },
+        "mailingAddress2": { "type": "string" },
+        "mailingAddress3": { "type": "string" },
+        "mailingTown": { "type": "string" },
+        "mailingRegion": { "type": "string" },
+        "mailingPostcode": { "type": "string" },
+        "mailingCountry": { "type": "string" }
       }
     },
     "Account": {
@@ -36,7 +43,14 @@
         "status": {
           "type": "string",
           "enum": ["active", "dissolved", "legend"]
-        }
+        },
+        "registeredOfficeAddress1": { "type": "string" },
+        "registeredOfficeAddress2": { "type": "string" },
+        "registeredOfficeAddress3": { "type": "string" },
+        "registeredOfficeTown": { "type": "string" },
+        "registeredOfficeRegion": { "type": "string" },
+        "registeredOfficePostcode": { "type": "string" },
+        "registeredOfficeCountry": { "type": "string" }
       }
     },
     "Deal": {
@@ -83,7 +97,9 @@
       "minRows": 25,
       "columns": [
         "contactId", "firstName", "lastName", "title", "email",
-        "phone", "accountId", "status", "notes"
+        "phone", "accountId", "status", "notes",
+        "mailingAddress1", "mailingAddress2", "mailingAddress3",
+        "mailingTown", "mailingRegion", "mailingPostcode", "mailingCountry"
       ],
       "schema": { "$ref": "#/$defs/Contact" }
     },
@@ -92,7 +108,9 @@
       "minRows": 10,
       "columns": [
         "accountId", "accountName", "legalName", "industry",
-        "parentAccountId", "description", "website", "status"
+        "parentAccountId", "description", "website", "status",
+        "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
+        "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
       ],
       "schema": { "$ref": "#/$defs/Account" }
     },

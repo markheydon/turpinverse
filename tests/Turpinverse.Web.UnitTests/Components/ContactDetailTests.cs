@@ -132,4 +132,30 @@ public class ContactDetailTests : BunitContext
         Assert.DoesNotContain("Socials", cut.Markup);
         Assert.Contains("Biography", cut.Markup);
     }
+
+    [Fact]
+    [Trait("Category", "PostalAddress")]
+    public void ContactDetail_RendersMailingAddressForDickTurpin()
+    {
+        Services.AddTurpinverseCore();
+        Services.AddTurpinverseData();
+        var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "dick-turpin"));
+
+        Assert.Contains("Mailing address", cut.Markup);
+        Assert.Contains("14 Church Lane", cut.Markup);
+        Assert.Contains("York", cut.Markup);
+        Assert.Contains("YO1 7HH", cut.Markup);
+    }
+
+    [Fact]
+    [Trait("Category", "PostalAddress")]
+    public void ContactDetail_OmitsMailingAddressForBlackBess()
+    {
+        Services.AddTurpinverseCore();
+        Services.AddTurpinverseData();
+        var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "black-bess"));
+
+        Assert.DoesNotContain("Mailing address", cut.Markup);
+        Assert.DoesNotContain("mailing-address-section", cut.Markup);
+    }
 }

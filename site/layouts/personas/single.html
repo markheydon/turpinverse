@@ -26,6 +26,13 @@
     </div>
   </div>
 
+  {{ with .Params.address }}
+  <section class="profile-section mailing-address-section">
+    <h2>Mailing address</h2>
+    {{ partial "postal-address.html" . }}
+  </section>
+  {{ end }}
+
   {{ with $profile.about }}
   <section class="profile-section about-section">
     <h2>About</h2>
