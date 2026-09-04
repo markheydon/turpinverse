@@ -24,7 +24,7 @@ Canon JSON uses universe names. CSV export uses CRM names. They are the same rec
 
 ```mermaid
 erDiagram
-    Organisation ||--|{ Persona : "membership (VR-001–003)"
+    Organisation }|--|{ Persona : "membership (VR-001-003)"
     Organisation |o--o{ Organisation : "parentOrganisationId"
     Organisation ||--|| Address : "registeredOffice (required)"
     Persona ||--o| Address : "address (optional mailing)"
