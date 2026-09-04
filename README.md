@@ -10,7 +10,8 @@ Turpinverse reframes the historical Dick Turpin legend as a tongue-in-cheek busi
 universe. It provides:
 
 - **Canon dataset** — 15+ personas, 8+ organisations, timeline events, and alias maps
-  grounded in Wikipedia history with clearly marked fictional extensions
+  grounded in Wikipedia history with clearly marked fictional extensions. How those
+  records join is documented in [docs/entity-relationships.md](docs/entity-relationships.md).
 - **Public reference site (Hugo)** — browsable showcase of human-readable demo data at
   [turpinverse.uk](https://turpinverse.uk); for reading the universe, using sample copy in
   presentations, or just enjoying the fiction

@@ -168,26 +168,7 @@ entries per FR-014).
 
 ## Entity Relationship Diagram
 
-```text
-┌─────────────┐     memberPersonaIds      ┌──────────────┐
-│  Persona    │◄─────────────────────────►│ Organisation │
-│             │     organisationIds       │              │
-└──────┬──────┘                           └──────┬───────┘
-       │                                           │
-       │ aliases                          parentOrganisationId
-       ▼                                           ▼ (self-ref)
-┌─────────────┐                           ┌──────────────┐
-│  AliasMap   │                           │ Organisation │
-└─────────────┘                           │  (parent)    │
-                                          └──────────────┘
-
-┌─────────────┐     personaIds/orgIds     ┌──────────────┐
-│ CanonEvent  │──────────────────────────►│ Persona /    │
-└─────────────┘                           │ Organisation │
-                                          └──────────────┘
-
-Canon ──derives──► Contact, Account, Deal, Case (CSV export)
-```
+Living join graph (including career, articles, and export names): [docs/entity-relationships.md](../../docs/entity-relationships.md).
 
 ## State Transitions
 
