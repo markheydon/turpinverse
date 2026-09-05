@@ -168,26 +168,7 @@ entries per FR-014).
 
 ## Entity Relationship Diagram
 
-```text
-┌─────────────┐     memberPersonaIds      ┌──────────────┐
-│  Persona    │◄─────────────────────────►│ Organisation │
-│             │     organisationIds       │              │
-└──────┬──────┘                           └──────┬───────┘
-       │                                           │
-       │ aliases                          parentOrganisationId
-       ▼                                           ▼ (self-ref)
-┌─────────────┐                           ┌──────────────┐
-│  AliasMap   │                           │ Organisation │
-└─────────────┘                           │  (parent)    │
-                                          └──────────────┘
-
-┌─────────────┐     personaIds/orgIds     ┌──────────────┐
-│ CanonEvent  │──────────────────────────►│ Persona /    │
-└─────────────┘                           │ Organisation │
-                                          └──────────────┘
-
-Canon ──derives──► Contact, Account, Deal, Case (CSV export)
-```
+Target CRM-shaped join graph (including career, articles, and export names): [docs/entity-relationships.md](../../docs/entity-relationships.md). This 001 data model documents the **shipped** field tables and validation codes; when the join graph and live schema diverge, the docs page is the intended target and a separate correction spec implements the change.
 
 ## State Transitions
 
