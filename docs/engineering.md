@@ -36,6 +36,14 @@ Authoritative artefacts:
 | HTTP export | [export-api.md](./export-api.md) |
 | Past decisions | [decision-log.md](./decision-log.md) |
 
+## 5. Issues and pull requests
+
+File work with the GitHub issue forms under [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) (story, bug, chore). Blank issues remain allowed. The issue is the input for Cursor Plan mode, then Agent mode.
+
+Labels use the same taxonomy as other solo-dev-board repos: `type/*`, `priority/*`, `status/*`, `size/*`. Forms apply a type, `status/todo`, and a default priority; adjust size and priority on the issue after filing. Dependabot PRs use `type/chore`.
+
+Pull requests use [`.github/pull_request_template.md`](../.github/pull_request_template.md) and should close the issue they implement.
+
 ## What we dropped
 
 This repo no longer uses GitHub Spec Kit. There is no requirement for a feature spec, plan, or tasks file before implementation. Use GitHub issues and the docs above for intent.

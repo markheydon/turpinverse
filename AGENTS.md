@@ -21,7 +21,7 @@ Turpinverse is **not** a Spec Kit project. Do not run `/speckit-*` commands or e
 | Repo maintenance rules | [`docs/engineering.md`](docs/engineering.md) |
 | Career/article Hugo mapping | [`docs/career-portfolio-mapping.md`](docs/career-portfolio-mapping.md), [`docs/article-gallery-mapping.md`](docs/article-gallery-mapping.md) |
 
-Intent for new work: GitHub issues and the docs above — not a new `specs/###-feature/` folder.
+Intent for new work: a GitHub issue (templates under `.github/ISSUE_TEMPLATE/`) plus the docs above. Use the issue as Cursor **Plan** mode input, then **Agent** mode. Do not add a `specs/###-feature/` folder. Labels: `type/*`, `priority/*`, `status/*`, `size/*`.
 
 ## Tests
 

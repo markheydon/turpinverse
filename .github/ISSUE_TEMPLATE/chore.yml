@@ -1,0 +1,40 @@
+name: Chore
+description: Maintenance, refactoring, tooling, or technical debt — not a new demo-data story.
+title: "[Chore] "
+labels:
+  - "type/chore"
+  - "status/todo"
+  - "priority/low"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue as Cursor **Plan** mode input, then switch to **Agent** mode to implement.
+
+        Write in **UK English**. Adjust `priority/*`, `size/*`, and `status/*` labels after filing if the defaults are wrong.
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Risk, drift, or cost this work removes.
+    validations:
+      required: true
+
+  - type: textarea
+    id: change
+    attributes:
+      label: What to change
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ]
+        - [ ] Existing tests still pass
+        - [ ] Docs updated if behaviour or layout of the repo changed
+    validations:
+      required: true

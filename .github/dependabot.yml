@@ -9,7 +9,7 @@ updates:
       timezone: "Europe/London"
     open-pull-requests-limit: 5
     labels:
-      - "dependencies"
+      - "type/chore"
     assignees:
       - "markheydon"
 
@@ -22,7 +22,7 @@ updates:
       timezone: "Europe/London"
     open-pull-requests-limit: 5
     labels:
-      - "dependencies"
+      - "type/chore"
     assignees:
       - "markheydon"
     groups:

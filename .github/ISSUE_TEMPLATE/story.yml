@@ -1,0 +1,89 @@
+name: Story
+description: A user-facing change to canon, Hugo, Blazor export, or validation.
+title: "[Story] "
+labels:
+  - "type/story"
+  - "status/todo"
+  - "priority/medium"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue as Cursor **Plan** mode input, then switch to **Agent** mode to implement.
+
+        Read first: [AGENTS.md](https://github.com/markheydon/turpinverse/blob/main/AGENTS.md), [docs/product-surfaces.md](https://github.com/markheydon/turpinverse/blob/main/docs/product-surfaces.md), [docs/entity-relationships.md](https://github.com/markheydon/turpinverse/blob/main/docs/entity-relationships.md), [docs/universe-voice.md](https://github.com/markheydon/turpinverse/blob/main/docs/universe-voice.md), [docs/validation-rules.md](https://github.com/markheydon/turpinverse/blob/main/docs/validation-rules.md).
+
+        Write in **UK English**. Adjust `priority/*`, `size/*`, and `status/*` labels on the issue after filing if the defaults are wrong.
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Who needs this demo data or behaviour, and what is missing today.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed change
+      description: Domain model, volumes, file names under canon/, and any validator or export implications.
+      placeholder: |
+        - New or changed canon files
+        - Fields and joins
+        - Approximate record counts (hand-authored)
+    validations:
+      required: true
+
+  - type: textarea
+    id: channels
+    attributes:
+      label: Channels
+      description: How Hugo (readable showcase) and Blazor (explore / CSV) should treat this. Omit a channel only if it is genuinely out of scope.
+      value: |
+        - **Hugo:**
+        - **Blazor / CSV:**
+        - **Not in scope:**
+    validations:
+      required: true
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What must not be invented while implementing this issue.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ]
+        - [ ] Schema, validator, and living docs updated in the same change where behaviour changes
+        - [ ] Boundary tests added or updated where validation, export, or Hugo generation changes
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Parent issue, blockers, or preferred merge order.
+      placeholder: Parent #…  Blocked by #…  Unlocks #…
+    validations:
+      required: false
+
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size (set the matching size/* label after filing)
+      options:
+        - size/xs
+        - size/s
+        - size/m
+        - size/l
+        - size/xl
+    validations:
+      required: false

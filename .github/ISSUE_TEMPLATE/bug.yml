@@ -1,0 +1,73 @@
+name: Bug
+description: Unexpected behaviour in canon validation, Hugo, Blazor export, or CI.
+title: "[Bug] "
+labels:
+  - "type/bug"
+  - "status/todo"
+  - "priority/high"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue as Cursor **Plan** mode input, then switch to **Agent** mode to implement.
+
+        Write in **UK English**. Adjust `priority/*`, `size/*`, and `status/*` labels after filing if the defaults are wrong.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What is wrong
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where it shows up
+      options:
+        - Canon / validation
+        - Hugo site
+        - Blazor export app
+        - HTTP export API
+        - CI / tooling
+        - Docs
+        - Unsure
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to reproduce
+      placeholder: |
+        1. …
+        2. …
+        3. Observe …
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: Include error text, test name, or URL if you have it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] Defect is gone on the reported surface
+        - [ ] Regression coverage where the failure is automatable
+    validations:
+      required: true
