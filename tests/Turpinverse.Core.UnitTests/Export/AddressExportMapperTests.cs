@@ -3,6 +3,7 @@ using Turpinverse.Core.Models;
 
 namespace Turpinverse.Core.UnitTests.Export;
 
+[Trait("Category", "CsvExport")]
 public class AddressExportMapperTests
 {
     [Fact]

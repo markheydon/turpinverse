@@ -294,6 +294,6 @@ Task: "Add failing ExportMapper unit tests in tests/Turpinverse.Core.UnitTests/E
 
 ## Phase 7: Convergence
 
-- [ ] T061 Add `[Trait("Category", "CsvExport")]` to `tests/Turpinverse.Core.UnitTests/Export/ExportMapperTests.cs` (and export-related mapper tests) so quickstart `dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CsvExport"` exercises membership export unit coverage per quickstart.md / T060 (partial)
-- [ ] T062 Add `CanonSchemaValidatorTests` fixtures proving a deal/case without `contactId` and an organisation with `memberPersonaIds: []` pass JSON Schema validation in `tests/Turpinverse.Core.UnitTests/Validation/CanonSchemaValidatorTests.cs` per T013 / FR-015 (partial)
-- [ ] T063 Add `JoinGraphValidatorTests` fixture proving an organisation with zero members passes completeness (no VR-052/VR-003 violations when primary is omitted) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs` per US1/AC1 / FR-002 (partial)
+- [X] T061 Add `[Trait("Category", "CsvExport")]` to `tests/Turpinverse.Core.UnitTests/Export/ExportMapperTests.cs` (and export-related mapper tests) so quickstart `dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CsvExport"` exercises membership export unit coverage per quickstart.md / T060 (partial)
+- [X] T062 Add `CanonSchemaValidatorTests` fixtures proving a deal/case without `contactId` and an organisation with `memberPersonaIds: []` pass JSON Schema validation in `tests/Turpinverse.Core.UnitTests/Validation/CanonSchemaValidatorTests.cs` per T013 / FR-015 (partial)
+- [X] T063 Add `JoinGraphValidatorTests` fixture proving an organisation with zero members passes completeness (no VR-052/VR-003 violations when primary is omitted) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs` per US1/AC1 / FR-002 (partial)

@@ -156,6 +156,19 @@ public class JoinGraphValidatorTests
     }
 
     [Fact]
+    public void Validate_OrganisationWithZeroMembersAndNoPrimary_PassesJoinRules()
+    {
+        var canon = CreateCanon(
+            organisations: [Org("prospect-account", [])]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.DoesNotContain(
+            result.Violations,
+            v => v.EntityId == "prospect-account" && v.Rule is "VR-052" or "VR-003");
+    }
+
+    [Fact]
     public async Task Validate_LoadedCanon_NamedRowsMatchVr058()
     {
         var repository = new Turpinverse.Data.Repositories.JsonCanonRepository();
