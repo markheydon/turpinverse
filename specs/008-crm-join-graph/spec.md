@@ -25,6 +25,12 @@ This feature reshapes **how records join** and **how contacts export**. It MUST 
 
 Shared canon remains the single source of truth. This feature MUST NOT add a second public site or a new download product beyond the existing contact, account, deal, case, and project datasets.
 
+## Clarifications
+
+### Session 2026-09-06
+
+- Q: Who should be the account-member main contact on the four repaired records, with the previous non-member kept only as a stakeholder? → A: Assumed deputies: `deal-008` William Hargreaves (Henry Clayton stakeholder); `case-001` and `palmer-identity-vault` Mary Brazier (Richard Turpin stakeholder); `case-017` Henry Clayton (Thomas Collier stakeholder)
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Join rules match a real CRM account graph (Priority: P1)
@@ -55,10 +61,10 @@ A canon reviewer needs four existing records to remain **tellable** after the me
 
 | Record | Problem | Required outcome |
 |--------|---------|------------------|
-| Forest patrol outsourcing deal (`deal-008`) | Henry Clayton is named against Epping Forest Authority but is not a member | Account stays Epping Forest Authority. Main contact is an Epping Forest member. Henry remains on the record as a stakeholder (existing person only). |
-| Palmer identity collision case (`case-001`) | Richard Turpin is named against Brazier Legal but is not a member | Account stays Brazier Legal. Main contact is a Brazier Legal member. Richard remains as a stakeholder. |
-| Route analytics sync case (`case-017`) | Thomas Collier is named against Turpin Enterprises but is not a member | Account stays Turpin Enterprises. Main contact is a Turpin Enterprises member. Thomas remains as a stakeholder. |
-| Palmer Identity Vault project (`palmer-identity-vault`) | Richard Turpin is listed on a Brazier Legal project but is not a member | Sponsoring account stays Brazier Legal. Main contact is a Brazier Legal member. Richard remains as a stakeholder. |
+| Forest patrol outsourcing deal (`deal-008`) | Henry Clayton is named against Epping Forest Authority but is not a member | Account stays Epping Forest Authority. Main contact is **William Hargreaves**. Henry Clayton remains a stakeholder. |
+| Palmer identity collision case (`case-001`) | Richard Turpin is named against Brazier Legal but is not a member | Account stays Brazier Legal. Main contact is **Mary Brazier**. Richard Turpin remains a stakeholder. |
+| Route analytics sync case (`case-017`) | Thomas Collier is named against Turpin Enterprises but is not a member | Account stays Turpin Enterprises. Main contact is **Henry Clayton**. Thomas Collier remains a stakeholder. |
+| Palmer Identity Vault project (`palmer-identity-vault`) | Richard Turpin is listed on a Brazier Legal project but is not a member | Sponsoring account stays Brazier Legal. Main contact is **Mary Brazier**. Richard Turpin remains a stakeholder. |
 
 Do **not** add Richard to Brazier Legal, Henry to Epping Forest, or Thomas to Turpin Enterprises solely to keep the old main-contact field. Do **not** add demo rows whose only purpose is to show empty accounts or deals with no main contact.
 
@@ -68,10 +74,10 @@ Do **not** add Richard to Brazier Legal, Henry to Epping Forest, or Thomas to Tu
 
 **Acceptance Scenarios**:
 
-1. **Given** `deal-008`, **When** a reviewer inspects it, **Then** the account is Epping Forest Authority, the main contact is a member of that account, and Henry Clayton is a stakeholder (not the main contact unless he is first made a member — which this feature MUST NOT do).
-2. **Given** `case-001`, **When** a reviewer inspects it, **Then** the account is Brazier Legal, the main contact is a member of that account, and Richard Turpin is a stakeholder.
-3. **Given** `case-017`, **When** a reviewer inspects it, **Then** the account is Turpin Enterprises, the main contact is a member of that account, and Thomas Collier is a stakeholder.
-4. **Given** `palmer-identity-vault`, **When** a reviewer inspects it, **Then** the sponsoring account is Brazier Legal, the main contact is a member of that account, and Richard Turpin is a stakeholder.
+1. **Given** `deal-008`, **When** a reviewer inspects it, **Then** the account is Epping Forest Authority, the main contact is William Hargreaves, and Henry Clayton is a stakeholder (Henry MUST NOT be added as a member to keep the old main-contact field).
+2. **Given** `case-001`, **When** a reviewer inspects it, **Then** the account is Brazier Legal, the main contact is Mary Brazier, and Richard Turpin is a stakeholder.
+3. **Given** `case-017`, **When** a reviewer inspects it, **Then** the account is Turpin Enterprises, the main contact is Henry Clayton, and Thomas Collier is a stakeholder.
+4. **Given** `palmer-identity-vault`, **When** a reviewer inspects it, **Then** the sponsoring account is Brazier Legal, the main contact is Mary Brazier, and Richard Turpin is a stakeholder.
 5. **Given** the rest of the dataset, **When** this feature ships, **Then** no extra empty accounts, contact-less deals/cases/projects, or additional stakeholder casts were added beyond these four rows (other records MAY already have valid members as main contacts and need no stakeholder theatre).
 
 ---
@@ -157,7 +163,7 @@ Canon remains **fictional** demo data. This feature repeats contact identity (in
 - **FR-007**: A project MAY name at most one originating deal and zero or more related cases; those ids MUST exist when set (**VR-056**). Article “about this project/case” links stay publication links and are unchanged.
 - **FR-008**: Project people used for “projects this person is on” (public site and in-product filters) MUST be the main contact (if any) union stakeholders. Any required undifferentiated people list is retired or derived from that union so it cannot disagree with membership.
 - **FR-009**: Timeline events MAY name zero or more deals and zero or more cases; those ids MUST exist when set (**VR-057**). Case roll-up to account and main contact is presentation/export only — do not duplicate those ids as required fields on the event.
-- **FR-010**: Canon MUST be hand-authored. The four invalid rows MUST be corrected as in User Story 2 (**VR-058**): keep the existing accounts; keep a main contact who **is** a member; keep the previous non-member on the record as a stakeholder; invent no empty accounts, no contact-less pipeline rows, and no extra people. Intended deputies (assumptions): Epping Forest main contact William Hargreaves with Henry Clayton stakeholder; Brazier Legal mains Mary Brazier with Richard Turpin stakeholder on `case-001` and `palmer-identity-vault`; Turpin Enterprises main contact Henry Clayton with Thomas Collier stakeholder on `case-017`.
+- **FR-010**: Canon MUST be hand-authored. The four invalid rows MUST be corrected as in User Story 2 (**VR-058**): keep the existing accounts; keep a main contact who **is** a member; keep the previous non-member on the record as a stakeholder; invent no empty accounts, no contact-less pipeline rows, and no extra people. Confirmed deputies: Epping Forest main contact William Hargreaves with Henry Clayton stakeholder; Brazier Legal mains Mary Brazier with Richard Turpin stakeholder on `case-001` and `palmer-identity-vault`; Turpin Enterprises main contact Henry Clayton with Thomas Collier stakeholder on `case-017`.
 - **FR-011**: Canon MUST NOT store per-account email, phone, or mailing address. Professional-extras contact copy is not a CRM contact and is unchanged.
 - **FR-012**: **In-product export (constitution IX)**: Contact download MUST emit **one row per membership** (**VR-059**): same contact identity on each row, different account, copied email/phone/mailing address. Account download MAY include optional primary contact. Deal, case, and project downloads MUST include optional main contact and a stakeholder field (empty when omitted). Project download MUST include optional originating deal and related cases. Stakeholder export is a field on those datasets (not a requirement to invent a second file).
 - **FR-013**: **Collision policy**: Turpinverse unique person key is the contact identity. Email is a copied attribute. Multi-membership rows repeat the same email on purpose. Importers whose CRM unique-keys on email MUST use contact identity (or contact+account) or apply their own suffix/skip rule. Document this on the export surface and exporter documentation — not as primary public-site copy.
@@ -180,7 +186,7 @@ Canon remains **fictional** demo data. This feature repeats contact identity (in
 
 - **SC-001**: An automated completeness check reports pass on the full authored dataset, including the four repaired rows, and fail with the offending record identity when a main contact is not an account member.
 - **SC-002**: 100% of contacts still have at least one account. A reviewer can pick any person and name that account in under one minute.
-- **SC-003**: A reviewer inspecting `deal-008`, `case-001`, `case-017`, and `palmer-identity-vault` confirms each keeps its original account, has a main contact who is a member, and lists the previous non-member as a stakeholder — with no new people or empty accounts added for the demo.
+- **SC-003**: A reviewer inspecting `deal-008`, `case-001`, `case-017`, and `palmer-identity-vault` confirms each keeps its original account and the confirmed deputies (William Hargreaves / Henry Clayton; Mary Brazier / Richard Turpin; Henry Clayton / Thomas Collier; Mary Brazier / Richard Turpin) — with no new people or empty accounts added for the demo.
 - **SC-004**: Contact download row count equals the number of person–account memberships. A reviewer can find two rows for at least one multi-account person (same identity and email, different accounts) within one download preview.
 - **SC-005**: A reviewer mapping downloads into a CRM can place optional main contact and stakeholders on deals, cases, and projects, and can state the email collision policy after reading export documentation once (under five minutes) without finding per-account emails in canon.
 - **SC-006**: A reviewer comparing the public reference site and the in-product app confirms names and stories on the public site versus identifiers and duplicate membership rows in download; omitted main contacts do not produce empty-id reader copy.
@@ -189,7 +195,7 @@ Canon remains **fictional** demo data. This feature repeats contact identity (in
 ## Assumptions
 
 - GitHub issue #41 is the source of scope; [`docs/entity-relationships.md`](../../docs/entity-relationships.md) is the join-graph source of truth for cardinality.
-- Intended deputies for FR-010 (existing members only): William Hargreaves + Henry Clayton on `deal-008`; Mary Brazier + Richard Turpin on `case-001` and `palmer-identity-vault`; Henry Clayton + Thomas Collier on `case-017`.
+- Four-row deputies are confirmed (Clarifications, 2026-09-06): William Hargreaves + Henry Clayton on `deal-008`; Mary Brazier + Richard Turpin on `case-001` and `palmer-identity-vault`; Henry Clayton + Thomas Collier on `case-017`.
 - Schema **allows** empty accounts and omitted main contacts; **demo data in this increment does not add examples** of those optionality shapes.
 - Stakeholder export is a single field on deal, case, and project downloads (joined list of contact identities), not a second dataset, unless planning finds a documented reason to split files.
 - Account primary contact is optional in data and MAY appear as an export column; demo data NEED NOT populate it on every account.
