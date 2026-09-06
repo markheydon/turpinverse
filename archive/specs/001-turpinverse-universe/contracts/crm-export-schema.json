@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/crm-export/v1",
+  "title": "Turpinverse CRM Export Schemas",
+  "description": "CSV export column definitions for CRM demo datasets",
+  "$defs": {
+    "Contact": {
+      "type": "object",
+      "required": ["contactId", "firstName", "lastName", "title", "email", "accountId", "status"],
+      "properties": {
+        "contactId": { "type": "string" },
+        "firstName": { "type": "string", "maxLength": 50 },
+        "lastName": { "type": "string", "maxLength": 50 },
+        "title": { "type": "string", "maxLength": 80 },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string", "maxLength": 30 },
+        "accountId": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["active", "deceased", "legend", "archived"]
+        },
+        "notes": { "type": "string", "maxLength": 500 },
+        "mailingAddress1": { "type": "string" },
+        "mailingAddress2": { "type": "string" },
+        "mailingAddress3": { "type": "string" },
+        "mailingTown": { "type": "string" },
+        "mailingRegion": { "type": "string" },
+        "mailingPostcode": { "type": "string" },
+        "mailingCountry": { "type": "string" }
+      }
+    },
+    "Account": {
+      "type": "object",
+      "required": ["accountId", "accountName", "industry", "description", "status"],
+      "properties": {
+        "accountId": { "type": "string" },
+        "accountName": { "type": "string", "maxLength": 80 },
+        "legalName": { "type": "string", "maxLength": 200 },
+        "industry": { "type": "string", "maxLength": 60 },
+        "parentAccountId": { "type": "string" },
+        "primaryContactId": { "type": "string" },
+        "description": { "type": "string", "maxLength": 500 },
+        "website": { "type": "string", "format": "uri" },
+        "status": {
+          "type": "string",
+          "enum": ["active", "dissolved", "legend"]
+        },
+        "registeredOfficeAddress1": { "type": "string" },
+        "registeredOfficeAddress2": { "type": "string" },
+        "registeredOfficeAddress3": { "type": "string" },
+        "registeredOfficeTown": { "type": "string" },
+        "registeredOfficeRegion": { "type": "string" },
+        "registeredOfficePostcode": { "type": "string" },
+        "registeredOfficeCountry": { "type": "string" }
+      }
+    },
+    "Deal": {
+      "type": "object",
+      "required": ["dealId", "dealName", "accountId", "stage", "amount", "closeDate"],
+      "properties": {
+        "dealId": { "type": "string" },
+        "dealName": { "type": "string", "maxLength": 120 },
+        "accountId": { "type": "string" },
+        "contactId": { "type": "string" },
+        "stakeholderContactIds": { "type": "string" },
+        "stage": {
+          "type": "string",
+          "enum": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
+        },
+        "amount": { "type": "number", "minimum": 0 },
+        "closeDate": { "type": "string", "format": "date" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "Case": {
+      "type": "object",
+      "required": ["caseId", "subject", "description", "status", "priority", "accountId"],
+      "properties": {
+        "caseId": { "type": "string" },
+        "subject": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "status": {
+          "type": "string",
+          "enum": ["New", "In Progress", "On Hold", "Resolved", "Closed"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["Low", "Medium", "High", "Critical"]
+        },
+        "contactId": { "type": "string" },
+        "accountId": { "type": "string" },
+        "stakeholderContactIds": { "type": "string" },
+        "relatedEventId": { "type": "string" }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "required": ["projectId", "title", "summary", "accountId"],
+      "properties": {
+        "projectId": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "accountId": { "type": "string" },
+        "contactId": { "type": "string" },
+        "stakeholderContactIds": { "type": "string" },
+        "dealId": { "type": "string" },
+        "caseIds": { "type": "string" },
+        "tags": { "type": "string" },
+        "featured": { "type": "string" }
+      }
+    }
+  },
+  "exportManifest": {
+    "contacts": {
+      "filename": "turpinverse-contacts.csv",
+      "minRows": 25,
+      "rowRule": "One row per person–account membership (VR-059). Duplicate contactId and email across accounts is expected.",
+      "columns": [
+        "contactId", "firstName", "lastName", "title", "email",
+        "phone", "accountId", "status", "notes",
+        "mailingAddress1", "mailingAddress2", "mailingAddress3",
+        "mailingTown", "mailingRegion", "mailingPostcode", "mailingCountry"
+      ],
+      "schema": { "$ref": "#/$defs/Contact" }
+    },
+    "accounts": {
+      "filename": "turpinverse-accounts.csv",
+      "minRows": 10,
+      "columns": [
+        "accountId", "accountName", "legalName", "industry",
+        "parentAccountId", "primaryContactId", "description", "website", "status",
+        "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
+        "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
+      ],
+      "schema": { "$ref": "#/$defs/Account" }
+    },
+    "deals": {
+      "filename": "turpinverse-deals.csv",
+      "minRows": 20,
+      "columns": [
+        "dealId", "dealName", "accountId", "contactId", "stakeholderContactIds", "stage",
+        "amount", "closeDate", "description"
+      ],
+      "schema": { "$ref": "#/$defs/Deal" }
+    },
+    "cases": {
+      "filename": "turpinverse-cases.csv",
+      "minRows": 15,
+      "columns": [
+        "caseId", "subject", "description", "status", "priority",
+        "contactId", "accountId", "stakeholderContactIds", "relatedEventId"
+      ],
+      "schema": { "$ref": "#/$defs/Case" }
+    },
+    "projects": {
+      "filename": "turpinverse-projects.csv",
+      "minRows": 3,
+      "columns": [
+        "projectId", "title", "summary", "accountId",
+        "contactId", "stakeholderContactIds", "dealId", "caseIds",
+        "tags", "featured"
+      ],
+      "schema": { "$ref": "#/$defs/Project" }
+    }
+  },
+  "collisionPolicy": {
+    "personKey": "contactId",
+    "email": "Copied persona attribute; repeated on multi-membership rows on purpose",
+    "importerAdvice": "CRMs that unique-key email must use contactId or contactId+accountId, or apply their own suffix/skip rule outside Turpinverse",
+    "surface": "Blazor contacts/export documentation — not primary Hugo copy"
+  }
+}

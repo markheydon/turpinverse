@@ -1,6 +1,6 @@
 # Product surfaces
 
-Turpinverse publishes the same fictional dataset through two human-facing channels. They share one canon JSON source under `src/Turpinverse.Data/canon/`; each channel projects that data for a different job.
+Turpinverse's **primary product** is the fictional demo dataset in [`canon/`](../canon/). Hugo and the Blazor export app are **consumers** of that JSON — same as any other project that points at this repository for sample data.
 
 ## Who this is for
 
@@ -8,22 +8,24 @@ Anyone who wants to use Turpinverse demo data for their own purposes, including:
 
 - **CRM and business-app demos** — populate pipelines, accounts, contacts, and support cases with plausible sample data
 - **Presentations and public-facing documentation** — illustrate workflows without real people's confidential information
+- **Other codebases and libraries** — load `canon/*.json` directly (see [canon/README.md](../canon/README.md))
 - **Amusement** — enjoy a tongue-in-cheek Dick Turpin universe someone has built end to end
 
-## The two channels
+## Bundled consumers
 
-| Channel | URL / entry | Job |
-|---------|-------------|-----|
+| Consumer | URL / entry | Job |
+|----------|-------------|-----|
 | **Public reference site (Hugo)** | [turpinverse.uk](https://turpinverse.uk) | Browsable showcase of **human-readable** demo data |
-| **Interactive export app (Blazor)** | Run locally via Aspire (see [README](../README.md)) | Explore, filter, and **download** importable datasets |
+| **Interactive export app (Blazor)** | Run locally via Aspire (see [README](../README.md)) | Explore, filter, and **download** importable CSV |
 
 ```text
-Canon JSON
-    ├── Hugo site  → browse and read (no export plumbing)
-    └── Blazor app → explore / filter / download (CSV today)
+canon/  (JSON datasets + schema)
+    ├── Hugo site   → browse and read (no export plumbing)
+    ├── Blazor app  → explore / filter / download (CSV)
+    └── your app    → read JSON directly
 ```
 
-How canon records join (membership, deals, cases, career, articles): [entity-relationships.md](./entity-relationships.md) — shipped CRM join graph with VR-052–VR-059 validation and membership-based contact export.
+How canon records join (membership, deals, cases, career, articles): [entity-relationships.md](./entity-relationships.md).
 
 ### Hugo (public reference site)
 
@@ -101,6 +103,10 @@ These are product facts, not blockers for the channel split above:
 ## Related docs
 
 - [README.md](../README.md) — repository overview and quickstart
+- [canon/README.md](../canon/README.md) — using the datasets from another project
+- [universe-voice.md](./universe-voice.md) — tone and copy conventions
+- [engineering.md](./engineering.md) — how this repo is maintained
+- [decision-log.md](./decision-log.md) — why the model looks this way
 - [site/README.md](../site/README.md) — Hugo build, preview, and deploy
 - [tech-stack.md](./tech-stack.md) — technology summary
 - [career-portfolio-mapping.md](./career-portfolio-mapping.md) — projecting career/portfolio entities to a typical personal-site layout

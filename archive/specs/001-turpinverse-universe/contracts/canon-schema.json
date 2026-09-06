@@ -1,0 +1,571 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/canon/v1",
+  "title": "Turpinverse Canon",
+  "description": "Canonical universe data schema for personas, organisations, events, aliases, deals, and cases",
+  "type": "object",
+  "required": [
+    "version",
+    "personas",
+    "organisations",
+    "events",
+    "aliases",
+    "toneGuidelines",
+    "deals",
+    "cases",
+    "experience",
+    "education",
+    "projects",
+    "achievements",
+    "articles",
+    "galleries",
+    "professionalExtras"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver version of the canon dataset"
+    },
+    "personas": {
+      "type": "array",
+      "minItems": 25,
+      "items": { "$ref": "#/$defs/Persona" }
+    },
+    "organisations": {
+      "type": "array",
+      "minItems": 10,
+      "items": { "$ref": "#/$defs/Organisation" }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 10,
+      "items": { "$ref": "#/$defs/CanonEvent" }
+    },
+    "aliases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/AliasMap" }
+    },
+    "toneGuidelines": { "$ref": "#/$defs/ToneGuidelines" },
+    "deals": {
+      "type": "array",
+      "minItems": 20,
+      "items": { "$ref": "#/$defs/Deal" }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 15,
+      "items": { "$ref": "#/$defs/Case" }
+    },
+    "experience": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Experience" }
+    },
+    "education": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Education" }
+    },
+    "projects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Project" }
+    },
+    "achievements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Achievement" }
+    },
+    "articles": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Article" }
+    },
+    "galleries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Gallery" }
+    },
+    "professionalExtras": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ProfessionalExtras" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "maxLength": 64
+    },
+    "isoDateOrMonth": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$"
+    },
+    "FeaturedLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "maxLength": 80 },
+        "name": { "type": "string", "maxLength": 80 },
+        "icon": { "type": "string", "maxLength": 40 },
+        "tooltip": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "start", "description"],
+      "properties": {
+        "title": { "type": "string", "maxLength": 120 },
+        "start": { "$ref": "#/$defs/isoDateOrMonth" },
+        "end": { "$ref": "#/$defs/isoDateOrMonth" },
+        "displayRange": { "type": "string", "maxLength": 80 },
+        "description": { "type": "string" },
+        "extraInfo": { "type": "string", "maxLength": 400 },
+        "featuredLinks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/FeaturedLink" }
+        }
+      }
+    },
+    "Experience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "personaId", "organisationName", "roles"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "organisationId": { "$ref": "#/$defs/slug" },
+        "organisationName": { "type": "string", "maxLength": 80 },
+        "organisationUrl": { "type": "string", "minLength": 1 },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/Role" }
+        }
+      }
+    },
+    "Education": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "personaId", "title", "institutionName"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "maxLength": 160 },
+        "institutionName": { "type": "string", "maxLength": 120 },
+        "institutionUrl": { "type": "string", "minLength": 1 },
+        "organisationId": { "$ref": "#/$defs/slug" },
+        "start": { "$ref": "#/$defs/isoDateOrMonth" },
+        "end": { "$ref": "#/$defs/isoDateOrMonth" },
+        "displayRange": { "type": "string", "maxLength": 80 },
+        "grade": { "type": "string", "maxLength": 40 },
+        "description": { "type": "string" },
+        "featuredLink": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "summary",
+        "image",
+        "tags",
+        "links",
+        "organisationId"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string" },
+        "image": { "type": "string", "minLength": 1 },
+        "tags": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "maxLength": 40 }
+        },
+        "links": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/FeaturedLink" }
+        },
+        "organisationId": { "$ref": "#/$defs/slug" },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "dealId": { "$ref": "#/$defs/slug" },
+        "caseIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "featuredCta": { "$ref": "#/$defs/FeaturedLink" },
+        "featured": { "type": "boolean" }
+      }
+    },
+    "Achievement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "summary", "personaIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string" },
+        "url": { "type": "string", "minLength": 1 },
+        "image": { "type": "string", "minLength": 1 },
+        "personaIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        }
+      }
+    },
+    "Persona": {
+      "type": "object",
+      "required": [
+        "id", "displayName", "historicalName", "title", "biography",
+        "historicalAnchor", "isFictionalExtension", "organisationIds",
+        "status", "email"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "displayName": { "type": "string", "maxLength": 100, "description": "Modern user-facing name (e.g. Richard Turpin, not Dick Turpin)" },
+        "historicalName": { "type": "string", "maxLength": 100, "description": "Legendary or historical inspiration name" },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 100 }
+        },
+        "title": { "type": "string", "maxLength": 80 },
+        "biography": { "type": "string" },
+        "historicalAnchor": { "type": "string", "description": "Legend inspiration note — not a Wikipedia citation" },
+        "isFictionalExtension": { "type": "boolean" },
+        "temperament": { "type": "string", "maxLength": 200 },
+        "organisationIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug" },
+          "minItems": 1
+        },
+        "birthYear": { "type": "integer", "minimum": 1700, "maximum": 1800 },
+        "deathYear": { "type": "integer", "minimum": 1700, "maximum": 1800 },
+        "status": {
+          "type": "string",
+          "enum": ["active", "deceased", "legend", "archived"]
+        },
+        "email": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]+@turpinverse\\.uk$"
+        },
+        "phone": { "type": "string", "maxLength": 30 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "address": { "$ref": "#/$defs/Address" }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address1", "town", "postcode", "country"],
+      "properties": {
+        "address1": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "address2": { "type": "string", "maxLength": 120 },
+        "address3": { "type": "string", "maxLength": 120 },
+        "town": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "region": { "type": "string", "maxLength": 80 },
+        "postcode": { "type": "string", "minLength": 1, "maxLength": 16, "pattern": "^(GIR 0AA|[A-Za-z]{1,2}[0-9][0-9A-Za-z]? [0-9][A-Za-z]{2})$" },
+        "country": { "type": "string", "const": "United Kingdom" }
+      }
+    },
+    "Organisation": {
+      "type": "object",
+      "required": [
+        "id", "tradingName", "description", "industry",
+        "historicalAnchor", "memberPersonaIds", "status", "registeredOffice"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "tradingName": { "type": "string", "maxLength": 80 },
+        "legalName": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 500 },
+        "industry": { "type": "string", "maxLength": 60 },
+        "historicalAnchor": { "type": "string", "description": "Legend or folklore inspiration note" },
+        "parentOrganisationId": { "$ref": "#/$defs/slug" },
+        "memberPersonaIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug" },
+          "minItems": 0
+        },
+        "primaryContactId": { "$ref": "#/$defs/slug" },
+        "foundedYear": { "type": "integer", "minimum": 1700, "maximum": 1800 },
+        "status": {
+          "type": "string",
+          "enum": ["active", "dissolved", "legend"]
+        },
+        "website": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://[a-z0-9.-]+\\.turpinverse\\.uk$"
+        },
+        "registeredOffice": { "$ref": "#/$defs/Address" }
+      }
+    },
+    "CanonEvent": {
+      "type": "object",
+      "required": ["id", "date", "title", "description", "category"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$"
+        },
+        "title": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["historical", "legend", "fictional"]
+        },
+        "personaIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "organisationIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "dealIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "caseIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "location": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "AliasMap": {
+      "type": "object",
+      "required": ["alias", "personaId"],
+      "properties": {
+        "alias": { "type": "string", "maxLength": 100 },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "context": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "ToneGuidelines": {
+      "type": "object",
+      "required": ["version", "principles", "examples", "forbiddenPatterns"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "principles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["good", "bad", "reason"],
+            "properties": {
+              "good": { "type": "string" },
+              "bad": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "forbiddenPatterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "Deal": {
+      "type": "object",
+      "required": [
+        "dealId", "dealName", "accountId", "stage", "amount", "closeDate", "description"
+      ],
+      "properties": {
+        "dealId": { "type": "string" },
+        "dealName": { "type": "string", "maxLength": 120 },
+        "accountId": { "$ref": "#/$defs/slug" },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "stage": {
+          "type": "string",
+          "enum": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
+        },
+        "amount": { "type": "number", "minimum": 0 },
+        "closeDate": { "type": "string", "format": "date" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "Case": {
+      "type": "object",
+      "required": [
+        "caseId", "subject", "description", "status", "priority", "accountId"
+      ],
+      "properties": {
+        "caseId": { "type": "string" },
+        "subject": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "status": {
+          "type": "string",
+          "enum": ["New", "In Progress", "On Hold", "Resolved", "Closed"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["Low", "Medium", "High", "Critical"]
+        },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "accountId": { "$ref": "#/$defs/slug" },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "relatedEventId": { "$ref": "#/$defs/slug" }
+      }
+    },
+    "isoDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "GalleryImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src"],
+      "properties": {
+        "src": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "caption": { "type": "string", "maxLength": 400 },
+        "alt": { "type": "string", "maxLength": 400 }
+      }
+    },
+    "ViewerHint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "mode": { "type": "string", "maxLength": 40 },
+        "options": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean"]
+          }
+        }
+      }
+    },
+    "Article": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "publishedAt",
+        "draft",
+        "body",
+        "authorPersonaId",
+        "collection"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "publishedAt": { "$ref": "#/$defs/isoDate" },
+        "draft": { "type": "boolean" },
+        "body": { "type": "string", "minLength": 1 },
+        "authorPersonaId": { "$ref": "#/$defs/slug" },
+        "collection": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 40 }
+        },
+        "featuredImage": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "showTableOfContents": { "type": "boolean" },
+        "enableSpecialRendering": { "type": "boolean" },
+        "relatedProjectId": { "$ref": "#/$defs/slug" },
+        "relatedCaseId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+      }
+    },
+    "Gallery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "subject", "images", "viewer"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "subject": { "type": "string", "enum": ["team", "workplace", "brand"] },
+        "images": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "$ref": "#/$defs/GalleryImage" }
+        },
+        "viewer": { "$ref": "#/$defs/ViewerHint" }
+      }
+    },
+    "IntroCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shortIntro", "headline", "subtitle"],
+      "properties": {
+        "shortIntro": { "type": "string", "minLength": 1 },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "subtitle": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "photo": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "cta": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "ContactExtras": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["copy", "email"],
+      "properties": {
+        "copy": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "cta": { "$ref": "#/$defs/FeaturedLink" }
+      }
+    },
+    "ProfessionalSocial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network", "url"],
+      "properties": {
+        "network": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "url": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "ProfessionalExtras": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["personaId"],
+      "properties": {
+        "personaId": { "$ref": "#/$defs/slug" },
+        "intro": { "$ref": "#/$defs/IntroCopy" },
+        "about": { "type": "string", "minLength": 1 },
+        "skillsHeading": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "skills": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "contact": { "$ref": "#/$defs/ContactExtras" },
+        "socials": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ProfessionalSocial" }
+        }
+      }
+    }
+  }
+}

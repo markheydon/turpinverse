@@ -8,7 +8,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\..\specs\001-turpinverse-universe\contracts\canon-schema.json" Link="schemas\canon-schema.json" />
+    <EmbeddedResource Include="..\..\canon\schema\canon-schema.json" Link="schemas\canon-schema.json" />
   </ItemGroup>
 
   <PropertyGroup>
