@@ -304,5 +304,5 @@ Task: "Add failing ExportMapper unit tests in tests/Turpinverse.Core.UnitTests/E
 
 ## Phase 9: Convergence
 
-- [ ] T065 Replace leftover project `contactIds` preview with optional `contactId` and `stakeholderContactIds` in `src/Turpinverse.Web/Components/Pages/Projects.razor`, `src/Turpinverse.Web/Components/Crm/DataTable.razor`, and `tests/Turpinverse.Web.UnitTests/Components/CrmPageTests.cs` per FR-008 / FR-012 (contradicts)
-- [ ] T066 Add optional `contactId` and `stakeholderContactIds` preview columns on `src/Turpinverse.Web/Components/Pages/Deals.razor` and `stakeholderContactIds` on `src/Turpinverse.Web/Components/Pages/Cases.razor` per plan:channel-surfaces / contracts/channel-surfaces.md (partial)
+- [X] T065 Replace leftover project `contactIds` preview with optional `contactId` and `stakeholderContactIds` in `src/Turpinverse.Web/Components/Pages/Projects.razor`, `src/Turpinverse.Web/Components/Crm/DataTable.razor`, and `tests/Turpinverse.Web.UnitTests/Components/CrmPageTests.cs` per FR-008 / FR-012 (contradicts)
+- [X] T066 Add optional `contactId` and `stakeholderContactIds` preview columns on `src/Turpinverse.Web/Components/Pages/Deals.razor` and `stakeholderContactIds` on `src/Turpinverse.Web/Components/Pages/Cases.razor` per plan:channel-surfaces / contracts/channel-surfaces.md (partial)

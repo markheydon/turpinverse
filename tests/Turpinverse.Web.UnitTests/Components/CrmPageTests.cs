@@ -164,6 +164,8 @@ public class DealsPageTests : CrmEntityPageTestBase<Deals>
         Assert.Contains("Deals", cut.Markup);
         Assert.Contains("Deal Pipeline", cut.Markup);
         Assert.Contains("Deal Name", cut.Markup);
+        Assert.Contains("Contact ID", cut.Markup);
+        Assert.Contains("Stakeholder Contact IDs", cut.Markup);
         Assert.Contains("pipeline-chart", cut.Markup);
     }
 }
@@ -179,6 +181,7 @@ public class CasesPageTests : CrmEntityPageTestBase<Cases>
         Assert.Contains("Cases", cut.Markup);
         Assert.Contains("Subject", cut.Markup);
         Assert.Contains("Priority", cut.Markup);
+        Assert.Contains("Stakeholder Contact IDs", cut.Markup);
     }
 }
 
@@ -193,7 +196,11 @@ public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
         Assert.Contains("Projects", cut.Markup);
         Assert.Contains("Title", cut.Markup);
         Assert.Contains("Account ID", cut.Markup);
+        Assert.Contains("Contact ID", cut.Markup);
+        Assert.Contains("Stakeholder Contact IDs", cut.Markup);
         Assert.Contains("Black Bess Route Optimiser", cut.Markup);
+        Assert.Contains("dick-turpin", cut.Markup);
+        Assert.Contains("ned-palmer", cut.Markup);
     }
 
     [Fact]
@@ -303,7 +310,9 @@ internal static class CrmTestData
                     ["stage"] = "Proposal",
                     ["amount"] = "50000",
                     ["closeDate"] = "2026-12-31",
-                    ["accountId"] = "org1"
+                    ["accountId"] = "org1",
+                    ["contactId"] = "p1",
+                    ["stakeholderContactIds"] = "p2"
                 }
             ],
             "cases" =>
@@ -315,6 +324,7 @@ internal static class CrmTestData
                     ["status"] = "open",
                     ["priority"] = "high",
                     ["contactId"] = "p1",
+                    ["stakeholderContactIds"] = "p2",
                     ["accountId"] = "org1"
                 }
             ],
@@ -326,7 +336,8 @@ internal static class CrmTestData
                     ["title"] = "Black Bess Route Optimiser",
                     ["summary"] = "Corridor planning suite",
                     ["accountId"] = "turpin-enterprises",
-                    ["contactIds"] = "dick-turpin; ned-palmer",
+                    ["contactId"] = "dick-turpin",
+                    ["stakeholderContactIds"] = "ned-palmer",
                     ["tags"] = "logistics; corridor",
                     ["featured"] = "true"
                 }
