@@ -20,7 +20,7 @@ This feature reshapes **how records join** and **how contacts export**. It MUST 
 
 | Surface | Responsibility for this feature |
 |---------|----------------------------------|
-| **Public reference site** | Showcase people, accounts, deals, cases, projects, and timeline using **names and stories**. When a deal, case, or project has a main contact or stakeholders, show those people by name. When a main contact is omitted, omit the named-contact block — do not show empty identifiers. Reader-facing pages MUST NOT present join keys, export column names, or collision-policy plumbing as primary content. Update pages **only where** they currently assume every deal/case/project always has a main contact, or they list an undifferentiated “people” list that would mis-state membership. |
+| **Public reference site** | Showcase people, accounts, deals, cases, projects, and timeline using **names and stories**. When a deal, case, or project has a main contact or stakeholders, show those people by name. When a main contact is omitted, omit the named-contact block — do not show empty identifiers. Reader-facing pages MUST NOT present join keys, export column names, or collision-policy plumbing as primary content. Update pages **only where** they currently assume every deal/case/project always has a main contact, or they show a separate undifferentiated “people” list instead of main contact ∪ stakeholders. |
 | **In-product export app** | Explore, preview, filter, and download importable files. Technical identifiers, optional main-contact columns, stakeholder columns, membership-duplicated contact rows, and the email collision policy belong here (and in exporter documentation), not on the public site. |
 
 Shared canon remains the single source of truth. This feature MUST NOT add a second public site or a new download product beyond the existing contact, account, deal, case, and project datasets.
@@ -30,6 +30,7 @@ Shared canon remains the single source of truth. This feature MUST NOT add a sec
 ### Session 2026-09-06
 
 - Q: Who should be the account-member main contact on the four repaired records, with the previous non-member kept only as a stakeholder? → A: Assumed deputies: `deal-008` William Hargreaves (Henry Clayton stakeholder); `case-001` and `palmer-identity-vault` Mary Brazier (Richard Turpin stakeholder); `case-017` Henry Clayton (Thomas Collier stakeholder)
+- Q: Should a project store people only as an optional main contact plus stakeholders, with “who is on this project” always taken as that union, instead of keeping a separate undifferentiated people list? → A: Store only optional main contact and stakeholders. Filters and pages use that union. No separate people list.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -41,7 +42,7 @@ Today the shipped dataset still requires a main contact on deals and cases, does
 
 **Why this priority**: Wrong joins poison every CRM demo that follows. Child completeness stories assume this graph. Without P1, export and four-row story fixes have no rule to satisfy.
 
-**Independent Test**: Confirm account membership may be empty in the rules (even if demo data still has members); confirm every contact still has at least one account; confirm deal/case/project require an account; confirm main contact is optional in the rules and **must be an account member when set**; confirm stakeholders need not be members; confirm an automated completeness check fails a fixture that puts a non-member in the main-contact slot and passes the same fixture when that person is only a stakeholder. No empty demo accounts and no contact-less demo deals are required to prove the rule.
+**Independent Test**: Confirm account membership may be empty in the rules (even if demo data still has members); confirm every contact still has at least one account; confirm deal/case/project require an account; confirm main contact is optional in the rules and **must be an account member when set**; confirm stakeholders need not be members; confirm a project has no separate people list (only main ∪ stakeholders); confirm an automated completeness check fails a fixture that puts a non-member in the main-contact slot and passes the same fixture when that person is only a stakeholder. No empty demo accounts and no contact-less demo deals are required to prove the rule.
 
 **Acceptance Scenarios**:
 
@@ -50,7 +51,7 @@ Today the shipped dataset still requires a main contact on deals and cases, does
 3. **Given** a deal, case, or project, **When** it is stored, **Then** it has exactly one account. A main contact MAY be omitted. If a main contact is set, that person MUST be a member of that account.
 4. **Given** stakeholders on a deal, case, or project, **When** those people are not members of the account, **Then** the record is still valid. Stakeholders MUST be existing people; they MUST NOT require new invented characters.
 5. **Given** a completeness check, **When** a deal’s main contact is not a member of the deal’s account, **Then** the check fails and names the record. **When** that person is moved to stakeholders and a member is the main contact (or the main contact is omitted), **Then** that membership violation does not appear.
-6. **Given** a project, **When** people are listed for “who is on this project,” **Then** the set is the main contact (if any) union stakeholders. An undifferentiated required people list is retired or derived from that union — not a third independent roster that can disagree with membership.
+6. **Given** a project, **When** people are listed for “who is on this project,” **Then** the set is exactly the main contact (if any) union stakeholders. The project MUST NOT keep a separate undifferentiated people list.
 7. **Given** a timeline event, **When** it optionally names deals and/or cases, **Then** those references MUST exist. Linking an event to a case implies that case’s account and main contact on public timelines and export roll-up; those implied identities MUST NOT be duplicated as extra required fields on the event.
 
 ---
@@ -113,7 +114,7 @@ CRMs that unique-key on email will see collisions for multi-account people. The 
 - What if a contact has no account? Invalid. Every person keeps at least one account. Unassigned contacts are out of scope.
 - What if someone stores a different email, phone, or mailing address per account on the person record? Invalid. One identity per person in canon; duplication happens only at export.
 - What if a CRM keys uniqueness on email? Documented collision: repeated email on membership rows is expected; Turpinverse does not mint alias emails.
-- What if a project still has a required undifferentiated people list that disagrees with main ∪ stakeholders? Invalid. Retire or derive that list.
+- What if a project still has a separate undifferentiated people list? Invalid. Store only optional main contact and stakeholders; “who is on this project” is that union.
 - What if an event lists deals or cases that do not exist? Invalid.
 - What if the public site currently assumes a deal or case always has a main contact? Publication MUST tolerate omission; reader copy uses names, never empty technical keys as primary content.
 - What if professional-extras “contact” copy is treated as a CRM contact? It is not. No change to extras in this feature.
@@ -132,7 +133,7 @@ This increment extends published canon, completeness checking, and existing expo
 | Unknown or duplicate stakeholder | Stakeholder id missing, unknown, duplicated, or equal to the main contact | Completeness check fails (**VR-055**) | Stakeholders are extra existing people only |
 | Unknown project lineage | Project names a deal or cases that do not exist | Completeness check fails (**VR-056**) | Lineage omitted or pointed at real records |
 | Unknown event pipeline links | Event names deals or cases that do not exist | Completeness check fails (**VR-057**) | Optional arrays only contain real ids |
-| Four story rows still invalid | `deal-008`, `case-001`, `case-017`, or `palmer-identity-vault` still use a non-member as main / undifferentiated project people | Completeness check fails (**VR-054** and/or **VR-058**) | Stories preserved via member main + stakeholder, not fake membership |
+| Four story rows still invalid | `deal-008`, `case-001`, `case-017`, or `palmer-identity-vault` still use a non-member as main, or a project still has a separate people list | Completeness check fails (**VR-054** and/or **VR-058**) | Stories preserved via member main + stakeholder, not fake membership |
 | Contact export under-counts memberships | Download emits one row per person instead of one per membership | Export mapping is wrong; tests fail (**VR-059** as the membership-row invariant) | Multi-account people appear once per account |
 | Per-account identity in canon | Email, phone, or address stored per membership on the person | Rejected | Copy identity at export only |
 | Public site shows join plumbing | Reader pages lead with ids, CSV column names, or collision policy | Channel charter failure | Names and stories on the public site; ids on export |
@@ -161,13 +162,13 @@ Canon remains **fictional** demo data. This feature repeats contact identity (in
 - **FR-005**: Deal, case, and project MAY omit a main contact. When a main contact is set, that person MUST exist and MUST be a member of that record’s account (**VR-054**). Deceased people MUST NOT own **active** deals when they are the main contact (existing active-deal rule still applies).
 - **FR-006**: Deal, case, and project MAY list **stakeholders** (zero or more). Stakeholders MUST be existing people, MUST NOT duplicate the main contact, and NEED NOT be members of the account (**VR-055**). This increment MUST NOT add stakeholder casts except to repair the four rows in FR-010.
 - **FR-007**: A project MAY name at most one originating deal and zero or more related cases; those ids MUST exist when set (**VR-056**). Article “about this project/case” links stay publication links and are unchanged.
-- **FR-008**: Project people used for “projects this person is on” (public site and in-product filters) MUST be the main contact (if any) union stakeholders. Any required undifferentiated people list is retired or derived from that union so it cannot disagree with membership.
+- **FR-008**: A project MUST store people only as an optional main contact and optional stakeholders. It MUST NOT keep a separate undifferentiated people list. “Who is on this project” on the public site, in-product filters, and export MUST be that union. When converting existing projects other than FR-010, map the previous people list in authored order: the first listed person who is a member of the sponsoring account becomes main contact; any other previously listed people become stakeholders; do not add names that were not already on that list except as required by FR-010.
 - **FR-009**: Timeline events MAY name zero or more deals and zero or more cases; those ids MUST exist when set (**VR-057**). Case roll-up to account and main contact is presentation/export only — do not duplicate those ids as required fields on the event.
 - **FR-010**: Canon MUST be hand-authored. The four invalid rows MUST be corrected as in User Story 2 (**VR-058**): keep the existing accounts; keep a main contact who **is** a member; keep the previous non-member on the record as a stakeholder; invent no empty accounts, no contact-less pipeline rows, and no extra people. Confirmed deputies: Epping Forest main contact William Hargreaves with Henry Clayton stakeholder; Brazier Legal mains Mary Brazier with Richard Turpin stakeholder on `case-001` and `palmer-identity-vault`; Turpin Enterprises main contact Henry Clayton with Thomas Collier stakeholder on `case-017`.
 - **FR-011**: Canon MUST NOT store per-account email, phone, or mailing address. Professional-extras contact copy is not a CRM contact and is unchanged.
 - **FR-012**: **In-product export (constitution IX)**: Contact download MUST emit **one row per membership** (**VR-059**): same contact identity on each row, different account, copied email/phone/mailing address. Account download MAY include optional primary contact. Deal, case, and project downloads MUST include optional main contact and a stakeholder field (empty when omitted). Project download MUST include optional originating deal and related cases. Stakeholder export is a field on those datasets (not a requirement to invent a second file).
 - **FR-013**: **Collision policy**: Turpinverse unique person key is the contact identity. Email is a copied attribute. Multi-membership rows repeat the same email on purpose. Importers whose CRM unique-keys on email MUST use contact identity (or contact+account) or apply their own suffix/skip rule. Document this on the export surface and exporter documentation — not as primary public-site copy.
-- **FR-014**: **Public reference site (constitution IX)**: Show named people and accounts. Tolerate omitted main contact. Do not present technical identifiers or collision policy as primary content. Change public-site publication **only if** current pages would break or mislead under optional main contact or derived project people.
+- **FR-014**: **Public reference site (constitution IX)**: Show named people and accounts. Tolerate omitted main contact. Do not present technical identifiers or collision policy as primary content. Change public-site publication **only if** current pages would break or mislead under optional main contact or project people shown as main ∪ stakeholders rather than a separate people list.
 - **FR-015**: Completeness checks for FR-001–FR-010 MUST be automated and MUST have tests written to fail before the new behaviour is implemented (constitution III). This feature is specified in `specs/008-crm-join-graph` — do not treat the original universe specification as the only place this graph is recorded. Where older contracts still require a deal/case main contact or a single contact row per person, update them so documentation matches the target graph (constitution VIII).
 
 ### Key Entities
@@ -175,7 +176,7 @@ Canon remains **fictional** demo data. This feature repeats contact identity (in
 - **Contact (persona)**: One person; at least one account; one email, phone, and mailing address for the person.
 - **Account (organisation)**: Zero or more member contacts; optional primary contact (member when set).
 - **Membership**: A person–account link recorded on both sides when present. Export projects one contact row per membership.
-- **Deal / Case / Project**: Exactly one account; optional main contact (member when set); optional stakeholders (need not be members). Project also optional originating deal and related cases. Project people = main ∪ stakeholders.
+- **Deal / Case / Project**: Exactly one account; optional main contact (member when set); optional stakeholders (need not be members). Project also optional originating deal and related cases. Project people are only that union — no separate people list.
 - **Timeline event**: Optional people, accounts, deals, and cases.
 - **Contact download row**: One membership projection; identity fields copied; account differs per row.
 - **Stakeholder**: Extra person on a deal, case, or project who may sit outside the account.
@@ -196,6 +197,7 @@ Canon remains **fictional** demo data. This feature repeats contact identity (in
 
 - GitHub issue #41 is the source of scope; [`docs/entity-relationships.md`](../../docs/entity-relationships.md) is the join-graph source of truth for cardinality.
 - Four-row deputies are confirmed (Clarifications, 2026-09-06): William Hargreaves + Henry Clayton on `deal-008`; Mary Brazier + Richard Turpin on `case-001` and `palmer-identity-vault`; Henry Clayton + Thomas Collier on `case-017`.
+- Projects store people only as optional main contact and stakeholders (Clarifications, 2026-09-06). Other existing projects map the previous people list in authored order: first listed sponsoring-account member becomes main; remaining previously listed people become stakeholders. No new names except FR-010.
 - Schema **allows** empty accounts and omitted main contacts; **demo data in this increment does not add examples** of those optionality shapes.
 - Stakeholder export is a single field on deal, case, and project downloads (joined list of contact identities), not a second dataset, unless planning finds a documented reason to split files.
 - Account primary contact is optional in data and MAY appear as an export column; demo data NEED NOT populate it on every account.
