@@ -301,3 +301,8 @@ Task: "Add failing ExportMapper unit tests in tests/Turpinverse.Core.UnitTests/E
 ## Phase 8: Convergence
 
 - [X] T064 Refresh `docs/entity-relationships.md` (remove pre-ship implementation-status banner, document VR-052–VR-059, present-tense export projection table, replace “canon rows to fix” with shipped repair summary) and update the `docs/product-surfaces.md` cross-link so shipped schema no longer reads as lagging per SC-007 (contradicts)
+
+## Phase 9: Convergence
+
+- [ ] T065 Replace leftover project `contactIds` preview with optional `contactId` and `stakeholderContactIds` in `src/Turpinverse.Web/Components/Pages/Projects.razor`, `src/Turpinverse.Web/Components/Crm/DataTable.razor`, and `tests/Turpinverse.Web.UnitTests/Components/CrmPageTests.cs` per FR-008 / FR-012 (contradicts)
+- [ ] T066 Add optional `contactId` and `stakeholderContactIds` preview columns on `src/Turpinverse.Web/Components/Pages/Deals.razor` and `stakeholderContactIds` on `src/Turpinverse.Web/Components/Pages/Cases.razor` per plan:channel-surfaces / contracts/channel-surfaces.md (partial)
