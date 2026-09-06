@@ -25,7 +25,7 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
@@ -68,6 +68,7 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `accounts` | `turpinverse-accounts.csv` |
 | `deals` | `turpinverse-deals.csv` |
 | `cases` | `turpinverse-cases.csv` |
+| `projects` | `turpinverse-projects.csv` |
 
 ### GET /api/export/manifest
 
@@ -117,7 +118,14 @@ Runs cross-reference validation and returns results. See [validation-rules.md](.
     "organisations": 10,
     "events": 12,
     "deals": 22,
-    "cases": 17
+    "cases": 17,
+    "experience": 3,
+    "education": 2,
+    "projects": 3,
+    "achievements": 4,
+    "articles": 10,
+    "galleries": 1,
+    "professionalExtras": 1
   },
   "violations": []
 }
@@ -146,7 +154,7 @@ Turpinverse unique person key is `contactId`. Email is a copied attribute from t
 | Route | Behaviour |
 |-------|-----------|
 | `/` | Dataset summary, validation badge, summary chart |
-| `/contacts`, `/accounts`, `/deals`, `/cases` | Filtered preview table and download (shared filter) |
+| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
 | `/contacts/{id}` | Contact detail including career/portfolio and professional extras |
 
 Channel intent: [product-surfaces.md](./product-surfaces.md).
@@ -172,7 +180,7 @@ All errors use [RFC 7807 Problem Details](https://datatracker.ietf.org/doc/html/
   "type": "https://turpinverse.dev/errors/invalid-dataset",
   "title": "Invalid dataset type",
   "status": 400,
-  "detail": "Dataset 'foo' is not supported. Valid values: contacts, accounts, deals, cases."
+  "detail": "Dataset 'foo' is not supported. Valid values: contacts, accounts, deals, cases, projects."
 }
 ```
 

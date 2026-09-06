@@ -8,15 +8,15 @@ This directory holds historical GitHub Spec Kit artefacts from when Turpinverse 
 
 | Was | Now |
 |-----|-----|
-| Canon JSON | [`canon/`](../canon/) at repo root |
-| JSON Schema / CRM columns | [`canon/schema/`](../canon/schema/) |
-| Join graph | [`docs/entity-relationships.md`](../docs/entity-relationships.md) |
-| Voice rules | [`docs/universe-voice.md`](../docs/universe-voice.md) |
-| Export HTTP contract | [`docs/export-api.md`](../docs/export-api.md) |
-| Validation codes | [`docs/validation-rules.md`](../docs/validation-rules.md) |
-| Design decisions | [`docs/decision-log.md`](../docs/decision-log.md) |
-| Engineering rules | [`docs/engineering.md`](../docs/engineering.md) |
-| Agent orientation | [`AGENTS.md`](../AGENTS.md) |
+| Canon JSON | [`canon/`](../../canon/) at repo root |
+| JSON Schema / CRM columns | [`canon/schema/`](../../canon/schema/) |
+| Join graph | [`docs/entity-relationships.md`](../../docs/entity-relationships.md) |
+| Voice rules | [`docs/universe-voice.md`](../../docs/universe-voice.md) |
+| Export HTTP contract | [`docs/export-api.md`](../../docs/export-api.md) |
+| Validation codes | [`docs/validation-rules.md`](../../docs/validation-rules.md) |
+| Design decisions | [`docs/decision-log.md`](../../docs/decision-log.md) |
+| Engineering rules | [`docs/engineering.md`](../../docs/engineering.md) |
+| Agent orientation | [`AGENTS.md`](../../AGENTS.md) |
 
 Git history remains authoritative for forensic detail.
 

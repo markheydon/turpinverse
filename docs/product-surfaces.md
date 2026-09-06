@@ -48,14 +48,14 @@ See [site/README.md](../site/README.md) for build and deploy.
 
 **Responsibilities:**
 
-- Interactive browse and preview of CRM datasets (contacts, accounts, deals, cases)
+- Interactive browse and preview of CRM datasets (contacts, accounts, deals, cases, projects)
 - Filtering and faceting on dataset pages (preview and CSV download share the same server-side filter)
 - Per-contact detail for exploration ahead of export
 - Download CSV (and future import formats) with technical identifiers and cross-references intact for external systems
 
 **Not its job:** Replace the public site as the primary readable reference for the universe. Technical IDs belong here and in exports, not on Hugo reader pages.
 
-Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, and `/contacts/{id}` for contact detail.
+Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, and `/contacts/{id}` for contact detail.
 
 ## Dual publication on person pages
 
@@ -84,7 +84,7 @@ Professional extras publish in sandwich order on both channels: intro header →
 
 **Blazor / CSV today:**
 
-- Tabular deals and cases datasets with machine-oriented identifier columns in previews and exports (by design for the export channel)
+- Tabular deals, cases, and projects datasets with machine-oriented identifier columns in previews and exports (by design for the export channel)
 - Account and contact CSV exports include flattened UK postal columns (`registeredOffice*` / `mailing*`)
 - Blazor `/accounts` preview MAY show `registeredOfficeTown`; `/contacts` preview MAY show `mailingTown`
 - Blazor `/contacts/{id}` shows a mailing address section when the persona has one (outside professional-extras contact)
