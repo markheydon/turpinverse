@@ -3,6 +3,7 @@ using Turpinverse.Core.Models;
 
 namespace Turpinverse.Core.UnitTests.Export;
 
+[Trait("Category", "CsvExport")]
 public class AddressExportMapperTests
 {
     [Fact]
@@ -66,7 +67,7 @@ public class AddressExportMapperTests
             }
         };
 
-        var export = ExportMapper.MapContact(persona);
+        var export = ExportMapper.MapContactForMembership(persona, "turpin-enterprises");
 
         Assert.Equal("14 Church Lane", export.MailingAddress1);
         Assert.Equal("Micklegate", export.MailingAddress2);
@@ -94,7 +95,7 @@ public class AddressExportMapperTests
             Email = "black-bess@turpinverse.uk"
         };
 
-        var export = ExportMapper.MapContact(persona);
+        var export = ExportMapper.MapContactForMembership(persona, "turpin-enterprises");
 
         Assert.Equal(string.Empty, export.MailingAddress1);
         Assert.Equal(string.Empty, export.MailingAddress2);

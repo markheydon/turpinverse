@@ -12,7 +12,8 @@
       }
     ],
     "organisationId": "turpin-enterprises",
-    "personaIds": ["dick-turpin", "ned-palmer"],
+    "contactId": "dick-turpin",
+    "stakeholderContactIds": ["ned-palmer"],
     "featuredCta": {
       "name": "Request demo",
       "url": "https://turpin-enterprises.turpinverse.uk/demo/black-bess"
@@ -33,7 +34,8 @@
       }
     ],
     "organisationId": "brazier-legal",
-    "personaIds": ["dick-turpin"]
+    "contactId": "mary-brazier",
+    "stakeholderContactIds": ["dick-turpin"]
   },
   {
     "id": "essex-procurement-hub",
@@ -48,6 +50,6 @@
       }
     ],
     "organisationId": "essex-gang",
-    "personaIds": ["dick-turpin"]
+    "contactId": "dick-turpin"
   }
 ]

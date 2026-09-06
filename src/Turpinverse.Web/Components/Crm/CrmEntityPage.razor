@@ -47,6 +47,13 @@
     </div>
   }
 
+  @if (ExportHelp is not null)
+  {
+    <div class="export-help-section">
+      @ExportHelp
+    </div>
+  }
+
   @if (loading)
   {
     <p>Loading @GetDisplayName().ToLowerInvariant()...</p>
@@ -75,6 +82,7 @@
     [Parameter] public string? RowLinkColumn { get; set; }
     [Parameter] public string? RowLinkPathPrefix { get; set; }
     [Parameter] public string? RowLinkIdColumn { get; set; }
+    [Parameter] public RenderFragment? ExportHelp { get; set; }
 
     private ExportDatasetDefinition definition = new(string.Empty, string.Empty, "file", "/", string.Empty);
     private IReadOnlyList<IReadOnlyDictionary<string, string>> rows = [];

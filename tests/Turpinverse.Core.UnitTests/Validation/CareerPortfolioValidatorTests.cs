@@ -102,7 +102,7 @@ public class CareerPortfolioValidatorTests
     }
 
     [Fact]
-    public void Validate_ProjectWithoutPersonaIds_FailsVr022()
+    public void Validate_ProjectWithoutLinkedPeople_DoesNotFailVr022()
     {
         var canon = CreateBaseCanon() with
         {
@@ -116,14 +116,13 @@ public class CareerPortfolioValidatorTests
                     Image = "/img.png",
                     Tags = ["tag"],
                     Links = [new FeaturedLink { Url = "https://example.com", Label = "Link" }],
-                    OrganisationId = "turpin-enterprises",
-                    PersonaIds = []
+                    OrganisationId = "turpin-enterprises"
                 }
             ]
         };
 
         var result = _validator.Validate(canon);
-        Assert.Contains(result.Violations, v => v.Rule == "VR-022" && v.EntityId == "orphan-project");
+        Assert.DoesNotContain(result.Violations, v => v.Rule == "VR-022" && v.EntityId == "orphan-project");
     }
 
     [Fact]
@@ -202,7 +201,7 @@ public class CareerPortfolioValidatorTests
                     Tags = ["tag"],
                     Links = [new FeaturedLink { Url = "https://example.com", Label = "Link" }],
                     OrganisationId = "turpin-enterprises",
-                    PersonaIds = [CareerPortfolioPresenter.PrimaryPersonaId]
+                    ContactId = CareerPortfolioPresenter.PrimaryPersonaId
                 }
             ],
             Achievements = []

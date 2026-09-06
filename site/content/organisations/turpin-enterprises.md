@@ -5,6 +5,7 @@ industry: "Consulting"
 status: "active"
 legalName: "Turpin Enterprises International — Strategic Corridor Consultancy Since 1735"
 foundedYear: 1735
+primaryContactId: "dick-turpin"
 members: ["dick-turpin","mary-brazier","ned-palmer","black-bess","henry-clayton","catherine-bell"]
 parent: "essex-gang"
 registeredOffice:

@@ -3,7 +3,8 @@ title: "Palmer Identity Vault"
 type: "projects"
 projectId: "palmer-identity-vault"
 organisationId: "brazier-legal"
-personaIds: ["dick-turpin"]
+contactId: "mary-brazier"
+stakeholderContactIds: ["dick-turpin"]
 tags: ["identity","compliance","SSO"]
 image: "/images/projects/palmer-identity-vault.svg"
 ---

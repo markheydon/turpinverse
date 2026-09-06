@@ -134,6 +134,7 @@ Runs cross-reference validation (VR-001 through VR-010) and returns results.
 | Line ending | CRLF (`\r\n`) |
 | Header row | Required; matches column order in schema |
 | Empty fields | Empty string (not `null`) |
+| Contact rows | One row per person–account membership; duplicate `contactId` and email across accounts is expected (VR-059) |
 | Date format | ISO 8601 (`YYYY-MM-DD`) |
 | Decimal format | Period separator, no thousands separator |
 
@@ -163,6 +164,7 @@ Shared UI elements:
 |------------|----------|-----------|
 | Preview table | `DataTable.razor` in `CrmEntityPage` | Loads via `GET /api/export/{dataset}/preview?count=100` |
 | Download button | `CrmEntityPage` | Opens `GET /api/export/{dataset}` in a new browser tab |
+| Contact collision note | `Contacts.razor` | Explains that contact exports repeat email across membership rows; importers should key on `contactId` or `contactId` + `accountId` |
 | Pipeline chart | `PipelineChart.razor` on `/deals` | Chart.js bar chart of deal stage distribution |
 | Summary chart | `SummaryChart.razor` on `/` | Chart.js doughnut chart of dataset row counts |
 | Validation badge | `Home.razor` | Green/red indicator from `GET /api/canon/validate` |

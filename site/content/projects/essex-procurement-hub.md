@@ -3,7 +3,7 @@ title: "Essex Procurement Hub"
 type: "projects"
 projectId: "essex-procurement-hub"
 organisationId: "essex-gang"
-personaIds: ["dick-turpin"]
+contactId: "dick-turpin"
 tags: ["procurement","marketplace","legacy"]
 image: "/images/projects/essex-procurement-hub.svg"
 ---

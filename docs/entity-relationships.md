@@ -1,12 +1,10 @@
 # Entity relationships
 
-**Target CRM-shaped join graph** for Turpinverse canon and export. This page is the intended model for real-world CRM import fidelity while keeping Turpinverse as the source of truth for names and stories.
+**CRM-shaped join graph** for Turpinverse canon and export. Shipped JSON, JSON Schema, `CanonValidator`, CSV export, Hugo publication, and Blazor previews follow this model for real-world CRM import fidelity while keeping Turpinverse as the source of truth for names and stories.
 
-> **Implementation status:** Shipped JSON, JSON Schema, `CanonValidator`, and CSV export still follow older rules (required deal/case contacts, no stakeholder arrays, single contact row per persona, etc.) until the correction work in the linked GitHub issue lands. Where this page and live code disagree, this page is **target**; code is **current**.
+> **Shipped in:** [spec `008-crm-join-graph`](../specs/008-crm-join-graph/spec.md) (GitHub [#41](https://github.com/markheydon/turpinverse/issues/41)).
 
-> **Correction issue:** [#41 — Align CRM join schema, export, and canon rows](https://github.com/markheydon/turpinverse/issues/41).
-
-This is a repo artefact (human- and machine-readable Mermaid). It does not change the Blazor app or Hugo site by itself. Field-level validation codes will be assigned when the correction spec is implemented; they are described here in prose until then.
+This is a repo artefact (human- and machine-readable Mermaid). Field-level validation codes **VR-052–VR-059** are enforced in `CanonValidator` and export tests (see [completeness contract](../specs/008-crm-join-graph/contracts/completeness.md)).
 
 Source of truth for **fields** remains feature data models under `specs/` and `src/Turpinverse.Core/Models/`. This page is the **join graph**.
 
@@ -16,7 +14,7 @@ Canon JSON uses universe names. CSV export uses CRM names. They are the same log
 
 | Canon | CRM export | Notes |
 |-------|------------|--------|
-| Persona | Contact | One persona; **target** export is one CSV row **per account membership** (see Export) |
+| Persona | Contact | One persona; export emits one CSV row **per account membership** (see Export) |
 | Organisation | Account | 1:1 via `organisation.id` → `accountId` |
 | Deal | Deal (opportunity analogue) | Authored in `deals.json`; not derived |
 | Case | Case | Authored in `cases.json`; not derived |
@@ -124,7 +122,7 @@ erDiagram
 
 Career and publication collections do **not** add CSV columns on contacts, accounts, deals, or cases. See [career-portfolio-mapping.md](./career-portfolio-mapping.md) and [article-gallery-mapping.md](./article-gallery-mapping.md).
 
-## Export projection (target)
+## Export projection (shipped)
 
 ```mermaid
 flowchart LR
@@ -149,12 +147,12 @@ flowchart LR
     Project -->|"1:1 main plus stakeholders joined"| ProjectRow
 ```
 
-| Projection | Target behaviour |
-|------------|------------------|
-| Contact | **One CSV row per** `(persona, organisation)` membership. Same `contactId` (persona slug) on each row; `accountId` differs. Email/phone/address copied from persona (canon has one identity per person). Document id/email collision policy in the correction spec if a target CRM keys on email. |
-| Account | 1:1 from Organisation; optional `primaryContactId` column when implemented. |
-| Deal / Case | 1:1; optional `contactId`; optional stakeholder export (second file or joined column — correction spec). |
-| Project | 1:1; optional `contactId`, `dealId`, `caseIds`; stakeholders in export. |
+| Projection | Shipped behaviour |
+|------------|-------------------|
+| Contact | **One CSV row per** `(persona, organisation)` membership (**VR-059**). Same `contactId` (persona slug) on each row; `accountId` differs. Email/phone/address copied from persona (canon has one identity per person). Collision policy documented on the Blazor contacts export page and in [export-api.md](../specs/001-turpinverse-universe/contracts/export-api.md). |
+| Account | 1:1 from Organisation; optional `primaryContactId` column when set on the organisation. |
+| Deal / Case | 1:1; optional `contactId`; `stakeholderContactIds` as a semicolon-separated column (empty when none). |
+| Project | 1:1; optional `contactId`, `dealId`, `caseIds`; `stakeholderContactIds` column. Project people in export are main ∪ stakeholders. |
 
 Deals and cases are authored in canon; they are not generated from membership edges at export time.
 
@@ -166,18 +164,31 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | Per-account contact identity | Not in canon. Duplicate contact rows at export only. |
 | Shared Address records | Not modelled; billing vs shipping; geocodes. |
 | Gallery / professional-extras → org | Not modelled. |
-| Leads, activities, products, quotes | Future CRM/commercial stories (#32 epic); not part of this join correction. |
+| Leads, activities, products, quotes | Future CRM/commercial stories (#32 epic); not part of this join graph. |
 
-## Canon rows to fix when schema lands
+## Join-graph validation codes (shipped)
 
-These rows violate **target** “main contact must be account member” and must be corrected in the correction spec (not required to illustrate optional empty contacts or new stakeholders):
+| Code | Scope | Rule |
+|------|-------|------|
+| VR-052 | Organisation | `primaryContactId` omitted **or** is a member |
+| VR-053 | Deal, Case, Project | Exactly one existing account |
+| VR-054 | Deal, Case, Project | `contactId` omitted **or** exists and is an account member |
+| VR-055 | Deal, Case, Project | Stakeholders exist, unique, not equal to main |
+| VR-056 | Project | `dealId` / `caseIds` omitted or exist |
+| VR-057 | CanonEvent | `dealIds` / `caseIds` omitted or exist |
+| VR-058 | Named records | `deal-008`, `case-001`, `case-017`, `palmer-identity-vault` match the repaired deputies below |
+| VR-059 | Contact export | Row count equals membership links (export tests, not `/validate` body) |
 
-| Record | Issue |
-|--------|--------|
-| `deal-008` | Henry Clayton × Epping Forest Authority — Henry not a member of that account |
-| `case-001` | Dick Turpin × Brazier Legal — Dick not a member of that account |
-| `case-017` | Thomas Collier × Turpin Enterprises — Thomas not a member of that account |
-| `palmer-identity-vault` | Dick Turpin listed under Brazier Legal project — Dick not a member of that account |
+## Repaired canon rows (shipped)
+
+Four story rows were corrected so main contacts are account members and former non-member names moved to stakeholders (no new people, empty accounts, or contact-less pipeline rows):
+
+| Record | Account | Main contact | Stakeholder |
+|--------|---------|--------------|-------------|
+| `deal-008` | Epping Forest Authority | William Hargreaves | Henry Clayton |
+| `case-001` | Brazier Legal | Mary Brazier | Richard Turpin (`dick-turpin`) |
+| `case-017` | Turpin Enterprises | Henry Clayton | Thomas Collier |
+| `palmer-identity-vault` | Brazier Legal | Mary Brazier | Richard Turpin (`dick-turpin`) |
 
 ## Where to edit data
 

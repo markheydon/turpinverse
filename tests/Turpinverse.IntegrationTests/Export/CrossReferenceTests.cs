@@ -23,6 +23,11 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         var contactIds = contacts.Select(r => r["contactId"]).ToHashSet();
         foreach (var deal in deals)
         {
+            if (string.IsNullOrWhiteSpace(deal["contactId"]))
+            {
+                continue;
+            }
+
             Assert.True(
                 contactIds.Contains(deal["contactId"]),
                 $"deal {deal["dealId"]} references orphan contact");
@@ -56,7 +61,11 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
 
         foreach (var caseRecord in cases)
         {
-            Assert.Contains(caseRecord["contactId"], contactIds);
+            if (!string.IsNullOrWhiteSpace(caseRecord["contactId"]))
+            {
+                Assert.Contains(caseRecord["contactId"], contactIds);
+            }
+
             Assert.Contains(caseRecord["accountId"], accountIds);
         }
     }
@@ -75,7 +84,13 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         {
             Assert.Contains(project["accountId"], accountIds);
 
-            foreach (var contactId in project["contactIds"].Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+            if (!string.IsNullOrWhiteSpace(project["contactId"]))
+            {
+                Assert.Contains(project["contactId"], contactIds);
+            }
+
+            foreach (var contactId in project["stakeholderContactIds"]
+                .Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
             {
                 Assert.Contains(contactId, contactIds);
             }

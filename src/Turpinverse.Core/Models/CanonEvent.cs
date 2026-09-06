@@ -9,5 +9,7 @@ public sealed record CanonEvent
     public required string Category { get; init; }
     public IReadOnlyList<string> PersonaIds { get; init; } = [];
     public IReadOnlyList<string> OrganisationIds { get; init; } = [];
+    public IReadOnlyList<string> DealIds { get; init; } = [];
+    public IReadOnlyList<string> CaseIds { get; init; } = [];
     public string? Location { get; init; }
 }

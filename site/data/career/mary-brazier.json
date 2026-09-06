@@ -1,0 +1,36 @@
+{
+  "experience": [],
+  "education": [],
+  "projects": [
+    {
+      "id": "palmer-identity-vault",
+      "title": "Palmer Identity Vault",
+      "summary": "SSO and alias lifecycle tooling for clients relocating under fresh credentials. Keeps Yorkshire and Essex personas cleanly separated in audit logs.",
+      "image": "/images/projects/palmer-identity-vault.svg",
+      "tags": [
+        "identity",
+        "compliance",
+        "SSO"
+      ],
+      "links": [
+        {
+          "url": "/organisations/brazier-legal/",
+          "label": "Product overview",
+          "name": null,
+          "icon": "shield",
+          "tooltip": null
+        }
+      ],
+      "organisationId": "brazier-legal",
+      "contactId": "mary-brazier",
+      "stakeholderContactIds": [
+        "dick-turpin"
+      ],
+      "dealId": null,
+      "caseIds": [],
+      "featuredCta": null,
+      "featured": null
+    }
+  ],
+  "achievements": []
+}

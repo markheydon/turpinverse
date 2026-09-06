@@ -13,27 +13,28 @@ public static class ExportCsvColumns
     public static readonly IReadOnlyList<string> Accounts =
     [
         "accountId", "accountName", "legalName", "industry",
-        "parentAccountId", "description", "website", "status",
+        "parentAccountId", "primaryContactId", "description", "website", "status",
         "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
         "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
     ];
 
     public static readonly IReadOnlyList<string> Deals =
     [
-        "dealId", "dealName", "accountId", "contactId", "stage",
+        "dealId", "dealName", "accountId", "contactId", "stakeholderContactIds", "stage",
         "amount", "closeDate", "description"
     ];
 
     public static readonly IReadOnlyList<string> Cases =
     [
         "caseId", "subject", "description", "status", "priority",
-        "contactId", "accountId", "relatedEventId"
+        "contactId", "accountId", "stakeholderContactIds", "relatedEventId"
     ];
 
     public static readonly IReadOnlyList<string> Projects =
     [
         "projectId", "title", "summary", "accountId",
-        "contactIds", "tags", "featured"
+        "contactId", "stakeholderContactIds", "dealId", "caseIds",
+        "tags", "featured"
     ];
 
     public static IReadOnlyList<string> ForDataset(string dataset) =>

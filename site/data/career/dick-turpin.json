@@ -138,10 +138,12 @@
         }
       ],
       "organisationId": "turpin-enterprises",
-      "personaIds": [
-        "dick-turpin",
+      "contactId": "dick-turpin",
+      "stakeholderContactIds": [
         "ned-palmer"
       ],
+      "dealId": null,
+      "caseIds": [],
       "featuredCta": {
         "url": "/organisations/turpin-enterprises/",
         "label": null,
@@ -171,9 +173,10 @@
         }
       ],
       "organisationId": "essex-gang",
-      "personaIds": [
-        "dick-turpin"
-      ],
+      "contactId": "dick-turpin",
+      "stakeholderContactIds": [],
+      "dealId": null,
+      "caseIds": [],
       "featuredCta": null,
       "featured": null
     },
@@ -197,9 +200,12 @@
         }
       ],
       "organisationId": "brazier-legal",
-      "personaIds": [
+      "contactId": "mary-brazier",
+      "stakeholderContactIds": [
         "dick-turpin"
       ],
+      "dealId": null,
+      "caseIds": [],
       "featuredCta": null,
       "featured": null
     }

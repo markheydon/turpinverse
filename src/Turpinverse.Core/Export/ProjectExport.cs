@@ -20,15 +20,27 @@ public sealed record ProjectExport
     [Index(3)]
     public required string AccountId { get; init; }
 
-    [Name("contactIds")]
+    [Name("contactId")]
     [Index(4)]
-    public required string ContactIds { get; init; }
+    public string ContactId { get; init; } = string.Empty;
+
+    [Name("stakeholderContactIds")]
+    [Index(5)]
+    public string StakeholderContactIds { get; init; } = string.Empty;
+
+    [Name("dealId")]
+    [Index(6)]
+    public string DealId { get; init; } = string.Empty;
+
+    [Name("caseIds")]
+    [Index(7)]
+    public string CaseIds { get; init; } = string.Empty;
 
     [Name("tags")]
-    [Index(5)]
+    [Index(8)]
     public required string Tags { get; init; }
 
     [Name("featured")]
-    [Index(6)]
+    [Index(9)]
     public required string Featured { get; init; }
 }

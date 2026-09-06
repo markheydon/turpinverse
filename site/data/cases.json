@@ -5,8 +5,11 @@
     "description": "Two active Palmer accounts detected with overlapping Yorkshire postcodes. Ned Palmer and John Palmer records require deduplication review before alias renewal.",
     "status": "Resolved",
     "priority": "High",
-    "contactId": "dick-turpin",
+    "contactId": "mary-brazier",
     "accountId": "brazier-legal",
+    "stakeholderContactIds": [
+      "dick-turpin"
+    ],
     "relatedEventId": "john-palmer-alias"
   },
   {
@@ -17,6 +20,7 @@
     "priority": "Medium",
     "contactId": "george-chapman",
     "accountId": "king-equine-trading",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -27,6 +31,7 @@
     "priority": "High",
     "contactId": "william-hargreaves",
     "accountId": "epping-forest-authority",
+    "stakeholderContactIds": [],
     "relatedEventId": "epping-poaching-crackdown"
   },
   {
@@ -37,6 +42,7 @@
     "priority": "Medium",
     "contactId": "anna-ward",
     "accountId": "millington-inn",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -47,6 +53,7 @@
     "priority": "Critical",
     "contactId": "henry-clayton",
     "accountId": "highway-commission",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -57,6 +64,7 @@
     "priority": "High",
     "contactId": "james-smith",
     "accountId": "york-assize-court",
+    "stakeholderContactIds": [],
     "relatedEventId": "york-trial"
   },
   {
@@ -67,6 +75,7 @@
     "priority": "Low",
     "contactId": "catherine-bell",
     "accountId": "turpin-enterprises",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -77,6 +86,7 @@
     "priority": "Medium",
     "contactId": "richard-bayes",
     "accountId": "bayes-horsemanship",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -87,6 +97,7 @@
     "priority": "Medium",
     "contactId": "joseph-bryant",
     "accountId": "essex-gang",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -97,6 +108,7 @@
     "priority": "Low",
     "contactId": "sarah-thornton",
     "accountId": "york-racing-society",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -107,6 +119,7 @@
     "priority": "Medium",
     "contactId": "margaret-hayes",
     "accountId": "brazier-legal",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -117,6 +130,7 @@
     "priority": "Low",
     "contactId": "edward-grant",
     "accountId": "essex-gang",
+    "stakeholderContactIds": [],
     "relatedEventId": "essex-gang-merger"
   },
   {
@@ -127,6 +141,7 @@
     "priority": "Medium",
     "contactId": "black-bess",
     "accountId": "turpin-enterprises",
+    "stakeholderContactIds": [],
     "relatedEventId": "black-bess-ride"
   },
   {
@@ -137,6 +152,7 @@
     "priority": "High",
     "contactId": "robert-finch",
     "accountId": "highway-commission",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -147,6 +163,7 @@
     "priority": "Low",
     "contactId": "elizabeth-millington",
     "accountId": "millington-inn",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -157,6 +174,7 @@
     "priority": "High",
     "contactId": "john-king",
     "accountId": "essex-gang",
+    "stakeholderContactIds": [],
     "relatedEventId": null
   },
   {
@@ -165,8 +183,11 @@
     "description": "Analytics platform failed to sync overnight intercept probability data. Thomas Collier escalated. Vendor engaged.",
     "status": "New",
     "priority": "Critical",
-    "contactId": "thomas-collier",
+    "contactId": "henry-clayton",
     "accountId": "turpin-enterprises",
+    "stakeholderContactIds": [
+      "thomas-collier"
+    ],
     "relatedEventId": null
   }
 ]

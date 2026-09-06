@@ -22,10 +22,12 @@
         }
       ],
       "organisationId": "turpin-enterprises",
-      "personaIds": [
-        "dick-turpin",
+      "contactId": "dick-turpin",
+      "stakeholderContactIds": [
         "ned-palmer"
       ],
+      "dealId": null,
+      "caseIds": [],
       "featuredCta": {
         "url": "/organisations/turpin-enterprises/",
         "label": null,
