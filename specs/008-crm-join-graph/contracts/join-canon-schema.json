@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://turpinverse.dev/schemas/canon/crm-join-graph/v1",
+  "title": "Turpinverse canon — CRM join graph deltas (feature 008)",
+  "description": "Merge these $defs into specs/001-turpinverse-universe/contracts/canon-schema.json. Do not rewrite 001 spec.md as the only record of this graph.",
+  "$defs": {
+    "Organisation": {
+      "type": "object",
+      "required": [
+        "id", "tradingName", "description", "industry",
+        "historicalAnchor", "memberPersonaIds", "status", "registeredOffice"
+      ],
+      "properties": {
+        "memberPersonaIds": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "primaryContactId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "maxLength": 64
+        }
+      }
+    },
+    "Deal": {
+      "type": "object",
+      "required": [
+        "dealId", "dealName", "accountId", "stage", "amount", "closeDate", "description"
+      ],
+      "properties": {
+        "dealId": { "type": "string" },
+        "dealName": { "type": "string", "maxLength": 120 },
+        "accountId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "contactId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+        },
+        "stage": {
+          "type": "string",
+          "enum": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
+        },
+        "amount": { "type": "number", "minimum": 0 },
+        "closeDate": { "type": "string", "format": "date" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "Case": {
+      "type": "object",
+      "required": [
+        "caseId", "subject", "description", "status", "priority", "accountId"
+      ],
+      "properties": {
+        "caseId": { "type": "string" },
+        "subject": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "status": {
+          "type": "string",
+          "enum": ["New", "In Progress", "On Hold", "Resolved", "Closed"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["Low", "Medium", "High", "Critical"]
+        },
+        "contactId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "accountId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+        },
+        "relatedEventId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "title", "summary", "image", "tags", "links", "organisationId"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "title": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string" },
+        "image": { "type": "string", "minLength": 1 },
+        "tags": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "maxLength": 40 }
+        },
+        "links": { "type": "array", "minItems": 1 },
+        "organisationId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "contactId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+        },
+        "dealId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 },
+        "caseIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+        },
+        "featuredCta": { "type": "object" },
+        "featured": { "type": "boolean" }
+      }
+    },
+    "CanonEvent": {
+      "type": "object",
+      "required": ["id", "date", "title", "description", "category"],
+      "properties": {
+        "dealIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+        },
+        "caseIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "maxLength": 64 }
+        }
+      }
+    }
+  }
+}
