@@ -1,6 +1,6 @@
 # Feature Specification: CRM Join Graph Alignment
 
-**Feature Branch**: `cursor/crm-join-graph-7236`
+**Feature Branch**: `008-crm-join-graph`
 
 **Created**: 2026-09-06
 
