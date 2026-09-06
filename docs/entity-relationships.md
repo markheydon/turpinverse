@@ -2,11 +2,9 @@
 
 **CRM-shaped join graph** for Turpinverse canon and export. Shipped JSON, JSON Schema, `CanonValidator`, CSV export, Hugo publication, and Blazor previews follow this model for real-world CRM import fidelity while keeping Turpinverse as the source of truth for names and stories.
 
-> **Shipped in:** [spec `008-crm-join-graph`](../specs/008-crm-join-graph/spec.md) (GitHub [#41](https://github.com/markheydon/turpinverse/issues/41)).
+Field-level validation codes **VR-052–VR-059** are enforced in `CanonValidator` and export tests (see [validation-rules.md](./validation-rules.md)).
 
-This is a repo artefact (human- and machine-readable Mermaid). Field-level validation codes **VR-052–VR-059** are enforced in `CanonValidator` and export tests (see [completeness contract](../specs/008-crm-join-graph/contracts/completeness.md)).
-
-Source of truth for **fields** remains feature data models under `specs/` and `src/Turpinverse.Core/Models/`. This page is the **join graph**.
+Source of truth for **fields**: `canon/*.json`, [`canon/schema/canon-schema.json`](../canon/schema/canon-schema.json), and `src/Turpinverse.Core/Models/`. This page is the **join graph**.
 
 ## Naming
 
@@ -149,7 +147,7 @@ flowchart LR
 
 | Projection | Shipped behaviour |
 |------------|-------------------|
-| Contact | **One CSV row per** `(persona, organisation)` membership (**VR-059**). Same `contactId` (persona slug) on each row; `accountId` differs. Email/phone/address copied from persona (canon has one identity per person). Collision policy documented on the Blazor contacts export page and in [export-api.md](../specs/001-turpinverse-universe/contracts/export-api.md). |
+| Contact | **One CSV row per** `(persona, organisation)` membership (**VR-059**). Same `contactId` (persona slug) on each row; `accountId` differs. Email/phone/address copied from persona (canon has one identity per person). Collision policy documented on the Blazor contacts export page and in [export-api.md](./export-api.md). |
 | Account | 1:1 from Organisation; optional `primaryContactId` column when set on the organisation. |
 | Deal / Case | 1:1; optional `contactId`; `stakeholderContactIds` as a semicolon-separated column (empty when none). |
 | Project | 1:1; optional `contactId`, `dealId`, `caseIds`; `stakeholderContactIds` column. Project people in export are main ∪ stakeholders. |
@@ -193,7 +191,7 @@ Four story rows were corrected so main contacts are account members and former n
 ## Where to edit data
 
 ```text
-src/Turpinverse.Data/canon/
+canon/
 ├── personas.json
 ├── organisations.json
 ├── events.json
@@ -208,3 +206,5 @@ src/Turpinverse.Data/canon/
 ├── galleries.json
 └── professional-extras.json
 ```
+
+See [canon/README.md](../canon/README.md) for how to consume these files from another project.

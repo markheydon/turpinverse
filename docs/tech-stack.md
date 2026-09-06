@@ -1,6 +1,6 @@
 # Tech stack
 
-Short reference for Turpinverse technology choices. Channel intent (Hugo vs Blazor) lives in [product-surfaces.md](./product-surfaces.md).
+Short reference for Turpinverse technology choices. The demo datasets live in [`canon/`](../canon/). Channel intent (Hugo vs Blazor) lives in [product-surfaces.md](./product-surfaces.md). Rationale for major choices: [decision-log.md](./decision-log.md).
 
 | Layer | Technology |
 |-------|------------|
@@ -11,7 +11,7 @@ Short reference for Turpinverse technology choices. Channel intent (Hugo vs Blaz
 | Styling (Blazor) | Tailwind CSS 4.x |
 | Charts (Blazor) | Chart.js |
 | CSV export | CsvHelper |
-| Data | File-based JSON canon in `src/Turpinverse.Data/canon/` |
+| Data | File-based JSON canon in [`canon/`](../canon/) |
 | Tests | xUnit v3, NSubstitute, bUnit |
 
 See [README.md](../README.md) for quickstart commands and testing standards.
