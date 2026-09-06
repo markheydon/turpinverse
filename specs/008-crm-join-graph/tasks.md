@@ -300,4 +300,4 @@ Task: "Add failing ExportMapper unit tests in tests/Turpinverse.Core.UnitTests/E
 
 ## Phase 8: Convergence
 
-- [ ] T064 Refresh `docs/entity-relationships.md` (remove pre-ship implementation-status banner, document VR-052–VR-059, present-tense export projection table, replace “canon rows to fix” with shipped repair summary) and update the `docs/product-surfaces.md` cross-link so shipped schema no longer reads as lagging per SC-007 (contradicts)
+- [X] T064 Refresh `docs/entity-relationships.md` (remove pre-ship implementation-status banner, document VR-052–VR-059, present-tense export projection table, replace “canon rows to fix” with shipped repair summary) and update the `docs/product-surfaces.md` cross-link so shipped schema no longer reads as lagging per SC-007 (contradicts)

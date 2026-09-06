@@ -23,7 +23,7 @@ Canon JSON
     └── Blazor app → explore / filter / download (CSV today)
 ```
 
-How canon records join (membership, deals, cases, career, articles): [entity-relationships.md](./entity-relationships.md) — target CRM join graph; shipped schema may lag until the correction issue is implemented.
+How canon records join (membership, deals, cases, career, articles): [entity-relationships.md](./entity-relationships.md) — shipped CRM join graph with VR-052–VR-059 validation and membership-based contact export.
 
 ### Hugo (public reference site)
 
