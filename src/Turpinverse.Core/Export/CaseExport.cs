@@ -26,13 +26,17 @@ public sealed record CaseExport
 
     [Name("contactId")]
     [Index(5)]
-    public required string ContactId { get; init; }
+    public string ContactId { get; init; } = string.Empty;
 
     [Name("accountId")]
     [Index(6)]
     public required string AccountId { get; init; }
 
-    [Name("relatedEventId")]
+    [Name("stakeholderContactIds")]
     [Index(7)]
+    public string StakeholderContactIds { get; init; } = string.Empty;
+
+    [Name("relatedEventId")]
+    [Index(8)]
     public string RelatedEventId { get; init; } = string.Empty;
 }

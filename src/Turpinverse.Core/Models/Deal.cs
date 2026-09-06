@@ -5,7 +5,8 @@ public sealed record Deal
     public required string DealId { get; init; }
     public required string DealName { get; init; }
     public required string AccountId { get; init; }
-    public required string ContactId { get; init; }
+    public string? ContactId { get; init; }
+    public IReadOnlyList<string> StakeholderContactIds { get; init; } = [];
     public required string Stage { get; init; }
     public required decimal Amount { get; init; }
     public required string CloseDate { get; init; }

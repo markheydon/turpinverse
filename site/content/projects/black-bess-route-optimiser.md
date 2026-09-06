@@ -3,7 +3,8 @@ title: "Black Bess Route Optimiser"
 type: "projects"
 projectId: "black-bess-route-optimiser"
 organisationId: "turpin-enterprises"
-personaIds: ["dick-turpin","ned-palmer"]
+contactId: "dick-turpin"
+stakeholderContactIds: ["ned-palmer"]
 tags: ["logistics","corridor","SaaS"]
 image: "/images/projects/black-bess-route-optimiser.svg"
 featured: true

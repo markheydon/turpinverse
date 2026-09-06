@@ -9,6 +9,8 @@
       "dick-turpin"
     ],
     "organisationIds": [],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Hempstead, Essex"
   },
   {
@@ -23,6 +25,8 @@
     "organisationIds": [
       "essex-gang"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Epping Forest, Essex"
   },
   {
@@ -38,6 +42,8 @@
     "organisationIds": [
       "essex-gang"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Essex"
   },
   {
@@ -53,6 +59,8 @@
     "organisationIds": [
       "king-equine-trading"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "London"
   },
   {
@@ -65,6 +73,8 @@
       "matthew-king"
     ],
     "organisationIds": [],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Whitechapel, London"
   },
   {
@@ -80,6 +90,8 @@
     "organisationIds": [
       "brazier-legal"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Yorkshire"
   },
   {
@@ -92,6 +104,8 @@
       "dick-turpin"
     ],
     "organisationIds": [],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Beverley, Yorkshire"
   },
   {
@@ -107,6 +121,8 @@
     "organisationIds": [
       "york-assize-court"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "York"
   },
   {
@@ -119,6 +135,8 @@
       "dick-turpin"
     ],
     "organisationIds": [],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Knavesmire, York"
   },
   {
@@ -134,6 +152,8 @@
     "organisationIds": [
       "king-equine-trading"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "London to York"
   },
   {
@@ -150,6 +170,8 @@
       "epping-forest-authority",
       "essex-gang"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "Epping Forest"
   },
   {
@@ -164,6 +186,8 @@
     "organisationIds": [
       "turpin-enterprises"
     ],
+    "dealIds": [],
+    "caseIds": [],
     "location": "GitHub"
   }
 ]

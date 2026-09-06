@@ -51,9 +51,10 @@ One `Experience` record = one employer grouping. Multiple roles at the same empl
 | `links` | Demo, repo, or case-study links |
 | `featuredCta` | Primary call-to-action |
 | `organisationId` | Sponsoring company (CRM account) |
-| `personaIds` | Contributors or owners |
+| `contactId` | Optional main contact on the project |
+| `stakeholderContactIds` | Additional people linked to the project |
 
-Projects are a **shared catalog**: filter by `personaIds` to show only projects for a given person.
+Projects are a **shared catalog**: filter by linked people (`contactId` ∪ `stakeholderContactIds`) to show only projects for a given person.
 
 ## Achievements → “Achievements” / “Awards” section
 

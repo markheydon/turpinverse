@@ -268,7 +268,7 @@ public class ArticleGalleryValidatorTests
                     Tags = ["tag"],
                     Links = [new FeaturedLink { Url = "https://example.com", Label = "Link" }],
                     OrganisationId = "turpin-enterprises",
-                    PersonaIds = [CareerPortfolioPresenter.PrimaryPersonaId]
+                    ContactId = CareerPortfolioPresenter.PrimaryPersonaId
                 }
             ],
             Cases =

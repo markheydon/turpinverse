@@ -3,7 +3,8 @@ title: "Route planning analytics sync failure"
 type: "cases"
 caseId: "case-017"
 accountId: "turpin-enterprises"
-contactId: "thomas-collier"
+contactId: "henry-clayton"
+stakeholderContactIds: ["thomas-collier"]
 status: "New"
 priority: "Critical"
 ---

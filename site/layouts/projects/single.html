@@ -39,7 +39,10 @@
       {{ with .Params.organisationId }}
       <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
       {{ end }}
-      {{ range .Params.personaIds }}
+      {{ with .Params.contactId }}
+      <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
+      {{ end }}
+      {{ range .Params.stakeholderContactIds }}
       <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
       {{ end }}
     </ul>

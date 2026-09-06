@@ -35,8 +35,8 @@ description: "Task list for CRM Join Graph Alignment feature implementation"
 
 **Purpose**: Confirm feature context and contract merge targets before model/validator work
 
-- [ ] T001 Confirm active branch `008-crm-join-graph` and review design artifacts in `specs/008-crm-join-graph/` (plan.md, spec.md, data-model.md, contracts/)
-- [ ] T002 [P] Read join-graph source of truth in `docs/entity-relationships.md` and channel split in `docs/product-surfaces.md` before editing models or surfaces
+- [X] T001 Confirm active branch `008-crm-join-graph` and review design artifacts in `specs/008-crm-join-graph/` (plan.md, spec.md, data-model.md, contracts/)
+- [X] T002 [P] Read join-graph source of truth in `docs/entity-relationships.md` and channel split in `docs/product-surfaces.md` before editing models or surfaces
 
 **Checkpoint**: Feature folder and merge targets understood
 
@@ -48,17 +48,17 @@ description: "Task list for CRM Join Graph Alignment feature implementation"
 
 **⚠️ CRITICAL**: No user story implementation can begin until this phase is complete
 
-- [ ] T003 [P] Add optional `PrimaryContactId` property to `Organisation` in `src/Turpinverse.Core/Models/Organisation.cs`
-- [ ] T004 [P] Make `ContactId` optional (`string?`) and add `StakeholderContactIds` to `Deal` in `src/Turpinverse.Core/Models/Deal.cs`
-- [ ] T005 [P] Make `ContactId` optional (`string?`) and add `StakeholderContactIds` to `Case` in `src/Turpinverse.Core/Models/Case.cs`
-- [ ] T006 [P] Remove `PersonaIds` from `Project`; add optional `ContactId`, `StakeholderContactIds`, `DealId`, and `CaseIds` in `src/Turpinverse.Core/Models/Project.cs`
-- [ ] T007 [P] Add optional `DealIds` and `CaseIds` to `CanonEvent` in `src/Turpinverse.Core/Models/CanonEvent.cs`
-- [ ] T008 Merge `specs/008-crm-join-graph/contracts/join-canon-schema.json` into `specs/001-turpinverse-universe/contracts/canon-schema.json` (optional main contact, stakeholders, account `primaryContactId`, project lineage, `memberPersonaIds` min 0)
-- [ ] T009 Merge `specs/008-crm-join-graph/contracts/crm-export-schema.json` into `specs/001-turpinverse-universe/contracts/crm-export-schema.json` (membership contacts, optional main/stakeholder columns, account `primaryContactId`)
-- [ ] T010 Update `ExportCsvColumns` and export DTOs (`ContactExport`, `AccountExport`, `DealExport`, `CaseExport`, `ProjectExport`) in `src/Turpinverse.Core/Export/` to match merged CRM schema
-- [ ] T011 Add `LinkedPersonaIds` helper (main ∪ stakeholders, main first) on `Project` or in `src/Turpinverse.Core/Career/CareerPortfolioPresenter.cs`
-- [ ] T012 Update `JsonCanonRepository` deserialization in `src/Turpinverse.Data/Repositories/JsonCanonRepository.cs` for new optional fields and removed `Project.PersonaIds`
-- [ ] T013 [P] Update `CanonSchemaValidatorTests` in `tests/Turpinverse.Core.UnitTests/Validation/CanonSchemaValidatorTests.cs` for optional main contact and organisation `memberPersonaIds` min 0
+- [X] T003 [P] Add optional `PrimaryContactId` property to `Organisation` in `src/Turpinverse.Core/Models/Organisation.cs`
+- [X] T004 [P] Make `ContactId` optional (`string?`) and add `StakeholderContactIds` to `Deal` in `src/Turpinverse.Core/Models/Deal.cs`
+- [X] T005 [P] Make `ContactId` optional (`string?`) and add `StakeholderContactIds` to `Case` in `src/Turpinverse.Core/Models/Case.cs`
+- [X] T006 [P] Remove `PersonaIds` from `Project`; add optional `ContactId`, `StakeholderContactIds`, `DealId`, and `CaseIds` in `src/Turpinverse.Core/Models/Project.cs`
+- [X] T007 [P] Add optional `DealIds` and `CaseIds` to `CanonEvent` in `src/Turpinverse.Core/Models/CanonEvent.cs`
+- [X] T008 Merge `specs/008-crm-join-graph/contracts/join-canon-schema.json` into `specs/001-turpinverse-universe/contracts/canon-schema.json` (optional main contact, stakeholders, account `primaryContactId`, project lineage, `memberPersonaIds` min 0)
+- [X] T009 Merge `specs/008-crm-join-graph/contracts/crm-export-schema.json` into `specs/001-turpinverse-universe/contracts/crm-export-schema.json` (membership contacts, optional main/stakeholder columns, account `primaryContactId`)
+- [X] T010 Update `ExportCsvColumns` and export DTOs (`ContactExport`, `AccountExport`, `DealExport`, `CaseExport`, `ProjectExport`) in `src/Turpinverse.Core/Export/` to match merged CRM schema
+- [X] T011 Add `LinkedPersonaIds` helper (main ∪ stakeholders, main first) on `Project` or in `src/Turpinverse.Core/Career/CareerPortfolioPresenter.cs`
+- [X] T012 Update `JsonCanonRepository` deserialization in `src/Turpinverse.Data/Repositories/JsonCanonRepository.cs` for new optional fields and removed `Project.PersonaIds`
+- [X] T013 [P] Update `CanonSchemaValidatorTests` in `tests/Turpinverse.Core.UnitTests/Validation/CanonSchemaValidatorTests.cs` for optional main contact and organisation `memberPersonaIds` min 0
 
 **Checkpoint**: Models, merged schemas, and export column definitions align with data-model.md — user story work can begin
 
@@ -74,24 +74,24 @@ description: "Task list for CRM Join Graph Alignment feature implementation"
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T014 [P] [US1] Add failing VR-052 fixture (account primary not a member) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
-- [ ] T015 [P] [US1] Add failing VR-054 fixture (deal/case/project main not an account member) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
-- [ ] T016 [P] [US1] Add failing VR-055 fixtures (unknown, duplicate, and main-equals-stakeholder) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
-- [ ] T017 [P] [US1] Add failing VR-056 and VR-057 fixtures (unknown project deal/case and event pipeline ids) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
-- [ ] T018 [P] [US1] Add failing VR-053 fixture (missing/invalid account on pipeline record) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
-- [ ] T019 [P] [US1] Add failing pass-through fixture (stakeholder-only non-member, omitted main) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T014 [P] [US1] Add failing VR-052 fixture (account primary not a member) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs` with `[Trait("Category", "CanonValidation")]`
+- [X] T015 [P] [US1] Add failing VR-054 fixture (deal/case/project main not an account member) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T016 [P] [US1] Add failing VR-055 fixtures (unknown, duplicate, and main-equals-stakeholder) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T017 [P] [US1] Add failing VR-056 and VR-057 fixtures (unknown project deal/case and event pipeline ids) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T018 [P] [US1] Add failing VR-053 fixture (missing/invalid account on pipeline record) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T019 [P] [US1] Add failing pass-through fixture (stakeholder-only non-member, omitted main) in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Implement VR-052 (account `primaryContactId` must be a member when set) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T021 [US1] Implement VR-053 (deal/case/project must reference exactly one existing account) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T022 [US1] Implement VR-054 (main `contactId` optional; when set must exist and be an account member) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T023 [US1] Implement VR-055 (stakeholders exist, unique, not equal to main) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T024 [US1] Implement VR-056 (project `dealId` / `caseIds` exist when set) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T025 [US1] Implement VR-057 (event `dealIds` / `caseIds` exist when set) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
-- [ ] T026 [US1] Reinterpret VR-005 / VR-006 in `src/Turpinverse.Core/Validation/CanonValidator.cs` as “when main contact is set, identity must exist” (remove required-main assumption)
-- [ ] T027 [US1] Stop applying VR-022 “project must have ≥1 people” to projects in `src/Turpinverse.Core/Validation/CanonValidator.cs` (achievements keep VR-022)
-- [ ] T028 [US1] Verify VR-052–VR-057 unit tests pass in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T020 [US1] Implement VR-052 (account `primaryContactId` must be a member when set) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T021 [US1] Implement VR-053 (deal/case/project must reference exactly one existing account) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T022 [US1] Implement VR-054 (main `contactId` optional; when set must exist and be an account member) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T023 [US1] Implement VR-055 (stakeholders exist, unique, not equal to main) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T024 [US1] Implement VR-056 (project `dealId` / `caseIds` exist when set) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T025 [US1] Implement VR-057 (event `dealIds` / `caseIds` exist when set) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T026 [US1] Reinterpret VR-005 / VR-006 in `src/Turpinverse.Core/Validation/CanonValidator.cs` as “when main contact is set, identity must exist” (remove required-main assumption)
+- [X] T027 [US1] Stop applying VR-022 “project must have ≥1 people” to projects in `src/Turpinverse.Core/Validation/CanonValidator.cs` (achievements keep VR-022)
+- [X] T028 [US1] Verify VR-052–VR-057 unit tests pass in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
 
 **Checkpoint**: Join-rule validation works on fixtures independently of canon content repairs
 
@@ -107,27 +107,27 @@ description: "Task list for CRM Join Graph Alignment feature implementation"
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before canon repairs**
 
-- [ ] T029 [P] [US2] Add failing VR-058 tests for `deal-008`, `case-001`, `case-017`, and `palmer-identity-vault` in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
-- [ ] T030 [P] [US2] Add failing loaded-canon test asserting ten organisation `primaryContactId` values per `specs/008-crm-join-graph/data-model.md` in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
-- [ ] T031 [P] [US2] Add failing test that projects have no `personaIds` in loaded canon in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T029 [P] [US2] Add failing VR-058 tests for `deal-008`, `case-001`, `case-017`, and `palmer-identity-vault` in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T030 [P] [US2] Add failing loaded-canon test asserting ten organisation `primaryContactId` values per `specs/008-crm-join-graph/data-model.md` in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
+- [X] T031 [P] [US2] Add failing test that projects have no `personaIds` in loaded canon in `tests/Turpinverse.Core.UnitTests/Validation/JoinGraphValidatorTests.cs`
 
 ### Canon repairs for User Story 2
 
-- [ ] T032 [P] [US2] Repair `deal-008` (William Hargreaves main, Henry Clayton stakeholder) in `src/Turpinverse.Data/canon/deals.json`
-- [ ] T033 [P] [US2] Repair `case-001` and `case-017` (Mary Brazier / Henry Clayton mains; Richard Turpin / Thomas Collier stakeholders) in `src/Turpinverse.Data/canon/cases.json`
-- [ ] T034 [US2] Remap all projects per FR-008/FR-010 (`palmer-identity-vault`, `black-bess-route-optimiser`, `essex-procurement-hub`) in `src/Turpinverse.Data/canon/projects.json`
-- [ ] T035 [P] [US2] Add `primaryContactId` to all ten organisations per planning table in `src/Turpinverse.Data/canon/organisations.json`
-- [ ] T036 [US2] Implement VR-058 (four named rows + no project `personaIds`) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
+- [X] T032 [P] [US2] Repair `deal-008` (William Hargreaves main, Henry Clayton stakeholder) in `src/Turpinverse.Data/canon/deals.json`
+- [X] T033 [P] [US2] Repair `case-001` and `case-017` (Mary Brazier / Henry Clayton mains; Richard Turpin / Thomas Collier stakeholders) in `src/Turpinverse.Data/canon/cases.json`
+- [X] T034 [US2] Remap all projects per FR-008/FR-010 (`palmer-identity-vault`, `black-bess-route-optimiser`, `essex-procurement-hub`) in `src/Turpinverse.Data/canon/projects.json`
+- [X] T035 [P] [US2] Add `primaryContactId` to all ten organisations per planning table in `src/Turpinverse.Data/canon/organisations.json`
+- [X] T036 [US2] Implement VR-058 (four named rows + no project `personaIds`) in `src/Turpinverse.Core/Validation/CanonValidator.cs`
 
 ### Publication and career for User Story 2
 
-- [ ] T037 [P] [US2] Update `GetProjectsForPersona` and related filters to use `LinkedPersonaIds` in `src/Turpinverse.Core/Career/CareerPortfolioPresenter.cs`
-- [ ] T038 [US2] Update `HugoContentGenerator` to omit empty `contactId`, emit `stakeholderContactIds` and `primaryContactId` only when set in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
-- [ ] T039 [P] [US2] Update `site/layouts/partials/related-parties.html` to omit empty main-contact block and show stakeholder names
-- [ ] T040 [P] [US2] Update `site/layouts/deals/single.html`, `site/layouts/cases/single.html`, and `site/layouts/projects/single.html` for optional main contact and stakeholders by name
-- [ ] T041 [P] [US2] Update `site/layouts/organisations/single.html` to show account primary contact by display name when set
-- [ ] T042 [P] [US2] Update persona related deals/cases to include records where person is main **or** stakeholder in `site/layouts/personas/single.html` and related partials
-- [ ] T043 [US2] Verify `CanonValidatorTests.Validate_LoadedCanon_PassesAllRules` passes with VR-052–VR-058 in `tests/Turpinverse.Core.UnitTests/Validation/CanonValidatorTests.cs`
+- [X] T037 [P] [US2] Update `GetProjectsForPersona` and related filters to use `LinkedPersonaIds` in `src/Turpinverse.Core/Career/CareerPortfolioPresenter.cs`
+- [X] T038 [US2] Update `HugoContentGenerator` to omit empty `contactId`, emit `stakeholderContactIds` and `primaryContactId` only when set in `src/Turpinverse.Core/Hugo/HugoContentGenerator.cs`
+- [X] T039 [P] [US2] Update `site/layouts/partials/related-parties.html` to omit empty main-contact block and show stakeholder names
+- [X] T040 [P] [US2] Update `site/layouts/deals/single.html`, `site/layouts/cases/single.html`, and `site/layouts/projects/single.html` for optional main contact and stakeholders by name
+- [X] T041 [P] [US2] Update `site/layouts/organisations/single.html` to show account primary contact by display name when set
+- [X] T042 [P] [US2] Update persona related deals/cases to include records where person is main **or** stakeholder in `site/layouts/personas/single.html` and related partials
+- [X] T043 [US2] Verify `CanonValidatorTests.Validate_LoadedCanon_PassesAllRules` passes with VR-052–VR-058 in `tests/Turpinverse.Core.UnitTests/Validation/CanonValidatorTests.cs`
 
 **Checkpoint**: Full authored dataset passes completeness; public site shows names without empty-id blocks
 
@@ -143,21 +143,21 @@ description: "Task list for CRM Join Graph Alignment feature implementation"
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before export implementation**
 
-- [ ] T044 [P] [US3] Add failing VR-059 membership row-count test in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs` with `[Trait("Category", "CsvExport")]`
-- [ ] T045 [P] [US3] Add failing `dick-turpin` dual-row test (same email/phone/mailing, different `accountId`) in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs`
-- [ ] T046 [P] [US3] Update `contacts` `minRows` from 25 to ~31 and add stakeholder/optional-main column assertions in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs`
-- [ ] T047 [P] [US3] Add failing export mapper unit tests for membership explode in `tests/Turpinverse.Core.UnitTests/Export/ExportMapperTests.cs`
-- [ ] T048 [P] [US3] Update `CrossReferenceTests` for optional deal/case `contactId` and project people from union in `tests/Turpinverse.IntegrationTests/Export/CrossReferenceTests.cs`
+- [X] T044 [P] [US3] Add failing VR-059 membership row-count test in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs` with `[Trait("Category", "CsvExport")]`
+- [X] T045 [P] [US3] Add failing `dick-turpin` dual-row test (same email/phone/mailing, different `accountId`) in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs`
+- [X] T046 [P] [US3] Update `contacts` `minRows` from 25 to ~31 and add stakeholder/optional-main column assertions in `tests/Turpinverse.IntegrationTests/Export/CsvExportTests.cs`
+- [X] T047 [P] [US3] Add failing export mapper unit tests for membership explode in `tests/Turpinverse.Core.UnitTests/Export/ExportMapperTests.cs`
+- [X] T048 [P] [US3] Update `CrossReferenceTests` for optional deal/case `contactId` and project people from union in `tests/Turpinverse.IntegrationTests/Export/CrossReferenceTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T049 [US3] Refactor `MapContacts` to emit one row per persona × `organisationIds` entry with copied identity in `src/Turpinverse.Core/Export/ExportMapper.cs`
-- [ ] T050 [US3] Add optional `contactId` and joined `stakeholderContactIds` to deal/case/project export mapping in `src/Turpinverse.Core/Export/ExportMapper.cs`
-- [ ] T051 [US3] Add optional `primaryContactId` to account export mapping in `src/Turpinverse.Core/Export/ExportMapper.cs`
-- [ ] T052 [US3] Remove undifferentiated project people list from project export (use main ∪ stakeholders and lineage columns only) in `src/Turpinverse.Core/Export/ExportMapper.cs`
-- [ ] T053 [US3] Add email collision policy copy near contact download on `src/Turpinverse.Web/Components/Pages/Contacts.razor` (or shared export help partial under `src/Turpinverse.Web/Components/`)
-- [ ] T054 [US3] Document collision policy in `specs/001-turpinverse-universe/contracts/export-api.md` per `specs/008-crm-join-graph/contracts/completeness.md`
-- [ ] T055 [US3] Verify VR-059 and updated export tests pass (`Category=CsvExport`) in `tests/Turpinverse.IntegrationTests/Export/` and `tests/Turpinverse.Core.UnitTests/Export/`
+- [X] T049 [US3] Refactor `MapContacts` to emit one row per persona × `organisationIds` entry with copied identity in `src/Turpinverse.Core/Export/ExportMapper.cs`
+- [X] T050 [US3] Add optional `contactId` and joined `stakeholderContactIds` to deal/case/project export mapping in `src/Turpinverse.Core/Export/ExportMapper.cs`
+- [X] T051 [US3] Add optional `primaryContactId` to account export mapping in `src/Turpinverse.Core/Export/ExportMapper.cs`
+- [X] T052 [US3] Remove undifferentiated project people list from project export (use main ∪ stakeholders and lineage columns only) in `src/Turpinverse.Core/Export/ExportMapper.cs`
+- [X] T053 [US3] Add email collision policy copy near contact download on `src/Turpinverse.Web/Components/Pages/Contacts.razor` (or shared export help partial under `src/Turpinverse.Web/Components/`)
+- [X] T054 [US3] Document collision policy in `specs/001-turpinverse-universe/contracts/export-api.md` per `specs/008-crm-join-graph/contracts/completeness.md`
+- [X] T055 [US3] Verify VR-059 and updated export tests pass (`Category=CsvExport`) in `tests/Turpinverse.IntegrationTests/Export/` and `tests/Turpinverse.Core.UnitTests/Export/`
 
 **Checkpoint**: Export fidelity matches join graph; importers can read collision policy from Blazor/docs
 
@@ -167,11 +167,11 @@ description: "Task list for CRM Join Graph Alignment feature implementation"
 
 **Purpose**: Documentation alignment, API validation surface, and quickstart verification
 
-- [ ] T056 [P] Update project people guidance in `docs/career-portfolio-mapping.md` (main ∪ stakeholders, not `personaIds`)
-- [ ] T057 [P] Sync `docs/entity-relationships.md` only if implementation field names diverge from the documented graph
-- [ ] T058 [P] Verify `/api/canon/validate` returns 200 with VR-052–VR-058 on loaded canon in `tests/Turpinverse.IntegrationTests/Export/CanonValidateApiTests.cs`
-- [ ] T059 Regenerate Hugo content via `src/Turpinverse.Tools.GenerateHugoContent` and confirm no empty `contactId: ""` front matter
-- [ ] T060 Run quickstart scenarios A–C from `specs/008-crm-join-graph/quickstart.md` (`Category=CanonValidation` and `Category=CsvExport` filters)
+- [X] T056 [P] Update project people guidance in `docs/career-portfolio-mapping.md` (main ∪ stakeholders, not `personaIds`)
+- [X] T057 [P] Sync `docs/entity-relationships.md` only if implementation field names diverge from the documented graph
+- [X] T058 [P] Verify `/api/canon/validate` returns 200 with VR-052–VR-058 on loaded canon in `tests/Turpinverse.IntegrationTests/Export/CanonValidateApiTests.cs`
+- [X] T059 Regenerate Hugo content via `src/Turpinverse.Tools.GenerateHugoContent` and confirm no empty `contactId: ""` front matter
+- [X] T060 Run quickstart scenarios A–C from `specs/008-crm-join-graph/quickstart.md` (`Category=CanonValidation` and `Category=CsvExport` filters)
 
 ---
 

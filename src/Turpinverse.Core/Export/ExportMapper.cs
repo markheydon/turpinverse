@@ -4,8 +4,19 @@ namespace Turpinverse.Core.Export;
 
 public static class ExportMapper
 {
-    public static IReadOnlyList<ContactExport> MapContacts(Canon canon) =>
-        canon.Personas.Select(MapContact).ToList();
+    public static IReadOnlyList<ContactExport> MapContacts(Canon canon)
+    {
+        var rows = new List<ContactExport>();
+        foreach (var persona in canon.Personas)
+        {
+            foreach (var accountId in persona.OrganisationIds)
+            {
+                rows.Add(MapContactForMembership(persona, accountId));
+            }
+        }
+
+        return rows;
+    }
 
     public static IReadOnlyList<AccountExport> MapAccounts(Canon canon) =>
         canon.Organisations.Select(MapAccount).ToList();
@@ -19,7 +30,7 @@ public static class ExportMapper
     public static IReadOnlyList<ProjectExport> MapProjects(Canon canon) =>
         canon.Projects.Select(MapProject).ToList();
 
-    public static ContactExport MapContact(Persona persona)
+    public static ContactExport MapContactForMembership(Persona persona, string accountId)
     {
         var (firstName, lastName) = SplitName(persona.DisplayName);
         return new ContactExport
@@ -30,7 +41,7 @@ public static class ExportMapper
             Title = persona.Title,
             Email = persona.Email,
             Phone = persona.Phone ?? string.Empty,
-            AccountId = persona.OrganisationIds.FirstOrDefault() ?? string.Empty,
+            AccountId = accountId,
             Status = persona.Status,
             Notes = persona.Notes ?? string.Empty,
             MailingAddress1 = persona.Address?.Address1 ?? string.Empty,
@@ -51,6 +62,7 @@ public static class ExportMapper
             LegalName = organisation.LegalName ?? string.Empty,
             Industry = organisation.Industry,
             ParentAccountId = organisation.ParentOrganisationId ?? string.Empty,
+            PrimaryContactId = organisation.PrimaryContactId ?? string.Empty,
             Description = organisation.Description,
             Website = organisation.Website ?? string.Empty,
             Status = organisation.Status,
@@ -69,7 +81,8 @@ public static class ExportMapper
             DealId = deal.DealId,
             DealName = deal.DealName,
             AccountId = deal.AccountId,
-            ContactId = deal.ContactId,
+            ContactId = deal.ContactId ?? string.Empty,
+            StakeholderContactIds = JoinContactIds(deal.StakeholderContactIds),
             Stage = deal.Stage,
             Amount = deal.Amount,
             CloseDate = deal.CloseDate,
@@ -84,8 +97,9 @@ public static class ExportMapper
             Description = caseRecord.Description,
             Status = caseRecord.Status,
             Priority = caseRecord.Priority,
-            ContactId = caseRecord.ContactId,
+            ContactId = caseRecord.ContactId ?? string.Empty,
             AccountId = caseRecord.AccountId,
+            StakeholderContactIds = JoinContactIds(caseRecord.StakeholderContactIds),
             RelatedEventId = caseRecord.RelatedEventId ?? string.Empty
         };
 
@@ -96,10 +110,16 @@ public static class ExportMapper
             Title = project.Title,
             Summary = project.Summary,
             AccountId = project.OrganisationId,
-            ContactIds = string.Join("; ", project.PersonaIds),
+            ContactId = project.ContactId ?? string.Empty,
+            StakeholderContactIds = JoinContactIds(project.StakeholderContactIds),
+            DealId = project.DealId ?? string.Empty,
+            CaseIds = JoinContactIds(project.CaseIds),
             Tags = string.Join("; ", project.Tags),
             Featured = project.Featured == true ? "true" : "false"
         };
+
+    internal static string JoinContactIds(IReadOnlyList<string> contactIds) =>
+        contactIds.Count == 0 ? string.Empty : string.Join("; ", contactIds);
 
     private static (string FirstName, string LastName) SplitName(string displayName)
     {

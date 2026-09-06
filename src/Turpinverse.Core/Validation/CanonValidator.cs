@@ -27,6 +27,7 @@ public sealed partial class CanonValidator
         ValidateEvents(canon, personaIds, organisationIds, violations);
         ValidateDeals(canon, personaIds, organisationIds, violations);
         ValidateCases(canon, personaIds, organisationIds, eventIds, violations);
+        ValidateJoinGraph(canon, personaIds, organisationIds, violations);
         ValidateDeceasedDealOwners(canon, violations);
         ValidateLegendEvents(canon, violations);
         ValidateMinimumVolumes(canon, violations);
@@ -196,20 +197,11 @@ public sealed partial class CanonValidator
     {
         foreach (var deal in canon.Deals)
         {
-            if (!personaIds.Contains(deal.ContactId))
+            if (!string.IsNullOrWhiteSpace(deal.ContactId) && !personaIds.Contains(deal.ContactId))
             {
                 violations.Add(new ValidationViolation(
                     "VR-005",
                     $"Deal '{deal.DealId}' references unknown contact '{deal.ContactId}'",
-                    "Deal",
-                    deal.DealId));
-            }
-
-            if (!organisationIds.Contains(deal.AccountId))
-            {
-                violations.Add(new ValidationViolation(
-                    "VR-005",
-                    $"Deal '{deal.DealId}' references unknown account '{deal.AccountId}'",
                     "Deal",
                     deal.DealId));
             }
@@ -225,20 +217,11 @@ public sealed partial class CanonValidator
     {
         foreach (var caseRecord in canon.Cases)
         {
-            if (!personaIds.Contains(caseRecord.ContactId))
+            if (!string.IsNullOrWhiteSpace(caseRecord.ContactId) && !personaIds.Contains(caseRecord.ContactId))
             {
                 violations.Add(new ValidationViolation(
                     "VR-006",
                     $"Case '{caseRecord.CaseId}' references unknown contact '{caseRecord.ContactId}'",
-                    "Case",
-                    caseRecord.CaseId));
-            }
-
-            if (!organisationIds.Contains(caseRecord.AccountId))
-            {
-                violations.Add(new ValidationViolation(
-                    "VR-006",
-                    $"Case '{caseRecord.CaseId}' references unknown account '{caseRecord.AccountId}'",
                     "Case",
                     caseRecord.CaseId));
             }
@@ -264,7 +247,7 @@ public sealed partial class CanonValidator
 
         foreach (var deal in canon.Deals.Where(d => ActiveDealStages.Contains(d.Stage)))
         {
-            if (deceased.Contains(deal.ContactId))
+            if (!string.IsNullOrWhiteSpace(deal.ContactId) && deceased.Contains(deal.ContactId))
             {
                 violations.Add(new ValidationViolation(
                     "VR-007",
@@ -355,6 +338,352 @@ public sealed partial class CanonValidator
                         "CanonEvent",
                         evt.Id));
                 }
+            }
+        }
+    }
+
+    private static void ValidateJoinGraph(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var dealIds = canon.Deals.Select(d => d.DealId).ToHashSet();
+        var caseIds = canon.Cases.Select(c => c.CaseId).ToHashSet();
+
+        foreach (var org in canon.Organisations)
+        {
+            if (string.IsNullOrWhiteSpace(org.PrimaryContactId))
+            {
+                continue;
+            }
+
+            if (!personaIds.Contains(org.PrimaryContactId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-052",
+                    $"Organisation '{org.Id}' primary contact '{org.PrimaryContactId}' does not exist",
+                    "Organisation",
+                    org.Id));
+            }
+            else if (!org.MemberPersonaIds.Contains(org.PrimaryContactId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-052",
+                    $"Organisation '{org.Id}' primary contact '{org.PrimaryContactId}' is not a member",
+                    "Organisation",
+                    org.Id));
+            }
+        }
+
+        foreach (var deal in canon.Deals)
+        {
+            ValidatePipelineAccount(
+                deal.AccountId,
+                organisationIds,
+                "Deal",
+                deal.DealId,
+                violations);
+
+            ValidatePipelineMainContact(
+                deal.ContactId,
+                deal.AccountId,
+                organisationsById,
+                personaIds,
+                "Deal",
+                deal.DealId,
+                violations);
+
+            ValidateStakeholderContacts(
+                deal.StakeholderContactIds,
+                deal.ContactId,
+                personaIds,
+                "Deal",
+                deal.DealId,
+                violations);
+        }
+
+        foreach (var caseRecord in canon.Cases)
+        {
+            ValidatePipelineAccount(
+                caseRecord.AccountId,
+                organisationIds,
+                "Case",
+                caseRecord.CaseId,
+                violations);
+
+            ValidatePipelineMainContact(
+                caseRecord.ContactId,
+                caseRecord.AccountId,
+                organisationsById,
+                personaIds,
+                "Case",
+                caseRecord.CaseId,
+                violations);
+
+            ValidateStakeholderContacts(
+                caseRecord.StakeholderContactIds,
+                caseRecord.ContactId,
+                personaIds,
+                "Case",
+                caseRecord.CaseId,
+                violations);
+        }
+
+        foreach (var project in canon.Projects)
+        {
+            ValidatePipelineAccount(
+                project.OrganisationId,
+                organisationIds,
+                "Project",
+                project.Id,
+                violations);
+
+            ValidatePipelineMainContact(
+                project.ContactId,
+                project.OrganisationId,
+                organisationsById,
+                personaIds,
+                "Project",
+                project.Id,
+                violations);
+
+            ValidateStakeholderContacts(
+                project.StakeholderContactIds,
+                project.ContactId,
+                personaIds,
+                "Project",
+                project.Id,
+                violations);
+
+            if (!string.IsNullOrWhiteSpace(project.DealId) && !dealIds.Contains(project.DealId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-056",
+                    $"Project '{project.Id}' references unknown deal '{project.DealId}'",
+                    "Project",
+                    project.Id));
+            }
+
+            foreach (var caseId in project.CaseIds)
+            {
+                if (!caseIds.Contains(caseId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-056",
+                        $"Project '{project.Id}' references unknown case '{caseId}'",
+                        "Project",
+                        project.Id));
+                }
+            }
+        }
+
+        foreach (var evt in canon.Events)
+        {
+            foreach (var dealId in evt.DealIds)
+            {
+                if (!dealIds.Contains(dealId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-057",
+                        $"Event '{evt.Id}' references unknown deal '{dealId}'",
+                        "CanonEvent",
+                        evt.Id));
+                }
+            }
+
+            foreach (var caseId in evt.CaseIds)
+            {
+                if (!caseIds.Contains(caseId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-057",
+                        $"Event '{evt.Id}' references unknown case '{caseId}'",
+                        "CanonEvent",
+                        evt.Id));
+                }
+            }
+        }
+
+        ValidateNamedJoinGraphRows(canon, violations);
+        ValidateAuthoredOrganisationPrimaries(canon, violations);
+    }
+
+    private static void ValidatePipelineAccount(
+        string accountId,
+        HashSet<string> organisationIds,
+        string entityType,
+        string entityId,
+        List<ValidationViolation> violations)
+    {
+        if (string.IsNullOrWhiteSpace(accountId) || !organisationIds.Contains(accountId))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-053",
+                $"{entityType} '{entityId}' references unknown or missing account '{accountId}'",
+                entityType,
+                entityId));
+        }
+    }
+
+    private static void ValidatePipelineMainContact(
+        string? contactId,
+        string accountId,
+        Dictionary<string, Organisation> organisationsById,
+        HashSet<string> personaIds,
+        string entityType,
+        string entityId,
+        List<ValidationViolation> violations)
+    {
+        if (string.IsNullOrWhiteSpace(contactId))
+        {
+            return;
+        }
+
+        if (!personaIds.Contains(contactId))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-054",
+                $"{entityType} '{entityId}' main contact '{contactId}' does not exist",
+                entityType,
+                entityId));
+            return;
+        }
+
+        if (!organisationsById.TryGetValue(accountId, out var organisation)
+            || !organisation.MemberPersonaIds.Contains(contactId))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-054",
+                $"{entityType} '{entityId}' main contact '{contactId}' is not a member of account '{accountId}'",
+                entityType,
+                entityId));
+        }
+    }
+
+    private static void ValidateStakeholderContacts(
+        IReadOnlyList<string> stakeholderContactIds,
+        string? mainContactId,
+        HashSet<string> personaIds,
+        string entityType,
+        string entityId,
+        List<ValidationViolation> violations)
+    {
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var stakeholderId in stakeholderContactIds)
+        {
+            if (!personaIds.Contains(stakeholderId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-055",
+                    $"{entityType} '{entityId}' stakeholder '{stakeholderId}' does not exist",
+                    entityType,
+                    entityId));
+            }
+
+            if (!seen.Add(stakeholderId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-055",
+                    $"{entityType} '{entityId}' has duplicate stakeholder '{stakeholderId}'",
+                    entityType,
+                    entityId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(mainContactId)
+                && string.Equals(stakeholderId, mainContactId, StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-055",
+                    $"{entityType} '{entityId}' stakeholder '{stakeholderId}' equals main contact",
+                    entityType,
+                    entityId));
+            }
+        }
+    }
+
+    private static void ValidateNamedJoinGraphRows(Canon canon, List<ValidationViolation> violations)
+    {
+        var deal008 = canon.Deals.FirstOrDefault(d => d.DealId == "deal-008");
+        if (deal008 is null
+            || deal008.AccountId != "epping-forest-authority"
+            || deal008.ContactId != "william-hargreaves"
+            || !deal008.StakeholderContactIds.SequenceEqual(["henry-clayton"]))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-058",
+                "Deal 'deal-008' must use William Hargreaves as main and Henry Clayton as stakeholder",
+                "Deal",
+                "deal-008"));
+        }
+
+        var case001 = canon.Cases.FirstOrDefault(c => c.CaseId == "case-001");
+        if (case001 is null
+            || case001.AccountId != "brazier-legal"
+            || case001.ContactId != "mary-brazier"
+            || !case001.StakeholderContactIds.SequenceEqual(["dick-turpin"]))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-058",
+                "Case 'case-001' must use Mary Brazier as main and Dick Turpin as stakeholder",
+                "Case",
+                "case-001"));
+        }
+
+        var case017 = canon.Cases.FirstOrDefault(c => c.CaseId == "case-017");
+        if (case017 is null
+            || case017.AccountId != "turpin-enterprises"
+            || case017.ContactId != "henry-clayton"
+            || !case017.StakeholderContactIds.SequenceEqual(["thomas-collier"]))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-058",
+                "Case 'case-017' must use Henry Clayton as main and Thomas Collier as stakeholder",
+                "Case",
+                "case-017"));
+        }
+
+        var palmerVault = canon.Projects.FirstOrDefault(p => p.Id == "palmer-identity-vault");
+        if (palmerVault is null
+            || palmerVault.OrganisationId != "brazier-legal"
+            || palmerVault.ContactId != "mary-brazier"
+            || !palmerVault.StakeholderContactIds.SequenceEqual(["dick-turpin"]))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-058",
+                "Project 'palmer-identity-vault' must use Mary Brazier as main and Dick Turpin as stakeholder",
+                "Project",
+                "palmer-identity-vault"));
+        }
+    }
+
+    private static void ValidateAuthoredOrganisationPrimaries(Canon canon, List<ValidationViolation> violations)
+    {
+        var expectedPrimaries = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["turpin-enterprises"] = "dick-turpin",
+            ["essex-gang"] = "samuel-gregory",
+            ["millington-inn"] = "elizabeth-millington",
+            ["york-assize-court"] = "james-smith",
+            ["king-equine-trading"] = "matthew-king",
+            ["brazier-legal"] = "mary-brazier",
+            ["bayes-horsemanship"] = "richard-bayes",
+            ["york-racing-society"] = "sarah-thornton",
+            ["epping-forest-authority"] = "william-hargreaves",
+            ["highway-commission"] = "robert-finch"
+        };
+
+        foreach (var (organisationId, expectedPrimary) in expectedPrimaries)
+        {
+            var organisation = canon.Organisations.FirstOrDefault(o => o.Id == organisationId);
+            if (organisation?.PrimaryContactId != expectedPrimary)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-058",
+                    $"Organisation '{organisationId}' primary contact must be '{expectedPrimary}'",
+                    "Organisation",
+                    organisationId));
             }
         }
     }
@@ -601,16 +930,7 @@ public sealed partial class CanonValidator
     {
         foreach (var project in canon.Projects)
         {
-            if (project.PersonaIds.Count == 0)
-            {
-                violations.Add(new ValidationViolation(
-                    "VR-022",
-                    $"Project '{project.Id}' has no persona memberships",
-                    "Project",
-                    project.Id));
-            }
-
-            foreach (var personaId in project.PersonaIds)
+            foreach (var personaId in project.LinkedPersonaIds)
             {
                 if (!personaIds.Contains(personaId))
                 {
@@ -762,7 +1082,7 @@ public sealed partial class CanonValidator
                 primaryId));
         }
 
-        var projects = canon.Projects.Where(p => p.PersonaIds.Contains(primaryId)).ToList();
+        var projects = canon.Projects.Where(p => p.LinkedPersonaIds.Contains(primaryId)).ToList();
         if (projects.Count < 3)
         {
             violations.Add(new ValidationViolation(
@@ -850,8 +1170,8 @@ public sealed partial class CanonValidator
         const string primaryId = Career.CareerPortfolioPresenter.PrimaryPersonaId;
 
         var hasSharedProject = canon.Projects.Any(p =>
-            p.PersonaIds.Contains(primaryId)
-            && p.PersonaIds.Any(id => id != primaryId));
+            p.LinkedPersonaIds.Contains(primaryId)
+            && p.LinkedPersonaIds.Any(id => id != primaryId));
 
         var hasSharedAchievement = canon.Achievements.Any(a =>
             a.PersonaIds.Contains(primaryId)

@@ -92,7 +92,7 @@ public class CareerPortfolioSchemaValidatorTests
                     Tags = ["tag"],
                     Links = [new FeaturedLink { Url = "https://example.com" }],
                     OrganisationId = "",
-                    PersonaIds = ["dick-turpin"]
+                    ContactId = "dick-turpin"
                 }
             ]
         };

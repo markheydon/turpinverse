@@ -195,8 +195,20 @@
   {{ end }}
 
   {{ $personaId := .File.BaseFileName }}
-  {{ partial "related-deals-grid.html" (where hugo.Data.deals "contactId" $personaId) }}
-  {{ partial "related-cases-grid.html" (where hugo.Data.cases "contactId" $personaId) }}
+  {{ $relatedDeals := slice }}
+  {{ range hugo.Data.deals }}
+    {{ if or (eq .contactId $personaId) (in .stakeholderContactIds $personaId) }}
+      {{ $relatedDeals = $relatedDeals | append . }}
+    {{ end }}
+  {{ end }}
+  {{ partial "related-deals-grid.html" $relatedDeals }}
+  {{ $relatedCases := slice }}
+  {{ range hugo.Data.cases }}
+    {{ if or (eq .contactId $personaId) (in .stakeholderContactIds $personaId) }}
+      {{ $relatedCases = $relatedCases | append . }}
+    {{ end }}
+  {{ end }}
+  {{ partial "related-cases-grid.html" $relatedCases }}
   {{ partial "related-articles-grid.html" (where hugo.Data.articles "authorPersonaId" $personaId) }}
 </article>
 {{ end }}

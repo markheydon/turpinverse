@@ -69,6 +69,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         {
             var legalName = org.LegalName ?? string.Empty;
             var foundedLine = org.FoundedYear.HasValue ? $"foundedYear: {org.FoundedYear}\n" : string.Empty;
+            var primaryContactLine = !string.IsNullOrWhiteSpace(org.PrimaryContactId)
+                ? $"primaryContactId: \"{org.PrimaryContactId}\"\n"
+                : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(org.TradingName)}"
@@ -76,7 +79,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 industry: "{EscapeYaml(org.Industry)}"
                 status: "{org.Status}"
                 legalName: "{EscapeYaml(legalName)}"
-                {foundedLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
+                {foundedLine}{primaryContactLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
                 {FormatAddressYaml("registeredOffice", org.RegisteredOffice).TrimEnd()}
                 ---
@@ -132,14 +135,19 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
 
         foreach (var deal in canon.Deals)
         {
+            var contactLine = !string.IsNullOrWhiteSpace(deal.ContactId)
+                ? $"contactId: \"{deal.ContactId}\"\n"
+                : string.Empty;
+            var stakeholderLine = deal.StakeholderContactIds.Count > 0
+                ? $"stakeholderContactIds: {JsonSerializer.Serialize(deal.StakeholderContactIds)}\n"
+                : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(deal.DealName)}"
                 type: "deals"
                 dealId: "{deal.DealId}"
                 accountId: "{deal.AccountId}"
-                contactId: "{deal.ContactId}"
-                stage: "{EscapeYaml(deal.Stage)}"
+                {contactLine}{stakeholderLine}stage: "{EscapeYaml(deal.Stage)}"
                 amount: {deal.Amount}
                 closeDate: "{deal.CloseDate}"
                 ---
@@ -169,6 +177,12 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
 
         foreach (var caseRecord in canon.Cases)
         {
+            var contactLine = !string.IsNullOrWhiteSpace(caseRecord.ContactId)
+                ? $"contactId: \"{caseRecord.ContactId}\"\n"
+                : string.Empty;
+            var stakeholderLine = caseRecord.StakeholderContactIds.Count > 0
+                ? $"stakeholderContactIds: {JsonSerializer.Serialize(caseRecord.StakeholderContactIds)}\n"
+                : string.Empty;
             var relatedEventLine = caseRecord.RelatedEventId is not null
                 ? $"relatedEventId: \"{caseRecord.RelatedEventId}\"\n"
                 : string.Empty;
@@ -178,8 +192,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 type: "cases"
                 caseId: "{caseRecord.CaseId}"
                 accountId: "{caseRecord.AccountId}"
-                contactId: "{caseRecord.ContactId}"
-                status: "{EscapeYaml(caseRecord.Status)}"
+                {contactLine}{stakeholderLine}status: "{EscapeYaml(caseRecord.Status)}"
                 priority: "{EscapeYaml(caseRecord.Priority)}"
                 {relatedEventLine}---
 
@@ -221,14 +234,25 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         foreach (var project in canon.Projects)
         {
             var featuredLine = project.Featured == true ? "featured: true\n" : string.Empty;
+            var contactLine = !string.IsNullOrWhiteSpace(project.ContactId)
+                ? $"contactId: \"{project.ContactId}\"\n"
+                : string.Empty;
+            var stakeholderLine = project.StakeholderContactIds.Count > 0
+                ? $"stakeholderContactIds: {JsonSerializer.Serialize(project.StakeholderContactIds)}\n"
+                : string.Empty;
+            var dealLine = !string.IsNullOrWhiteSpace(project.DealId)
+                ? $"dealId: \"{project.DealId}\"\n"
+                : string.Empty;
+            var caseIdsLine = project.CaseIds.Count > 0
+                ? $"caseIds: {JsonSerializer.Serialize(project.CaseIds)}\n"
+                : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(project.Title)}"
                 type: "projects"
                 projectId: "{project.Id}"
                 organisationId: "{project.OrganisationId}"
-                personaIds: {JsonSerializer.Serialize(project.PersonaIds)}
-                tags: {JsonSerializer.Serialize(project.Tags)}
+                {contactLine}{stakeholderLine}{dealLine}{caseIdsLine}tags: {JsonSerializer.Serialize(project.Tags)}
                 image: "{project.Image}"
                 {featuredLine}---
 

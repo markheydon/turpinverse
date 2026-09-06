@@ -5,6 +5,7 @@ industry: "Legal Services"
 status: "active"
 legalName: "York Due Diligence Partners — We Always Find the Horse in the Transaction"
 foundedYear: 1700
+primaryContactId: "james-smith"
 members: ["james-smith"]
 parent: ""
 registeredOffice:

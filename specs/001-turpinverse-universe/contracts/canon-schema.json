@@ -172,8 +172,7 @@
         "image",
         "tags",
         "links",
-        "organisationId",
-        "personaIds"
+        "organisationId"
       ],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
@@ -191,9 +190,15 @@
           "items": { "$ref": "#/$defs/FeaturedLink" }
         },
         "organisationId": { "$ref": "#/$defs/slug" },
-        "personaIds": {
+        "contactId": { "$ref": "#/$defs/slug" },
+        "stakeholderContactIds": {
           "type": "array",
-          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "dealId": { "$ref": "#/$defs/slug" },
+        "caseIds": {
+          "type": "array",
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/slug" }
         },
@@ -290,8 +295,9 @@
         "memberPersonaIds": {
           "type": "array",
           "items": { "$ref": "#/$defs/slug" },
-          "minItems": 1
+          "minItems": 0
         },
+        "primaryContactId": { "$ref": "#/$defs/slug" },
         "foundedYear": { "type": "integer", "minimum": 1700, "maximum": 1800 },
         "status": {
           "type": "string",
@@ -326,6 +332,16 @@
         },
         "organisationIds": {
           "type": "array",
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "dealIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "caseIds": {
+          "type": "array",
+          "uniqueItems": true,
           "items": { "$ref": "#/$defs/slug" }
         },
         "location": { "type": "string", "maxLength": 100 }
@@ -371,13 +387,18 @@
     "Deal": {
       "type": "object",
       "required": [
-        "dealId", "dealName", "accountId", "contactId", "stage", "amount", "closeDate", "description"
+        "dealId", "dealName", "accountId", "stage", "amount", "closeDate", "description"
       ],
       "properties": {
         "dealId": { "type": "string" },
         "dealName": { "type": "string", "maxLength": 120 },
         "accountId": { "$ref": "#/$defs/slug" },
         "contactId": { "$ref": "#/$defs/slug" },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
         "stage": {
           "type": "string",
           "enum": ["Prospecting", "Qualification", "Proposal", "Negotiation", "Closed Won", "Closed Lost"]
@@ -390,7 +411,7 @@
     "Case": {
       "type": "object",
       "required": [
-        "caseId", "subject", "description", "status", "priority", "contactId", "accountId"
+        "caseId", "subject", "description", "status", "priority", "accountId"
       ],
       "properties": {
         "caseId": { "type": "string" },
@@ -406,6 +427,11 @@
         },
         "contactId": { "$ref": "#/$defs/slug" },
         "accountId": { "$ref": "#/$defs/slug" },
+        "stakeholderContactIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/slug" }
+        },
         "relatedEventId": { "$ref": "#/$defs/slug" }
       }
     },

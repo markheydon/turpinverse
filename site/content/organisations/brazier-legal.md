@@ -5,6 +5,7 @@ industry: "Legal Services"
 status: "active"
 legalName: "Brazier Legal Associates — Identity Documentation With Impeccable Provenance (Undiscussed)"
 foundedYear: 1736
+primaryContactId: "mary-brazier"
 members: ["mary-brazier","margaret-hayes"]
 parent: ""
 registeredOffice:

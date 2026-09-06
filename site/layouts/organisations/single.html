@@ -27,6 +27,15 @@
   {{ partial "org-member-chart.html" . }}
   {{ partial "org-history.html" . }}
 
+  {{ with .Params.primaryContactId }}
+  <section class="related-records account-primary-contact">
+    <h2>Primary contact</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
   {{ $orgId := .File.BaseFileName }}
   {{ partial "related-deals-grid.html" (where hugo.Data.deals "accountId" $orgId) }}
   {{ partial "related-cases-grid.html" (where hugo.Data.cases "accountId" $orgId) }}

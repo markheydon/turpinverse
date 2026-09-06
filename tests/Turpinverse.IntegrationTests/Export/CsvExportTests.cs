@@ -15,7 +15,7 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Theory]
-    [InlineData("contacts", "turpinverse-contacts.csv", 25)]
+    [InlineData("contacts", "turpinverse-contacts.csv", 31)]
     [InlineData("accounts", "turpinverse-accounts.csv", 10)]
     [InlineData("deals", "turpinverse-deals.csv", 20)]
     [InlineData("cases", "turpinverse-cases.csv", 15)]
@@ -92,9 +92,60 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal(string.Empty, blackBessRow["mailingTown"]);
         Assert.Equal(string.Empty, blackBessRow["mailingCountry"]);
 
-        var dickRow = rows.First(r => r["contactId"] == "dick-turpin");
-        Assert.Equal("14 Church Lane", dickRow["mailingAddress1"]);
-        Assert.Equal("York", dickRow["mailingTown"]);
-        Assert.Equal("YO1 7HH", dickRow["mailingPostcode"]);
+        var dickRows = rows.Where(r => r["contactId"] == "dick-turpin").ToList();
+        Assert.Equal(2, dickRows.Count);
+        Assert.Equal("14 Church Lane", dickRows[0]["mailingAddress1"]);
+        Assert.Equal("York", dickRows[0]["mailingTown"]);
+        Assert.Equal("YO1 7HH", dickRows[0]["mailingPostcode"]);
+        Assert.Contains(dickRows, row => row["accountId"] == "essex-gang");
+        Assert.Contains(dickRows, row => row["accountId"] == "turpin-enterprises");
+    }
+
+    [Fact]
+    public async Task Export_Contacts_MembershipRowCountMatchesVr059()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/contacts", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var rows = CsvExportReader.ParseRows(bytes);
+        Assert.Equal(31, rows.Count);
+    }
+
+    [Fact]
+    public async Task Export_Deals_IncludesStakeholderColumn()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/deals", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var header = CsvExportReader.ParseHeader(bytes);
+        Assert.Contains("stakeholderContactIds", header);
+
+        var rows = CsvExportReader.ParseRows(bytes);
+        var deal008 = rows.First(r => r["dealId"] == "deal-008");
+        Assert.Equal("william-hargreaves", deal008["contactId"]);
+        Assert.Equal("henry-clayton", deal008["stakeholderContactIds"]);
+    }
+
+    [Fact]
+    public async Task Export_Accounts_IncludesPrimaryContactColumn()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/accounts", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var header = CsvExportReader.ParseHeader(bytes);
+        Assert.Contains("primaryContactId", header);
+
+        var rows = CsvExportReader.ParseRows(bytes);
+        var turpinRow = rows.First(r => r["accountId"] == "turpin-enterprises");
+        Assert.Equal("dick-turpin", turpinRow["primaryContactId"]);
     }
 }

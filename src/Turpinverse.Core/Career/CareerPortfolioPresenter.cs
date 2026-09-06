@@ -21,7 +21,7 @@ public sealed class CareerPortfolioPresenter
 
     public IReadOnlyList<Project> GetProjectsForPersona(Canon canon, string personaId) =>
         canon.Projects
-            .Where(p => p.PersonaIds.Contains(personaId))
+            .Where(p => p.LinkedPersonaIds.Contains(personaId))
             .OrderBy(p => p.Id, StringComparer.Ordinal)
             .ToList();
 

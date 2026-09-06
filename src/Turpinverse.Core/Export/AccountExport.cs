@@ -24,43 +24,47 @@ public sealed record AccountExport
     [Index(4)]
     public string ParentAccountId { get; init; } = string.Empty;
 
-    [Name("description")]
+    [Name("primaryContactId")]
     [Index(5)]
+    public string PrimaryContactId { get; init; } = string.Empty;
+
+    [Name("description")]
+    [Index(6)]
     public required string Description { get; init; }
 
     [Name("website")]
-    [Index(6)]
+    [Index(7)]
     public string Website { get; init; } = string.Empty;
 
     [Name("status")]
-    [Index(7)]
+    [Index(8)]
     public required string Status { get; init; }
 
     [Name("registeredOfficeAddress1")]
-    [Index(8)]
+    [Index(9)]
     public string RegisteredOfficeAddress1 { get; init; } = string.Empty;
 
     [Name("registeredOfficeAddress2")]
-    [Index(9)]
+    [Index(10)]
     public string RegisteredOfficeAddress2 { get; init; } = string.Empty;
 
     [Name("registeredOfficeAddress3")]
-    [Index(10)]
+    [Index(11)]
     public string RegisteredOfficeAddress3 { get; init; } = string.Empty;
 
     [Name("registeredOfficeTown")]
-    [Index(11)]
+    [Index(12)]
     public string RegisteredOfficeTown { get; init; } = string.Empty;
 
     [Name("registeredOfficeRegion")]
-    [Index(12)]
+    [Index(13)]
     public string RegisteredOfficeRegion { get; init; } = string.Empty;
 
     [Name("registeredOfficePostcode")]
-    [Index(13)]
+    [Index(14)]
     public string RegisteredOfficePostcode { get; init; } = string.Empty;
 
     [Name("registeredOfficeCountry")]
-    [Index(14)]
+    [Index(15)]
     public string RegisteredOfficeCountry { get; init; } = string.Empty;
 }

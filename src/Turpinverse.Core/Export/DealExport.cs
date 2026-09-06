@@ -18,21 +18,25 @@ public sealed record DealExport
 
     [Name("contactId")]
     [Index(3)]
-    public required string ContactId { get; init; }
+    public string ContactId { get; init; } = string.Empty;
+
+    [Name("stakeholderContactIds")]
+    [Index(4)]
+    public string StakeholderContactIds { get; init; } = string.Empty;
 
     [Name("stage")]
-    [Index(4)]
+    [Index(5)]
     public required string Stage { get; init; }
 
     [Name("amount")]
-    [Index(5)]
+    [Index(6)]
     public required decimal Amount { get; init; }
 
     [Name("closeDate")]
-    [Index(6)]
+    [Index(7)]
     public required string CloseDate { get; init; }
 
     [Name("description")]
-    [Index(7)]
+    [Index(8)]
     public required string Description { get; init; }
 }
