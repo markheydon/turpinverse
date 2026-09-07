@@ -16,7 +16,17 @@ Canon JSON uses universe names. CSV export uses CRM names. They are the same log
 | Organisation | Account | 1:1 via `organisation.id` → `accountId` |
 | Deal | Deal (opportunity analogue) | Authored in `deals.json`; not derived |
 | Case | Case | Authored in `cases.json`; not derived |
-| Project | Project (optional export) | Shared catalog, not a CRM standard object |
+| Project | Project (optional export) | Delivery/portfolio work; not the price book |
+| Product | Product / service | Catalogue item in `products.json`; distinct from Project |
+| TaxRate | Tax rate | UK VAT lookup in `tax-rates.json` |
+| Quote | Quote / estimate | Authored in `quotes.json` |
+| SalesOrder | Sales order | Authored in `sales-orders.json` |
+| Invoice | Sales invoice (ACCREC) | Authored in `invoices.json` |
+| Payment | Payment | Settles one invoice **or** one bill |
+| CreditNote | Credit note (AR) | Authored in `credit-notes.json` |
+| Bill | Bill / purchase invoice (ACCPAY) | Authored in `bills.json` |
+| Lead | Lead | Pre-contact prospect in `leads.json` |
+| Activity | Activity | CRM interaction in `activities.json` |
 
 `ProfessionalExtras.contact` is presentation copy on a person page. It is **not** a CRM Contact.
 
@@ -86,6 +96,178 @@ erDiagram
 | Project people (union) | For Hugo/Blazor filters | main ∪ stakeholders | “Projects this person is on” uses all linked contact ids. |
 
 Article `relatedProjectId` / `relatedCaseId` remain **publication** links (“this article is about X”), independent of project→deal/case lineage.
+
+## Catalogue and account roles
+
+```mermaid
+erDiagram
+    TaxRate ||--o{ Product : "taxRateId default"
+    Organisation }o--o{ Organisation : "roles hats not a join"
+```
+
+### What that means
+
+| Link | Target cardinality | Keys | Constraints |
+|------|-------------------|------|-------------|
+| Product → TaxRate | Exactly one default | `taxRateId` | Reference table only — not a tax engine. |
+| Product ↔ Project | **Not linked** | — | `projects.json` is delivery/portfolio; `products.json` is the price book. |
+| Organisation commercial hats | Zero-or-more | `roles[]` | Values: `customer`, `supplier`, `partner`. Unique; min 0. Authored — not inferred from documents. |
+| Books owner | Convention | — | Turpin Enterprises (`turpin-enterprises`) is the implicit home books. AR documents are *from* that entity; bills are AP *to* suppliers. No `sellerAccountId` on documents; no `internal` role. |
+| AR document → Organisation | Exactly one customer | `accountId` on quote, sales order, invoice, credit note | Org **must** include `customer` in `roles` when the document exists. |
+| Bill → Organisation | Exactly one supplier | `supplierAccountId` | Org **must** include `supplier` in `roles`. |
+| `partner` hat | With customer or supplier | — | Allowed alongside either; does not by itself authorise AR or AP. |
+
+Discontinued products may still appear on issued document lines. Line items **snapshot** `taxRateId` and `unitPrice` so historical documents do not move when the catalogue changes.
+
+## Commercial documents
+
+Sales-side documents share a **header** (the piece of paper and its counterparty) and **nested lines** (allocation). Bills are AP — separate type, not a sales-invoice status.
+
+```mermaid
+erDiagram
+    Organisation ||--o{ Quote : "accountId required"
+    Organisation ||--o{ SalesOrder : "accountId required"
+    Organisation ||--o{ Invoice : "accountId required"
+    Organisation ||--o{ CreditNote : "accountId required"
+    Organisation ||--o{ Bill : "supplierAccountId required"
+    Persona |o--o{ Quote : "contactId optional member"
+    Persona |o--o{ SalesOrder : "contactId optional member"
+    Persona |o--o{ Invoice : "contactId optional member"
+    Persona |o--o{ CreditNote : "contactId optional member"
+    Persona |o--o{ Bill : "contactId optional member"
+    Deal |o--o{ Quote : "dealId optional header"
+    Deal |o--o{ SalesOrder : "dealId optional header"
+    Deal |o--o{ Invoice : "dealId optional header"
+    Deal |o--o{ Bill : "dealId optional header"
+    Case |o--o{ Invoice : "caseId optional header"
+    Case |o--o{ Bill : "caseId optional header"
+    Quote ||--o{ QuoteLine : "nested lines"
+    SalesOrder ||--o{ SalesOrderLine : "nested lines"
+    Invoice ||--o{ InvoiceLine : "nested lines"
+    CreditNote ||--o{ CreditNoteLine : "nested lines"
+    Bill ||--o{ BillLine : "nested lines"
+    Product |o--o{ DocumentLine : "productId optional"
+    Project |o--o{ DocumentLine : "projectId optional"
+    Quote |o--o{ DocumentLine : "quoteId optional on SO or invoice lines"
+    SalesOrder |o--o{ InvoiceLine : "salesOrderId optional"
+    Invoice ||--o{ Payment : "invoiceId xor billId"
+    Bill ||--o{ Payment : "billId xor invoiceId"
+    Invoice |o--o{ CreditNote : "invoiceId optional header"
+    TaxRate ||--o{ DocumentLine : "taxRateId snapshot"
+```
+
+### Document headers
+
+| Field | Quote / sales order / invoice / credit note | Bill |
+|-------|---------------------------------------------|------|
+| Counterparty | `accountId` **required** | `supplierAccountId` **required** |
+| Main contact | `contactId` optional; membership against counterparty (VR-054 pattern) | `contactId` optional; membership against **supplier** account |
+| CRM opportunity | `dealId` optional; at most one; omit if paper spans deals | `dealId` optional |
+| Dispute / service case | `caseId` optional on invoice | `caseId` optional (e.g. `case-011` AP dispute on a bill) |
+| Currency | `currency` required; `GBP` only in v1 | Same |
+| Totals | `subtotal`, `taxTotal`, `total` authored | Same |
+
+**Not on invoice or bill headers:** `projectId`, `salesOrderId`, `quoteId`. One invoice can cover several orders or several projects via lines.
+
+**No required chain.** Quote → sales order → invoice is narrative, not schema. An invoice without quote or order is valid.
+
+### Shared line shape (nested in parent JSON)
+
+Description and money fields are required; every FK on the line is optional. No separate `quote-lines.json` — CSV flattening is export-only.
+
+| Line field | Quote | Sales order | Invoice | Bill | Credit note |
+|------------|-------|-------------|---------|------|-------------|
+| `description`, `quantity`, `unitPrice`, `taxRateId`, `lineTotal` | required | required | required | required | required |
+| `productId` | optional | optional | optional | optional | optional |
+| `projectId` | optional | optional | optional | optional | optional |
+| `quoteId` | — | optional | optional | — | — |
+| `salesOrderId` | — | — | optional | — | — |
+
+A whole-project quote or sales order may be a single lump line: `projectId` set, `productId` omitted, description names the work.
+
+**Rejected:** requiring `productId` on lines; `quoteLineId` / `salesOrderLineId` (line-to-line matching); header-level `projectId` / `salesOrderId` / `quoteId` on invoices and bills.
+
+### Line allocation constraints
+
+| When set on line | Rule |
+|------------------|------|
+| Invoice line `projectId` | `project.organisationId` must equal `invoice.accountId`. |
+| Invoice line `salesOrderId` or `quoteId` | Referenced document’s `accountId` must equal invoice’s `accountId`. |
+| Sales-order line `quoteId` | Quote’s `accountId` must equal order’s `accountId`. |
+| Quote / sales-order line `projectId` | `project.organisationId` must equal that document’s `accountId`. |
+| Bill line `projectId` | Project must exist. **Do not** require `project.organisationId` = supplier — a supplier bill can cost a Turpin-side delivery project (e.g. equine hire from `king-equine-trading`). |
+
+Consumers that need “invoices for this project” join through lines, not a header field.
+
+### Payments and credit notes
+
+| Link | Cardinality | Keys | Constraints |
+|------|-------------|------|-------------|
+| Payment → Invoice **or** Bill | Exactly one target | `invoiceId` **XOR** `billId` | Sum of payments on a document ≤ document `total`. Credits handled separately. |
+| Credit note → Invoice | Zero-or-one | `invoiceId` optional header | AR only in v1. When set, same `accountId`. Nested lines. No supplier-credit type (parked). |
+
+### case-011 (AP dispute)
+
+`case-011` (“Accounts payable — Q3 invoice dispute”, account `brazier-legal`, deal `deal-017`) links to a **Bill** via header `caseId`, not to a sales invoice. Margaret Hayes owns the case as main contact; she is not a second people FK on the bill. #35 may still ship a separate customer invoice-dispute example; it must not misuse `case-011`.
+
+## Leads
+
+```mermaid
+erDiagram
+    Lead |o--o| Organisation : "accountId optional match"
+    Lead |o--o| Persona : "convertedContactId when Converted"
+```
+
+### What that means
+
+| Link | Target cardinality | Keys | Constraints |
+|------|-------------------|------|-------------|
+| Lead → Organisation | Zero-or-one | `accountId` | Optional match to known org; no membership required. |
+| Lead → Persona | Zero-or-one | `convertedContactId` | **Required** when `status` is `Converted`; must be existing persona. No new personas for conversion. |
+| Lead identity | Pre-contact | `companyName`, `contactName`, `email`, `phone` | Strings — not persona/org FKs until converted. |
+| Lead → commercial docs | **Not linked** | — | No quotes/invoices until converted; then use persona like any contact. |
+| Conversion side effects | None | — | No automatic membership write on conversion. |
+
+## Activities
+
+```mermaid
+erDiagram
+    Persona ||--o{ Activity : "ownerContactId required"
+    Activity }o--|| Regarding : "regardingType plus regardingId"
+```
+
+Activities are CRM interaction history (calls, emails, meetings, tasks, notes). **CanonEvent** (universe timeline) stays separate — no FK between Activity and CanonEvent.
+
+### What that means
+
+| Link | Target cardinality | Keys | Constraints |
+|------|-------------------|------|-------------|
+| Activity → Persona (owner) | Exactly one | `ownerContactId` | Sales/service rep who owns the activity. |
+| Activity → regarding record | Exactly one | `regardingType`, `regardingId` | Closed enum: `contact`, `deal`, `case`, `lead`, `invoice`, `bill`, `quote`, `salesOrder`. |
+| Regarding project / org / payment / credit note / product | **Not modelled** | — | Reach via document or contact. Adding a `regardingType` later is additive. |
+
+Curated volume only (~20–25 activities total) — not a full history per record.
+
+## Import mapping (Xero / FreeAgent / QuickBooks / Sage)
+
+Turpinverse is a **generic CRM + SME commercial file**, not a clone of any one API. Importers flatten; mapping should be mechanical.
+
+| Turpinverse | Xero | FreeAgent | QuickBooks Online | Sage Accounting |
+|-------------|------|-----------|-------------------|-----------------|
+| Organisation | Contact | Contact | Customer (AR) / Vendor (AP) | Contact |
+| Persona | Contact person | — (on contact) | — | — |
+| `roles[]` | `IsCustomer` / `IsSupplier` (derived) | — | Separate Customer/Vendor lists | — |
+| Invoice `accountId` | `Contact` on ACCREC | `contact` | `CustomerRef` | `contact_id` |
+| Bill `supplierAccountId` | `Contact` on ACCPAY | — (supplier contact) | `VendorRef` | `contact_id` |
+| Line `productId` | `ItemCode` / optional | Stock item optional | `ItemRef` (often required — use dummy “Services” item) | Product optional |
+| Line `taxRateId` | `TaxType` | Sales tax | `TaxCodeRef` | `tax_rate_id` |
+| Line `projectId` | Tracking category | `project` on invoice item | `ClassRef` per line (not Job) | — (Sage 50: project per line) |
+| Line `salesOrderId` | — (no SO object) | — | — | — |
+| Payment | Payment → invoice or bill | — | Payment | Payment |
+| Credit note | Credit note + allocation | — | Credit memo | Credit note |
+| Nominal / ledger code | `AccountCode` on line | Category | Account on item | `ledger_account_id` | **Parked** — importer applies default account |
+
+**Importer notes:** Map organisation → their Contact. If every invoice line shares one `projectId`, FreeAgent importers may copy it to the FA invoice header; otherwise leave header project empty. QBO Jobs are sub-customers (one per invoice) — multi-project invoices use Classes or split invoices. Sales-order FKs are dropped on Xero/FreeAgent/QBO/Sage Business Cloud import.
 
 ## Career, portfolio, and publication
 
@@ -162,7 +344,16 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | Per-account contact identity | Not in canon. Duplicate contact rows at export only. |
 | Shared Address records | Not modelled; billing vs shipping; geocodes. |
 | Gallery / professional-extras → org | Not modelled. |
-| Leads, activities, products, quotes | Future CRM/commercial stories (#32 epic); not part of this join graph. |
+| Chart of accounts / nominal codes on lines | Parked (#32). Importers apply default sales/purchase accounts. |
+| Journals, bank accounts, reconciliation | Parked (#32). |
+| Payroll, inventory, purchase orders (separate from bills) | Parked (#32). |
+| Recurring invoices, multi-currency, timesheets, fixed assets | Parked (#32). |
+| Campaigns, territories, queues, SLAs | Parked (#32). |
+| Document attachments / PDFs | Parked (#32). |
+| Supplier credit notes (AP credits) | Parked — AR credit notes only in #35. |
+| Multi-invoice credit-note allocation | Parked — optional 1:1 `invoiceId` on credit note is enough for demo. |
+| Activity ↔ CanonEvent | Separate models; no FK. |
+| Line-to-line document matching (`quoteLineId`, `salesOrderLineId`) | Not modelled. |
 
 ## Join-graph validation codes (shipped)
 
@@ -193,7 +384,7 @@ Four story rows were corrected so main contacts are account members and former n
 ```text
 canon/
 ├── personas.json
-├── organisations.json
+├── organisations.json          # roles[] lands with #33
 ├── events.json
 ├── aliases.json
 ├── deals.json
@@ -204,7 +395,19 @@ canon/
 ├── achievements.json
 ├── articles.json
 ├── galleries.json
-└── professional-extras.json
+├── professional-extras.json
+│
+│  # Agreed graph — files land with child stories (#33–#38):
+├── products.json               # #33
+├── tax-rates.json              # #33
+├── quotes.json                 # #34
+├── sales-orders.json           # #36
+├── invoices.json               # #35
+├── payments.json               # #35
+├── credit-notes.json           # #35
+├── bills.json                  # #36
+├── leads.json                  # #37
+└── activities.json             # #38
 ```
 
 See [canon/README.md](../canon/README.md) for how to consume these files from another project.
