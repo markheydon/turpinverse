@@ -96,6 +96,7 @@ These are product facts, not blockers for the channel split above:
 | Gap | Status |
 |-----|--------|
 | Hugo pages for deals and cases | **Shipped** — generated from canon with nav and home links |
+| Products, quotes, invoices, bills, leads, activities | **Planned** — join graph frozen (#45); Hugo/Blazor/CSV land with #33–#38 |
 | Technical IDs in Hugo body copy | **Addressed** — display-name partials and fallbacks; join keys remain in front matter / data JSON only |
 | Blazor filtering / faceting | **Shipped** — dataset pages filter preview and CSV download via shared `ExportFilter` |
 | Hugo completeness vs canon | Generator and layouts must grow as new human-readable entity types are added — articles and galleries **shipped** on Hugo |

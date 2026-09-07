@@ -4,6 +4,28 @@ Why Turpinverse data and code look the way they do. Newest entries first. For fi
 
 ---
 
+## Commercial join graph (#45, 2026-09)
+
+Child stories #33–#38 share one frozen ERD in [entity-relationships.md](./entity-relationships.md). Key decisions:
+
+**Account roles.** `Organisation.roles` is a unique array of `customer` | `supplier` | `partner`, min 0 — not a single primary `role`. An org can be customer and supplier (and partner). Hats are authored, not inferred. Turpin Enterprises is the implicit home books; no `sellerAccountId` on documents.
+
+**Invoice party.** Sales invoice **must** have exactly one `accountId`. Project, quote, sales order, deal, and case lineage lives on **lines**, not the invoice/bill header — one invoice can cover several orders or projects.
+
+**Optional catalogue on lines.** `productId` is optional on every document line. A whole-project quote or sales order can be one lump line with `projectId` and no product.
+
+**Payments.** One `Payment` targets `invoiceId` **XOR** `billId`.
+
+**case-011.** AP dispute links to a **Bill** (`caseId` on header), not a sales invoice — corrects #35 wording.
+
+**Leads** are pre-contact strings until `Converted` → existing `convertedContactId`. **Activities** are separate from CanonEvent; closed `regardingType` enum on activities.
+
+**SME import.** Line-level `projectId` matches Xero tracking / Sage 50 / FreeAgent item projects better than a header-only project. Sales-order FKs are dropped on Xero/FreeAgent/QBO import (no SO object there). QBO may need a dummy item when `productId` is blank.
+
+Rejected: single `role`; header `projectId` / `salesOrderId` / `quoteId` on invoices; required `productId` on lines; required quote→order→invoice chain; `quoteLineId` / `salesOrderLineId`; supplier credit notes in v1.
+
+---
+
 ## CRM join graph and membership export (2026-09)
 
 Contacts export as **one CSV row per account membership**, not one row per person. The unique person key is `contactId` (persona slug); email is copied onto each row and may repeat.
