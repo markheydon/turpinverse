@@ -98,10 +98,31 @@ h1 {
 }
 
 .turpin-quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin: 0 0 2rem;
+}
+
+.turpin-quick-link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.turpin-quick-link-heading {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--secondary);
+  margin: 0;
+}
+
+.turpin-quick-link-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-  margin: 0 0 2rem;
 }
 
 .turpin-quick-link {
@@ -1036,10 +1057,109 @@ h1 {
   margin-top: 0;
 }
 
-/* GitHub repo link in primary navigation */
+/* Grouped primary navigation dropdowns */
+.header {
+  position: relative;
+  z-index: 50;
+  overflow: visible;
+}
+
+.header-nav {
+  overflow: visible;
+}
+
+/* PaperMod sets overflow-x: auto on .menu, which also computes overflow-y: auto
+   and clips absolutely positioned dropdown panels inside the nav bar. */
 .menu {
   align-items: center;
+  overflow: visible;
 }
+
+.menu-dropdown {
+  position: relative;
+}
+
+.menu-dropdown-details {
+  position: relative;
+}
+
+.menu-dropdown-trigger {
+  list-style: none;
+  cursor: pointer;
+  color: var(--secondary);
+  font-size: 16px;
+}
+
+.menu-dropdown-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.menu-dropdown-trigger span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.menu-dropdown-trigger span::after {
+  content: "";
+  border: 0.3em solid transparent;
+  border-top-color: currentColor;
+  margin-top: 0.2em;
+}
+
+.menu-dropdown-trigger:hover,
+.menu-dropdown-trigger.active,
+.menu-dropdown-details[open] .menu-dropdown-trigger {
+  color: var(--primary);
+}
+
+.menu-dropdown-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 10rem;
+  margin: 0;
+  /* Padding bridges the gap to the trigger so the pointer can reach links. */
+  padding: 0.35rem 0 0;
+  list-style: none;
+  background: var(--entry);
+  background-clip: padding-box;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+}
+
+.menu-dropdown-panel a {
+  display: block;
+  padding: 0.45rem 0.85rem;
+  white-space: nowrap;
+}
+
+.menu-dropdown-panel a:hover {
+  background: var(--code-bg);
+}
+
+.menu-dropdown-details[open] .menu-dropdown-panel {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    flex-wrap: wrap;
+    white-space: normal;
+    row-gap: 0.35rem;
+  }
+
+  .menu-dropdown-panel {
+    position: static;
+    margin-top: 0.35rem;
+    box-shadow: none;
+  }
+}
+
+/* GitHub repo link in primary navigation */
 
 .menu a[href*="github.com/markheydon/turpinverse"] {
   display: inline-flex;

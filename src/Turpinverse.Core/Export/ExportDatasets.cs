@@ -5,19 +5,23 @@ public sealed record ExportDatasetDefinition(
     string Title,
     string Icon,
     string Route,
-    string Description);
+    string Description,
+    string? Group = null);
 
 public static class ExportDatasets
 {
+    public const string CrmGroup = "CRM";
+    public const string FinanceGroup = "Finance";
+
     public static readonly IReadOnlyList<ExportDatasetDefinition> All =
     [
         new("contacts", "Contacts", "users", "/contacts", "Personas mapped to CRM contact records"),
         new("accounts", "Accounts", "building", "/accounts", "Organisations mapped to CRM account records"),
-        new("deals", "Deals", "handshake", "/deals", "Commerce scenarios with pipeline stages"),
-        new("cases", "Cases", "ticket", "/cases", "Support tickets derived from canon events"),
-        new("projects", "Projects", "folder", "/projects", "Portfolio catalog items linked to accounts and contacts"),
-        new("products", "Products", "tag", "/products", "Product and service catalogue with UK VAT defaults"),
-        new("leads", "Leads", "user-plus", "/leads", "Pre-contact CRM prospects and qualification pipeline"),
+        new("leads", "Leads", "user-plus", "/leads", "Pre-contact CRM prospects and qualification pipeline", CrmGroup),
+        new("deals", "Deals", "handshake", "/deals", "Commerce scenarios with pipeline stages", CrmGroup),
+        new("cases", "Cases", "ticket", "/cases", "Support tickets derived from canon events", CrmGroup),
+        new("projects", "Projects", "folder", "/projects", "Portfolio catalog items linked to accounts and contacts", CrmGroup),
+        new("products", "Products", "tag", "/products", "Product and service catalogue with UK VAT defaults", FinanceGroup),
     ];
 
     public static readonly IReadOnlyList<string> DisplayOrder =

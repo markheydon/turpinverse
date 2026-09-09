@@ -4,6 +4,22 @@ Why Turpinverse data and code look the way they do. Newest entries first. For fi
 
 ---
 
+## Navigation grouping (2026-09)
+
+Hugo and Blazor share the same information architecture so the showcase and export app stay aligned as commercial entities land.
+
+**Top-level (both surfaces):** Home; directory entries for people and orgs (Hugo: Personas, Organisations; Blazor: Contacts, Accounts).
+
+**CRM group:** Leads, Deals, Cases, Projects. Activities join this group when #38 ships an index. Leads stay in CRM, not beside Personas — a lead is not a persona until converted.
+
+**Finance group:** Products today; quotes, sales orders, invoices, payments, credit notes, and bills join this group as #34–#36 ship. Products live here despite being a catalogue, not a ledger document — keeps CRM to pipeline and delivery work.
+
+**Universe group (Hugo only):** Articles, Gallery, Timeline. Blazor deliberately omits these (channel charter).
+
+Hugo renders CRM, Finance, and Universe as header dropdowns (`menu.main` parents in `site/hugo.toml`). Blazor mirrors CRM and Finance with sidebar section labels on `ExportDatasets.Group`. Future commercial menu items add a child under the Finance parent, not a new top-level Hugo item.
+
+---
+
 ## Commercial join graph (#45, 2026-09)
 
 Child stories #33–#38 share one frozen ERD in [entity-relationships.md](./entity-relationships.md). Key decisions:

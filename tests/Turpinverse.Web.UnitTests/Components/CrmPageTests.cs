@@ -36,7 +36,7 @@ public class HomePageTests : BunitContext
     {
         RegisterHomeServices(CrmTestData.CreateIncompleteManifest(), valid: true);
         var cut = Render<Home>();
-        Assert.Contains("Manifest is missing the 'cases' dataset.", cut.Markup);
+        Assert.Contains("Manifest is missing the 'leads' dataset.", cut.Markup);
     }
 
     [Fact]

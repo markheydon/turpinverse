@@ -17,10 +17,25 @@
             <LucideIcon Name="home" /> Home
         </NavLink>
 
-        <p class="nav-section-label">Data</p>
-
-        @foreach (var dataset in ExportDatasets.All)
+        @foreach (var dataset in ExportDatasets.All.Where(dataset => dataset.Group is null))
         {
+            <NavLink class="nav-item" href="@dataset.Route.TrimStart('/')">
+                <LucideIcon Name="@dataset.Icon" /> @dataset.Title
+            </NavLink>
+        }
+
+        @{
+            var currentGroup = string.Empty;
+        }
+
+        @foreach (var dataset in ExportDatasets.All.Where(dataset => dataset.Group is not null))
+        {
+            if (!string.Equals(currentGroup, dataset.Group, StringComparison.Ordinal))
+            {
+                currentGroup = dataset.Group!;
+                <p class="nav-section-label">@currentGroup</p>
+            }
+
             <NavLink class="nav-item" href="@dataset.Route.TrimStart('/')">
                 <LucideIcon Name="@dataset.Icon" /> @dataset.Title
             </NavLink>

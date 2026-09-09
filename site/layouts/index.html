@@ -51,41 +51,68 @@
 </article>
 
 <div class="turpin-quick-links">
-  <a class="turpin-quick-link" href="{{ "/personas/" | relURL }}">
-    <strong>Personas</strong>
-    CRM contacts from legend and folklore
-  </a>
-  <a class="turpin-quick-link" href="{{ "/organisations/" | relURL }}">
-    <strong>Organisations</strong>
-    Tongue-in-cheek business accounts
-  </a>
-  <a class="turpin-quick-link" href="{{ "/deals/" | relURL }}">
-    <strong>Deals</strong>
-    Pipeline opportunities from the canon
-  </a>
-  <a class="turpin-quick-link" href="{{ "/cases/" | relURL }}">
-    <strong>Cases</strong>
-    Support cases and their relationships
-  </a>
-  <a class="turpin-quick-link" href="{{ "/projects/" | relURL }}">
-    <strong>Projects</strong>
-    Portfolio catalog linked to accounts and contacts
-  </a>
-  <a class="turpin-quick-link" href="{{ "/leads/" | relURL }}">
-    <strong>Leads</strong>
-    Pre-contact prospects and qualification pipeline
-  </a>
-  <a class="turpin-quick-link" href="{{ "/articles/" | relURL }}">
-    <strong>Articles</strong>
-    Team journal and thought-leadership pieces
-  </a>
-  <a class="turpin-quick-link" href="{{ "/galleries/" | relURL }}">
-    <strong>Gallery</strong>
-    Team and workplace imagery with captions
-  </a>
-  <a class="turpin-quick-link" href="{{ "/timeline/" | relURL }}">
-    <strong>Timeline</strong>
-    Historical, legendary, and fictional events
-  </a>
+  <section class="turpin-quick-link-group">
+    <h2 class="turpin-quick-link-heading">Directory</h2>
+    <div class="turpin-quick-link-grid">
+      <a class="turpin-quick-link" href="{{ "/personas/" | relURL }}">
+        <strong>Personas</strong>
+        CRM contacts from legend and folklore
+      </a>
+      <a class="turpin-quick-link" href="{{ "/organisations/" | relURL }}">
+        <strong>Organisations</strong>
+        Tongue-in-cheek business accounts
+      </a>
+    </div>
+  </section>
+
+  <section class="turpin-quick-link-group">
+    <h2 class="turpin-quick-link-heading">CRM</h2>
+    <div class="turpin-quick-link-grid">
+      <a class="turpin-quick-link" href="{{ "/leads/" | relURL }}">
+        <strong>Leads</strong>
+        Pre-contact prospects and qualification pipeline
+      </a>
+      <a class="turpin-quick-link" href="{{ "/deals/" | relURL }}">
+        <strong>Deals</strong>
+        Pipeline opportunities from the canon
+      </a>
+      <a class="turpin-quick-link" href="{{ "/cases/" | relURL }}">
+        <strong>Cases</strong>
+        Support cases and their relationships
+      </a>
+      <a class="turpin-quick-link" href="{{ "/projects/" | relURL }}">
+        <strong>Projects</strong>
+        Portfolio catalog linked to accounts and contacts
+      </a>
+    </div>
+  </section>
+
+  <section class="turpin-quick-link-group">
+    <h2 class="turpin-quick-link-heading">Finance</h2>
+    <div class="turpin-quick-link-grid">
+      <a class="turpin-quick-link" href="{{ "/products/" | relURL }}">
+        <strong>Products</strong>
+        Product and service catalogue with UK VAT defaults
+      </a>
+    </div>
+  </section>
+
+  <section class="turpin-quick-link-group">
+    <h2 class="turpin-quick-link-heading">Universe</h2>
+    <div class="turpin-quick-link-grid">
+      <a class="turpin-quick-link" href="{{ "/articles/" | relURL }}">
+        <strong>Articles</strong>
+        Team journal and thought-leadership pieces
+      </a>
+      <a class="turpin-quick-link" href="{{ "/galleries/" | relURL }}">
+        <strong>Gallery</strong>
+        Team and workplace imagery with captions
+      </a>
+      <a class="turpin-quick-link" href="{{ "/timeline/" | relURL }}">
+        <strong>Timeline</strong>
+        Historical, legendary, and fictional events
+      </a>
+    </div>
+  </section>
 </div>
 {{ end }}

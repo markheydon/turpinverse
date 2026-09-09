@@ -84,17 +84,11 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
     public async Task<ExportManifest> GetManifestAsync(CancellationToken cancellationToken = default)
     {
         var canon = await canonRepository.LoadAsync(cancellationToken);
-        return new ExportManifest(
-            canon.Version,
-            [
-                CreateDatasetInfo("contacts", ExportMapper.MapContacts(canon).Count),
-                CreateDatasetInfo("accounts", ExportMapper.MapAccounts(canon).Count),
-                CreateDatasetInfo("deals", ExportMapper.MapDeals(canon).Count),
-                CreateDatasetInfo("cases", ExportMapper.MapCases(canon).Count),
-                CreateDatasetInfo("projects", ExportMapper.MapProjects(canon).Count),
-                CreateDatasetInfo("products", ExportMapper.MapProducts(canon).Count),
-                CreateDatasetInfo("leads", ExportMapper.MapLeads(canon).Count)
-            ]);
+        var datasets = ExportDatasets.DisplayOrder
+            .Select(type => CreateDatasetInfo(type, GetRowCount(type, canon)))
+            .ToArray();
+
+        return new ExportManifest(canon.Version, datasets);
     }
 
     public static bool TryGetFilename(string dataset, out string filename) =>
@@ -211,6 +205,19 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         filter is null
             ? ExportMapper.MapLeads(canon)
             : filter.ApplyToLeads(ExportMapper.MapLeads(canon));
+
+    private static int GetRowCount(string type, Models.Canon canon) =>
+        type.ToLowerInvariant() switch
+        {
+            "contacts" => ExportMapper.MapContacts(canon).Count,
+            "accounts" => ExportMapper.MapAccounts(canon).Count,
+            "leads" => ExportMapper.MapLeads(canon).Count,
+            "deals" => ExportMapper.MapDeals(canon).Count,
+            "cases" => ExportMapper.MapCases(canon).Count,
+            "projects" => ExportMapper.MapProjects(canon).Count,
+            "products" => ExportMapper.MapProducts(canon).Count,
+            _ => throw new ArgumentException($"Dataset '{type}' is not supported.", nameof(type))
+        };
 
     private static ExportDatasetInfo CreateDatasetInfo(string type, int rowCount) =>
         new(type, Filenames[type], rowCount, ExportCsvColumns.ForDataset(type));
