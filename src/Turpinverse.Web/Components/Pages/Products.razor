@@ -1,0 +1,17 @@
+@page "/products"
+@rendermode InteractiveServer
+
+<PageTitle>Products - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="products"
+                 Columns="@ProductsColumns"
+                 FacetColumns="@ProductsFacets" />
+
+@code {
+    private static readonly string[] ProductsColumns =
+    [
+        "name", "unitPrice", "taxRateId", "unitOfMeasure", "status", "sku"
+    ];
+
+    private static readonly string[] ProductsFacets = ["status", "taxRateId"];
+}

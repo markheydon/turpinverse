@@ -70,6 +70,35 @@ public class ExportFilterTests
     }
 
     [Fact]
+    public void ApplyToProducts_WhenTaxRateIdMatches_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateProduct("p1", "tax-standard", "active"),
+            CreateProduct("p2", "tax-reduced", "active"),
+            CreateProduct("p3", "tax-standard", "discontinued")
+        };
+
+        var filter = new ExportFilter { TaxRateId = "tax-standard" };
+        var result = filter.ApplyToProducts(rows);
+
+        Assert.Equal(2, result.Count);
+        Assert.All(result, row => Assert.Equal("tax-standard", row.TaxRateId));
+    }
+
+    [Fact]
+    public void FromQuery_WhenTaxRateIdProvided_ReturnsFilter()
+    {
+        var filter = ExportFilter.FromQuery(new Dictionary<string, string?>
+        {
+            ["taxRateId"] = "tax-standard"
+        });
+
+        Assert.NotNull(filter);
+        Assert.Equal("tax-standard", filter!.TaxRateId);
+    }
+
+    [Fact]
     public void FromQuery_WhenNoConstraints_ReturnsNull()
     {
         var filter = ExportFilter.FromQuery(new Dictionary<string, string?>());
@@ -121,5 +150,17 @@ public class ExportFilterTests
             Industry = industry,
             Status = status,
             Description = "desc"
+        };
+
+    private static ProductExport CreateProduct(string productId, string taxRateId, string status) =>
+        new()
+        {
+            ProductId = productId,
+            Name = productId,
+            Description = "desc",
+            UnitPrice = 100,
+            TaxRateId = taxRateId,
+            UnitOfMeasure = "each",
+            Status = status
         };
 }

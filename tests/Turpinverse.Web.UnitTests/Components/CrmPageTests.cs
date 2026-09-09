@@ -185,6 +185,22 @@ public class CasesPageTests : CrmEntityPageTestBase<Cases>
     }
 }
 
+public class ProductsPageTests : CrmEntityPageTestBase<Products>
+{
+    protected override string DatasetType => "products";
+
+    [Fact]
+    public void ProductsPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Products", cut.Markup);
+        Assert.Contains("UnitPrice", cut.Markup);
+        Assert.Contains("TaxRateId", cut.Markup);
+        Assert.Contains("Tax rate", cut.Markup);
+        Assert.Contains("Corridor Optimisation Retainer", cut.Markup);
+    }
+}
+
 public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
 {
     protected override string DatasetType => "projects";
@@ -236,6 +252,8 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
             .Returns(CrmTestData.CreatePreviewRows("cases"));
         exportService.PreviewAsync("projects", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("projects"));
+        exportService.PreviewAsync("products", 100, null, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("products"));
         exportService.PreviewAsync(Arg.Any<string>(), 100, Arg.Any<ExportFilter?>(), Arg.Any<CancellationToken>())
             .Returns(callInfo =>
             {
@@ -258,7 +276,8 @@ internal static class CrmTestData
                 new ExportDatasetInfo("contacts", "turpinverse-contacts.csv", 25, ["contactId"]),
                 new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"]),
                 new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"]),
-                new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"])
+                new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
+                new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>
@@ -340,6 +359,20 @@ internal static class CrmTestData
                     ["stakeholderContactIds"] = "ned-palmer",
                     ["tags"] = "logistics; corridor",
                     ["featured"] = "true"
+                }
+            ],
+            "products" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["productId"] = "corridor-optimisation-retainer",
+                    ["name"] = "Corridor Optimisation Retainer",
+                    ["description"] = "Monthly retainer",
+                    ["unitPrice"] = "4500",
+                    ["taxRateId"] = "tax-standard",
+                    ["unitOfMeasure"] = "retainer-month",
+                    ["status"] = "active",
+                    ["sku"] = "CORR-RET-01"
                 }
             ],
             _ => []

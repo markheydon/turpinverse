@@ -182,7 +182,8 @@
             Stage = facetValues.GetValueOrDefault("stage"),
             Priority = facetValues.GetValueOrDefault("priority"),
             AccountId = facetValues.GetValueOrDefault("accountId"),
-            Industry = facetValues.GetValueOrDefault("industry")
+            Industry = facetValues.GetValueOrDefault("industry"),
+            TaxRateId = facetValues.GetValueOrDefault("taxRateId")
         };
     }
 
@@ -200,6 +201,7 @@
         facet switch
         {
             "accountId" => "Account",
+            "taxRateId" => "Tax rate",
             _ => char.ToUpperInvariant(facet[0]) + facet[1..]
         };
 
@@ -240,6 +242,11 @@
         if (!string.IsNullOrWhiteSpace(filter.Industry))
         {
             query.Add($"industry={Uri.EscapeDataString(filter.Industry)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.TaxRateId))
+        {
+            query.Add($"taxRateId={Uri.EscapeDataString(filter.TaxRateId)}");
         }
 
         return query.Count == 0

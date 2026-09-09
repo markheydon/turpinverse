@@ -6,6 +6,7 @@ status: "active"
 legalName: "Brazier Legal Associates — Identity Documentation With Impeccable Provenance (Undiscussed)"
 foundedYear: 1736
 primaryContactId: "mary-brazier"
+roles: ["customer","supplier","partner"]
 members: ["mary-brazier","margaret-hayes"]
 parent: ""
 registeredOffice:

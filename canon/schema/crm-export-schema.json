@@ -45,6 +45,7 @@
           "type": "string",
           "enum": ["active", "dissolved", "legend"]
         },
+        "roles": { "type": "string" },
         "registeredOfficeAddress1": { "type": "string" },
         "registeredOfficeAddress2": { "type": "string" },
         "registeredOfficeAddress3": { "type": "string" },
@@ -108,6 +109,26 @@
         "tags": { "type": "string" },
         "featured": { "type": "string" }
       }
+    },
+    "Product": {
+      "type": "object",
+      "required": ["productId", "name", "description", "unitPrice", "taxRateId", "unitOfMeasure", "status"],
+      "properties": {
+        "productId": { "type": "string" },
+        "name": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "unitPrice": { "type": "number", "minimum": 0 },
+        "taxRateId": { "type": "string" },
+        "unitOfMeasure": {
+          "type": "string",
+          "enum": ["hour", "day", "each", "retainer-month"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "discontinued"]
+        },
+        "sku": { "type": "string", "maxLength": 32 }
+      }
     }
   },
   "exportManifest": {
@@ -128,7 +149,7 @@
       "minRows": 10,
       "columns": [
         "accountId", "accountName", "legalName", "industry",
-        "parentAccountId", "primaryContactId", "description", "website", "status",
+        "parentAccountId", "primaryContactId", "description", "website", "status", "roles",
         "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
         "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
       ],
@@ -161,6 +182,15 @@
         "tags", "featured"
       ],
       "schema": { "$ref": "#/$defs/Project" }
+    },
+    "products": {
+      "filename": "turpinverse-products.csv",
+      "minRows": 10,
+      "columns": [
+        "productId", "name", "description", "unitPrice", "taxRateId",
+        "unitOfMeasure", "status", "sku"
+      ],
+      "schema": { "$ref": "#/$defs/Product" }
     }
   },
   "collisionPolicy": {

@@ -6,6 +6,7 @@ status: "active"
 legalName: "National Highway Commission — Usage-Based Billing & Corridor Risk Management"
 foundedYear: 1700
 primaryContactId: "robert-finch"
+roles: ["customer"]
 members: ["robert-finch","henry-clayton"]
 parent: ""
 registeredOffice:

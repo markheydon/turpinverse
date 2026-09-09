@@ -7,13 +7,15 @@ public sealed record ExportFilter
     public string? Priority { get; init; }
     public string? AccountId { get; init; }
     public string? Industry { get; init; }
+    public string? TaxRateId { get; init; }
 
     public bool HasConstraints =>
         !string.IsNullOrWhiteSpace(Status) ||
         !string.IsNullOrWhiteSpace(Stage) ||
         !string.IsNullOrWhiteSpace(Priority) ||
         !string.IsNullOrWhiteSpace(AccountId) ||
-        !string.IsNullOrWhiteSpace(Industry);
+        !string.IsNullOrWhiteSpace(Industry) ||
+        !string.IsNullOrWhiteSpace(TaxRateId);
 
     public static ExportFilter? FromQuery(IReadOnlyDictionary<string, string?> query)
     {
@@ -23,7 +25,8 @@ public sealed record ExportFilter
             Stage = GetQueryValue(query, "stage"),
             Priority = GetQueryValue(query, "priority"),
             AccountId = GetQueryValue(query, "accountId"),
-            Industry = GetQueryValue(query, "industry")
+            Industry = GetQueryValue(query, "industry"),
+            TaxRateId = GetQueryValue(query, "taxRateId")
         };
 
         return filter.HasConstraints ? filter : null;
@@ -44,6 +47,9 @@ public sealed record ExportFilter
     public IReadOnlyList<ProjectExport> ApplyToProjects(IEnumerable<ProjectExport> rows) =>
         rows.ToList();
 
+    public IReadOnlyList<ProductExport> ApplyToProducts(IEnumerable<ProductExport> rows) =>
+        rows.Where(MatchesProduct).ToList();
+
     private bool MatchesContact(ContactExport row) =>
         MatchesStatus(row.Status) &&
         MatchesAccountId(row.AccountId);
@@ -60,6 +66,10 @@ public sealed record ExportFilter
         MatchesStatus(row.Status) &&
         MatchesPriority(row.Priority) &&
         MatchesAccountId(row.AccountId);
+
+    private bool MatchesProduct(ProductExport row) =>
+        MatchesStatus(row.Status) &&
+        MatchesTaxRateId(row.TaxRateId);
 
     private bool MatchesStatus(string value) =>
         string.IsNullOrWhiteSpace(Status) ||
@@ -80,6 +90,10 @@ public sealed record ExportFilter
     private bool MatchesIndustry(string value) =>
         string.IsNullOrWhiteSpace(Industry) ||
         string.Equals(value, Industry, StringComparison.OrdinalIgnoreCase);
+
+    private bool MatchesTaxRateId(string value) =>
+        string.IsNullOrWhiteSpace(TaxRateId) ||
+        string.Equals(value, TaxRateId, StringComparison.Ordinal);
 
     private static string? GetQueryValue(IReadOnlyDictionary<string, string?> query, string key) =>
         query.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)

@@ -13,7 +13,7 @@ public static class ExportCsvColumns
     public static readonly IReadOnlyList<string> Accounts =
     [
         "accountId", "accountName", "legalName", "industry",
-        "parentAccountId", "primaryContactId", "description", "website", "status",
+        "parentAccountId", "primaryContactId", "description", "website", "status", "roles",
         "registeredOfficeAddress1", "registeredOfficeAddress2", "registeredOfficeAddress3",
         "registeredOfficeTown", "registeredOfficeRegion", "registeredOfficePostcode", "registeredOfficeCountry"
     ];
@@ -37,6 +37,12 @@ public static class ExportCsvColumns
         "tags", "featured"
     ];
 
+    public static readonly IReadOnlyList<string> Products =
+    [
+        "productId", "name", "description", "unitPrice", "taxRateId",
+        "unitOfMeasure", "status", "sku"
+    ];
+
     public static IReadOnlyList<string> ForDataset(string dataset) =>
         dataset.ToLowerInvariant() switch
         {
@@ -45,6 +51,7 @@ public static class ExportCsvColumns
             "deals" => Deals,
             "cases" => Cases,
             "projects" => Projects,
+            "products" => Products,
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
 }

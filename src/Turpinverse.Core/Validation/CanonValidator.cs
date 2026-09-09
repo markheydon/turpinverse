@@ -36,6 +36,7 @@ public sealed partial class CanonValidator
         ValidateArticlesAndGalleries(canon, personaIds, violations);
         ValidateProfessionalExtras(canon, personaIds, violations);
         ValidateAddresses(canon, violations);
+        ValidateCatalogue(canon, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -51,7 +52,9 @@ public sealed partial class CanonValidator
             ["achievements"] = canon.Achievements.Count,
             ["articles"] = canon.Articles.Count,
             ["galleries"] = canon.Galleries.Count,
-            ["professionalExtras"] = canon.ProfessionalExtras.Count
+            ["professionalExtras"] = canon.ProfessionalExtras.Count,
+            ["products"] = canon.Products.Count,
+            ["taxRates"] = canon.TaxRates.Count
         };
 
         return new CanonValidationResult(
@@ -841,6 +844,233 @@ public sealed partial class CanonValidator
 
     internal static string GetDoorKey(Address address) =>
         $"{address.Address1.Trim()}\u001f{address.Postcode.Trim()}";
+
+    private static void ValidateCatalogue(Canon canon, List<ValidationViolation> violations)
+    {
+        ValidateTaxRates(canon, violations);
+        ValidateProducts(canon, violations);
+        ValidateOrganisationRoles(canon, violations);
+        ValidateNamedOrganisationHats(canon, violations);
+    }
+
+    private static readonly HashSet<string> AllowedOrganisationRoles = new(StringComparer.Ordinal)
+    {
+        "customer", "supplier", "partner"
+    };
+
+    private static readonly Dictionary<string, decimal> RequiredTaxRates = new(StringComparer.Ordinal)
+    {
+        ["tax-standard"] = 20m,
+        ["tax-reduced"] = 5m,
+        ["tax-zero"] = 0m,
+        ["tax-exempt"] = 0m
+    };
+
+    private static readonly HashSet<string> AllowedProductStatuses = new(StringComparer.Ordinal)
+    {
+        "active", "discontinued"
+    };
+
+    private static readonly HashSet<string> AllowedUnitOfMeasures = new(StringComparer.Ordinal)
+    {
+        "hour", "day", "each", "retainer-month"
+    };
+
+    private static void ValidateTaxRates(Canon canon, List<ValidationViolation> violations)
+    {
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var taxRate in canon.TaxRates)
+        {
+            if (!seenIds.Add(taxRate.TaxRateId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-060",
+                    $"Duplicate tax rate id '{taxRate.TaxRateId}'",
+                    "TaxRate",
+                    taxRate.TaxRateId));
+            }
+        }
+
+        if (canon.TaxRates.Count != RequiredTaxRates.Count)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-060",
+                $"Expected exactly {RequiredTaxRates.Count} UK VAT tax rates, found {canon.TaxRates.Count}",
+                "Canon",
+                "taxRates"));
+        }
+
+        foreach (var (expectedId, expectedPercentage) in RequiredTaxRates)
+        {
+            var taxRate = canon.TaxRates.FirstOrDefault(t => t.TaxRateId == expectedId);
+            if (taxRate is null)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-060",
+                    $"Missing required tax rate '{expectedId}'",
+                    "TaxRate",
+                    expectedId));
+                continue;
+            }
+
+            if (taxRate.Percentage != expectedPercentage)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-060",
+                    $"Tax rate '{expectedId}' must be {expectedPercentage}%, found {taxRate.Percentage}%",
+                    "TaxRate",
+                    expectedId));
+            }
+        }
+    }
+
+    private static void ValidateProducts(Canon canon, List<ValidationViolation> violations)
+    {
+        if (canon.Products.Count < 10)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-061",
+                $"Expected at least 10 products, found {canon.Products.Count}",
+                "Canon",
+                "products"));
+        }
+
+        var taxRateIds = canon.TaxRates.Select(t => t.TaxRateId).ToHashSet(StringComparer.Ordinal);
+        var seenProductIds = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var product in canon.Products)
+        {
+            if (!seenProductIds.Add(product.ProductId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Duplicate product id '{product.ProductId}'",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (string.IsNullOrWhiteSpace(product.Name)
+                || string.IsNullOrWhiteSpace(product.Description)
+                || string.IsNullOrWhiteSpace(product.UnitOfMeasure)
+                || string.IsNullOrWhiteSpace(product.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' is missing required catalogue fields",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (product.UnitPrice < 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' unit price must be zero or greater",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (!AllowedUnitOfMeasures.Contains(product.UnitOfMeasure))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' has invalid unit of measure '{product.UnitOfMeasure}'",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (!AllowedProductStatuses.Contains(product.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' has invalid status '{product.Status}'",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (!taxRateIds.Contains(product.TaxRateId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-062",
+                    $"Product '{product.ProductId}' references unknown tax rate '{product.TaxRateId}'",
+                    "Product",
+                    product.ProductId));
+            }
+        }
+    }
+
+    private static void ValidateOrganisationRoles(Canon canon, List<ValidationViolation> violations)
+    {
+        foreach (var organisation in canon.Organisations)
+        {
+            var seenRoles = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var role in organisation.Roles)
+            {
+                if (!AllowedOrganisationRoles.Contains(role))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-063",
+                        $"Organisation '{organisation.Id}' has invalid role '{role}'",
+                        "Organisation",
+                        organisation.Id));
+                }
+
+                if (!seenRoles.Add(role))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-063",
+                        $"Organisation '{organisation.Id}' has duplicate role '{role}'",
+                        "Organisation",
+                        organisation.Id));
+                }
+            }
+        }
+
+        var turpin = canon.Organisations.FirstOrDefault(o => o.Id == "turpin-enterprises");
+        if (turpin is not null && turpin.Roles.Count > 0)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-063",
+                "Organisation 'turpin-enterprises' must have no commercial roles (implicit home books)",
+                "Organisation",
+                "turpin-enterprises"));
+        }
+    }
+
+    private static void ValidateNamedOrganisationHats(Canon canon, List<ValidationViolation> violations)
+    {
+        RequireRole(canon, "king-equine-trading", "supplier", violations);
+        RequireRole(canon, "brazier-legal", "partner", violations);
+        RequireRole(canon, "brazier-legal", "supplier", violations);
+        RequireRole(canon, "york-assize-court", "partner", violations);
+    }
+
+    private static void RequireRole(
+        Canon canon,
+        string organisationId,
+        string role,
+        List<ValidationViolation> violations)
+    {
+        var organisation = canon.Organisations.FirstOrDefault(o => o.Id == organisationId);
+        if (organisation is null)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-064",
+                $"Organisation '{organisationId}' must include role '{role}'",
+                "Organisation",
+                organisationId));
+            return;
+        }
+
+        if (!organisation.Roles.Contains(role, StringComparer.Ordinal))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-064",
+                $"Organisation '{organisationId}' must include role '{role}'",
+                "Organisation",
+                organisationId));
+        }
+    }
 
     private void ValidateTone(Canon canon, List<ValidationViolation> violations)
     {

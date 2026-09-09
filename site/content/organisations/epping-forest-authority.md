@@ -6,6 +6,7 @@ status: "active"
 legalName: "Epping Forest Authority — Conservation & Unauthorised Procurement Enforcement"
 foundedYear: 1700
 primaryContactId: "william-hargreaves"
+roles: ["customer"]
 members: ["william-hargreaves"]
 parent: ""
 registeredOffice:

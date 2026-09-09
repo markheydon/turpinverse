@@ -14,6 +14,17 @@
     </p>
   </header>
 
+  {{ with .Params.roles }}
+  <section class="commercial-roles-section">
+    <h2>Commercial roles</h2>
+    <ul class="chip-list">
+      {{ range . }}
+      <li><span class="chip">{{ if eq . "customer" }}Customer{{ else if eq . "supplier" }}Supplier{{ else if eq . "partner" }}Partner{{ else }}{{ . }}{{ end }}</span></li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
   {{ with .Params.registeredOffice }}
   <section class="registered-office-section">
     <h2>Registered office</h2>

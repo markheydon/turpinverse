@@ -6,6 +6,7 @@ status: "active"
 legalName: "Bayes Horsemanship Academy — Executive Mobility for Those Who Need to Cover Ground Quickly"
 foundedYear: 1730
 primaryContactId: "richard-bayes"
+roles: ["customer"]
 members: ["richard-bayes"]
 parent: ""
 registeredOffice:
