@@ -57,6 +57,19 @@ See [site/README.md](../site/README.md) for build and deploy.
 
 Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/leads`, and `/contacts/{id}` for contact detail.
 
+## Navigation
+
+Both consumers group destinations the same way so the header/sidebar does not grow one flat item per entity type.
+
+| Group | Hugo (`menu.main`) | Blazor sidebar |
+|-------|-------------------|----------------|
+| Directory | Personas, Organisations (top-level) | Contacts, Accounts (top-level) |
+| CRM | Dropdown: Leads, Deals, Cases, Projects | Section label **CRM** |
+| Finance | Dropdown: Products (more document types as they ship) | Section label **Finance** |
+| Universe | Dropdown: Articles, Gallery, Timeline | *(not published on Blazor)* |
+
+Home quick links on Hugo follow the same groups. When #34–#36 add quotes, orders, invoices, payments, credit notes, and bills, they nest under **Finance** in Hugo and Blazor rather than becoming new top-level nav items. When #38 ships Activities, it nests under **CRM**.
+
 ## Dual publication on person pages
 
 Career and portfolio content (experience, education, projects, achievements) and

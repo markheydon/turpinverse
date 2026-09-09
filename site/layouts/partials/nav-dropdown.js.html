@@ -1,0 +1,55 @@
+<script>
+  (() => {
+    const menu = document.getElementById("menu");
+    if (!menu) {
+      return;
+    }
+
+    const details = menu.querySelectorAll(".menu-dropdown-details");
+
+    const setExpanded = (element, open) => {
+      const trigger = element.querySelector(".menu-dropdown-trigger");
+      if (trigger) {
+        trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+    };
+
+    const closeAll = () => {
+      details.forEach((element) => {
+        if (element.open) {
+          element.open = false;
+          setExpanded(element, false);
+        }
+      });
+    };
+
+    details.forEach((element) => {
+      setExpanded(element, element.open);
+
+      element.addEventListener("toggle", () => {
+        if (element.open) {
+          details.forEach((other) => {
+            if (other !== element && other.open) {
+              other.open = false;
+              setExpanded(other, false);
+            }
+          });
+        }
+
+        setExpanded(element, element.open);
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) {
+        closeAll();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeAll();
+      }
+    });
+  })();
+</script>

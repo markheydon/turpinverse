@@ -30,6 +30,8 @@ Career portfolio images live in `site/static/images/` (projects and achievements
 
 The site uses the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme via [Hugo modules](https://gohugo.io/hugo-modules/), with Turpinverse brand styling in `assets/css/extended/turpinverse.css`.
 
+Grouped header navigation (CRM, Finance, Universe dropdowns) overrides PaperMod's `layouts/partials/header.html`. After updating PaperMod, diff that file against the theme copy and merge any upstream header fixes.
+
 Hugo downloads the theme automatically on first build (`hugo mod get` is optional after clone). Module metadata lives in `site/go.mod` and `site/go.sum`.
 
 To update PaperMod:
