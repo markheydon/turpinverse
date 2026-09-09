@@ -312,6 +312,8 @@ flowchart LR
         Deal
         Case
         Project
+        Product
+        TaxRate
     end
     subgraph csv [CSV rows]
         Contact
@@ -319,18 +321,22 @@ flowchart LR
         DealRow[Deal]
         CaseRow[Case]
         ProjectRow[Project]
+        ProductRow[Product]
     end
     Persona -->|"1 row per membership"| Contact
-    Organisation -->|"1:1 flatten registeredOffice"| Account
+    Organisation -->|"1:1 flatten registeredOffice plus roles"| Account
     Deal -->|"1:1 optional contactId"| DealRow
     Case -->|"1:1 optional contactId"| CaseRow
     Project -->|"1:1 main plus stakeholders joined"| ProjectRow
+    Product -->|"1:1 default taxRateId"| ProductRow
+    TaxRate -.->|"lookup only on Hugo"| ProductRow
 ```
 
 | Projection | Shipped behaviour |
 |------------|-------------------|
 | Contact | **One CSV row per** `(persona, organisation)` membership (**VR-059**). Same `contactId` (persona slug) on each row; `accountId` differs. Email/phone/address copied from persona (canon has one identity per person). Collision policy documented on the Blazor contacts export page and in [export-api.md](./export-api.md). |
-| Account | 1:1 from Organisation; optional `primaryContactId` column when set on the organisation. |
+| Account | 1:1 from Organisation; optional `primaryContactId` column when set; `roles` as semicolon-separated `customer` / `supplier` / `partner` (empty when none). |
+| Product | 1:1 from catalogue item; `taxRateId` is the default VAT lookup (lines snapshot later). |
 | Deal / Case | 1:1; optional `contactId`; `stakeholderContactIds` as a semicolon-separated column (empty when none). |
 | Project | 1:1; optional `contactId`, `dealId`, `caseIds`; `stakeholderContactIds` column. Project people in export are main ∪ stakeholders. |
 
@@ -367,6 +373,11 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | VR-057 | CanonEvent | `dealIds` / `caseIds` omitted or exist |
 | VR-058 | Named records | `deal-008`, `case-001`, `case-017`, `palmer-identity-vault` match the repaired deputies below |
 | VR-059 | Contact export | Row count equals membership links (export tests, not `/validate` body) |
+| VR-060 | TaxRate | Exactly four UK VAT rows with required ids and percentages |
+| VR-061 | Product | Unique ids; required fields; ≥10 catalogue items |
+| VR-062 | Product | `taxRateId` references an existing tax rate |
+| VR-063 | Organisation | `roles[]` enum, unique, min 0; `turpin-enterprises` has none |
+| VR-064 | Organisation | Named supplier/partner hats on key story orgs |
 
 ## Repaired canon rows (shipped)
 
@@ -384,7 +395,7 @@ Four story rows were corrected so main contacts are account members and former n
 ```text
 canon/
 ├── personas.json
-├── organisations.json          # roles[] lands with #33
+├── organisations.json          # roles[] (customer / supplier / partner)
 ├── events.json
 ├── aliases.json
 ├── deals.json
@@ -397,9 +408,9 @@ canon/
 ├── galleries.json
 ├── professional-extras.json
 │
-│  # Agreed graph — files land with child stories (#33–#38):
-├── products.json               # #33
-├── tax-rates.json              # #33
+│  # Agreed graph — remaining files land with child stories (#34–#38):
+├── products.json
+├── tax-rates.json
 ├── quotes.json                 # #34
 ├── sales-orders.json           # #36
 ├── invoices.json               # #35

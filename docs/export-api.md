@@ -25,13 +25,14 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
 | Name | Type | Datasets | Semantics |
 |------|------|----------|-----------|
-| `status` | string | `contacts`, `accounts`, `cases` | Exact match, case-insensitive |
+| `status` | string | `contacts`, `accounts`, `cases`, `products` | Exact match, case-insensitive |
+| `taxRateId` | string | `products` | Exact match on export `taxRateId` |
 | `stage` | string | `deals` | Exact match, case-insensitive |
 | `priority` | string | `cases` | Exact match, case-insensitive |
 | `accountId` | string | `contacts`, `deals`, `cases` | Exact match on export `accountId` |
@@ -69,6 +70,7 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `deals` | `turpinverse-deals.csv` |
 | `cases` | `turpinverse-cases.csv` |
 | `projects` | `turpinverse-projects.csv` |
+| `products` | `turpinverse-products.csv` |
 
 ### GET /api/export/manifest
 
@@ -112,7 +114,7 @@ Runs cross-reference validation and returns results. See [validation-rules.md](.
 ```json
 {
   "valid": true,
-  "canonVersion": "1.3.0",
+  "canonVersion": "1.4.0",
   "counts": {
     "personas": 25,
     "organisations": 10,

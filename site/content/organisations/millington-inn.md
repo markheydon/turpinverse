@@ -6,6 +6,7 @@ status: "active"
 legalName: "Rose & Crown Hospitality Group — Where Discretion Is Part of the Room Rate"
 foundedYear: 1720
 primaryContactId: "elizabeth-millington"
+roles: ["customer"]
 members: ["elizabeth-millington","anna-ward"]
 parent: ""
 registeredOffice:

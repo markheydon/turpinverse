@@ -33,7 +33,10 @@
       "region": "Essex",
       "postcode": "CM1 1LN",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer"
+    ]
   },
   {
     "id": "turpin-enterprises",
@@ -63,7 +66,8 @@
       "region": "Essex",
       "postcode": "CM23 4TA",
       "country": "United Kingdom"
-    }
+    },
+    "roles": []
   },
   {
     "id": "millington-inn",
@@ -89,7 +93,10 @@
       "region": "Essex",
       "postcode": "CM23 1AB",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer"
+    ]
   },
   {
     "id": "york-assize-court",
@@ -114,7 +121,11 @@
       "region": "North Yorkshire",
       "postcode": "YO1 9RX",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "partner",
+      "customer"
+    ]
   },
   {
     "id": "king-equine-trading",
@@ -141,7 +152,11 @@
       "region": "Essex",
       "postcode": "IG11 8TQ",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "supplier",
+      "customer"
+    ]
   },
   {
     "id": "brazier-legal",
@@ -167,7 +182,12 @@
       "region": "North Yorkshire",
       "postcode": "HG5 8AA",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer",
+      "supplier",
+      "partner"
+    ]
   },
   {
     "id": "bayes-horsemanship",
@@ -192,7 +212,10 @@
       "region": "Suffolk",
       "postcode": "CB8 0XA",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer"
+    ]
   },
   {
     "id": "york-racing-society",
@@ -217,7 +240,10 @@
       "region": "North Yorkshire",
       "postcode": "YO23 1EX",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer"
+    ]
   },
   {
     "id": "epping-forest-authority",
@@ -242,7 +268,10 @@
       "region": "Essex",
       "postcode": "IG10 4QN",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer"
+    ]
   },
   {
     "id": "highway-commission",
@@ -268,6 +297,9 @@
       "region": "Greater London",
       "postcode": "N18 2TG",
       "country": "United Kingdom"
-    }
+    },
+    "roles": [
+      "customer"
+    ]
   }
 ]

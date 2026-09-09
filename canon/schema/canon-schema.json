@@ -19,7 +19,9 @@
     "achievements",
     "articles",
     "galleries",
-    "professionalExtras"
+    "professionalExtras",
+    "products",
+    "taxRates"
   ],
   "properties": {
     "version": {
@@ -85,6 +87,17 @@
     "professionalExtras": {
       "type": "array",
       "items": { "$ref": "#/$defs/ProfessionalExtras" }
+    },
+    "products": {
+      "type": "array",
+      "minItems": 10,
+      "items": { "$ref": "#/$defs/Product" }
+    },
+    "taxRates": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/TaxRate" }
     }
   },
   "$defs": {
@@ -308,7 +321,49 @@
           "format": "uri",
           "pattern": "^https://[a-z0-9.-]+\\.turpinverse\\.uk$"
         },
-        "registeredOffice": { "$ref": "#/$defs/Address" }
+        "registeredOffice": { "$ref": "#/$defs/Address" },
+        "roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["customer", "supplier", "partner"]
+          }
+        }
+      }
+    },
+    "TaxRate": {
+      "type": "object",
+      "required": ["taxRateId", "name", "code", "percentage", "description"],
+      "properties": {
+        "taxRateId": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "maxLength": 80 },
+        "code": { "type": "string", "maxLength": 4 },
+        "percentage": { "type": "number", "minimum": 0, "maximum": 100 },
+        "description": { "type": "string", "maxLength": 300 }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "required": [
+        "productId", "name", "description", "unitPrice",
+        "taxRateId", "unitOfMeasure", "status"
+      ],
+      "properties": {
+        "productId": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "unitPrice": { "type": "number", "minimum": 0 },
+        "taxRateId": { "$ref": "#/$defs/slug" },
+        "unitOfMeasure": {
+          "type": "string",
+          "enum": ["hour", "day", "each", "retainer-month"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "discontinued"]
+        },
+        "sku": { "type": "string", "maxLength": 32 }
       }
     },
     "CanonEvent": {

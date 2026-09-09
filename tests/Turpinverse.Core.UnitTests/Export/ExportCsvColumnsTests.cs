@@ -21,6 +21,24 @@ public class ExportCsvColumnsTests
     }
 
     [Fact]
+    public void Accounts_IncludesRolesColumn()
+    {
+        Assert.Contains("roles", ExportCsvColumns.Accounts);
+    }
+
+    [Fact]
+    public void Products_HasExpectedColumns()
+    {
+        Assert.Equal(
+            new[]
+            {
+                "productId", "name", "description", "unitPrice", "taxRateId",
+                "unitOfMeasure", "status", "sku"
+            },
+            ExportCsvColumns.Products);
+    }
+
+    [Fact]
     public void Contacts_IncludesMailingColumns()
     {
         var expected =

@@ -1,0 +1,102 @@
+[
+  {
+    "productId": "corridor-optimisation-retainer",
+    "name": "Corridor Optimisation Retainer",
+    "description": "Monthly retainer for strategic route analysis, intercept-probability modelling, and corridor licensing advisory. Includes quarterly board-ready variance commentary.",
+    "unitPrice": 4500,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "retainer-month",
+    "status": "active",
+    "sku": "CORR-RET-01"
+  },
+  {
+    "productId": "equine-asset-hire-day",
+    "name": "Equine Asset Hire \u2014 Day Rate",
+    "description": "Single-day hire of a vetted equine transport asset with mileage reconciliation support. Overnight claims reviewed separately.",
+    "unitPrice": 850,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "day",
+    "status": "active",
+    "sku": "EQ-HIRE-D"
+  },
+  {
+    "productId": "identity-advisory-hour",
+    "name": "Identity Management Advisory Hour",
+    "description": "Billable hour for alias lifecycle review, SSO provisioning guidance, and Yorkshire relocation paperwork sanity checks.",
+    "unitPrice": 185,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "hour",
+    "status": "active",
+    "sku": "ID-ADV-HR"
+  },
+  {
+    "productId": "hospitality-block-booking",
+    "name": "Hospitality Block Booking",
+    "description": "Reserved coaching-inn suite block for executive gatherings. Discretion tier and intelligence-sharing add-ons quoted separately.",
+    "unitPrice": 2400,
+    "taxRateId": "tax-reduced",
+    "unitOfMeasure": "each",
+    "status": "active",
+    "sku": "HOSP-BLK"
+  },
+  {
+    "productId": "overnight-logistics-surcharge",
+    "name": "Overnight Logistics Surcharge",
+    "description": "Premium surcharge for time-sensitive London\u2013York corridor movements. Legend-based mileage disputes handled under separate case workflow.",
+    "unitPrice": 320,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "each",
+    "status": "active",
+    "sku": "LOG-OVR"
+  },
+  {
+    "productId": "highway-risk-day-rate",
+    "name": "Highway Risk Assessment \u2014 Day Rate",
+    "description": "On-site turnpike and coaching-corridor risk review with automated toll-billing fault analysis. A10 rated Critical on request.",
+    "unitPrice": 1200,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "day",
+    "status": "active",
+    "sku": "HWY-RISK-D"
+  },
+  {
+    "productId": "alias-documentation-pack",
+    "name": "Alias Documentation Pack",
+    "description": "Fixed-fee bundle for complete alias documentation, provenance notes, and handover to legal counsel. Impeccable paperwork, undiscussed.",
+    "unitPrice": 950,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "each",
+    "status": "active",
+    "sku": "ALIAS-PK"
+  },
+  {
+    "productId": "race-day-hospitality-suite",
+    "name": "Race Day Hospitality Suite",
+    "description": "Premium race-meeting hospitality package with curated guest list and catering coordination. Select societies only.",
+    "unitPrice": 4800,
+    "taxRateId": "tax-standard",
+    "unitOfMeasure": "each",
+    "status": "active",
+    "sku": "RACE-SUITE"
+  },
+  {
+    "productId": "forest-patrol-sector",
+    "name": "Forest Patrol \u2014 Sector Day",
+    "description": "Supplementary patrol services for high-risk unauthorised procurement zones. Sector 7 scheduling subject to authority approval.",
+    "unitPrice": 750,
+    "taxRateId": "tax-zero",
+    "unitOfMeasure": "day",
+    "status": "active",
+    "sku": "FOR-PAT-D"
+  },
+  {
+    "productId": "ledger-reconciliation-legacy",
+    "name": "Ledger Reconciliation \u2014 Legacy SKU",
+    "description": "Discontinued manual ledger reconciliation service superseded by the identity platform retainer. Retained for historical invoice line matching only.",
+    "unitPrice": 400,
+    "taxRateId": "tax-exempt",
+    "unitOfMeasure": "hour",
+    "status": "discontinued",
+    "sku": "LEG-RECON"
+  }
+]

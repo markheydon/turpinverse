@@ -25,6 +25,12 @@ public sealed partial class ToneValidator
             violations.AddRange(ValidateAddressFields(org.RegisteredOffice, patterns, "Organisation", org.Id));
         }
 
+        foreach (var product in canon.Products)
+        {
+            violations.AddRange(ValidateText(product.Name, patterns, "Product", product.ProductId));
+            violations.AddRange(ValidateText(product.Description, patterns, "Product", product.ProductId));
+        }
+
         foreach (var persona in canon.Personas)
         {
             if (persona.Address is not null)

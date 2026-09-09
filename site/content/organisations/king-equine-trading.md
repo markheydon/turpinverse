@@ -6,6 +6,7 @@ status: "dissolved"
 legalName: "King Equine Partners — Acquisition Velocity Unmatched Since 1737"
 foundedYear: 1734
 primaryContactId: "matthew-king"
+roles: ["supplier","customer"]
 members: ["matthew-king","george-chapman","black-bess"]
 parent: ""
 registeredOffice:

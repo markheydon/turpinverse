@@ -258,7 +258,8 @@ internal static class CrmTestData
                 new ExportDatasetInfo("contacts", "turpinverse-contacts.csv", 25, ["contactId"]),
                 new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"]),
                 new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"]),
-                new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"])
+                new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
+                new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>
@@ -340,6 +341,20 @@ internal static class CrmTestData
                     ["stakeholderContactIds"] = "ned-palmer",
                     ["tags"] = "logistics; corridor",
                     ["featured"] = "true"
+                }
+            ],
+            "products" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["productId"] = "corridor-optimisation-retainer",
+                    ["name"] = "Corridor Optimisation Retainer",
+                    ["description"] = "Monthly retainer",
+                    ["unitPrice"] = "4500",
+                    ["taxRateId"] = "tax-standard",
+                    ["unitOfMeasure"] = "retainer-month",
+                    ["status"] = "active",
+                    ["sku"] = "CORR-RET-01"
                 }
             ],
             _ => []

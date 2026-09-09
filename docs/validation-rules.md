@@ -88,9 +88,19 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-058 | Named records | `deal-008`, `case-001`, `case-017`, `palmer-identity-vault` match repaired deputies |
 | VR-059 | Contact export | CSV row count = membership links (export tests, not `/validate` body) |
 
+## Product catalogue (VR-060–VR-064)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-060 | TaxRate | Unique ids; exactly four UK VAT rows (`tax-standard` 20%, `tax-reduced` 5%, `tax-zero` 0%, `tax-exempt` 0%) |
+| VR-061 | Product | Unique `productId`; required fields; ≥10 products |
+| VR-062 | Product | `taxRateId` references an existing tax rate |
+| VR-063 | Organisation | `roles[]` values in `customer` \| `supplier` \| `partner`; unique within org; `turpin-enterprises` has none |
+| VR-064 | Organisation | Named hats: `king-equine-trading` includes `supplier`; `brazier-legal` includes `partner` and `supplier`; `york-assize-court` includes `partner` |
+
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, persona notes, and address string fields.
 
 ## Related docs
 

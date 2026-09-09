@@ -6,6 +6,7 @@ status: "active"
 legalName: "York Racing Society — Premium Event Management for Select Guest Lists"
 foundedYear: 1730
 primaryContactId: "sarah-thornton"
+roles: ["customer"]
 members: ["sarah-thornton"]
 parent: ""
 registeredOffice:

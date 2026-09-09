@@ -15,4 +15,5 @@ public sealed record Organisation
     public required string Status { get; init; }
     public string? Website { get; init; }
     public required Address RegisteredOffice { get; init; }
+    public IReadOnlyList<string> Roles { get; init; } = [];
 }

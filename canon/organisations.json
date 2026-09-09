@@ -14,6 +14,7 @@
     ],
     "foundedYear": 1730,
     "status": "dissolved",
+    "roles": ["customer"],
     "website": "https://essex-gang.turpinverse.uk",
     "registeredOffice": {
       "address1": "Warehouse 3, Riverside Yard",
@@ -39,6 +40,7 @@
     ],
     "foundedYear": 1735,
     "status": "active",
+    "roles": [],
     "website": "https://turpin-enterprises.turpinverse.uk",
     "registeredOffice": {
       "address1": "Suite 12, Thornbury House",
@@ -61,6 +63,7 @@
     "memberPersonaIds": ["elizabeth-millington", "anna-ward"],
     "foundedYear": 1720,
     "status": "active",
+    "roles": ["customer"],
     "website": "https://millington-inn.turpinverse.uk",
     "registeredOffice": {
       "address1": "The Rose & Crown",
@@ -82,6 +85,7 @@
     "memberPersonaIds": ["james-smith"],
     "foundedYear": 1700,
     "status": "active",
+    "roles": ["partner", "customer"],
     "website": "https://york-assize-court.turpinverse.uk",
     "registeredOffice": {
       "address1": "Assize Chambers",
@@ -103,6 +107,7 @@
     "memberPersonaIds": ["matthew-king", "george-chapman", "black-bess"],
     "foundedYear": 1734,
     "status": "dissolved",
+    "roles": ["supplier", "customer"],
     "website": "https://king-equine-trading.turpinverse.uk",
     "registeredOffice": {
       "address1": "Stable Block 7",
@@ -124,6 +129,7 @@
     "memberPersonaIds": ["mary-brazier", "margaret-hayes"],
     "foundedYear": 1736,
     "status": "active",
+    "roles": ["customer", "supplier", "partner"],
     "website": "https://brazier-legal.turpinverse.uk",
     "registeredOffice": {
       "address1": "Brazier Chambers",
@@ -145,6 +151,7 @@
     "memberPersonaIds": ["richard-bayes"],
     "foundedYear": 1730,
     "status": "active",
+    "roles": ["customer"],
     "website": "https://bayes-horsemanship.turpinverse.uk",
     "registeredOffice": {
       "address1": "The Gallops",
@@ -166,6 +173,7 @@
     "memberPersonaIds": ["sarah-thornton"],
     "foundedYear": 1730,
     "status": "active",
+    "roles": ["customer"],
     "website": "https://york-racing-society.turpinverse.uk",
     "registeredOffice": {
       "address1": "Racecourse Pavilion",
@@ -187,6 +195,7 @@
     "memberPersonaIds": ["william-hargreaves"],
     "foundedYear": 1700,
     "status": "active",
+    "roles": ["customer"],
     "website": "https://epping-forest-authority.turpinverse.uk",
     "registeredOffice": {
       "address1": "Forest Gate House",
@@ -208,6 +217,7 @@
     "memberPersonaIds": ["robert-finch", "henry-clayton"],
     "foundedYear": 1700,
     "status": "active",
+    "roles": ["customer"],
     "website": "https://highway-commission.turpinverse.uk",
     "registeredOffice": {
       "address1": "Turnpike House",

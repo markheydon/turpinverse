@@ -5,7 +5,7 @@ Fictional Dick Turpin universe demo data: personas, organisations, deals, cases,
 ## Quick start
 
 1. Clone or submodule this repository (or copy this `canon/` folder).
-2. Read `canon.json` for the dataset version (currently `1.3.0`).
+2. Read `canon.json` for the dataset version (currently `1.4.0`).
 3. Load the entity files listed below. Property names are **camelCase** JSON.
 4. Validate against [`schema/canon-schema.json`](schema/canon-schema.json) if your toolchain supports JSON Schema.
 5. For CRM-shaped CSV columns (optional), see [`schema/crm-export-schema.json`](schema/crm-export-schema.json).
@@ -23,7 +23,9 @@ Example (relative path from another repo):
 |------|----------|
 | `canon.json` | Dataset version |
 | `personas.json` | Characters (CRM: contacts source) |
-| `organisations.json` | Accounts source; includes `registeredOffice` |
+| `organisations.json` | Accounts source; includes `registeredOffice` and optional `roles[]` |
+| `products.json` | Product/service catalogue (price book) |
+| `tax-rates.json` | UK VAT reference rates |
 | `events.json` | Timeline |
 | `aliases.json` | Alternate identities |
 | `deals.json` | Pipeline opportunities |

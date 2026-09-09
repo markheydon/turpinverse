@@ -20,6 +20,7 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("deals", "turpinverse-deals.csv", 20)]
     [InlineData("cases", "turpinverse-cases.csv", 15)]
     [InlineData("projects", "turpinverse-projects.csv", 3)]
+    [InlineData("products", "turpinverse-products.csv", 10)]
     public async Task Export_ReturnsValidCsv(string dataset, string filename, int minRows)
     {
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -70,6 +71,28 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal("Suite 12, Thornbury House", turpinRow["registeredOfficeAddress1"]);
         Assert.Equal("Hempstead", turpinRow["registeredOfficeTown"]);
         Assert.Equal("United Kingdom", turpinRow["registeredOfficeCountry"]);
+    }
+
+    [Fact]
+    public async Task Export_Accounts_IncludesRolesColumn()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/accounts", cancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var header = CsvExportReader.ParseHeader(bytes);
+        Assert.Contains("roles", header);
+
+        var rows = CsvExportReader.ParseRows(bytes);
+        var brazierRow = rows.First(r => r["accountId"] == "brazier-legal");
+        Assert.Contains("customer", brazierRow["roles"]);
+        Assert.Contains("supplier", brazierRow["roles"]);
+        Assert.Contains("partner", brazierRow["roles"]);
+
+        var turpinRow = rows.First(r => r["accountId"] == "turpin-enterprises");
+        Assert.Equal(string.Empty, turpinRow["roles"]);
     }
 
     [Fact]

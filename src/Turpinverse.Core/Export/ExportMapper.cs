@@ -30,6 +30,9 @@ public static class ExportMapper
     public static IReadOnlyList<ProjectExport> MapProjects(Canon canon) =>
         canon.Projects.Select(MapProject).ToList();
 
+    public static IReadOnlyList<ProductExport> MapProducts(Canon canon) =>
+        canon.Products.Select(MapProduct).ToList();
+
     public static ContactExport MapContactForMembership(Persona persona, string accountId)
     {
         var (firstName, lastName) = SplitName(persona.DisplayName);
@@ -66,6 +69,7 @@ public static class ExportMapper
             Description = organisation.Description,
             Website = organisation.Website ?? string.Empty,
             Status = organisation.Status,
+            Roles = JoinContactIds(organisation.Roles),
             RegisteredOfficeAddress1 = organisation.RegisteredOffice.Address1,
             RegisteredOfficeAddress2 = organisation.RegisteredOffice.Address2 ?? string.Empty,
             RegisteredOfficeAddress3 = organisation.RegisteredOffice.Address3 ?? string.Empty,
@@ -116,6 +120,19 @@ public static class ExportMapper
             CaseIds = JoinContactIds(project.CaseIds),
             Tags = string.Join("; ", project.Tags),
             Featured = project.Featured == true ? "true" : "false"
+        };
+
+    public static ProductExport MapProduct(Product product) =>
+        new()
+        {
+            ProductId = product.ProductId,
+            Name = product.Name,
+            Description = product.Description,
+            UnitPrice = product.UnitPrice,
+            TaxRateId = product.TaxRateId,
+            UnitOfMeasure = product.UnitOfMeasure,
+            Status = product.Status,
+            Sku = product.Sku ?? string.Empty
         };
 
     internal static string JoinContactIds(IReadOnlyList<string> contactIds) =>

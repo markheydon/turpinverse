@@ -31,6 +31,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "deals"));
         Directory.CreateDirectory(Path.Combine(contentDir, "cases"));
         Directory.CreateDirectory(Path.Combine(contentDir, "projects"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "products"));
         Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
         Directory.CreateDirectory(Path.Combine(contentDir, "galleries"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
@@ -72,6 +73,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             var primaryContactLine = !string.IsNullOrWhiteSpace(org.PrimaryContactId)
                 ? $"primaryContactId: \"{org.PrimaryContactId}\"\n"
                 : string.Empty;
+            var rolesLine = org.Roles.Count > 0
+                ? $"roles: {JsonSerializer.Serialize(org.Roles)}\n"
+                : string.Empty;
             var content = $"""
                 ---
                 title: "{EscapeYaml(org.TradingName)}"
@@ -79,7 +83,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 industry: "{EscapeYaml(org.Industry)}"
                 status: "{org.Status}"
                 legalName: "{EscapeYaml(legalName)}"
-                {foundedLine}{primaryContactLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
+                {foundedLine}{primaryContactLine}{rolesLine}members: {JsonSerializer.Serialize(org.MemberPersonaIds)}
                 parent: "{org.ParentOrganisationId ?? ""}"
                 {FormatAddressYaml("registeredOffice", org.RegisteredOffice).TrimEnd()}
                 ---
@@ -268,6 +272,57 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "projects.json"),
             JsonSerializer.Serialize(canon.Projects, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var taxRateNames = canon.TaxRates.ToDictionary(t => t.TaxRateId, t => t.Name);
+        var taxRatePercentages = canon.TaxRates.ToDictionary(t => t.TaxRateId, t => t.Percentage);
+
+        var productsIndexContent = """
+            ---
+            title: Products
+            ---
+
+            Product and service catalogue from the Turpinverse canon — price book items with UK VAT defaults, distinct from portfolio delivery projects.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "products", "_index.md"),
+            productsIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var product in canon.Products)
+        {
+            var skuLine = !string.IsNullOrWhiteSpace(product.Sku)
+                ? $"sku: \"{EscapeYaml(product.Sku)}\"\n"
+                : string.Empty;
+            var taxRateName = taxRateNames.GetValueOrDefault(product.TaxRateId, product.TaxRateId);
+            var taxRatePercentage = taxRatePercentages.GetValueOrDefault(product.TaxRateId, 0m);
+            var content = $"""
+                ---
+                title: "{EscapeYaml(product.Name)}"
+                type: "products"
+                productId: "{product.ProductId}"
+                unitPrice: {product.UnitPrice}
+                taxRateName: "{EscapeYaml(taxRateName)}"
+                taxRatePercentage: {taxRatePercentage}
+                unitOfMeasure: "{EscapeYaml(product.UnitOfMeasure)}"
+                status: "{product.Status}"
+                {skuLine}---
+
+                {product.Description}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "products", $"{product.ProductId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "products.json"),
+            JsonSerializer.Serialize(canon.Products, JsonOptions),
             Utf8NoBom,
             cancellationToken);
 
