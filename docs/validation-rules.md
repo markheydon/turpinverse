@@ -98,9 +98,17 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-063 | Organisation | `roles[]` values in `customer` \| `supplier` \| `partner`; unique within org; `turpin-enterprises` has none |
 | VR-064 | Organisation | Named hats: `king-equine-trading` includes `supplier`; `brazier-legal` includes `partner` and `supplier`; `york-assize-court` includes `partner` |
 
+## Leads (VR-065–VR-067)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-065 | Lead | Unique `leadId`; ≥10 leads; `status` in `New` \| `Contacted` \| `Qualified` \| `Disqualified` \| `Converted`; `source` in `Web` \| `Referral` \| `Event` \| `Cold outreach` \| `Tender`; optional `rating` in `Hot` \| `Warm` \| `Cold` |
+| VR-066 | Lead | `convertedContactId` required when `status` is `Converted` and must reference an existing persona; must be omitted otherwise |
+| VR-067 | Lead | Optional `accountId` references an existing organisation when set (no membership required) |
+
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, persona notes, and address string fields.
 
 ## Related docs
 

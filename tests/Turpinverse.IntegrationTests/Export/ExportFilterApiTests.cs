@@ -94,6 +94,80 @@ public class ExportFilterApiTests : IClassFixture<WebApplicationFactory<Program>
         Assert.DoesNotContain(rows, row => row["taxRateId"] == "tax-standard");
     }
 
+    [Fact]
+    public async Task Preview_WithLeadStatusFilter_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/leads/preview?count=100&status=Qualified",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.NotEmpty(rows);
+        Assert.All(rows!, row => Assert.Equal("Qualified", row["status"], StringComparer.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Preview_WithLeadSourceFilter_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/leads/preview?count=100&source=Web",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.NotEmpty(rows);
+        Assert.All(rows!, row => Assert.Equal("Web", row["source"], StringComparer.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Download_WithLeadSourceFilter_ReturnsOnlyMatchingRowsInCsv()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/leads?source=Cold%20outreach",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = CsvExportReader.ParseRows(await response.Content.ReadAsByteArrayAsync(cancellationToken));
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("Cold outreach", row["source"], StringComparer.OrdinalIgnoreCase));
+        Assert.DoesNotContain(rows, row => row["source"] == "Referral");
+    }
+
+    [Fact]
+    public async Task Download_WithZeroMatchLeadFilter_Returns409ProblemJson()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/leads?status=__no_such_status__", cancellationToken);
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetailsResponse>(cancellationToken);
+        Assert.NotNull(problem);
+        Assert.Equal("No matching rows", problem!.Title);
+        Assert.Equal(409, problem.Status);
+        Assert.Equal("https://turpinverse.dev/errors/empty-filter-match", problem.Type);
+    }
+
+    [Fact]
+    public async Task Preview_WithZeroMatchLeadFilter_ReturnsEmptyArray()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/leads/preview?source=__no_such_source__",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.Empty(rows);
+    }
+
     private sealed class ProblemDetailsResponse
     {
         public string Title { get; set; } = string.Empty;

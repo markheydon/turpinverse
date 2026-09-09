@@ -105,6 +105,52 @@ public class ExportFilterTests
         Assert.Null(filter);
     }
 
+    [Fact]
+    public void ApplyToLeads_WhenSourceMatches_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateLead("l1", "New", "Web"),
+            CreateLead("l2", "Contacted", "Referral"),
+            CreateLead("l3", "Qualified", "Web")
+        };
+
+        var filter = new ExportFilter { Source = "Web" };
+        var result = filter.ApplyToLeads(rows);
+
+        Assert.Equal(2, result.Count);
+        Assert.All(result, row => Assert.Equal("Web", row.Source));
+    }
+
+    [Fact]
+    public void ApplyToLeads_WhenStatusMatches_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateLead("l1", "New", "Web"),
+            CreateLead("l2", "Qualified", "Referral"),
+            CreateLead("l3", "Qualified", "Web")
+        };
+
+        var filter = new ExportFilter { Status = "Qualified" };
+        var result = filter.ApplyToLeads(rows);
+
+        Assert.Equal(2, result.Count);
+        Assert.All(result, row => Assert.Equal("Qualified", row.Status));
+    }
+
+    [Fact]
+    public void FromQuery_WhenSourceProvided_ReturnsFilter()
+    {
+        var filter = ExportFilter.FromQuery(new Dictionary<string, string?>
+        {
+            ["source"] = "Referral"
+        });
+
+        Assert.NotNull(filter);
+        Assert.Equal("Referral", filter!.Source);
+    }
+
     private static DealExport CreateDeal(string dealId, string stage) =>
         new()
         {
@@ -162,5 +208,16 @@ public class ExportFilterTests
             TaxRateId = taxRateId,
             UnitOfMeasure = "each",
             Status = status
+        };
+
+    private static LeadExport CreateLead(string leadId, string status, string source) =>
+        new()
+        {
+            LeadId = leadId,
+            CompanyName = "Example Co",
+            ContactName = "Example Contact",
+            Status = status,
+            Source = source,
+            Description = "desc"
         };
 }

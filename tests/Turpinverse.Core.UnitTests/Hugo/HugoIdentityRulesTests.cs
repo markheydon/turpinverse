@@ -59,6 +59,19 @@ public class HugoIdentityRulesTests
                 Assert.DoesNotContain($"title: \"{article.Id}\"", content);
                 Assert.DoesNotContain($"title: \"{article.AuthorPersonaId}\"", content);
             }
+
+            foreach (var lead in canon.Leads)
+            {
+                var content = await File.ReadAllTextAsync(
+                    Path.Combine(siteRoot, "content", "leads", $"{lead.LeadId}.md"),
+                    cancellationToken);
+                Assert.Contains($"title: \"{lead.CompanyName}\"", content);
+                Assert.DoesNotContain($"title: \"{lead.LeadId}\"", content);
+                if (!string.IsNullOrWhiteSpace(lead.ConvertedContactId))
+                {
+                    Assert.DoesNotContain($"title: \"{lead.ConvertedContactId}\"", content);
+                }
+            }
         }
         finally
         {

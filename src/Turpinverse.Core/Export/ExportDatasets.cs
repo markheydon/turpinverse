@@ -17,6 +17,7 @@ public static class ExportDatasets
         new("cases", "Cases", "ticket", "/cases", "Support tickets derived from canon events"),
         new("projects", "Projects", "folder", "/projects", "Portfolio catalog items linked to accounts and contacts"),
         new("products", "Products", "tag", "/products", "Product and service catalogue with UK VAT defaults"),
+        new("leads", "Leads", "user-plus", "/leads", "Pre-contact CRM prospects and qualification pipeline"),
     ];
 
     public static readonly IReadOnlyList<string> DisplayOrder =

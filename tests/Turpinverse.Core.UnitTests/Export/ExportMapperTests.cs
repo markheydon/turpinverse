@@ -89,4 +89,25 @@ public class ExportMapperTests
         Assert.Equal(string.Empty, export.DealId);
         Assert.Equal(string.Empty, export.CaseIds);
     }
+
+    [Fact]
+    public void MapLead_IncludesOptionalFieldsAsEmptyStrings()
+    {
+        var export = ExportMapper.MapLead(new Lead
+        {
+            LeadId = "lead-004",
+            CompanyName = "Palmer & Associates",
+            ContactName = "John Palmer",
+            Status = "Converted",
+            Source = "Web",
+            Description = "Alias confusion inbound lead.",
+            ConvertedContactId = "dick-turpin"
+        });
+
+        Assert.Equal("lead-004", export.LeadId);
+        Assert.Equal("John Palmer", export.ContactName);
+        Assert.Equal("dick-turpin", export.ConvertedContactId);
+        Assert.Equal(string.Empty, export.AccountId);
+        Assert.Equal(string.Empty, export.Rating);
+    }
 }

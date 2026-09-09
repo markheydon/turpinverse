@@ -37,6 +37,7 @@ public sealed partial class CanonValidator
         ValidateProfessionalExtras(canon, personaIds, violations);
         ValidateAddresses(canon, violations);
         ValidateCatalogue(canon, violations);
+        ValidateLeads(canon, personaIds, organisationIds, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -54,7 +55,8 @@ public sealed partial class CanonValidator
             ["galleries"] = canon.Galleries.Count,
             ["professionalExtras"] = canon.ProfessionalExtras.Count,
             ["products"] = canon.Products.Count,
-            ["taxRates"] = canon.TaxRates.Count
+            ["taxRates"] = canon.TaxRates.Count,
+            ["leads"] = canon.Leads.Count
         };
 
         return new CanonValidationResult(
@@ -1076,6 +1078,115 @@ public sealed partial class CanonValidator
     {
         var toneValidator = new ToneValidator();
         violations.AddRange(toneValidator.ValidateCanon(canon));
+    }
+
+    private static readonly HashSet<string> AllowedLeadStatuses = new(StringComparer.Ordinal)
+    {
+        "New", "Contacted", "Qualified", "Disqualified", "Converted"
+    };
+
+    private static readonly HashSet<string> AllowedLeadSources = new(StringComparer.Ordinal)
+    {
+        "Web", "Referral", "Event", "Cold outreach", "Tender"
+    };
+
+    private static readonly HashSet<string> AllowedLeadRatings = new(StringComparer.Ordinal)
+    {
+        "Hot", "Warm", "Cold"
+    };
+
+    private static void ValidateLeads(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var lead in canon.Leads)
+        {
+            if (!seenIds.Add(lead.LeadId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-065",
+                    $"Duplicate lead id '{lead.LeadId}'",
+                    "Lead",
+                    lead.LeadId));
+            }
+
+            if (!AllowedLeadStatuses.Contains(lead.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-065",
+                    $"Lead status '{lead.Status}' is not allowed",
+                    "Lead",
+                    lead.LeadId));
+            }
+
+            if (!AllowedLeadSources.Contains(lead.Source))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-065",
+                    $"Lead source '{lead.Source}' is not allowed",
+                    "Lead",
+                    lead.LeadId));
+            }
+
+            if (lead.Rating is not null && !AllowedLeadRatings.Contains(lead.Rating))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-065",
+                    $"Lead rating '{lead.Rating}' is not allowed",
+                    "Lead",
+                    lead.LeadId));
+            }
+
+            var isConverted = string.Equals(lead.Status, "Converted", StringComparison.Ordinal);
+            if (isConverted)
+            {
+                if (string.IsNullOrWhiteSpace(lead.ConvertedContactId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-066",
+                        "Converted leads must include convertedContactId",
+                        "Lead",
+                        lead.LeadId));
+                }
+                else if (!personaIds.Contains(lead.ConvertedContactId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-066",
+                        $"convertedContactId '{lead.ConvertedContactId}' does not reference an existing persona",
+                        "Lead",
+                        lead.LeadId));
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(lead.ConvertedContactId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-066",
+                    "convertedContactId must be omitted unless status is Converted",
+                    "Lead",
+                    lead.LeadId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(lead.AccountId) && !organisationIds.Contains(lead.AccountId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-067",
+                    $"accountId '{lead.AccountId}' does not reference an existing organisation",
+                    "Lead",
+                    lead.LeadId));
+            }
+        }
+
+        if (canon.Leads.Count < 10)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-065",
+                $"Minimum 10 leads required, found {canon.Leads.Count}",
+                "Lead",
+                "leads"));
+        }
     }
 
     private static void ValidateCareerPortfolio(

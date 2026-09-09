@@ -201,6 +201,22 @@ public class ProductsPageTests : CrmEntityPageTestBase<Products>
     }
 }
 
+public class LeadsPageTests : CrmEntityPageTestBase<Leads>
+{
+    protected override string DatasetType => "leads";
+
+    [Fact]
+    public void LeadsPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Leads", cut.Markup);
+        Assert.Contains("CompanyName", cut.Markup);
+        Assert.Contains("ContactName", cut.Markup);
+        Assert.Contains("Source", cut.Markup);
+        Assert.Contains("Example Co", cut.Markup);
+    }
+}
+
 public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
 {
     protected override string DatasetType => "projects";
@@ -254,6 +270,8 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
             .Returns(CrmTestData.CreatePreviewRows("projects"));
         exportService.PreviewAsync("products", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("products"));
+        exportService.PreviewAsync("leads", 100, null, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("leads"));
         exportService.PreviewAsync(Arg.Any<string>(), 100, Arg.Any<ExportFilter?>(), Arg.Any<CancellationToken>())
             .Returns(callInfo =>
             {
@@ -277,7 +295,8 @@ internal static class CrmTestData
                 new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"]),
                 new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"]),
                 new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
-                new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"])
+                new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
+                new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>
@@ -373,6 +392,24 @@ internal static class CrmTestData
                     ["unitOfMeasure"] = "retainer-month",
                     ["status"] = "active",
                     ["sku"] = "CORR-RET-01"
+                }
+            ],
+            "leads" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["leadId"] = "lead-001",
+                    ["companyName"] = "Example Co",
+                    ["contactName"] = "Example Contact",
+                    ["title"] = "Director",
+                    ["email"] = "example@turpinverse.uk",
+                    ["phone"] = "",
+                    ["status"] = "New",
+                    ["source"] = "Web",
+                    ["rating"] = "Warm",
+                    ["description"] = "Example lead",
+                    ["accountId"] = "",
+                    ["convertedContactId"] = ""
                 }
             ],
             _ => []

@@ -25,13 +25,14 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
 | Name | Type | Datasets | Semantics |
 |------|------|----------|-----------|
-| `status` | string | `contacts`, `accounts`, `cases`, `products` | Exact match, case-insensitive |
+| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads` | Exact match, case-insensitive |
+| `source` | string | `leads` | Exact match, case-insensitive |
 | `taxRateId` | string | `products` | Exact match on export `taxRateId` |
 | `stage` | string | `deals` | Exact match, case-insensitive |
 | `priority` | string | `cases` | Exact match, case-insensitive |
@@ -71,6 +72,7 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `cases` | `turpinverse-cases.csv` |
 | `projects` | `turpinverse-projects.csv` |
 | `products` | `turpinverse-products.csv` |
+| `leads` | `turpinverse-leads.csv` |
 
 ### GET /api/export/manifest
 
@@ -101,7 +103,7 @@ Returns the first N rows as JSON (camelCase property names matching CSV columns)
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `count` | integer | `5` | Preview rows (1–100); after filtering, returns min(count, match count) |
-| `status`, `stage`, `priority`, `accountId`, `industry`, `taxRateId` | string | — | Same as download |
+| `status`, `stage`, `priority`, `accountId`, `industry`, `taxRateId`, `source` | string | — | Same as download |
 
 Zero filter matches → `[]` with 200 (preview only; download uses 409).
 
@@ -114,7 +116,7 @@ Runs cross-reference validation and returns results. See [validation-rules.md](.
 ```json
 {
   "valid": true,
-  "canonVersion": "1.4.0",
+  "canonVersion": "1.5.0",
   "counts": {
     "personas": 25,
     "organisations": 10,
@@ -129,7 +131,8 @@ Runs cross-reference validation and returns results. See [validation-rules.md](.
     "galleries": 1,
     "professionalExtras": 1,
     "products": 10,
-    "taxRates": 4
+    "taxRates": 4,
+    "leads": 10
   },
   "violations": []
 }
@@ -158,7 +161,7 @@ Turpinverse unique person key is `contactId`. Email is a copied attribute from t
 | Route | Behaviour |
 |-------|-----------|
 | `/` | Dataset summary, validation badge, summary chart |
-| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
+| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/leads` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
 | `/contacts/{id}` | Contact detail including career/portfolio and professional extras |
 
 Channel intent: [product-surfaces.md](./product-surfaces.md).

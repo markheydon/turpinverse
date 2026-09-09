@@ -183,7 +183,8 @@
             Priority = facetValues.GetValueOrDefault("priority"),
             AccountId = facetValues.GetValueOrDefault("accountId"),
             Industry = facetValues.GetValueOrDefault("industry"),
-            TaxRateId = facetValues.GetValueOrDefault("taxRateId")
+            TaxRateId = facetValues.GetValueOrDefault("taxRateId"),
+            Source = facetValues.GetValueOrDefault("source")
         };
     }
 
@@ -247,6 +248,11 @@
         if (!string.IsNullOrWhiteSpace(filter.TaxRateId))
         {
             query.Add($"taxRateId={Uri.EscapeDataString(filter.TaxRateId)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Source))
+        {
+            query.Add($"source={Uri.EscapeDataString(filter.Source)}");
         }
 
         return query.Count == 0

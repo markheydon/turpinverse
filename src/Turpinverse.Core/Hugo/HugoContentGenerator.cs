@@ -32,6 +32,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "cases"));
         Directory.CreateDirectory(Path.Combine(contentDir, "projects"));
         Directory.CreateDirectory(Path.Combine(contentDir, "products"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "leads"));
         Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
         Directory.CreateDirectory(Path.Combine(contentDir, "galleries"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
@@ -323,6 +324,68 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "products.json"),
             JsonSerializer.Serialize(canon.Products, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var leadsIndexContent = """
+            ---
+            title: Leads
+            ---
+
+            Pre-contact CRM prospects from the Turpinverse canon — qualification pipeline before persona conversion.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "leads", "_index.md"),
+            leadsIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var lead in canon.Leads)
+        {
+            var title = EscapeYaml(lead.CompanyName);
+            var contactNameLine = !string.IsNullOrWhiteSpace(lead.ContactName)
+                ? $"contactName: \"{EscapeYaml(lead.ContactName)}\"\n"
+                : string.Empty;
+            var titleLine = !string.IsNullOrWhiteSpace(lead.Title)
+                ? $"jobTitle: \"{EscapeYaml(lead.Title)}\"\n"
+                : string.Empty;
+            var emailLine = !string.IsNullOrWhiteSpace(lead.Email)
+                ? $"email: \"{EscapeYaml(lead.Email)}\"\n"
+                : string.Empty;
+            var phoneLine = !string.IsNullOrWhiteSpace(lead.Phone)
+                ? $"phone: \"{EscapeYaml(lead.Phone)}\"\n"
+                : string.Empty;
+            var ratingLine = !string.IsNullOrWhiteSpace(lead.Rating)
+                ? $"rating: \"{EscapeYaml(lead.Rating)}\"\n"
+                : string.Empty;
+            var accountIdLine = !string.IsNullOrWhiteSpace(lead.AccountId)
+                ? $"accountId: \"{lead.AccountId}\"\n"
+                : string.Empty;
+            var convertedContactIdLine = !string.IsNullOrWhiteSpace(lead.ConvertedContactId)
+                ? $"convertedContactId: \"{lead.ConvertedContactId}\"\n"
+                : string.Empty;
+            var content = $"""
+                ---
+                title: "{title}"
+                type: "leads"
+                leadId: "{lead.LeadId}"
+                {contactNameLine}{titleLine}status: "{EscapeYaml(lead.Status)}"
+                source: "{EscapeYaml(lead.Source)}"
+                {ratingLine}{emailLine}{phoneLine}{accountIdLine}{convertedContactIdLine}---
+
+                {lead.Description}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "leads", $"{lead.LeadId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "leads.json"),
+            JsonSerializer.Serialize(canon.Leads, JsonOptions),
             Utf8NoBom,
             cancellationToken);
 
