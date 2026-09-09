@@ -65,17 +65,21 @@ publishDir = "public"
     url = "/products/"
     weight = 7
   [[menu.main]]
+    name = "Leads"
+    url = "/leads/"
+    weight = 8
+  [[menu.main]]
     name = "Articles"
     url = "/articles/"
-    weight = 8
+    weight = 9
   [[menu.main]]
     name = "Gallery"
     url = "/galleries/"
-    weight = 9
+    weight = 10
   [[menu.main]]
     name = "Timeline"
     url = "/timeline/"
-    weight = 10
+    weight = 11
   [[menu.main]]
     identifier = "github"
     name = ""

@@ -21,7 +21,8 @@
     "galleries",
     "professionalExtras",
     "products",
-    "taxRates"
+    "taxRates",
+    "leads"
   ],
   "properties": {
     "version": {
@@ -98,6 +99,11 @@
       "minItems": 4,
       "maxItems": 4,
       "items": { "$ref": "#/$defs/TaxRate" }
+    },
+    "leads": {
+      "type": "array",
+      "minItems": 10,
+      "items": { "$ref": "#/$defs/Lead" }
     }
   },
   "$defs": {
@@ -364,6 +370,36 @@
           "enum": ["active", "discontinued"]
         },
         "sku": { "type": "string", "maxLength": 32 }
+      }
+    },
+    "Lead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "leadId", "companyName", "contactName", "status", "source", "description"
+      ],
+      "properties": {
+        "leadId": { "$ref": "#/$defs/slug" },
+        "companyName": { "type": "string", "maxLength": 120 },
+        "contactName": { "type": "string", "maxLength": 120 },
+        "title": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "status": {
+          "type": "string",
+          "enum": ["New", "Contacted", "Qualified", "Disqualified", "Converted"]
+        },
+        "source": {
+          "type": "string",
+          "enum": ["Web", "Referral", "Event", "Cold outreach", "Tender"]
+        },
+        "rating": {
+          "type": "string",
+          "enum": ["Hot", "Warm", "Cold"]
+        },
+        "description": { "type": "string", "maxLength": 500 },
+        "accountId": { "$ref": "#/$defs/slug" },
+        "convertedContactId": { "$ref": "#/$defs/slug" }
       }
     },
     "CanonEvent": {

@@ -19,4 +19,5 @@ public sealed record Canon
     public IReadOnlyList<ProfessionalExtras> ProfessionalExtras { get; init; } = [];
     public IReadOnlyList<Product> Products { get; init; } = [];
     public IReadOnlyList<TaxRate> TaxRates { get; init; } = [];
+    public IReadOnlyList<Lead> Leads { get; init; } = [];
 }

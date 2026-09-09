@@ -25,7 +25,8 @@ public class EmbeddedCanonResourceTests
         "galleries.json",
         "professional-extras.json",
         "products.json",
-        "tax-rates.json"
+        "tax-rates.json",
+        "leads.json"
     ];
 
     [Fact]

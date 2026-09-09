@@ -24,6 +24,14 @@
       <span class="turpin-stat-label">Projects</span>
     </div>
     <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "products") }}</span>
+      <span class="turpin-stat-label">Products</span>
+    </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "leads") }}</span>
+      <span class="turpin-stat-label">Leads</span>
+    </div>
+    <div class="turpin-stat">
       <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "articles") }}</span>
       <span class="turpin-stat-label">Articles</span>
     </div>
@@ -62,6 +70,10 @@
   <a class="turpin-quick-link" href="{{ "/projects/" | relURL }}">
     <strong>Projects</strong>
     Portfolio catalog linked to accounts and contacts
+  </a>
+  <a class="turpin-quick-link" href="{{ "/leads/" | relURL }}">
+    <strong>Leads</strong>
+    Pre-contact prospects and qualification pipeline
   </a>
   <a class="turpin-quick-link" href="{{ "/articles/" | relURL }}">
     <strong>Articles</strong>

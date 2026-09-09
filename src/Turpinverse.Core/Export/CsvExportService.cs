@@ -16,7 +16,8 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         ["deals"] = "turpinverse-deals.csv",
         ["cases"] = "turpinverse-cases.csv",
         ["projects"] = "turpinverse-projects.csv",
-        ["products"] = "turpinverse-products.csv"
+        ["products"] = "turpinverse-products.csv",
+        ["leads"] = "turpinverse-leads.csv"
     };
 
     private static readonly JsonSerializerOptions PreviewJsonOptions = new()
@@ -45,6 +46,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "cases" => await WriteCasesAsync(csv, canon, filter, cancellationToken),
             "projects" => await WriteProjectsAsync(csv, canon, filter, cancellationToken),
             "products" => await WriteProductsAsync(csv, canon, filter, cancellationToken),
+            "leads" => await WriteLeadsAsync(csv, canon, filter, cancellationToken),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
 
@@ -72,6 +74,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "cases" => GetCases(canon, filter),
             "projects" => GetProjects(canon, filter),
             "products" => GetProducts(canon, filter),
+            "leads" => GetLeads(canon, filter),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
 
@@ -89,7 +92,8 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
                 CreateDatasetInfo("deals", ExportMapper.MapDeals(canon).Count),
                 CreateDatasetInfo("cases", ExportMapper.MapCases(canon).Count),
                 CreateDatasetInfo("projects", ExportMapper.MapProjects(canon).Count),
-                CreateDatasetInfo("products", ExportMapper.MapProducts(canon).Count)
+                CreateDatasetInfo("products", ExportMapper.MapProducts(canon).Count),
+                CreateDatasetInfo("leads", ExportMapper.MapLeads(canon).Count)
             ]);
     }
 
@@ -162,6 +166,17 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         return rows.Count;
     }
 
+    private static async Task<int> WriteLeadsAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetLeads(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
     private static IReadOnlyList<ContactExport> GetContacts(Models.Canon canon, ExportFilter? filter) =>
         filter is null
             ? ExportMapper.MapContacts(canon)
@@ -191,6 +206,11 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         filter is null
             ? ExportMapper.MapProducts(canon)
             : filter.ApplyToProducts(ExportMapper.MapProducts(canon));
+
+    private static IReadOnlyList<LeadExport> GetLeads(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapLeads(canon)
+            : filter.ApplyToLeads(ExportMapper.MapLeads(canon));
 
     private static ExportDatasetInfo CreateDatasetInfo(string type, int rowCount) =>
         new(type, Filenames[type], rowCount, ExportCsvColumns.ForDataset(type));

@@ -1,0 +1,17 @@
+@page "/leads"
+@rendermode InteractiveServer
+
+<PageTitle>Leads - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="leads"
+                 Columns="@LeadsColumns"
+                 FacetColumns="@LeadsFacets" />
+
+@code {
+    private static readonly string[] LeadsColumns =
+    [
+        "companyName", "contactName", "title", "status", "source", "rating", "accountId", "convertedContactId"
+    ];
+
+    private static readonly string[] LeadsFacets = ["status", "source"];
+}

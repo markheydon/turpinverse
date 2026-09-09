@@ -129,6 +129,33 @@
         },
         "sku": { "type": "string", "maxLength": 32 }
       }
+    },
+    "Lead": {
+      "type": "object",
+      "required": ["leadId", "companyName", "contactName", "status", "source", "description"],
+      "properties": {
+        "leadId": { "type": "string" },
+        "companyName": { "type": "string", "maxLength": 120 },
+        "contactName": { "type": "string", "maxLength": 120 },
+        "title": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "status": {
+          "type": "string",
+          "enum": ["New", "Contacted", "Qualified", "Disqualified", "Converted"]
+        },
+        "source": {
+          "type": "string",
+          "enum": ["Web", "Referral", "Event", "Cold outreach", "Tender"]
+        },
+        "rating": {
+          "type": "string",
+          "enum": ["Hot", "Warm", "Cold"]
+        },
+        "description": { "type": "string", "maxLength": 500 },
+        "accountId": { "type": "string" },
+        "convertedContactId": { "type": "string" }
+      }
     }
   },
   "exportManifest": {
@@ -191,6 +218,15 @@
         "unitOfMeasure", "status", "sku"
       ],
       "schema": { "$ref": "#/$defs/Product" }
+    },
+    "leads": {
+      "filename": "turpinverse-leads.csv",
+      "minRows": 10,
+      "columns": [
+        "leadId", "companyName", "contactName", "title", "email", "phone",
+        "status", "source", "rating", "description", "accountId", "convertedContactId"
+      ],
+      "schema": { "$ref": "#/$defs/Lead" }
     }
   },
   "collisionPolicy": {

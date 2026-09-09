@@ -97,6 +97,30 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
         }
     }
 
+    [Fact]
+    public async Task Leads_AllReferencesResolve()
+    {
+        var contacts = await ParseCsv("/api/export/contacts");
+        var accounts = await ParseCsv("/api/export/accounts");
+        var leads = await ParseCsv("/api/export/leads");
+
+        var contactIds = contacts.Select(r => r["contactId"]).ToHashSet();
+        var accountIds = accounts.Select(r => r["accountId"]).ToHashSet();
+
+        foreach (var lead in leads)
+        {
+            if (!string.IsNullOrWhiteSpace(lead["accountId"]))
+            {
+                Assert.Contains(lead["accountId"], accountIds);
+            }
+
+            if (!string.IsNullOrWhiteSpace(lead["convertedContactId"]))
+            {
+                Assert.Contains(lead["convertedContactId"], contactIds);
+            }
+        }
+    }
+
     private async Task<List<Dictionary<string, string>>> ParseCsv(string url)
     {
         var cancellationToken = TestContext.Current.CancellationToken;

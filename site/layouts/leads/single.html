@@ -1,0 +1,35 @@
+{{ define "main" }}
+<article class="lead post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.contactName }}
+    <p class="card-meta">Contact: {{ . }}{{ with $.Params.jobTitle }} · {{ . }}{{ end }}</p>
+    {{ end }}
+    <p class="card-meta">
+      {{ with .Params.status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+      {{ with .Params.source }}&nbsp;·&nbsp;{{ . }}{{ end }}
+      {{ with .Params.rating }}&nbsp;·&nbsp;{{ . }}{{ end }}
+    </p>
+  </header>
+
+  {{ if or .Params.email .Params.phone }}
+  <section class="lead-contact">
+    {{ with .Params.email }}<p class="card-meta">Email: {{ . }}</p>{{ end }}
+    {{ with .Params.phone }}<p class="card-meta">Phone: {{ . }}</p>{{ end }}
+  </section>
+  {{ end }}
+
+  {{ if or .Params.accountId .Params.convertedContactId }}
+  <section class="lead-links">
+    {{ with .Params.accountId }}
+    <p class="card-meta">Matched account: <a href="{{ printf "/organisations/%s/" . | relURL }}">{{ partial "org-title.html" . }}</a></p>
+    {{ end }}
+    {{ with .Params.convertedContactId }}
+    <p class="card-meta">Converted to: <a href="{{ printf "/personas/%s/" . | relURL }}">{{ partial "persona-title.html" . }}</a></p>
+    {{ end }}
+  </section>
+  {{ end }}
+
+  <div class="post-content md-content">{{ .Content }}</div>
+</article>
+{{ end }}

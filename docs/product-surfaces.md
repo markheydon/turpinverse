@@ -55,7 +55,7 @@ See [site/README.md](../site/README.md) for build and deploy.
 
 **Not its job:** Replace the public site as the primary readable reference for the universe. Technical IDs belong here and in exports, not on Hugo reader pages.
 
-Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, and `/contacts/{id}` for contact detail.
+Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/leads`, and `/contacts/{id}` for contact detail.
 
 ## Dual publication on person pages
 
@@ -81,12 +81,13 @@ Professional extras publish in sandwich order on both channels: intro header →
 - Professional profile extras on persona pages (intro, about, skills, contact, socials)
 - Deals and cases (dedicated indexes and detail pages with named bidirectional links)
 - Product catalogue (index and detail pages; UK VAT rate shown as human-readable name and percentage — no dedicated tax-rate pages)
+- Leads (index and detail pages; converted leads link to persona display names; matched orgs link by trading name)
 - Organisation commercial roles on org pages when authored (Customer / Supplier / Partner chips; heading omitted when empty)
 - Articles and galleries (team journal list/detail pages, persona article lists, captioned gallery with lightbox)
 
 **Blazor / CSV today:**
 
-- Tabular deals, cases, projects, and products datasets with machine-oriented identifier columns in previews and exports (by design for the export channel)
+- Tabular deals, cases, projects, products, and leads datasets with machine-oriented identifier columns in previews and exports (by design for the export channel)
 - Account and contact CSV exports include flattened UK postal columns (`registeredOffice*` / `mailing*`)
 - Account CSV includes semicolon-separated `roles` (customer / supplier / partner hats)
 - Blazor `/accounts` preview MAY show `registeredOfficeTown`; `/contacts` preview MAY show `mailingTown`
@@ -100,7 +101,8 @@ These are product facts, not blockers for the channel split above:
 |-----|--------|
 | Hugo pages for deals and cases | **Shipped** — generated from canon with nav and home links |
 | Product catalogue and account `roles[]` | **Shipped** — Hugo product pages; Blazor `/products` CSV; accounts export includes roles |
-| Quotes, invoices, bills, leads, activities | **Planned** — join graph frozen (#45); Hugo/Blazor/CSV land with #34–#38 |
+| Leads | **Shipped** — Hugo lead pages; Blazor `/leads` CSV with status/source filters |
+| Quotes, invoices, bills, activities | **Planned** — join graph frozen (#45); Hugo/Blazor/CSV land with #34–#36, #38 |
 | Technical IDs in Hugo body copy | **Addressed** — display-name partials and fallbacks; join keys remain in front matter / data JSON only |
 | Blazor filtering / faceting | **Shipped** — dataset pages filter preview and CSV download via shared `ExportFilter` |
 | Hugo completeness vs canon | Generator and layouts must grow as new human-readable entity types are added — articles and galleries **shipped** on Hugo |
