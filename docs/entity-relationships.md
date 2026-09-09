@@ -408,16 +408,17 @@ canon/
 ├── galleries.json
 ├── professional-extras.json
 │
-│  # Agreed graph — remaining files land with child stories (#34–#38):
 ├── products.json
 ├── tax-rates.json
+├── leads.json
+│
+│  # Agreed graph — remaining files land with child stories (#34–#36, #38):
 ├── quotes.json                 # #34
 ├── sales-orders.json           # #36
 ├── invoices.json               # #35
 ├── payments.json               # #35
 ├── credit-notes.json           # #35
 ├── bills.json                  # #36
-├── leads.json                  # #37
 └── activities.json             # #38
 ```
 

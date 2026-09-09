@@ -96,6 +96,26 @@ public class LeadValidatorTests
     }
 
     [Fact]
+    public void Validate_InvalidLeadSource_FailsVr065()
+    {
+        var canon = CreateCanon([Lead("lead-1", source: "Trade show")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-065" && v.EntityId == "lead-1");
+    }
+
+    [Fact]
+    public void Validate_InvalidLeadRating_FailsVr065()
+    {
+        var canon = CreateCanon([Lead("lead-1", rating: "Lukewarm")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-065" && v.EntityId == "lead-1");
+    }
+
+    [Fact]
     public void Validate_ConvertedLeadWithExistingPersona_PassesConversionRule()
     {
         var leads = Enumerable.Range(1, 10)
@@ -158,6 +178,7 @@ public class LeadValidatorTests
         string leadId,
         string status = "New",
         string source = "Web",
+        string? rating = null,
         string? accountId = null,
         string? convertedContactId = null) =>
         new()
@@ -167,6 +188,7 @@ public class LeadValidatorTests
             ContactName = "Example Contact",
             Status = status,
             Source = source,
+            Rating = rating,
             Description = "Example lead description for validation tests.",
             AccountId = accountId,
             ConvertedContactId = convertedContactId

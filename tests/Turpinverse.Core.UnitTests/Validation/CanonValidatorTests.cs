@@ -59,6 +59,13 @@ public class CanonValidatorTests
     }
 
     [Fact]
+    public async Task Validate_LoadedCanon_HasMinimumLeads()
+    {
+        var canon = await _repository.LoadAsync(TestContext.Current.CancellationToken);
+        Assert.True(canon.Leads.Count >= 10);
+    }
+
+    [Fact]
     public async Task Validate_LoadedCanon_IncludesArticleAndGalleryCounts()
     {
         var canon = await _repository.LoadAsync(TestContext.Current.CancellationToken);

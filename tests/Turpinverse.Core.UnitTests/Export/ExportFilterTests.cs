@@ -123,6 +123,23 @@ public class ExportFilterTests
     }
 
     [Fact]
+    public void ApplyToLeads_WhenStatusMatches_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateLead("l1", "New", "Web"),
+            CreateLead("l2", "Qualified", "Referral"),
+            CreateLead("l3", "Qualified", "Web")
+        };
+
+        var filter = new ExportFilter { Status = "Qualified" };
+        var result = filter.ApplyToLeads(rows);
+
+        Assert.Equal(2, result.Count);
+        Assert.All(result, row => Assert.Equal("Qualified", row.Status));
+    }
+
+    [Fact]
     public void FromQuery_WhenSourceProvided_ReturnsFilter()
     {
         var filter = ExportFilter.FromQuery(new Dictionary<string, string?>
