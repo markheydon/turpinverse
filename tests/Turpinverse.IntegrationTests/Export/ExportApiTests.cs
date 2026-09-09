@@ -75,7 +75,11 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.True(result.Counts.ContainsKey("education"));
         Assert.True(result.Counts.ContainsKey("projects"));
         Assert.True(result.Counts.ContainsKey("achievements"));
+        Assert.True(result.Counts.ContainsKey("products"));
+        Assert.True(result.Counts.ContainsKey("taxRates"));
         Assert.True(result.Counts["experience"] > 0);
+        Assert.True(result.Counts["products"] >= 10);
+        Assert.Equal(4, result.Counts["taxRates"]);
     }
 
     [Fact]

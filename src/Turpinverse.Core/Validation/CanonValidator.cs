@@ -866,6 +866,16 @@ public sealed partial class CanonValidator
         ["tax-exempt"] = 0m
     };
 
+    private static readonly HashSet<string> AllowedProductStatuses = new(StringComparer.Ordinal)
+    {
+        "active", "discontinued"
+    };
+
+    private static readonly HashSet<string> AllowedUnitOfMeasures = new(StringComparer.Ordinal)
+    {
+        "hour", "day", "each", "retainer-month"
+    };
+
     private static void ValidateTaxRates(Canon canon, List<ValidationViolation> violations)
     {
         var seenIds = new HashSet<string>(StringComparer.Ordinal);
@@ -951,6 +961,33 @@ public sealed partial class CanonValidator
                     product.ProductId));
             }
 
+            if (product.UnitPrice < 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' unit price must be zero or greater",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (!AllowedUnitOfMeasures.Contains(product.UnitOfMeasure))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' has invalid unit of measure '{product.UnitOfMeasure}'",
+                    "Product",
+                    product.ProductId));
+            }
+
+            if (!AllowedProductStatuses.Contains(product.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-061",
+                    $"Product '{product.ProductId}' has invalid status '{product.Status}'",
+                    "Product",
+                    product.ProductId));
+            }
+
             if (!taxRateIds.Contains(product.TaxRateId))
             {
                 violations.Add(new ValidationViolation(
@@ -1017,6 +1054,11 @@ public sealed partial class CanonValidator
         var organisation = canon.Organisations.FirstOrDefault(o => o.Id == organisationId);
         if (organisation is null)
         {
+            violations.Add(new ValidationViolation(
+                "VR-064",
+                $"Organisation '{organisationId}' must include role '{role}'",
+                "Organisation",
+                organisationId));
             return;
         }
 

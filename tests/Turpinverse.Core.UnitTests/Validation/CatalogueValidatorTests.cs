@@ -87,6 +87,92 @@ public class CatalogueValidatorTests
         Assert.Contains(result.Violations, v => v.Rule == "VR-060");
     }
 
+    [Fact]
+    public void Validate_FewerThanTenProducts_FailsVr061()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-061" && v.EntityId == "products");
+    }
+
+    [Fact]
+    public void Validate_ProductWithInvalidStatus_FailsVr061()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard", status: "archived")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-061" && v.EntityId == "prod-1");
+    }
+
+    [Fact]
+    public void Validate_ProductWithNegativeUnitPrice_FailsVr061()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard", unitPrice: -1)]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-061" && v.EntityId == "prod-1");
+    }
+
+    [Fact]
+    public void Validate_ProductWithInvalidUnitOfMeasure_FailsVr061()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard", unitOfMeasure: "crate")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-061" && v.EntityId == "prod-1");
+    }
+
+    [Fact]
+    public void Validate_BrazierLegalWithoutPartner_FailsVr064()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard")],
+            organisations: [Org("brazier-legal", roles: ["customer", "supplier"])]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-064" && v.EntityId == "brazier-legal");
+    }
+
+    [Fact]
+    public void Validate_YorkAssizeWithoutPartner_FailsVr064()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard")],
+            organisations: [Org("york-assize-court", roles: ["customer"])]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-064" && v.EntityId == "york-assize-court");
+    }
+
+    [Fact]
+    public void Validate_MissingNamedOrganisation_FailsVr064()
+    {
+        var canon = CreateCanon(
+            taxRates: StandardTaxRates(),
+            products: [Product("prod-1", "tax-standard")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-064" && v.EntityId == "king-equine-trading");
+    }
+
     private static Canon CreateCanon(
         IReadOnlyList<TaxRate>? taxRates = null,
         IReadOnlyList<Product>? products = null,
@@ -127,16 +213,21 @@ public class CatalogueValidatorTests
             Description = "Test tax rate"
         };
 
-    private static Product Product(string productId, string taxRateId) =>
+    private static Product Product(
+        string productId,
+        string taxRateId,
+        string status = "active",
+        decimal unitPrice = 100,
+        string unitOfMeasure = "each") =>
         new()
         {
             ProductId = productId,
             Name = productId,
             Description = "Description",
-            UnitPrice = 100,
+            UnitPrice = unitPrice,
             TaxRateId = taxRateId,
-            UnitOfMeasure = "each",
-            Status = "active"
+            UnitOfMeasure = unitOfMeasure,
+            Status = status
         };
 
     private static Organisation Org(string id, IReadOnlyList<string>? roles = null) =>

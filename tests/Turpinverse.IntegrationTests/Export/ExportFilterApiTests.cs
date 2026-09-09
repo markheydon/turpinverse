@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Turpinverse.Core.Export;
 
 namespace Turpinverse.IntegrationTests.Export;
 
@@ -63,6 +64,34 @@ public class ExportFilterApiTests : IClassFixture<WebApplicationFactory<Program>
         var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
         Assert.NotNull(rows);
         Assert.Empty(rows);
+    }
+
+    [Fact]
+    public async Task Preview_WithTaxRateIdFilter_ReturnsOnlyMatchingProducts()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/products/preview?count=100&taxRateId=tax-reduced",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.NotEmpty(rows);
+        Assert.All(rows!, row => Assert.Equal("tax-reduced", row["taxRateId"]));
+    }
+
+    [Fact]
+    public async Task Download_WithTaxRateIdFilter_ReturnsOnlyMatchingProductsInCsv()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync("/api/export/products?taxRateId=tax-exempt", cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = CsvExportReader.ParseRows(await response.Content.ReadAsByteArrayAsync(cancellationToken));
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("tax-exempt", row["taxRateId"]));
+        Assert.DoesNotContain(rows, row => row["taxRateId"] == "tax-standard");
     }
 
     private sealed class ProblemDetailsResponse

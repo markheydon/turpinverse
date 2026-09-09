@@ -51,6 +51,36 @@ public class CrmEntityPageFilterTests : BunitContext
     }
 
     [Fact]
+    public void CrmEntityPage_PassesTaxRateIdFacetToPreviewFilter()
+    {
+        var exportService = Substitute.For<IExportService>();
+        exportService.GetManifestAsync(Arg.Any<CancellationToken>())
+            .Returns(new ExportManifest("1.0.0", [new ExportDatasetInfo("products", "turpinverse-products.csv", 2, ["productId"])]));
+        exportService.PreviewAsync("products", 100, null, Arg.Any<CancellationToken>())
+            .Returns(CreateProductRows(("taxRateId", "tax-standard"), ("taxRateId", "tax-reduced")));
+        exportService.PreviewAsync(
+                "products",
+                100,
+                Arg.Is<ExportFilter>(filter => filter != null && filter.TaxRateId == "tax-standard"),
+                Arg.Any<CancellationToken>())
+            .Returns(CreateProductRows(("taxRateId", "tax-standard")));
+        Services.AddSingleton(exportService);
+
+        var cut = Render<CrmEntityPage>(parameters => parameters
+            .Add(p => p.DatasetType, "products")
+            .Add(p => p.Columns, new[] { "name", "taxRateId" })
+            .Add(p => p.FacetColumns, new[] { "taxRateId" }));
+
+        cut.FindAll("select.facet-select")[0].Change("tax-standard");
+
+        exportService.Received(1).PreviewAsync(
+            "products",
+            100,
+            Arg.Is<ExportFilter>(filter => filter != null && filter.TaxRateId == "tax-standard"),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public void CrmEntityPage_DisablesDownloadWhenFilterMatchesZeroRows()
     {
         var exportService = Substitute.For<IExportService>();
@@ -92,5 +122,14 @@ public class CrmEntityPageFilterTests : BunitContext
             ["dealName"] = "Deal",
             [pair.key] = pair.value,
             ["accountId"] = "org-a"
+        }).ToList();
+
+    private static IReadOnlyList<IReadOnlyDictionary<string, string>> CreateProductRows(
+        params (string key, string value)[] values) =>
+        values.Select(pair => (IReadOnlyDictionary<string, string>)new Dictionary<string, string>
+        {
+            ["name"] = "Product",
+            ["status"] = "active",
+            [pair.key] = pair.value
         }).ToList();
 }

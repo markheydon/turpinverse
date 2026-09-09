@@ -185,6 +185,22 @@ public class CasesPageTests : CrmEntityPageTestBase<Cases>
     }
 }
 
+public class ProductsPageTests : CrmEntityPageTestBase<Products>
+{
+    protected override string DatasetType => "products";
+
+    [Fact]
+    public void ProductsPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Products", cut.Markup);
+        Assert.Contains("UnitPrice", cut.Markup);
+        Assert.Contains("TaxRateId", cut.Markup);
+        Assert.Contains("Tax rate", cut.Markup);
+        Assert.Contains("Corridor Optimisation Retainer", cut.Markup);
+    }
+}
+
 public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
 {
     protected override string DatasetType => "projects";
@@ -236,6 +252,8 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
             .Returns(CrmTestData.CreatePreviewRows("cases"));
         exportService.PreviewAsync("projects", 100, null, Arg.Any<CancellationToken>())
             .Returns(CrmTestData.CreatePreviewRows("projects"));
+        exportService.PreviewAsync("products", 100, null, Arg.Any<CancellationToken>())
+            .Returns(CrmTestData.CreatePreviewRows("products"));
         exportService.PreviewAsync(Arg.Any<string>(), 100, Arg.Any<ExportFilter?>(), Arg.Any<CancellationToken>())
             .Returns(callInfo =>
             {

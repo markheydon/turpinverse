@@ -93,7 +93,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 | Code | Scope | Pass condition |
 |------|-------|----------------|
 | VR-060 | TaxRate | Unique ids; exactly four UK VAT rows (`tax-standard` 20%, `tax-reduced` 5%, `tax-zero` 0%, `tax-exempt` 0%) |
-| VR-061 | Product | Unique `productId`; required fields; ≥10 products |
+| VR-061 | Product | Unique `productId`; required fields; ≥10 products; `unitPrice` ≥ 0; `unitOfMeasure` in `hour` \| `day` \| `each` \| `retainer-month`; `status` in `active` \| `discontinued` |
 | VR-062 | Product | `taxRateId` references an existing tax rate |
 | VR-063 | Organisation | `roles[]` values in `customer` \| `supplier` \| `partner`; unique within org; `turpin-enterprises` has none |
 | VR-064 | Organisation | Named hats: `king-equine-trading` includes `supplier`; `brazier-legal` includes `partner` and `supplier`; `york-assize-court` includes `partner` |
