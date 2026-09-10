@@ -1,0 +1,17 @@
+@page "/activities"
+@rendermode InteractiveServer
+
+<PageTitle>Activities - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="activities"
+                 Columns="@ActivitiesColumns"
+                 FacetColumns="@ActivitiesFacets" />
+
+@code {
+    private static readonly string[] ActivitiesColumns =
+    [
+        "subject", "type", "status", "activityDate", "regardingType", "regardingId", "ownerContactId"
+    ];
+
+    private static readonly string[] ActivitiesFacets = ["type", "status"];
+}

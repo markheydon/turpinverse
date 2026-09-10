@@ -25,13 +25,15 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `quotes`, `sales-orders`, `invoices`, `bills`, `payments`, `credit-notes` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `activities`, `quotes`, `sales-orders`, `invoices`, `bills`, `payments`, `credit-notes` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
 | Name | Type | Datasets | Semantics |
 |------|------|----------|-----------|
-| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `quotes`, `sales-orders`, `invoices`, `bills` | Exact match, case-insensitive |
+| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `activities`, `quotes`, `sales-orders`, `invoices`, `bills` | Exact match, case-insensitive |
+| `type` | string | `activities` | Exact match on activity `type` (Call, Email, Meeting, Task, Note), case-insensitive |
+| `regardingType` | string | `activities` | Exact match on closed regarding enum, case-insensitive |
 | `source` | string | `leads` | Exact match, case-insensitive |
 | `taxRateId` | string | `products` | Exact match on export `taxRateId` |
 | `stage` | string | `deals` | Exact match, case-insensitive |
@@ -73,6 +75,7 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `projects` | `turpinverse-projects.csv` |
 | `products` | `turpinverse-products.csv` |
 | `leads` | `turpinverse-leads.csv` |
+| `activities` | `turpinverse-activities.csv` |
 | `quotes` | `turpinverse-quotes.csv` |
 | `sales-orders` | `turpinverse-sales-orders.csv` |
 | `invoices` | `turpinverse-invoices.csv` |
@@ -138,7 +141,8 @@ Runs cross-reference validation and returns results. See [validation-rules.md](.
     "professionalExtras": 1,
     "products": 10,
     "taxRates": 4,
-    "leads": 10
+    "leads": 10,
+    "activities": 22
   },
   "violations": []
 }
@@ -167,7 +171,7 @@ Turpinverse unique person key is `contactId`. Email is a copied attribute from t
 | Route | Behaviour |
 |-------|-----------|
 | `/` | Dataset summary, validation badge, summary chart |
-| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/leads`, `/quotes`, `/invoices`, `/payments`, `/credit-notes` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
+| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/activities`, `/products`, `/leads`, `/quotes`, `/invoices`, `/payments`, `/credit-notes` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
 | `/contacts/{id}` | Contact detail including career/portfolio and professional extras |
 
 Channel intent: [product-surfaces.md](./product-surfaces.md).

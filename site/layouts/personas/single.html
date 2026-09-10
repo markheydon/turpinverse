@@ -210,5 +210,6 @@
   {{ end }}
   {{ partial "related-cases-grid.html" $relatedCases }}
   {{ partial "related-articles-grid.html" (where hugo.Data.articles "authorPersonaId" $personaId) }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "contact" "regardingId" $personaId) }}
 </article>
 {{ end }}

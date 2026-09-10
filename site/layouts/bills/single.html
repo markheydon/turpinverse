@@ -15,15 +15,6 @@
 
   {{ partial "related-parties.html" . }}
 
-  {{ with .Params.dealId }}
-  <section class="related-records related-deal-link">
-    <h2>Related deal</h2>
-    <ul class="chip-list">
-      <li><a class="chip" href="{{ "/deals/" | relURL }}{{ . }}/">{{ partial "deal-title.html" . }}</a></li>
-    </ul>
-  </section>
-  {{ end }}
-
   {{ with .Params.caseId }}
   <section class="related-records related-case-link">
     <h2>Related case</h2>
@@ -33,14 +24,7 @@
   </section>
   {{ end }}
 
-  {{ $billId := .Params.billId }}
-  {{ $taxRates := index hugo.Data "tax-rates" }}
-  {{ $matchedBills := where (index hugo.Data "bills") "billId" $billId }}
-  {{ if gt (len $matchedBills) 0 }}
-    {{ $bill := index $matchedBills 0 }}
-    {{ partial "document-lines-table.html" (dict "lines" $bill.lines "subtotal" $bill.subtotal "taxTotal" $bill.taxTotal "total" $bill.total "taxRates" $taxRates) }}
-  {{ end }}
-
-  {{ partial "related-payments-grid.html" (where hugo.Data.payments "billId" $billId) }}
+  {{ $billId := .Params.billId | default .File.BaseFileName }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "bill" "regardingId" $billId) }}
 </article>
 {{ end }}

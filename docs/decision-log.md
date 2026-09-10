@@ -4,6 +4,12 @@ Why Turpinverse data and code look the way they do. Newest entries first. For fi
 
 ---
 
+## CRM activities surface (#38, 2026-09)
+
+~20–25 curated rows in `canon/activities.json`. **No FK to CanonEvent** — universe timeline stays separate. Blazor ships `/activities` list + CSV under **CRM**. Hugo embeds readable activity timelines on regarding-record detail pages (deal, case, contact, lead, quote, sales order, invoice, bill) via `site/data/activities.json` — **no** standalone Hugo index or CRM nav item.
+
+---
+
 ## Invoice and credit note CSV shape (#35, 2026-09)
 
 v1 ships **header-only** `turpinverse-invoices.csv` and `turpinverse-credit-notes.csv` (`/invoices`, `/credit-notes`, `/payments` in Blazor and the export API). Nested `lines[]` stay in `canon/invoices.json` / `canon/credit-notes.json` and on Hugo detail pages. Flattened document-lines CSV remains deferred (same posture as quotes in #34).
@@ -24,7 +30,7 @@ Hugo and Blazor share the same information architecture so the showcase and expo
 
 **Top-level (both surfaces):** Home; directory entries for people and orgs (Hugo: Personas, Organisations; Blazor: Contacts, Accounts).
 
-**CRM group:** Leads, Deals, Cases, Projects. Activities join this group when #38 ships an index. Leads stay in CRM, not beside Personas — a lead is not a persona until converted.
+**CRM group:** Leads, Deals, Cases, Projects, Activities (Blazor list/export). Leads stay in CRM, not beside Personas — a lead is not a persona until converted.
 
 **Finance group:** Products today; quotes, sales orders, invoices, payments, credit notes, and bills join this group as #34–#36 ship. Products live here despite being a catalogue, not a ledger document — keeps CRM to pipeline and delivery work.
 

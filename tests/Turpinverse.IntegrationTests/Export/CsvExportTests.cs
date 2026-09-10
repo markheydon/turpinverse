@@ -22,6 +22,7 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("projects", "turpinverse-projects.csv", 3)]
     [InlineData("products", "turpinverse-products.csv", 10)]
     [InlineData("leads", "turpinverse-leads.csv", 10)]
+    [InlineData("activities", "turpinverse-activities.csv", 20)]
     [InlineData("quotes", "turpinverse-quotes.csv", 8)]
     [InlineData("sales-orders", "turpinverse-sales-orders.csv", 6)]
     [InlineData("invoices", "turpinverse-invoices.csv", 12)]

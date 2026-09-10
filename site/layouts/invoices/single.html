@@ -44,5 +44,6 @@
   {{ partial "related-payments-grid.html" (where hugo.Data.payments "invoiceId" $invoiceId) }}
 
   {{ partial "related-credit-notes-grid.html" (where (index hugo.Data "credit-notes") "invoiceId" $invoiceId) }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "invoice" "regardingId" $invoiceId) }}
 </article>
 {{ end }}

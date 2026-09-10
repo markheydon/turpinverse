@@ -404,4 +404,47 @@ public class ExportFilterTests
             TaxTotal = 20,
             Total = 120
         };
+
+    [Fact]
+    public void ApplyToActivities_WhenTypeMatches_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateActivity("a1", "Call", "Completed"),
+            CreateActivity("a2", "Email", "Completed"),
+            CreateActivity("a3", "Call", "Open")
+        };
+
+        var filter = new ExportFilter { ActivityType = "Call" };
+        var result = filter.ApplyToActivities(rows);
+
+        Assert.Equal(2, result.Count);
+        Assert.All(result, row => Assert.Equal("Call", row.Type));
+    }
+
+    [Fact]
+    public void FromQuery_WhenTypeProvided_ReturnsActivityTypeFilter()
+    {
+        var filter = ExportFilter.FromQuery(new Dictionary<string, string?>
+        {
+            ["type"] = "Meeting"
+        });
+
+        Assert.NotNull(filter);
+        Assert.Equal("Meeting", filter!.ActivityType);
+    }
+
+    private static ActivityExport CreateActivity(string activityId, string type, string status) =>
+        new()
+        {
+            ActivityId = activityId,
+            Type = type,
+            Subject = "Subject",
+            Description = "Description",
+            ActivityDate = "2026-01-01",
+            Status = status,
+            RegardingType = "deal",
+            RegardingId = "deal-001",
+            OwnerContactId = "mary-brazier"
+        };
 }

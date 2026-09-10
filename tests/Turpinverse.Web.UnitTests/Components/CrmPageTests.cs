@@ -391,6 +391,7 @@ internal static class CrmTestData
                 new ExportDatasetInfo("deals", "turpinverse-deals.csv", 22, ["dealId"]),
                 new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"]),
                 new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
+                new ExportDatasetInfo("activities", "turpinverse-activities.csv", 22, ["activityId"]),
                 new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
                 new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"]),
                 new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"]),
@@ -494,6 +495,23 @@ internal static class CrmTestData
                     ["unitOfMeasure"] = "retainer-month",
                     ["status"] = "active",
                     ["sku"] = "CORR-RET-01"
+                }
+            ],
+            "activities" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["activityId"] = "activity-001",
+                    ["type"] = "Call",
+                    ["subject"] = "Qualification call",
+                    ["description"] = "Discussed corridor licensing.",
+                    ["activityDate"] = "2026-02-18",
+                    ["dueDate"] = "",
+                    ["status"] = "Completed",
+                    ["regardingType"] = "lead",
+                    ["regardingId"] = "lead-001",
+                    ["ownerContactId"] = "james-smith",
+                    ["durationMinutes"] = "15"
                 }
             ],
             "leads" =>

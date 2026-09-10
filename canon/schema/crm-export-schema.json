@@ -185,6 +185,35 @@
         "accountId": { "type": "string" },
         "convertedContactId": { "type": "string" }
       }
+    },
+    "Activity": {
+      "type": "object",
+      "required": [
+        "activityId", "type", "subject", "description", "activityDate", "status",
+        "regardingType", "regardingId", "ownerContactId"
+      ],
+      "properties": {
+        "activityId": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["Call", "Email", "Meeting", "Task", "Note"]
+        },
+        "subject": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "activityDate": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["Open", "Completed", "Cancelled"]
+        },
+        "regardingType": {
+          "type": "string",
+          "enum": ["contact", "deal", "case", "lead", "invoice", "bill", "quote", "salesOrder"]
+        },
+        "regardingId": { "type": "string" },
+        "ownerContactId": { "type": "string" },
+        "durationMinutes": { "type": "integer", "minimum": 1 }
+      }
     }
   },
   "exportManifest": {
@@ -238,6 +267,15 @@
         "tags", "featured"
       ],
       "schema": { "$ref": "#/$defs/Project" }
+    },
+    "activities": {
+      "filename": "turpinverse-activities.csv",
+      "minRows": 20,
+      "columns": [
+        "activityId", "type", "subject", "description", "activityDate", "dueDate",
+        "status", "regardingType", "regardingId", "ownerContactId", "durationMinutes"
+      ],
+      "schema": { "$ref": "#/$defs/Activity" }
     },
     "products": {
       "filename": "turpinverse-products.csv",

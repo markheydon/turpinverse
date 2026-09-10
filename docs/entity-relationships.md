@@ -248,6 +248,8 @@ Activities are CRM interaction history (calls, emails, meetings, tasks, notes). 
 
 Curated volume only (~20–25 activities total) — not a full history per record.
 
+Fields: `activityId`, `type` (Call | Email | Meeting | Task | Note), `subject`, `description`, `activityDate`, optional `dueDate` (required for open tasks), `status` (Open | Completed | Cancelled), `regardingType` + `regardingId`, required `ownerContactId`, optional `durationMinutes` (Call/Meeting only).
+
 ## Import mapping (Xero / FreeAgent / QuickBooks / Sage)
 
 Turpinverse is a **generic CRM + SME commercial file**, not a clone of any one API. Importers flatten; mapping should be mechanical.

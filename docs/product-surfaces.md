@@ -55,7 +55,7 @@ See [site/README.md](../site/README.md) for build and deploy.
 
 **Not its job:** Replace the public site as the primary readable reference for the universe. Technical IDs belong here and in exports, not on Hugo reader pages.
 
-Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/quotes`, `/sales-orders`, `/invoices`, `/bills`, `/payments`, `/credit-notes`, `/leads`, and `/contacts/{id}` for contact detail.
+Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/activities`, `/products`, `/quotes`, `/sales-orders`, `/invoices`, `/bills`, `/payments`, `/credit-notes`, `/leads`, and `/contacts/{id}` for contact detail.
 
 ## Navigation
 
@@ -64,11 +64,11 @@ Both consumers group destinations the same way so the header/sidebar does not gr
 | Group | Hugo (`menu.main`) | Blazor sidebar |
 |-------|-------------------|----------------|
 | Directory | Personas, Organisations (top-level) | Contacts, Accounts (top-level) |
-| CRM | Dropdown: Leads, Deals, Cases, Projects | Section label **CRM** |
+| CRM | Dropdown: Leads, Deals, Cases, Projects | Section label **CRM** (includes **Activities** list/export) |
 | Finance | Dropdown: Products (more document types as they ship) | Section label **Finance** |
 | Universe | Dropdown: Articles, Gallery, Timeline | *(not published on Blazor)* |
 
-Home quick links on Hugo follow the same groups. When #34–#36 add quotes, orders, invoices, payments, credit notes, and bills, they nest under **Finance** in Hugo and Blazor rather than becoming new top-level nav items. When #38 ships Activities, it nests under **CRM**.
+Home quick links on Hugo follow the same groups. Finance document types nest under **Finance** in Hugo and Blazor. **Activities** ship on Blazor (`/activities` + CSV) under **CRM**; on Hugo they appear as **embedded timelines** on deal, case, contact, lead, and commercial document detail pages — not a standalone `/activities/` index or CRM nav item.
 
 ## Dual publication on person pages
 

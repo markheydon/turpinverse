@@ -18,6 +18,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         ["projects"] = "turpinverse-projects.csv",
         ["products"] = "turpinverse-products.csv",
         ["leads"] = "turpinverse-leads.csv",
+        ["activities"] = "turpinverse-activities.csv",
         ["quotes"] = "turpinverse-quotes.csv",
         ["sales-orders"] = "turpinverse-sales-orders.csv",
         ["invoices"] = "turpinverse-invoices.csv",
@@ -53,6 +54,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "projects" => await WriteProjectsAsync(csv, canon, filter, cancellationToken),
             "products" => await WriteProductsAsync(csv, canon, filter, cancellationToken),
             "leads" => await WriteLeadsAsync(csv, canon, filter, cancellationToken),
+            "activities" => await WriteActivitiesAsync(csv, canon, filter, cancellationToken),
             "quotes" => await WriteQuotesAsync(csv, canon, filter, cancellationToken),
             "sales-orders" => await WriteSalesOrdersAsync(csv, canon, filter, cancellationToken),
             "invoices" => await WriteInvoicesAsync(csv, canon, filter, cancellationToken),
@@ -87,6 +89,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "projects" => GetProjects(canon, filter),
             "products" => GetProducts(canon, filter),
             "leads" => GetLeads(canon, filter),
+            "activities" => GetActivities(canon, filter),
             "quotes" => GetQuotes(canon, filter),
             "sales-orders" => GetSalesOrders(canon, filter),
             "invoices" => GetInvoices(canon, filter),
@@ -185,6 +188,17 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         CancellationToken cancellationToken)
     {
         var rows = GetLeads(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static async Task<int> WriteActivitiesAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetActivities(canon, filter);
         await csv.WriteRecordsAsync(rows, cancellationToken);
         return rows.Count;
     }
@@ -290,6 +304,11 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             ? ExportMapper.MapLeads(canon)
             : filter.ApplyToLeads(ExportMapper.MapLeads(canon));
 
+    private static IReadOnlyList<ActivityExport> GetActivities(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapActivities(canon)
+            : filter.ApplyToActivities(ExportMapper.MapActivities(canon));
+
     private static IReadOnlyList<QuoteExport> GetQuotes(Models.Canon canon, ExportFilter? filter) =>
         filter is null
             ? ExportMapper.MapQuotes(canon)
@@ -326,6 +345,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "contacts" => ExportMapper.MapContacts(canon).Count,
             "accounts" => ExportMapper.MapAccounts(canon).Count,
             "leads" => ExportMapper.MapLeads(canon).Count,
+            "activities" => ExportMapper.MapActivities(canon).Count,
             "deals" => ExportMapper.MapDeals(canon).Count,
             "cases" => ExportMapper.MapCases(canon).Count,
             "projects" => ExportMapper.MapProjects(canon).Count,
