@@ -56,11 +56,25 @@ public static class ExportCsvColumns
         "notes", "terms"
     ];
 
+    public static readonly IReadOnlyList<string> SalesOrders =
+    [
+        "salesOrderId", "orderNumber", "accountId", "contactId", "dealId",
+        "status", "orderDate", "requestedDeliveryDate", "currency", "subtotal", "taxTotal", "total",
+        "notes", "terms"
+    ];
+
     public static readonly IReadOnlyList<string> Invoices =
     [
         "invoiceId", "invoiceNumber", "accountId", "contactId", "dealId", "caseId",
         "status", "issueDate", "dueDate", "currency", "subtotal", "taxTotal", "total",
         "amountDue", "notes", "terms"
+    ];
+
+    public static readonly IReadOnlyList<string> Bills =
+    [
+        "billId", "billNumber", "supplierAccountId", "contactId", "dealId", "caseId",
+        "status", "issueDate", "dueDate", "currency", "subtotal", "taxTotal", "total",
+        "amountDue", "notes"
     ];
 
     public static readonly IReadOnlyList<string> Payments =
@@ -86,7 +100,9 @@ public static class ExportCsvColumns
             "products" => Products,
             "leads" => Leads,
             "quotes" => Quotes,
+            "sales-orders" => SalesOrders,
             "invoices" => Invoices,
+            "bills" => Bills,
             "payments" => Payments,
             "credit-notes" => CreditNotes,
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))

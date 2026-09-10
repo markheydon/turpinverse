@@ -39,13 +39,20 @@ public static class ExportMapper
     public static IReadOnlyList<QuoteExport> MapQuotes(Canon canon) =>
         canon.Quotes.Select(MapQuote).ToList();
 
+    public static IReadOnlyList<SalesOrderExport> MapSalesOrders(Canon canon) =>
+        canon.SalesOrders.Select(MapSalesOrder).ToList();
+
     public static IReadOnlyList<InvoiceExport> MapInvoices(Canon canon) =>
         canon.Invoices.Select(MapInvoice).ToList();
+
+    public static IReadOnlyList<BillExport> MapBills(Canon canon) =>
+        canon.Bills.Select(MapBill).ToList();
 
     public static IReadOnlyList<PaymentExport> MapPayments(Canon canon)
     {
         var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
-        return canon.Payments.Select(payment => MapPayment(payment, invoicesById)).ToList();
+        var billsById = canon.Bills.ToDictionary(b => b.BillId);
+        return canon.Payments.Select(payment => MapPayment(payment, invoicesById, billsById)).ToList();
     }
 
     public static IReadOnlyList<CreditNoteExport> MapCreditNotes(Canon canon) =>
@@ -189,6 +196,45 @@ public static class ExportMapper
             Terms = quote.Terms ?? string.Empty
         };
 
+    public static SalesOrderExport MapSalesOrder(SalesOrder salesOrder) =>
+        new()
+        {
+            SalesOrderId = salesOrder.SalesOrderId,
+            OrderNumber = salesOrder.OrderNumber,
+            AccountId = salesOrder.AccountId,
+            ContactId = salesOrder.ContactId ?? string.Empty,
+            DealId = salesOrder.DealId ?? string.Empty,
+            Status = salesOrder.Status,
+            OrderDate = salesOrder.OrderDate,
+            RequestedDeliveryDate = salesOrder.RequestedDeliveryDate ?? string.Empty,
+            Currency = salesOrder.Currency,
+            Subtotal = salesOrder.Subtotal,
+            TaxTotal = salesOrder.TaxTotal,
+            Total = salesOrder.Total,
+            Notes = salesOrder.Notes ?? string.Empty,
+            Terms = salesOrder.Terms ?? string.Empty
+        };
+
+    public static BillExport MapBill(Bill bill) =>
+        new()
+        {
+            BillId = bill.BillId,
+            BillNumber = bill.BillNumber,
+            SupplierAccountId = bill.SupplierAccountId,
+            ContactId = bill.ContactId ?? string.Empty,
+            DealId = bill.DealId ?? string.Empty,
+            CaseId = bill.CaseId ?? string.Empty,
+            Status = bill.Status,
+            IssueDate = bill.IssueDate,
+            DueDate = bill.DueDate,
+            Currency = bill.Currency,
+            Subtotal = bill.Subtotal,
+            TaxTotal = bill.TaxTotal,
+            Total = bill.Total,
+            AmountDue = bill.AmountDue,
+            Notes = bill.Notes ?? string.Empty
+        };
+
     public static InvoiceExport MapInvoice(Invoice invoice) =>
         new()
         {
@@ -211,18 +257,26 @@ public static class ExportMapper
         };
 
     public static PaymentExport MapPayment(Payment payment, Canon canon) =>
-        MapPayment(payment, canon.Invoices.ToDictionary(i => i.InvoiceId));
+        MapPayment(
+            payment,
+            canon.Invoices.ToDictionary(i => i.InvoiceId),
+            canon.Bills.ToDictionary(b => b.BillId));
 
     public static PaymentExport MapPayment(
         Payment payment,
-        IReadOnlyDictionary<string, Invoice> invoicesById)
+        IReadOnlyDictionary<string, Invoice> invoicesById,
+        IReadOnlyDictionary<string, Bill> billsById)
     {
-        // Bill-targeted payments: denormalise accountId from bills when #36 lands.
         var accountId = string.Empty;
         if (!string.IsNullOrWhiteSpace(payment.InvoiceId)
             && invoicesById.TryGetValue(payment.InvoiceId, out var invoice))
         {
             accountId = invoice.AccountId;
+        }
+        else if (!string.IsNullOrWhiteSpace(payment.BillId)
+                 && billsById.TryGetValue(payment.BillId, out var bill))
+        {
+            accountId = bill.SupplierAccountId;
         }
 
         return new PaymentExport

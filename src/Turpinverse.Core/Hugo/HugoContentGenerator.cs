@@ -34,7 +34,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "products"));
         Directory.CreateDirectory(Path.Combine(contentDir, "leads"));
         Directory.CreateDirectory(Path.Combine(contentDir, "quotes"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "sales-orders"));
         Directory.CreateDirectory(Path.Combine(contentDir, "invoices"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "bills"));
         Directory.CreateDirectory(Path.Combine(contentDir, "payments"));
         Directory.CreateDirectory(Path.Combine(contentDir, "credit-notes"));
         Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
@@ -454,6 +456,69 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             Utf8NoBom,
             cancellationToken);
 
+        var salesOrdersIndexContent = """
+            ---
+            title: Sales Orders
+            ---
+
+            Sales orders from the Turpinverse canon — fulfilment documents after quotes are accepted, with nested line items.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "sales-orders", "_index.md"),
+            salesOrdersIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var salesOrder in canon.SalesOrders)
+        {
+            var contactLine = !string.IsNullOrWhiteSpace(salesOrder.ContactId)
+                ? $"contactId: \"{salesOrder.ContactId}\"\n"
+                : string.Empty;
+            var dealLine = !string.IsNullOrWhiteSpace(salesOrder.DealId)
+                ? $"dealId: \"{salesOrder.DealId}\"\n"
+                : string.Empty;
+            var deliveryLine = !string.IsNullOrWhiteSpace(salesOrder.RequestedDeliveryDate)
+                ? $"requestedDeliveryDate: \"{salesOrder.RequestedDeliveryDate}\"\n"
+                : string.Empty;
+            var notesBody = salesOrder.Notes ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(salesOrder.Terms))
+            {
+                notesBody = string.IsNullOrWhiteSpace(notesBody)
+                    ? salesOrder.Terms
+                    : $"{notesBody}\n\n**Terms:** {salesOrder.Terms}";
+            }
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(salesOrder.OrderNumber)}"
+                type: "sales-orders"
+                salesOrderId: "{salesOrder.SalesOrderId}"
+                orderNumber: "{EscapeYaml(salesOrder.OrderNumber)}"
+                accountId: "{salesOrder.AccountId}"
+                {contactLine}{dealLine}status: "{EscapeYaml(salesOrder.Status)}"
+                orderDate: "{salesOrder.OrderDate}"
+                {deliveryLine}currency: "{salesOrder.Currency}"
+                subtotal: {salesOrder.Subtotal}
+                taxTotal: {salesOrder.TaxTotal}
+                total: {salesOrder.Total}
+                ---
+
+                {notesBody}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "sales-orders", $"{salesOrder.SalesOrderId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "sales-orders.json"),
+            JsonSerializer.Serialize(canon.SalesOrders, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
         var invoicesIndexContent = """
             ---
             title: Invoices
@@ -519,12 +584,70 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             Utf8NoBom,
             cancellationToken);
 
+        var billsIndexContent = """
+            ---
+            title: Bills
+            ---
+
+            Supplier bills from the Turpinverse canon — accounts payable purchase invoices with nested line items.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "bills", "_index.md"),
+            billsIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var bill in canon.Bills)
+        {
+            var contactLine = !string.IsNullOrWhiteSpace(bill.ContactId)
+                ? $"contactId: \"{bill.ContactId}\"\n"
+                : string.Empty;
+            var dealLine = !string.IsNullOrWhiteSpace(bill.DealId)
+                ? $"dealId: \"{bill.DealId}\"\n"
+                : string.Empty;
+            var caseLine = !string.IsNullOrWhiteSpace(bill.CaseId)
+                ? $"caseId: \"{bill.CaseId}\"\n"
+                : string.Empty;
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(bill.BillNumber)}"
+                type: "bills"
+                billId: "{bill.BillId}"
+                billNumber: "{EscapeYaml(bill.BillNumber)}"
+                supplierAccountId: "{bill.SupplierAccountId}"
+                {contactLine}{dealLine}{caseLine}status: "{EscapeYaml(bill.Status)}"
+                issueDate: "{bill.IssueDate}"
+                dueDate: "{bill.DueDate}"
+                currency: "{bill.Currency}"
+                subtotal: {bill.Subtotal}
+                taxTotal: {bill.TaxTotal}
+                total: {bill.Total}
+                amountDue: {bill.AmountDue}
+                ---
+
+                {bill.Notes ?? string.Empty}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "bills", $"{bill.BillId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "bills.json"),
+            JsonSerializer.Serialize(canon.Bills, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
         var paymentsIndexContent = """
             ---
             title: Payments
             ---
 
-            Customer payments from the Turpinverse canon — settlements against sales invoices.
+            Payments from the Turpinverse canon — settlements against sales invoices or supplier bills.
 
             """;
         await File.WriteAllTextAsync(
@@ -546,7 +669,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
                 : string.Empty;
             var description = !string.IsNullOrWhiteSpace(payment.Reference)
                 ? $"Payment reference {payment.Reference}."
-                : "Customer payment against a sales invoice.";
+                : !string.IsNullOrWhiteSpace(payment.BillId)
+                    ? "Supplier payment against a bill."
+                    : "Customer payment against a sales invoice.";
 
             var content = $"""
                 ---

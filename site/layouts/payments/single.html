@@ -19,6 +19,15 @@
   </section>
   {{ end }}
 
+  {{ with .Params.billId }}
+  <section class="related-records related-bill-link">
+    <h2>Related bill</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/bills/" | relURL }}{{ . }}/">{{ partial "bill-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
   {{ with .Params.reference }}
   <section class="related-records">
     <h2>Reference</h2>

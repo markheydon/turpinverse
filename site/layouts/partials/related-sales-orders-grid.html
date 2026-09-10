@@ -1,0 +1,17 @@
+{{/* Expects a slice of sales order records from hugo.Data.sales-orders */}}
+{{ if gt (len .) 0 }}
+<section class="related-records related-sales-orders">
+  <h2>Related sales orders</h2>
+  <div class="record-grid">
+    {{ range . }}
+    <a class="record-card sales-order-record" href="{{ "/sales-orders/" | relURL }}{{ .salesOrderId }}/">
+      <h3>{{ partial "sales-order-title.html" .salesOrderId }}</h3>
+      <p class="card-meta">
+        {{ with .status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+        {{ with .total }}&nbsp;·&nbsp;£{{ . }}{{ end }}
+      </p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

@@ -14,5 +14,6 @@
 
   {{ $caseId := .Params.caseId | default .File.BaseFileName }}
   {{ partial "related-invoices-grid.html" (where hugo.Data.invoices "caseId" $caseId) }}
+  {{ partial "related-bills-grid.html" (where (index hugo.Data "bills") "caseId" $caseId) }}
 </article>
 {{ end }}

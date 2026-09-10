@@ -427,9 +427,9 @@ canon/
 ├── invoices.json               # shipped #35
 ├── payments.json               # shipped #35
 ├── credit-notes.json           # shipped #35
-│  # Agreed graph — remaining files land with child stories (#36, #38):
-├── sales-orders.json           # #36
-├── bills.json                  # #36
+├── sales-orders.json           # shipped #36
+├── bills.json                  # shipped #36
+│  # Agreed graph — remaining files land with child stories (#38):
 └── activities.json             # #38
 ```
 

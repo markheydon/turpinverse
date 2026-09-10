@@ -55,7 +55,7 @@ See [site/README.md](../site/README.md) for build and deploy.
 
 **Not its job:** Replace the public site as the primary readable reference for the universe. Technical IDs belong here and in exports, not on Hugo reader pages.
 
-Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/quotes`, `/invoices`, `/payments`, `/credit-notes`, `/leads`, and `/contacts/{id}` for contact detail.
+Run via `dotnet run --project src/Turpinverse.AppHost`. Main routes: `/`, `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/quotes`, `/sales-orders`, `/invoices`, `/bills`, `/payments`, `/credit-notes`, `/leads`, and `/contacts/{id}` for contact detail.
 
 ## Navigation
 
@@ -123,7 +123,9 @@ These are product facts, not blockers for the channel split above:
 | Leads | **Shipped** — Hugo lead pages; Blazor `/leads` CSV with status/source filters |
 | Quotes | **Shipped** — Hugo quote pages with line items; Blazor `/quotes` CSV (headers only) with status/accountId filters |
 | Invoices, payments, credit notes | **Shipped** — Hugo AR document pages; Blazor `/invoices`, `/payments`, `/credit-notes` CSV (invoice/credit note headers only) |
-| Bills, sales orders, activities | **Planned** — join graph frozen (#45); Hugo/Blazor/CSV land with #36, #38 |
+| Sales orders, bills | **Shipped** — Hugo fulfilment and AP pages; Blazor `/sales-orders`, `/bills` CSV (headers only) |
+| Bills, sales orders | **Shipped** — Hugo indexes/details; Blazor `/sales-orders`, `/bills` CSV (headers only) with status/accountId filters |
+| Activities | **Planned** — join graph frozen (#45); Hugo/Blazor/CSV land with #38 |
 | Technical IDs in Hugo body copy | **Addressed** — display-name partials and fallbacks; join keys remain in front matter / data JSON only |
 | Blazor filtering / faceting | **Shipped** — dataset pages filter preview and CSV download via shared `ExportFilter` |
 | Hugo completeness vs canon | Generator and layouts must grow as new human-readable entity types are added — articles and galleries **shipped** on Hugo |

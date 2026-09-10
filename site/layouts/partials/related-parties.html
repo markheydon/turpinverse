@@ -1,5 +1,5 @@
 {{/* Expects a page context with optional contactId, accountId, stakeholderContactIds, and relatedEventId params */}}
-{{ $hasParties := or .Params.contactId .Params.accountId .Params.relatedEventId .Params.stakeholderContactIds }}
+{{ $hasParties := or .Params.contactId .Params.accountId .Params.supplierAccountId .Params.relatedEventId .Params.stakeholderContactIds }}
 {{ if $hasParties }}
 <section class="related-records related-parties">
   <h2>Related parties</h2>
@@ -11,6 +11,9 @@
     <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
     {{ end }}
     {{ with .Params.accountId }}
+    <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
+    {{ end }}
+    {{ with .Params.supplierAccountId }}
     <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
     {{ end }}
     {{ with .Params.relatedEventId }}

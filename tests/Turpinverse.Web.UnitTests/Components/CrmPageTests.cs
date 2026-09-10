@@ -361,8 +361,10 @@ internal static class CrmTestData
                 new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
                 new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"]),
                 new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"]),
+                new ExportDatasetInfo("sales-orders", "turpinverse-sales-orders.csv", 6, ["salesOrderId"]),
                 new ExportDatasetInfo("invoices", "turpinverse-invoices.csv", 12, ["invoiceId"]),
-                new ExportDatasetInfo("payments", "turpinverse-payments.csv", 9, ["paymentId"]),
+                new ExportDatasetInfo("bills", "turpinverse-bills.csv", 6, ["billId"]),
+                new ExportDatasetInfo("payments", "turpinverse-payments.csv", 12, ["paymentId"]),
                 new ExportDatasetInfo("credit-notes", "turpinverse-credit-notes.csv", 3, ["creditNoteId"])
             ]);
 
@@ -499,6 +501,26 @@ internal static class CrmTestData
                     ["terms"] = ""
                 }
             ],
+            "sales-orders" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["salesOrderId"] = "so-001",
+                    ["orderNumber"] = "SO-2026-0101",
+                    ["accountId"] = "highway-commission",
+                    ["contactId"] = "henry-clayton",
+                    ["dealId"] = "deal-006",
+                    ["status"] = "Confirmed",
+                    ["orderDate"] = "2026-07-15",
+                    ["requestedDeliveryDate"] = "2026-09-01",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "8720",
+                    ["taxTotal"] = "1744",
+                    ["total"] = "10464",
+                    ["notes"] = "Example sales order",
+                    ["terms"] = ""
+                }
+            ],
             "invoices" =>
             [
                 new Dictionary<string, string>
@@ -519,6 +541,27 @@ internal static class CrmTestData
                     ["amountDue"] = "12288",
                     ["notes"] = "Example invoice",
                     ["terms"] = ""
+                }
+            ],
+            "bills" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["billId"] = "bill-001",
+                    ["billNumber"] = "BILL-2026-0041",
+                    ["supplierAccountId"] = "king-equine-trading",
+                    ["contactId"] = "george-chapman",
+                    ["dealId"] = "deal-016",
+                    ["caseId"] = "",
+                    ["status"] = "Authorised",
+                    ["issueDate"] = "2026-06-15",
+                    ["dueDate"] = "2026-07-15",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "2920",
+                    ["taxTotal"] = "584",
+                    ["total"] = "3504",
+                    ["amountDue"] = "3504",
+                    ["notes"] = "Example bill"
                 }
             ],
             "payments" =>

@@ -92,7 +92,7 @@ public class InvoiceValidatorTests
     }
 
     [Fact]
-    public void Validate_InvoiceLineWithSalesOrderId_FailsVr078()
+    public void Validate_InvoiceLineWithUnknownSalesOrderId_FailsVr078()
     {
         var canon = CreateCanon(
         [
@@ -101,9 +101,54 @@ public class InvoiceValidatorTests
                 Lines =
                 [
                     Line(500),
-                    Line(500) with { SalesOrderId = "so-001" }
+                    Line(500) with { SalesOrderId = "so-missing" }
                 ]
             }
+        ]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-078" && v.EntityId == "inv-1");
+    }
+
+    [Fact]
+    public void Validate_InvoiceLineWithSalesOrderOnDifferentAccount_FailsVr078()
+    {
+        var canon = CreateCanon(
+        [
+            Invoice("inv-1") with
+            {
+                Lines =
+                [
+                    Line(500),
+                    Line(500) with { SalesOrderId = "so-1" }
+                ]
+            }
+        ],
+        salesOrders:
+        [
+            new SalesOrder
+            {
+                SalesOrderId = "so-1",
+                OrderNumber = "SO-2026-0001",
+                AccountId = "millington-inn",
+                Status = "Confirmed",
+                OrderDate = "2026-01-01",
+                Currency = "GBP",
+                Subtotal = 1000,
+                TaxTotal = 200,
+                Total = 1200,
+                Lines =
+                [
+                    SalesOrderLine(500),
+                    SalesOrderLine(500)
+                ]
+            }
+        ],
+        organisations:
+        [
+            Organisation("highway-commission", roles: ["customer"], members: ["henry-clayton"]),
+            Organisation("millington-inn", roles: ["customer"])
         ]);
 
         var result = _validator.Validate(canon);
@@ -126,12 +171,14 @@ public class InvoiceValidatorTests
 
     private static Canon CreateCanon(
         IReadOnlyList<Invoice> invoices,
-        IReadOnlyList<Payment>? payments = null) =>
+        IReadOnlyList<Payment>? payments = null,
+        IReadOnlyList<SalesOrder>? salesOrders = null,
+        IReadOnlyList<Organisation>? organisations = null) =>
         new()
         {
-            Version = "1.6.0",
+            Version = "1.7.0",
             Personas = [Persona("henry-clayton", ["highway-commission"])],
-            Organisations =
+            Organisations = organisations ??
             [
                 Organisation("highway-commission", roles: ["customer"], members: ["henry-clayton"])
             ],
@@ -151,7 +198,8 @@ public class InvoiceValidatorTests
             ],
             Invoices = invoices,
             Payments = payments ?? [],
-            CreditNotes = []
+            CreditNotes = [],
+            SalesOrders = salesOrders ?? []
         };
 
     private static Invoice Invoice(
@@ -184,6 +232,17 @@ public class InvoiceValidatorTests
         };
 
     private static InvoiceLine Line(decimal lineTotal) =>
+        new()
+        {
+            Description = "Service",
+            Quantity = 1,
+            UnitPrice = lineTotal,
+            TaxRateId = "tax-standard",
+            LineTotal = lineTotal,
+            ProductId = "highway-risk-day-rate"
+        };
+
+    private static SalesOrderLine SalesOrderLine(decimal lineTotal) =>
         new()
         {
             Description = "Service",

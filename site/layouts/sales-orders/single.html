@@ -1,0 +1,34 @@
+{{ define "main" }}
+<article class="sales-order post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p class="card-meta">
+      {{ with .Params.status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+      {{ with .Params.total }}&nbsp;·&nbsp;£{{ . }}{{ end }}
+      {{ with .Params.orderDate }}&nbsp;·&nbsp;Ordered {{ . }}{{ end }}
+      {{ with .Params.requestedDeliveryDate }}&nbsp;·&nbsp;Requested {{ . }}{{ end }}
+    </p>
+  </header>
+
+  <div class="post-content md-content">{{ .Content }}</div>
+
+  {{ partial "related-parties.html" . }}
+
+  {{ with .Params.dealId }}
+  <section class="related-records related-deal-link">
+    <h2>Related deal</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/deals/" | relURL }}{{ . }}/">{{ partial "deal-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ $salesOrderId := .Params.salesOrderId }}
+  {{ $taxRates := index hugo.Data "tax-rates" }}
+  {{ $matchedOrders := where (index hugo.Data "sales-orders") "salesOrderId" $salesOrderId }}
+  {{ if gt (len $matchedOrders) 0 }}
+    {{ $salesOrder := index $matchedOrders 0 }}
+    {{ partial "document-lines-table.html" (dict "lines" $salesOrder.lines "subtotal" $salesOrder.subtotal "taxTotal" $salesOrder.taxTotal "total" $salesOrder.total "taxRates" $taxRates) }}
+  {{ end }}
+</article>
+{{ end }}

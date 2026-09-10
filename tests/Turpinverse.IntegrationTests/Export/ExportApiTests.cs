@@ -23,7 +23,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
 
         var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>(cancellationToken);
         Assert.NotNull(manifest);
-        Assert.Equal(11, manifest!.Datasets.Count);
+        Assert.Equal(13, manifest!.Datasets.Count);
         Assert.Equal(ExportDatasets.DisplayOrder, manifest.Datasets.Select(d => d.Type));
     }
 
@@ -36,7 +36,9 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("products", "productId")]
     [InlineData("leads", "leadId")]
     [InlineData("quotes", "quoteId")]
+    [InlineData("sales-orders", "salesOrderId")]
     [InlineData("invoices", "invoiceId")]
+    [InlineData("bills", "billId")]
     [InlineData("payments", "paymentId")]
     [InlineData("credit-notes", "creditNoteId")]
     public async Task Manifest_UsesCamelCaseColumnNames(string datasetType, string firstColumn)

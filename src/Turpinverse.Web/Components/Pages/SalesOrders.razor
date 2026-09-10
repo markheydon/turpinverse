@@ -1,0 +1,18 @@
+@page "/sales-orders"
+@rendermode InteractiveServer
+
+<PageTitle>Sales Orders - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="sales-orders"
+                 Columns="@SalesOrdersColumns"
+                 FacetColumns="@SalesOrdersFacets" />
+
+@code {
+    private static readonly string[] SalesOrdersColumns =
+    [
+        "orderNumber", "status", "accountId", "contactId", "dealId",
+        "orderDate", "requestedDeliveryDate", "currency", "subtotal", "taxTotal", "total"
+    ];
+
+    private static readonly string[] SalesOrdersFacets = ["status", "accountId"];
+}

@@ -1,0 +1,224 @@
+[
+  {
+    "billId": "bill-001",
+    "billNumber": "BILL-2026-0041",
+    "supplierAccountId": "king-equine-trading",
+    "contactId": "george-chapman",
+    "dealId": "deal-016",
+    "caseId": null,
+    "status": "Authorised",
+    "issueDate": "2026-06-15",
+    "dueDate": "2026-07-15",
+    "currency": "GBP",
+    "subtotal": 2920,
+    "taxTotal": 584,
+    "total": 3504,
+    "amountDue": 3504,
+    "notes": "Supplier maintenance invoice \u2014 three hire-day equivalents plus advisory hours for fleet diagnostics.",
+    "lines": [
+      {
+        "description": "Equine Asset Hire \u2014 Day Rate (supplier maintenance)",
+        "quantity": 3,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 2550,
+        "productId": "equine-asset-hire-day",
+        "projectId": null
+      },
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 2,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 370,
+        "productId": "identity-advisory-hour",
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "billId": "bill-002",
+    "billNumber": "BILL-2026-0042",
+    "supplierAccountId": "king-equine-trading",
+    "contactId": "black-bess",
+    "dealId": "deal-022",
+    "caseId": null,
+    "status": "Paid",
+    "issueDate": "2026-05-20",
+    "dueDate": "2026-06-20",
+    "currency": "GBP",
+    "subtotal": 4890,
+    "taxTotal": 978,
+    "total": 5868,
+    "amountDue": 0,
+    "notes": "Equine hire for Black Bess Route Optimiser corridor trials \u2014 Turpin-side delivery project on supplier bill.",
+    "lines": [
+      {
+        "description": "Equine Asset Hire \u2014 Day Rate (corridor trial)",
+        "quantity": 5,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 4250,
+        "productId": "equine-asset-hire-day",
+        "projectId": "black-bess-route-optimiser"
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 2,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 640,
+        "productId": "overnight-logistics-surcharge",
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "billId": "bill-003",
+    "billNumber": "BILL-1738-0093",
+    "supplierAccountId": "brazier-legal",
+    "contactId": "mary-brazier",
+    "dealId": "deal-017",
+    "caseId": "case-011",
+    "status": "Authorised",
+    "issueDate": "1738-07-01",
+    "dueDate": "1738-08-01",
+    "currency": "GBP",
+    "subtotal": 2800,
+    "taxTotal": 560,
+    "total": 3360,
+    "amountDue": 3360,
+    "notes": "Q3 legal advisory supplier invoice under reconciliation \u2014 AP dispute tracked on case-011. Separate from customer retainer invoice.",
+    "lines": [
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 10,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1850,
+        "productId": "identity-advisory-hour",
+        "projectId": null
+      },
+      {
+        "description": "Alias Documentation Pack",
+        "quantity": 1,
+        "unitPrice": 950,
+        "taxRateId": "tax-standard",
+        "lineTotal": 950,
+        "productId": "alias-documentation-pack",
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "billId": "bill-004",
+    "billNumber": "BILL-1737-0018",
+    "supplierAccountId": "brazier-legal",
+    "contactId": "mary-brazier",
+    "dealId": "deal-004",
+    "caseId": null,
+    "status": "Paid",
+    "issueDate": "1737-09-20",
+    "dueDate": "1737-10-20",
+    "currency": "GBP",
+    "subtotal": 2060,
+    "taxTotal": 412,
+    "total": 2472,
+    "amountDue": 0,
+    "notes": "Supplier alias documentation and advisory charges for Project Yorkshire counsel handover.",
+    "lines": [
+      {
+        "description": "Alias Documentation Pack",
+        "quantity": 1,
+        "unitPrice": 950,
+        "taxRateId": "tax-standard",
+        "lineTotal": 950,
+        "productId": "alias-documentation-pack",
+        "projectId": null
+      },
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 6,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1110,
+        "productId": "identity-advisory-hour",
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "billId": "bill-005",
+    "billNumber": "BILL-2026-0045",
+    "supplierAccountId": "king-equine-trading",
+    "contactId": "george-chapman",
+    "dealId": "deal-016",
+    "caseId": null,
+    "status": "Overdue",
+    "issueDate": "2026-04-01",
+    "dueDate": "2026-05-01",
+    "currency": "GBP",
+    "subtotal": 3720,
+    "taxTotal": 744,
+    "total": 4464,
+    "amountDue": 2464,
+    "notes": "Overdue fleet maintenance supplier invoice \u2014 partial settlement received; balance disputed pending mileage reconciliation.",
+    "lines": [
+      {
+        "description": "Equine Asset Hire \u2014 Day Rate",
+        "quantity": 4,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 3400,
+        "productId": "equine-asset-hire-day",
+        "projectId": null
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 1,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 320,
+        "productId": "overnight-logistics-surcharge",
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "billId": "bill-006",
+    "billNumber": "BILL-2026-0046",
+    "supplierAccountId": "brazier-legal",
+    "contactId": null,
+    "dealId": null,
+    "caseId": null,
+    "status": "Draft",
+    "issueDate": "2026-09-05",
+    "dueDate": "2026-10-05",
+    "currency": "GBP",
+    "subtotal": 2455,
+    "taxTotal": 491,
+    "total": 2946,
+    "amountDue": 2946,
+    "notes": "Draft compliance review supplier charges \u2014 not yet authorised for payment.",
+    "lines": [
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 3,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 555,
+        "productId": "identity-advisory-hour",
+        "projectId": null
+      },
+      {
+        "description": "Alias Documentation Pack",
+        "quantity": 2,
+        "unitPrice": 950,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1900,
+        "productId": "alias-documentation-pack",
+        "projectId": null
+      }
+    ]
+  }
+]

@@ -39,7 +39,9 @@ public sealed partial class CanonValidator
         ValidateCatalogue(canon, violations);
         ValidateLeads(canon, personaIds, organisationIds, violations);
         ValidateQuotes(canon, personaIds, organisationIds, violations);
+        ValidateSalesOrders(canon, personaIds, organisationIds, violations);
         ValidateInvoices(canon, personaIds, organisationIds, violations);
+        ValidateBills(canon, personaIds, organisationIds, violations);
         ValidatePayments(canon, violations);
         ValidateCreditNotes(canon, personaIds, organisationIds, violations);
         ValidateTone(canon, violations);
@@ -64,7 +66,9 @@ public sealed partial class CanonValidator
             ["quotes"] = canon.Quotes.Count,
             ["invoices"] = canon.Invoices.Count,
             ["payments"] = canon.Payments.Count,
-            ["creditNotes"] = canon.CreditNotes.Count
+            ["creditNotes"] = canon.CreditNotes.Count,
+            ["salesOrders"] = canon.SalesOrders.Count,
+            ["bills"] = canon.Bills.Count
         };
 
         return new CanonValidationResult(
@@ -1410,8 +1414,24 @@ public sealed partial class CanonValidator
     [GeneratedRegex(@"^INV-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
     private static partial Regex InvoiceNumberPattern();
 
+    [GeneratedRegex(@"^SO-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
+    private static partial Regex SalesOrderNumberPattern();
+
+    [GeneratedRegex(@"^BILL-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
+    private static partial Regex BillNumberPattern();
+
     [GeneratedRegex(@"^CRN-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
     private static partial Regex CreditNoteNumberPattern();
+
+    private static readonly HashSet<string> AllowedSalesOrderStatuses = new(StringComparer.Ordinal)
+    {
+        "Draft", "Confirmed", "Fulfilled", "Cancelled"
+    };
+
+    private static readonly HashSet<string> AllowedBillStatuses = new(StringComparer.Ordinal)
+    {
+        "Draft", "Authorised", "Paid", "Overdue"
+    };
 
     private static void ValidateInvoices(
         Canon canon,
@@ -1424,6 +1444,7 @@ public sealed partial class CanonValidator
         var casesById = canon.Cases.ToDictionary(c => c.CaseId);
         var projectsById = canon.Projects.ToDictionary(p => p.Id);
         var quotesById = canon.Quotes.ToDictionary(q => q.QuoteId);
+        var salesOrdersById = canon.SalesOrders.ToDictionary(s => s.SalesOrderId);
         var productIds = canon.Products.Select(p => p.ProductId).ToHashSet(StringComparer.Ordinal);
         var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
         var paymentsByInvoice = canon.Payments
@@ -1564,6 +1585,7 @@ public sealed partial class CanonValidator
                 productIds,
                 projectsById,
                 quotesById,
+                salesOrdersById,
                 violations);
 
             if (!TryCompareDates(invoice.IssueDate, invoice.DueDate, out var dateOrder) || dateOrder > 0)
@@ -1657,6 +1679,7 @@ public sealed partial class CanonValidator
         HashSet<string> productIds,
         Dictionary<string, Project> projectsById,
         Dictionary<string, Quote> quotesById,
+        Dictionary<string, SalesOrder> salesOrdersById,
         List<ValidationViolation> violations)
     {
         decimal computedTaxTotal = 0;
@@ -1737,11 +1760,22 @@ public sealed partial class CanonValidator
 
             if (!string.IsNullOrWhiteSpace(line.SalesOrderId))
             {
-                violations.Add(new ValidationViolation(
-                    "VR-078",
-                    $"Invoice '{invoice.InvoiceId}' line references sales order '{line.SalesOrderId}' but sales orders are not yet in canon (#36)",
-                    "Invoice",
-                    invoice.InvoiceId));
+                if (!salesOrdersById.TryGetValue(line.SalesOrderId, out var salesOrder))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-078",
+                        $"Invoice '{invoice.InvoiceId}' line references unknown sales order '{line.SalesOrderId}'",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+                else if (!string.Equals(salesOrder.AccountId, invoice.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-078",
+                        $"Invoice '{invoice.InvoiceId}' line sales order '{line.SalesOrderId}' belongs to a different account",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
             }
         }
 
@@ -1779,9 +1813,12 @@ public sealed partial class CanonValidator
     private static void ValidatePayments(Canon canon, List<ValidationViolation> violations)
     {
         var invoiceIds = canon.Invoices.Select(i => i.InvoiceId).ToHashSet(StringComparer.Ordinal);
+        var billIds = canon.Bills.Select(b => b.BillId).ToHashSet(StringComparer.Ordinal);
         var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
+        var billsById = canon.Bills.ToDictionary(b => b.BillId);
         var seenPaymentIds = new HashSet<string>(StringComparer.Ordinal);
         var paymentsByInvoice = new Dictionary<string, decimal>(StringComparer.Ordinal);
+        var paymentsByBill = new Dictionary<string, decimal>(StringComparer.Ordinal);
         var hasPartialPayment = false;
 
         foreach (var payment in canon.Payments)
@@ -1832,9 +1869,18 @@ public sealed partial class CanonValidator
                     paymentsByInvoice[payment.InvoiceId!] = running + payment.Amount;
                 }
             }
+            else if (!billIds.Contains(payment.BillId!))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-081",
+                    $"Payment '{payment.PaymentId}' references unknown bill '{payment.BillId}'",
+                    "Payment",
+                    payment.PaymentId));
+            }
             else
             {
-                // Bill FK validation and payment accountId export denormalisation land with bills (#36).
+                paymentsByBill.TryGetValue(payment.BillId!, out var running);
+                paymentsByBill[payment.BillId!] = running + payment.Amount;
             }
         }
 
@@ -1865,6 +1911,19 @@ public sealed partial class CanonValidator
                 "payments"));
         }
 
+        foreach (var (billId, paidTotal) in paymentsByBill)
+        {
+            var bill = billsById[billId];
+            if (paidTotal > bill.Total)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-081",
+                    $"Payments on bill '{billId}' total {paidTotal} exceeds bill total {bill.Total}",
+                    "Payment",
+                    billId));
+            }
+        }
+
         if (!hasPartialPayment)
         {
             violations.Add(new ValidationViolation(
@@ -1872,6 +1931,574 @@ public sealed partial class CanonValidator
                 "At least one invoice must have a partial payment (sum of payments less than total)",
                 "Payment",
                 "payments"));
+        }
+    }
+
+    private static void ValidateSalesOrders(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var dealsById = canon.Deals.ToDictionary(d => d.DealId);
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        var quotesById = canon.Quotes.ToDictionary(q => q.QuoteId);
+        var productIds = canon.Products.Select(p => p.ProductId).ToHashSet(StringComparer.Ordinal);
+        var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
+
+        var seenSalesOrderIds = new HashSet<string>(StringComparer.Ordinal);
+        var seenOrderNumbers = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var salesOrder in canon.SalesOrders)
+        {
+            if (!seenSalesOrderIds.Add(salesOrder.SalesOrderId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-084",
+                    $"Duplicate sales order id '{salesOrder.SalesOrderId}'",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!seenOrderNumbers.Add(salesOrder.OrderNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-084",
+                    $"Duplicate sales order number '{salesOrder.OrderNumber}'",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!SalesOrderNumberPattern().IsMatch(salesOrder.OrderNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-084",
+                    $"Sales order number '{salesOrder.OrderNumber}' must match SO-YYYY-nnnn",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!AllowedSalesOrderStatuses.Contains(salesOrder.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-089",
+                    $"Sales order status '{salesOrder.Status}' is not allowed",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!string.Equals(salesOrder.Currency, "GBP", StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-089",
+                    $"Sales order currency '{salesOrder.Currency}' must be GBP",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (salesOrder.Lines.Count < 1 || salesOrder.Lines.Count > 5)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-089",
+                    $"Sales order '{salesOrder.SalesOrderId}' must have between 1 and 5 lines, found {salesOrder.Lines.Count}",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!organisationIds.Contains(salesOrder.AccountId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-085",
+                    $"Sales order '{salesOrder.SalesOrderId}' references unknown account '{salesOrder.AccountId}'",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+            else if (!organisationsById[salesOrder.AccountId].Roles.Contains("customer", StringComparer.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-085",
+                    $"Sales order '{salesOrder.SalesOrderId}' account '{salesOrder.AccountId}' must include customer role",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            ValidateQuoteMainContact(
+                salesOrder.ContactId,
+                salesOrder.AccountId,
+                organisationsById,
+                personaIds,
+                salesOrder.SalesOrderId,
+                violations,
+                contactRule: "VR-086",
+                entityType: "SalesOrder");
+
+            if (!string.IsNullOrWhiteSpace(salesOrder.DealId))
+            {
+                if (!dealsById.TryGetValue(salesOrder.DealId, out var deal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-087",
+                        $"Sales order '{salesOrder.SalesOrderId}' references unknown deal '{salesOrder.DealId}'",
+                        "SalesOrder",
+                        salesOrder.SalesOrderId));
+                }
+                else if (!string.Equals(deal.AccountId, salesOrder.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-087",
+                        $"Sales order '{salesOrder.SalesOrderId}' deal '{salesOrder.DealId}' belongs to a different account",
+                        "SalesOrder",
+                        salesOrder.SalesOrderId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(salesOrder.RequestedDeliveryDate)
+                && (!TryCompareDates(salesOrder.OrderDate, salesOrder.RequestedDeliveryDate, out var deliveryOrder)
+                    || deliveryOrder > 0))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-088",
+                    $"Sales order '{salesOrder.SalesOrderId}' requestedDeliveryDate must be on or after orderDate",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            ValidateSalesOrderMoney(
+                salesOrder,
+                taxRatesById,
+                productIds,
+                projectsById,
+                quotesById,
+                violations);
+        }
+
+        if (canon.SalesOrders.Count < 6)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-084",
+                $"Minimum 6 sales orders required, found {canon.SalesOrders.Count}",
+                "SalesOrder",
+                "salesOrders"));
+        }
+    }
+
+    private static void ValidateSalesOrderMoney(
+        SalesOrder salesOrder,
+        Dictionary<string, TaxRate> taxRatesById,
+        HashSet<string> productIds,
+        Dictionary<string, Project> projectsById,
+        Dictionary<string, Quote> quotesById,
+        List<ValidationViolation> violations)
+    {
+        decimal computedTaxTotal = 0;
+
+        foreach (var line in salesOrder.Lines)
+        {
+            var expectedLineTotal = line.Quantity * line.UnitPrice;
+            if (line.LineTotal != expectedLineTotal)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-088",
+                    $"Sales order '{salesOrder.SalesOrderId}' line total {line.LineTotal} does not equal quantity × unitPrice ({expectedLineTotal})",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!taxRatesById.TryGetValue(line.TaxRateId, out var taxRate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-087",
+                    $"Sales order '{salesOrder.SalesOrderId}' line references unknown tax rate '{line.TaxRateId}'",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+            else
+            {
+                computedTaxTotal += RoundQuoteLineTax(line.LineTotal, taxRate.Percentage);
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProductId) && !productIds.Contains(line.ProductId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-087",
+                    $"Sales order '{salesOrder.SalesOrderId}' line references unknown product '{line.ProductId}'",
+                    "SalesOrder",
+                    salesOrder.SalesOrderId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProjectId))
+            {
+                if (!projectsById.TryGetValue(line.ProjectId, out var project))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-087",
+                        $"Sales order '{salesOrder.SalesOrderId}' line references unknown project '{line.ProjectId}'",
+                        "SalesOrder",
+                        salesOrder.SalesOrderId));
+                }
+                else if (!string.Equals(project.OrganisationId, salesOrder.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-087",
+                        $"Sales order '{salesOrder.SalesOrderId}' line project '{line.ProjectId}' is not sponsored by account '{salesOrder.AccountId}'",
+                        "SalesOrder",
+                        salesOrder.SalesOrderId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.QuoteId))
+            {
+                if (!quotesById.TryGetValue(line.QuoteId, out var quote))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-087",
+                        $"Sales order '{salesOrder.SalesOrderId}' line references unknown quote '{line.QuoteId}'",
+                        "SalesOrder",
+                        salesOrder.SalesOrderId));
+                }
+                else if (!string.Equals(quote.AccountId, salesOrder.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-087",
+                        $"Sales order '{salesOrder.SalesOrderId}' line quote '{line.QuoteId}' belongs to a different account",
+                        "SalesOrder",
+                        salesOrder.SalesOrderId));
+                }
+            }
+        }
+
+        var computedSubtotal = salesOrder.Lines.Sum(l => l.LineTotal);
+        var computedTotal = computedSubtotal + computedTaxTotal;
+
+        if (salesOrder.Subtotal != computedSubtotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-088",
+                $"Sales order '{salesOrder.SalesOrderId}' subtotal {salesOrder.Subtotal} does not equal sum of line totals ({computedSubtotal})",
+                "SalesOrder",
+                salesOrder.SalesOrderId));
+        }
+
+        if (salesOrder.TaxTotal != computedTaxTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-088",
+                $"Sales order '{salesOrder.SalesOrderId}' taxTotal {salesOrder.TaxTotal} does not equal computed tax ({computedTaxTotal})",
+                "SalesOrder",
+                salesOrder.SalesOrderId));
+        }
+
+        if (salesOrder.Total != computedTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-088",
+                $"Sales order '{salesOrder.SalesOrderId}' total {salesOrder.Total} does not equal subtotal + tax ({computedTotal})",
+                "SalesOrder",
+                salesOrder.SalesOrderId));
+        }
+    }
+
+    private static void ValidateBills(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var dealsById = canon.Deals.ToDictionary(d => d.DealId);
+        var casesById = canon.Cases.ToDictionary(c => c.CaseId);
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        var productIds = canon.Products.Select(p => p.ProductId).ToHashSet(StringComparer.Ordinal);
+        var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
+        var paymentsByBill = canon.Payments
+            .Where(p => !string.IsNullOrWhiteSpace(p.BillId))
+            .GroupBy(p => p.BillId!, StringComparer.Ordinal)
+            .ToDictionary(g => g.Key, g => g.Sum(p => p.Amount));
+
+        var seenBillIds = new HashSet<string>(StringComparer.Ordinal);
+        var seenBillNumbers = new HashSet<string>(StringComparer.Ordinal);
+        var hasOverdue = false;
+        var hasCase011 = false;
+
+        foreach (var bill in canon.Bills)
+        {
+            if (!seenBillIds.Add(bill.BillId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-090",
+                    $"Duplicate bill id '{bill.BillId}'",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!seenBillNumbers.Add(bill.BillNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-090",
+                    $"Duplicate bill number '{bill.BillNumber}'",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!BillNumberPattern().IsMatch(bill.BillNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-090",
+                    $"Bill number '{bill.BillNumber}' must match BILL-YYYY-nnnn",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!AllowedBillStatuses.Contains(bill.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-095",
+                    $"Bill status '{bill.Status}' is not allowed",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!string.Equals(bill.Currency, "GBP", StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-095",
+                    $"Bill currency '{bill.Currency}' must be GBP",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (bill.Lines.Count < 2 || bill.Lines.Count > 5)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-095",
+                    $"Bill '{bill.BillId}' must have between 2 and 5 lines, found {bill.Lines.Count}",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!organisationIds.Contains(bill.SupplierAccountId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-091",
+                    $"Bill '{bill.BillId}' references unknown supplier '{bill.SupplierAccountId}'",
+                    "Bill",
+                    bill.BillId));
+            }
+            else if (!organisationsById[bill.SupplierAccountId].Roles.Contains("supplier", StringComparer.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-091",
+                    $"Bill '{bill.BillId}' supplier '{bill.SupplierAccountId}' must include supplier role",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            ValidateQuoteMainContact(
+                bill.ContactId,
+                bill.SupplierAccountId,
+                organisationsById,
+                personaIds,
+                bill.BillId,
+                violations,
+                contactRule: "VR-092",
+                entityType: "Bill");
+
+            if (!string.IsNullOrWhiteSpace(bill.DealId))
+            {
+                if (!dealsById.TryGetValue(bill.DealId, out var deal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-093",
+                        $"Bill '{bill.BillId}' references unknown deal '{bill.DealId}'",
+                        "Bill",
+                        bill.BillId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(bill.CaseId))
+            {
+                if (!casesById.ContainsKey(bill.CaseId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-093",
+                        $"Bill '{bill.BillId}' references unknown case '{bill.CaseId}'",
+                        "Bill",
+                        bill.BillId));
+                }
+
+                if (string.Equals(bill.CaseId, "case-011", StringComparison.Ordinal))
+                {
+                    hasCase011 = true;
+                }
+            }
+
+            if (!TryCompareDates(bill.IssueDate, bill.DueDate, out var dateOrder) || dateOrder > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-094",
+                    $"Bill '{bill.BillId}' dueDate must be on or after issueDate",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            paymentsByBill.TryGetValue(bill.BillId, out var paidAmount);
+            var expectedAmountDue = Math.Max(0m, bill.Total - paidAmount);
+
+            if (bill.AmountDue != expectedAmountDue)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-094",
+                    $"Bill '{bill.BillId}' amountDue {bill.AmountDue} does not equal total minus payments ({expectedAmountDue})",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (string.Equals(bill.Status, "Paid", StringComparison.Ordinal)
+                && (bill.AmountDue != 0 || paidAmount != bill.Total))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-095",
+                    $"Bill '{bill.BillId}' status Paid requires amountDue 0 and payments totalling the bill total",
+                    "Bill",
+                    bill.BillId));
+            }
+            else if (string.Equals(bill.Status, "Overdue", StringComparison.Ordinal)
+                     && bill.AmountDue <= 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-095",
+                    $"Bill '{bill.BillId}' status Overdue requires amountDue greater than 0",
+                    "Bill",
+                    bill.BillId));
+            }
+            else if (string.Equals(bill.Status, "Draft", StringComparison.Ordinal)
+                     && paidAmount > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-095",
+                    $"Bill '{bill.BillId}' status Draft must not have payments",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (string.Equals(bill.Status, "Overdue", StringComparison.Ordinal))
+            {
+                hasOverdue = true;
+            }
+
+            ValidateBillMoney(bill, taxRatesById, productIds, projectsById, violations);
+        }
+
+        if (canon.Bills.Count < 6)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-090",
+                $"Minimum 6 bills required, found {canon.Bills.Count}",
+                "Bill",
+                "bills"));
+        }
+
+        if (!hasCase011)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-093",
+                "At least one bill must reference case-011",
+                "Bill",
+                "bills"));
+        }
+
+        if (!hasOverdue)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-095",
+                "At least one bill must have status Overdue",
+                "Bill",
+                "bills"));
+        }
+    }
+
+    private static void ValidateBillMoney(
+        Bill bill,
+        Dictionary<string, TaxRate> taxRatesById,
+        HashSet<string> productIds,
+        Dictionary<string, Project> projectsById,
+        List<ValidationViolation> violations)
+    {
+        decimal computedTaxTotal = 0;
+
+        foreach (var line in bill.Lines)
+        {
+            var expectedLineTotal = line.Quantity * line.UnitPrice;
+            if (line.LineTotal != expectedLineTotal)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-094",
+                    $"Bill '{bill.BillId}' line total {line.LineTotal} does not equal quantity × unitPrice ({expectedLineTotal})",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!taxRatesById.TryGetValue(line.TaxRateId, out var taxRate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-093",
+                    $"Bill '{bill.BillId}' line references unknown tax rate '{line.TaxRateId}'",
+                    "Bill",
+                    bill.BillId));
+            }
+            else
+            {
+                computedTaxTotal += RoundQuoteLineTax(line.LineTotal, taxRate.Percentage);
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProductId) && !productIds.Contains(line.ProductId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-093",
+                    $"Bill '{bill.BillId}' line references unknown product '{line.ProductId}'",
+                    "Bill",
+                    bill.BillId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProjectId) && !projectsById.ContainsKey(line.ProjectId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-093",
+                    $"Bill '{bill.BillId}' line references unknown project '{line.ProjectId}'",
+                    "Bill",
+                    bill.BillId));
+            }
+        }
+
+        var computedSubtotal = bill.Lines.Sum(l => l.LineTotal);
+        var computedTotal = computedSubtotal + computedTaxTotal;
+
+        if (bill.Subtotal != computedSubtotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-094",
+                $"Bill '{bill.BillId}' subtotal {bill.Subtotal} does not equal sum of line totals ({computedSubtotal})",
+                "Bill",
+                bill.BillId));
+        }
+
+        if (bill.TaxTotal != computedTaxTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-094",
+                $"Bill '{bill.BillId}' taxTotal {bill.TaxTotal} does not equal computed tax ({computedTaxTotal})",
+                "Bill",
+                bill.BillId));
+        }
+
+        if (bill.Total != computedTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-094",
+                $"Bill '{bill.BillId}' total {bill.Total} does not equal subtotal + tax ({computedTotal})",
+                "Bill",
+                bill.BillId));
         }
     }
 

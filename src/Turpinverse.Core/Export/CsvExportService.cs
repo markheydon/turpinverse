@@ -19,7 +19,9 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         ["products"] = "turpinverse-products.csv",
         ["leads"] = "turpinverse-leads.csv",
         ["quotes"] = "turpinverse-quotes.csv",
+        ["sales-orders"] = "turpinverse-sales-orders.csv",
         ["invoices"] = "turpinverse-invoices.csv",
+        ["bills"] = "turpinverse-bills.csv",
         ["payments"] = "turpinverse-payments.csv",
         ["credit-notes"] = "turpinverse-credit-notes.csv"
     };
@@ -52,7 +54,9 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "products" => await WriteProductsAsync(csv, canon, filter, cancellationToken),
             "leads" => await WriteLeadsAsync(csv, canon, filter, cancellationToken),
             "quotes" => await WriteQuotesAsync(csv, canon, filter, cancellationToken),
+            "sales-orders" => await WriteSalesOrdersAsync(csv, canon, filter, cancellationToken),
             "invoices" => await WriteInvoicesAsync(csv, canon, filter, cancellationToken),
+            "bills" => await WriteBillsAsync(csv, canon, filter, cancellationToken),
             "payments" => await WritePaymentsAsync(csv, canon, filter, cancellationToken),
             "credit-notes" => await WriteCreditNotesAsync(csv, canon, filter, cancellationToken),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
@@ -84,7 +88,9 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "products" => GetProducts(canon, filter),
             "leads" => GetLeads(canon, filter),
             "quotes" => GetQuotes(canon, filter),
+            "sales-orders" => GetSalesOrders(canon, filter),
             "invoices" => GetInvoices(canon, filter),
+            "bills" => GetBills(canon, filter),
             "payments" => GetPayments(canon, filter),
             "credit-notes" => GetCreditNotes(canon, filter),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
@@ -194,6 +200,17 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         return rows.Count;
     }
 
+    private static async Task<int> WriteSalesOrdersAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetSalesOrders(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
     private static async Task<int> WriteInvoicesAsync(
         CsvWriter csv,
         Models.Canon canon,
@@ -201,6 +218,17 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         CancellationToken cancellationToken)
     {
         var rows = GetInvoices(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
+    private static async Task<int> WriteBillsAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetBills(canon, filter);
         await csv.WriteRecordsAsync(rows, cancellationToken);
         return rows.Count;
     }
@@ -267,10 +295,20 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             ? ExportMapper.MapQuotes(canon)
             : filter.ApplyToQuotes(ExportMapper.MapQuotes(canon));
 
+    private static IReadOnlyList<SalesOrderExport> GetSalesOrders(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapSalesOrders(canon)
+            : filter.ApplyToSalesOrders(ExportMapper.MapSalesOrders(canon));
+
     private static IReadOnlyList<InvoiceExport> GetInvoices(Models.Canon canon, ExportFilter? filter) =>
         filter is null
             ? ExportMapper.MapInvoices(canon)
             : filter.ApplyToInvoices(ExportMapper.MapInvoices(canon));
+
+    private static IReadOnlyList<BillExport> GetBills(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapBills(canon)
+            : filter.ApplyToBills(ExportMapper.MapBills(canon));
 
     private static IReadOnlyList<PaymentExport> GetPayments(Models.Canon canon, ExportFilter? filter) =>
         filter is null
@@ -293,7 +331,9 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "projects" => ExportMapper.MapProjects(canon).Count,
             "products" => ExportMapper.MapProducts(canon).Count,
             "quotes" => ExportMapper.MapQuotes(canon).Count,
+            "sales-orders" => ExportMapper.MapSalesOrders(canon).Count,
             "invoices" => ExportMapper.MapInvoices(canon).Count,
+            "bills" => ExportMapper.MapBills(canon).Count,
             "payments" => ExportMapper.MapPayments(canon).Count,
             "credit-notes" => ExportMapper.MapCreditNotes(canon).Count,
             _ => throw new ArgumentException($"Dataset '{type}' is not supported.", nameof(type))

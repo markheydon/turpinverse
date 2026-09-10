@@ -1,0 +1,18 @@
+@page "/bills"
+@rendermode InteractiveServer
+
+<PageTitle>Bills - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="bills"
+                 Columns="@BillsColumns"
+                 FacetColumns="@BillsFacets" />
+
+@code {
+    private static readonly string[] BillsColumns =
+    [
+        "billNumber", "status", "supplierAccountId", "contactId", "dealId", "caseId",
+        "issueDate", "dueDate", "currency", "subtotal", "taxTotal", "total", "amountDue"
+    ];
+
+    private static readonly string[] BillsFacets = ["status", "supplierAccountId"];
+}

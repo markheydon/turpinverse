@@ -125,7 +125,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-075 | Invoice | Unique `invoiceId` / `invoiceNumber`; ≥12 invoices; `invoiceNumber` matches `INV-YYYY-nnnn` |
 | VR-076 | Invoice | `accountId` exists and organisation `roles` includes `customer` |
 | VR-077 | Invoice | `contactId` omitted or exists and is a member of `accountId`; optional `dealId` exists with matching account; optional `caseId` exists and is **not** `case-011` |
-| VR-078 | Invoice line | Authored money and FK rules (products, projects, quotes same account); `salesOrderId` omitted until sales orders ship (#36); 2–5 nested lines |
+| VR-078 | Invoice line | Authored money and FK rules (products, projects, quotes, sales orders same account); 2–5 nested lines |
 | VR-079 | Invoice | `dueDate` ≥ `issueDate`; `amountDue` equals `total` minus sum of payments (void invoices: `amountDue` is 0) |
 | VR-080 | Invoice | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue` \| `Void`; `currency` is `GBP`; at least one `Overdue`; `Paid` requires full settlement; `Overdue` requires `amountDue` > 0; `Draft` and `Void` require no payments |
 
@@ -134,6 +134,28 @@ Violations use `{ rule, message, entityType, entityId }`.
 | Code | Scope | Pass condition |
 |------|-------|----------------|
 | VR-081 | Payment | Unique `paymentId`; ≥8 payments; `method` in closed enum; exactly one target (`invoiceId` **XOR** `billId`); payment sums on a document ≤ document `total`; at least one partial payment |
+
+## Sales orders (VR-084–VR-089)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-084 | Sales order | Unique `salesOrderId` / `orderNumber`; ≥6 sales orders; `orderNumber` matches `SO-YYYY-nnnn` |
+| VR-085 | Sales order | `accountId` exists and organisation `roles` includes `customer` |
+| VR-086 | Sales order | `contactId` omitted or exists and is a member of `accountId` |
+| VR-087 | Sales order line | `taxRateId` and optional `productId` exist; optional `projectId` exists and `project.organisationId` equals order `accountId`; optional `quoteId` same account; optional `dealId` same account |
+| VR-088 | Sales order | Authored money; `requestedDeliveryDate` ≥ `orderDate` when set |
+| VR-089 | Sales order | `status` in `Draft` \| `Confirmed` \| `Fulfilled` \| `Cancelled`; `currency` is `GBP`; 1–5 nested lines each |
+
+## Bills (VR-090–VR-095)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-090 | Bill | Unique `billId` / `billNumber`; ≥6 bills; `billNumber` matches `BILL-YYYY-nnnn` |
+| VR-091 | Bill | `supplierAccountId` exists and organisation `roles` includes `supplier` |
+| VR-092 | Bill | `contactId` omitted or exists and is a member of `supplierAccountId` |
+| VR-093 | Bill | Optional `dealId` / `caseId` exist; at least one bill references `case-011`; line FKs (project must exist; no supplier-org match on project) |
+| VR-094 | Bill | Authored money; `dueDate` ≥ `issueDate`; `amountDue` equals `total` minus bill payments |
+| VR-095 | Bill | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue`; `currency` is `GBP`; 2–5 nested lines; at least one `Overdue`; `Paid` requires full settlement; `Draft` requires no payments |
 
 ## Credit notes (VR-082–VR-083)
 
@@ -144,7 +166,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, quote/invoice/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, quote/sales-order/invoice/bill/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
 
 ## Related docs
 

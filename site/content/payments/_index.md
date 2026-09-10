@@ -2,4 +2,4 @@
 title: Payments
 ---
 
-Customer payments from the Turpinverse canon — settlements against sales invoices.
+Payments from the Turpinverse canon — settlements against sales invoices or supplier bills.
