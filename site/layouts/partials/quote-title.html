@@ -1,0 +1,7 @@
+{{ $id := . }}
+{{ $matched := where hugo.Data.quotes "quoteId" $id }}
+{{ if gt (len $matched) 0 }}
+  {{ (index $matched 0).quoteNumber }}
+{{ else }}
+  {{ $id }}
+{{ end }}

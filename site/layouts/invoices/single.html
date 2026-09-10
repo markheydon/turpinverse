@@ -1,0 +1,48 @@
+{{ define "main" }}
+<article class="invoice post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p class="card-meta">
+      {{ with .Params.status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+      {{ with .Params.total }}&nbsp;·&nbsp;£{{ . }}{{ end }}
+      {{ with .Params.amountDue }}&nbsp;·&nbsp;Due £{{ . }}{{ end }}
+      {{ with .Params.issueDate }}&nbsp;·&nbsp;Issued {{ . }}{{ end }}
+      {{ with .Params.dueDate }}&nbsp;·&nbsp;Due {{ . }}{{ end }}
+    </p>
+  </header>
+
+  <div class="post-content md-content">{{ .Content }}</div>
+
+  {{ partial "related-parties.html" . }}
+
+  {{ with .Params.dealId }}
+  <section class="related-records related-deal-link">
+    <h2>Related deal</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/deals/" | relURL }}{{ . }}/">{{ partial "deal-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.caseId }}
+  <section class="related-records related-case-link">
+    <h2>Related case</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/cases/" | relURL }}{{ . }}/">{{ partial "case-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ $invoiceId := .Params.invoiceId }}
+  {{ $taxRates := index hugo.Data "tax-rates" }}
+  {{ $matchedInvoices := where hugo.Data.invoices "invoiceId" $invoiceId }}
+  {{ if gt (len $matchedInvoices) 0 }}
+    {{ $invoice := index $matchedInvoices 0 }}
+    {{ partial "document-lines-table.html" (dict "lines" $invoice.lines "subtotal" $invoice.subtotal "taxTotal" $invoice.taxTotal "total" $invoice.total "taxRates" $taxRates) }}
+  {{ end }}
+
+  {{ partial "related-payments-grid.html" (where hugo.Data.payments "invoiceId" $invoiceId) }}
+
+  {{ partial "related-credit-notes-grid.html" (where (index hugo.Data "credit-notes") "invoiceId" $invoiceId) }}
+</article>
+{{ end }}

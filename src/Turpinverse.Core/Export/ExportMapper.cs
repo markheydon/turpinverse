@@ -39,6 +39,15 @@ public static class ExportMapper
     public static IReadOnlyList<QuoteExport> MapQuotes(Canon canon) =>
         canon.Quotes.Select(MapQuote).ToList();
 
+    public static IReadOnlyList<InvoiceExport> MapInvoices(Canon canon) =>
+        canon.Invoices.Select(MapInvoice).ToList();
+
+    public static IReadOnlyList<PaymentExport> MapPayments(Canon canon) =>
+        canon.Payments.Select(payment => MapPayment(payment, canon)).ToList();
+
+    public static IReadOnlyList<CreditNoteExport> MapCreditNotes(Canon canon) =>
+        canon.CreditNotes.Select(MapCreditNote).ToList();
+
     public static ContactExport MapContactForMembership(Persona persona, string accountId)
     {
         var (firstName, lastName) = SplitName(persona.DisplayName);
@@ -175,6 +184,66 @@ public static class ExportMapper
             Total = quote.Total,
             Notes = quote.Notes ?? string.Empty,
             Terms = quote.Terms ?? string.Empty
+        };
+
+    public static InvoiceExport MapInvoice(Invoice invoice) =>
+        new()
+        {
+            InvoiceId = invoice.InvoiceId,
+            InvoiceNumber = invoice.InvoiceNumber,
+            AccountId = invoice.AccountId,
+            ContactId = invoice.ContactId ?? string.Empty,
+            DealId = invoice.DealId ?? string.Empty,
+            CaseId = invoice.CaseId ?? string.Empty,
+            Status = invoice.Status,
+            IssueDate = invoice.IssueDate,
+            DueDate = invoice.DueDate,
+            Currency = invoice.Currency,
+            Subtotal = invoice.Subtotal,
+            TaxTotal = invoice.TaxTotal,
+            Total = invoice.Total,
+            AmountDue = invoice.AmountDue,
+            Notes = invoice.Notes ?? string.Empty,
+            Terms = invoice.Terms ?? string.Empty
+        };
+
+    public static PaymentExport MapPayment(Payment payment, Canon canon)
+    {
+        var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
+        var accountId = string.Empty;
+        if (!string.IsNullOrWhiteSpace(payment.InvoiceId)
+            && invoicesById.TryGetValue(payment.InvoiceId, out var invoice))
+        {
+            accountId = invoice.AccountId;
+        }
+
+        return new PaymentExport
+        {
+            PaymentId = payment.PaymentId,
+            PaymentDate = payment.PaymentDate,
+            Amount = payment.Amount,
+            Method = payment.Method,
+            InvoiceId = payment.InvoiceId ?? string.Empty,
+            BillId = payment.BillId ?? string.Empty,
+            AccountId = accountId,
+            Reference = payment.Reference ?? string.Empty
+        };
+    }
+
+    public static CreditNoteExport MapCreditNote(CreditNote creditNote) =>
+        new()
+        {
+            CreditNoteId = creditNote.CreditNoteId,
+            CreditNoteNumber = creditNote.CreditNoteNumber,
+            AccountId = creditNote.AccountId,
+            ContactId = creditNote.ContactId ?? string.Empty,
+            InvoiceId = creditNote.InvoiceId ?? string.Empty,
+            IssueDate = creditNote.IssueDate,
+            Currency = creditNote.Currency,
+            Subtotal = creditNote.Subtotal,
+            TaxTotal = creditNote.TaxTotal,
+            Total = creditNote.Total,
+            Notes = creditNote.Notes ?? string.Empty
         };
 
     internal static string JoinContactIds(IReadOnlyList<string> contactIds) =>

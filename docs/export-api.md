@@ -25,18 +25,18 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `quotes` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `quotes`, `invoices`, `payments`, `credit-notes` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
 | Name | Type | Datasets | Semantics |
 |------|------|----------|-----------|
-| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `quotes` | Exact match, case-insensitive |
+| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `quotes`, `invoices` | Exact match, case-insensitive |
 | `source` | string | `leads` | Exact match, case-insensitive |
 | `taxRateId` | string | `products` | Exact match on export `taxRateId` |
 | `stage` | string | `deals` | Exact match, case-insensitive |
 | `priority` | string | `cases` | Exact match, case-insensitive |
-| `accountId` | string | `contacts`, `deals`, `cases`, `quotes` | Exact match on export `accountId` |
+| `accountId` | string | `contacts`, `deals`, `cases`, `quotes`, `invoices`, `payments`, `credit-notes` | Exact match on export `accountId` |
 | `industry` | string | `accounts` | Exact match, case-insensitive |
 
 No query parameters → full dataset. Filtered body contains **only matching rows**.
@@ -74,6 +74,9 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `products` | `turpinverse-products.csv` |
 | `leads` | `turpinverse-leads.csv` |
 | `quotes` | `turpinverse-quotes.csv` |
+| `invoices` | `turpinverse-invoices.csv` |
+| `payments` | `turpinverse-payments.csv` |
+| `credit-notes` | `turpinverse-credit-notes.csv` |
 
 ### GET /api/export/manifest
 
@@ -162,7 +165,7 @@ Turpinverse unique person key is `contactId`. Email is a copied attribute from t
 | Route | Behaviour |
 |-------|-----------|
 | `/` | Dataset summary, validation badge, summary chart |
-| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/leads` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
+| `/contacts`, `/accounts`, `/deals`, `/cases`, `/projects`, `/products`, `/leads`, `/quotes`, `/invoices`, `/payments`, `/credit-notes` | Filtered preview table and download (shared filter; `projects` ignores query filters today) |
 | `/contacts/{id}` | Contact detail including career/portfolio and professional extras |
 
 Channel intent: [product-surfaces.md](./product-surfaces.md).

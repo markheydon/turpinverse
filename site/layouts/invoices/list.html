@@ -1,0 +1,27 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>Invoices</h1>
+  <p class="section-intro">Sales invoices from the Turpinverse canon — accounts receivable documents with line-item detail and payment status.</p>
+</header>
+
+<div class="card-grid">
+  {{ range .Pages.ByTitle }}
+  <a class="deal-card" href="{{ .RelPermalink }}">
+    <div class="card-header">
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+        {{ with .Params.status }}
+        <span class="status-badge status-{{ . | urlize }}">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ with .Params.total }}<p class="card-meta">£{{ . }}{{ with $.Params.amountDue }} · Due £{{ . }}{{ end }}</p>{{ end }}
+    {{ with .Params.dueDate }}<p class="card-meta">Due {{ . }}</p>{{ end }}
+    {{ with .Params.accountId }}
+    <p class="card-meta">{{ partial "org-title.html" . }}</p>
+    {{ end }}
+    {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

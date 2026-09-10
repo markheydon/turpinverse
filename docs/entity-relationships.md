@@ -424,11 +424,11 @@ canon/
 ├── leads.json
 │
 ├── quotes.json                 # shipped #34
-│  # Agreed graph — remaining files land with child stories (#35–#36, #38):
+├── invoices.json               # shipped #35
+├── payments.json               # shipped #35
+├── credit-notes.json           # shipped #35
+│  # Agreed graph — remaining files land with child stories (#36, #38):
 ├── sales-orders.json           # #36
-├── invoices.json               # #35
-├── payments.json               # #35
-├── credit-notes.json           # #35
 ├── bills.json                  # #36
 └── activities.json             # #38
 ```

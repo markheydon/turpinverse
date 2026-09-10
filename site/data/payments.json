@@ -1,0 +1,83 @@
+[
+  {
+    "paymentId": "pay-001",
+    "paymentDate": "1737-11-20",
+    "amount": 4728,
+    "method": "Bank transfer",
+    "invoiceId": "inv-003",
+    "billId": null,
+    "reference": "BRAZ-YORK-1737-01"
+  },
+  {
+    "paymentId": "pay-002",
+    "paymentDate": "2026-05-28",
+    "amount": 7500,
+    "method": "Bank transfer",
+    "invoiceId": "inv-004",
+    "billId": null,
+    "reference": "EFA-SECTOR7-2026"
+  },
+  {
+    "paymentId": "pay-003",
+    "paymentDate": "2026-08-15",
+    "amount": 8000,
+    "method": "Bank transfer",
+    "invoiceId": "inv-005",
+    "billId": null,
+    "reference": "HWY-PARTIAL-0190"
+  },
+  {
+    "paymentId": "pay-004",
+    "paymentDate": "1731-09-28",
+    "amount": 7620,
+    "method": "Direct debit",
+    "invoiceId": "inv-007",
+    "billId": null,
+    "reference": "ESG-PROC-1731"
+  },
+  {
+    "paymentId": "pay-005",
+    "paymentDate": "1738-03-05",
+    "amount": 3372,
+    "method": "Card",
+    "invoiceId": "inv-010",
+    "billId": null,
+    "reference": "BAYES-CERT-3372"
+  },
+  {
+    "paymentId": "pay-006",
+    "paymentDate": "1738-07-15",
+    "amount": 2000,
+    "method": "Bank transfer",
+    "invoiceId": "inv-012",
+    "billId": null,
+    "reference": "BRAZ-Q3-RET-1"
+  },
+  {
+    "paymentId": "pay-007",
+    "paymentDate": "1738-08-02",
+    "amount": 1804,
+    "method": "Cheque",
+    "invoiceId": "inv-012",
+    "billId": null,
+    "reference": "BRAZ-Q3-RET-2"
+  },
+  {
+    "paymentId": "pay-008",
+    "paymentDate": "2026-08-01",
+    "amount": 1500,
+    "method": "Bank transfer",
+    "invoiceId": "inv-008",
+    "billId": null,
+    "reference": "KET-DEPOSIT-0192"
+  },
+  {
+    "paymentId": "pay-009",
+    "paymentDate": "2026-06-20",
+    "amount": 2500,
+    "method": "Bank transfer",
+    "invoiceId": "inv-002",
+    "billId": null,
+    "reference": "MILL-VIP-DEP"
+  }
+]

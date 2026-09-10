@@ -1,0 +1,48 @@
+{{ define "main" }}
+<article class="credit-note post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p class="card-meta">
+      {{ with .Params.total }}£{{ . }}{{ end }}
+      {{ with .Params.issueDate }}&nbsp;·&nbsp;Issued {{ . }}{{ end }}
+    </p>
+  </header>
+
+  <div class="post-content md-content">{{ .Content }}</div>
+
+  {{ with .Params.accountId }}
+  <section class="related-records">
+    <h2>Account</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/organisations/" | relURL }}{{ . }}/">{{ partial "org-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.contactId }}
+  <section class="related-records">
+    <h2>Contact</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/personas/" | relURL }}{{ . }}/">{{ partial "persona-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.invoiceId }}
+  <section class="related-records related-invoice-link">
+    <h2>Related invoice</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/invoices/" | relURL }}{{ . }}/">{{ partial "invoice-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ $creditNoteId := .Params.creditNoteId }}
+  {{ $taxRates := index hugo.Data "tax-rates" }}
+  {{ $matched := where (index hugo.Data "credit-notes") "creditNoteId" $creditNoteId }}
+  {{ if gt (len $matched) 0 }}
+    {{ $creditNote := index $matched 0 }}
+    {{ partial "document-lines-table.html" (dict "lines" $creditNote.lines "subtotal" $creditNote.subtotal "taxTotal" $creditNote.taxTotal "total" $creditNote.total "taxRates" $taxRates) }}
+  {{ end }}
+</article>
+{{ end }}

@@ -29,6 +29,24 @@ Follow [`.cursor/rules/testing-standards.mdc`](.cursor/rules/testing-standards.m
 
 When changing canon validation, export, or Hugo generation, add or update boundary tests.
 
+## Hugo site
+
+The public reference site lives under [`site/`](site/). Content and `site/data/*.json` are **generated** from canon — do not hand-edit generated markdown or data files except by re-running the generator.
+
+**Local preview (no Hugo install required)** — from the repo root:
+
+```bash
+./scripts/invoke-hugo-site.sh serve    # dev server + live reload → http://localhost:1313
+./scripts/invoke-hugo-site.sh build    # production build to site/public/
+./scripts/invoke-hugo-site.sh preview  # build then nginx preview → http://localhost:8080
+```
+
+`serve`, `build`, and `preview` all run `dotnet run --project src/Turpinverse.Tools.GenerateHugoContent` first. After changing `HugoContentGenerator`, layouts under `site/layouts/`, or canon entities that publish on Hugo, regenerate and run `serve` or `build` to confirm templates render.
+
+**Layout data files:** Hugo keys match the JSON filename (without `.json`). Hyphenated files must use `index hugo.Data "credit-notes"` (same pattern as `tax-rates`), not `hugo.Data.creditNotes`.
+
+Unit tests: `Category=CanonValidation` for generator parity (e.g. `CommittedSiteInvoicesDataTests`); see [`site/README.md`](site/README.md) for theme and deploy detail.
+
 ## Historical artefacts
 
 Frozen Spec Kit packs: [`archive/specs/`](archive/specs/) (after migration). Do not treat them as source of truth.

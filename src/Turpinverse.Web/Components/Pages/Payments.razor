@@ -1,0 +1,18 @@
+@page "/payments"
+@rendermode InteractiveServer
+
+<PageTitle>Payments - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="payments"
+                 Columns="@PaymentsColumns"
+                 FacetColumns="@PaymentsFacets" />
+
+@code {
+    private static readonly string[] PaymentsColumns =
+    [
+        "paymentId", "paymentDate", "amount", "method",
+        "invoiceId", "accountId", "reference"
+    ];
+
+    private static readonly string[] PaymentsFacets = ["accountId"];
+}

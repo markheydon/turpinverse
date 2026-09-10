@@ -27,6 +27,9 @@ Example (relative path from another repo):
 | `products.json` | Product/service catalogue (price book) |
 | `leads.json` | Pre-contact CRM prospects and qualification pipeline |
 | `quotes.json` | Sales quotes and estimates with nested line items |
+| `invoices.json` | Sales invoices (accounts receivable) with nested line items |
+| `payments.json` | Customer payments settling invoices (`invoiceId` XOR `billId`) |
+| `credit-notes.json` | AR credit notes with nested line items |
 | `tax-rates.json` | UK VAT reference rates |
 | `events.json` | Timeline |
 | `aliases.json` | Alternate identities |

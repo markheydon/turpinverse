@@ -267,6 +267,36 @@
         "notes", "terms"
       ],
       "schema": { "$ref": "#/$defs/Quote" }
+    },
+    "invoices": {
+      "filename": "turpinverse-invoices.csv",
+      "minRows": 12,
+      "rowRule": "Header-only export. Nested line items remain in canon/invoices.json and Hugo detail pages; flattened invoice-lines CSV is deferred.",
+      "columns": [
+        "invoiceId", "invoiceNumber", "accountId", "contactId", "dealId", "caseId",
+        "status", "issueDate", "dueDate", "currency", "subtotal", "taxTotal", "total",
+        "amountDue", "notes", "terms"
+      ],
+      "schema": { "$ref": "#/$defs/Invoice" }
+    },
+    "payments": {
+      "filename": "turpinverse-payments.csv",
+      "minRows": 8,
+      "columns": [
+        "paymentId", "paymentDate", "amount", "method",
+        "invoiceId", "billId", "accountId", "reference"
+      ],
+      "schema": { "$ref": "#/$defs/Payment" }
+    },
+    "credit-notes": {
+      "filename": "turpinverse-credit-notes.csv",
+      "minRows": 3,
+      "rowRule": "Header-only export. Nested line items remain in canon/credit-notes.json and Hugo detail pages.",
+      "columns": [
+        "creditNoteId", "creditNoteNumber", "accountId", "contactId", "invoiceId",
+        "issueDate", "currency", "subtotal", "taxTotal", "total", "notes"
+      ],
+      "schema": { "$ref": "#/$defs/CreditNote" }
     }
   },
   "collisionPolicy": {

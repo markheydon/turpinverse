@@ -50,6 +50,7 @@
   {{ $orgId := .File.BaseFileName }}
   {{ partial "related-deals-grid.html" (where hugo.Data.deals "accountId" $orgId) }}
   {{ partial "related-quotes-grid.html" (where hugo.Data.quotes "accountId" $orgId) }}
+  {{ partial "related-invoices-grid.html" (where hugo.Data.invoices "accountId" $orgId) }}
   {{ partial "related-cases-grid.html" (where hugo.Data.cases "accountId" $orgId) }}
   {{ partial "related-projects-grid.html" (where hugo.Data.projects "organisationId" $orgId) }}
 

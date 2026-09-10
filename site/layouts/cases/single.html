@@ -11,5 +11,8 @@
   <div class="post-content md-content">{{ .Content }}</div>
 
   {{ partial "related-parties.html" . }}
+
+  {{ $caseId := .Params.caseId | default .File.BaseFileName }}
+  {{ partial "related-invoices-grid.html" (where hugo.Data.invoices "caseId" $caseId) }}
 </article>
 {{ end }}

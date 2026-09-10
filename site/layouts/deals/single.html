@@ -15,5 +15,6 @@
 
   {{ $dealId := .Params.dealId | default .File.BaseFileName }}
   {{ partial "related-quotes-grid.html" (where hugo.Data.quotes "dealId" $dealId) }}
+  {{ partial "related-invoices-grid.html" (where hugo.Data.invoices "dealId" $dealId) }}
 </article>
 {{ end }}

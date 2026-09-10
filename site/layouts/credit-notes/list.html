@@ -1,0 +1,24 @@
+{{ define "main" }}
+<header class="page-header">
+  <h1>Credit Notes</h1>
+  <p class="section-intro">Accounts receivable credit notes from the Turpinverse canon — adjustments and dispute credits.</p>
+</header>
+
+<div class="card-grid">
+  {{ range .Pages.ByTitle }}
+  <a class="deal-card" href="{{ .RelPermalink }}">
+    <div class="card-header">
+      <div>
+        <p class="card-title">{{ .Title }}</p>
+      </div>
+    </div>
+    {{ with .Params.total }}<p class="card-meta">£{{ . }}</p>{{ end }}
+    {{ with .Params.issueDate }}<p class="card-meta">Issued {{ . }}</p>{{ end }}
+    {{ with .Params.accountId }}
+    <p class="card-meta">{{ partial "org-title.html" . }}</p>
+    {{ end }}
+    {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}

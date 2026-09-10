@@ -34,6 +34,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "products"));
         Directory.CreateDirectory(Path.Combine(contentDir, "leads"));
         Directory.CreateDirectory(Path.Combine(contentDir, "quotes"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "invoices"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "payments"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "credit-notes"));
         Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
         Directory.CreateDirectory(Path.Combine(contentDir, "galleries"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
@@ -448,6 +451,177 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "quotes.json"),
             JsonSerializer.Serialize(canon.Quotes, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var invoicesIndexContent = """
+            ---
+            title: Invoices
+            ---
+
+            Sales invoices from the Turpinverse canon — accounts receivable documents with nested line items and payment history.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "invoices", "_index.md"),
+            invoicesIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var invoice in canon.Invoices)
+        {
+            var contactLine = !string.IsNullOrWhiteSpace(invoice.ContactId)
+                ? $"contactId: \"{invoice.ContactId}\"\n"
+                : string.Empty;
+            var dealLine = !string.IsNullOrWhiteSpace(invoice.DealId)
+                ? $"dealId: \"{invoice.DealId}\"\n"
+                : string.Empty;
+            var caseLine = !string.IsNullOrWhiteSpace(invoice.CaseId)
+                ? $"caseId: \"{invoice.CaseId}\"\n"
+                : string.Empty;
+            var notesBody = invoice.Notes ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(invoice.Terms))
+            {
+                notesBody = string.IsNullOrWhiteSpace(notesBody)
+                    ? invoice.Terms
+                    : $"{notesBody}\n\n**Terms:** {invoice.Terms}";
+            }
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(invoice.InvoiceNumber)}"
+                type: "invoices"
+                invoiceId: "{invoice.InvoiceId}"
+                invoiceNumber: "{EscapeYaml(invoice.InvoiceNumber)}"
+                accountId: "{invoice.AccountId}"
+                {contactLine}{dealLine}{caseLine}status: "{EscapeYaml(invoice.Status)}"
+                issueDate: "{invoice.IssueDate}"
+                dueDate: "{invoice.DueDate}"
+                currency: "{invoice.Currency}"
+                subtotal: {invoice.Subtotal}
+                taxTotal: {invoice.TaxTotal}
+                total: {invoice.Total}
+                amountDue: {invoice.AmountDue}
+                ---
+
+                {notesBody}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "invoices", $"{invoice.InvoiceId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "invoices.json"),
+            JsonSerializer.Serialize(canon.Invoices, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var paymentsIndexContent = """
+            ---
+            title: Payments
+            ---
+
+            Customer payments from the Turpinverse canon — settlements against sales invoices.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "payments", "_index.md"),
+            paymentsIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var payment in canon.Payments)
+        {
+            var invoiceLine = !string.IsNullOrWhiteSpace(payment.InvoiceId)
+                ? $"invoiceId: \"{payment.InvoiceId}\"\n"
+                : string.Empty;
+            var billLine = !string.IsNullOrWhiteSpace(payment.BillId)
+                ? $"billId: \"{payment.BillId}\"\n"
+                : string.Empty;
+            var referenceLine = !string.IsNullOrWhiteSpace(payment.Reference)
+                ? $"reference: \"{EscapeYaml(payment.Reference)}\"\n"
+                : string.Empty;
+            var description = !string.IsNullOrWhiteSpace(payment.Reference)
+                ? $"Payment reference {payment.Reference}."
+                : "Customer payment against a sales invoice.";
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(payment.PaymentId)}"
+                type: "payments"
+                paymentId: "{payment.PaymentId}"
+                paymentDate: "{payment.PaymentDate}"
+                amount: {payment.Amount}
+                method: "{EscapeYaml(payment.Method)}"
+                {invoiceLine}{billLine}{referenceLine}---
+
+                {description}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "payments", $"{payment.PaymentId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "payments.json"),
+            JsonSerializer.Serialize(canon.Payments, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var creditNotesIndexContent = """
+            ---
+            title: Credit Notes
+            ---
+
+            Accounts receivable credit notes from the Turpinverse canon — adjustments and dispute credits with nested line items.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "credit-notes", "_index.md"),
+            creditNotesIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var creditNote in canon.CreditNotes)
+        {
+            var contactLine = !string.IsNullOrWhiteSpace(creditNote.ContactId)
+                ? $"contactId: \"{creditNote.ContactId}\"\n"
+                : string.Empty;
+            var invoiceLine = !string.IsNullOrWhiteSpace(creditNote.InvoiceId)
+                ? $"invoiceId: \"{creditNote.InvoiceId}\"\n"
+                : string.Empty;
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(creditNote.CreditNoteNumber)}"
+                type: "credit-notes"
+                creditNoteId: "{creditNote.CreditNoteId}"
+                creditNoteNumber: "{EscapeYaml(creditNote.CreditNoteNumber)}"
+                accountId: "{creditNote.AccountId}"
+                {contactLine}{invoiceLine}issueDate: "{creditNote.IssueDate}"
+                currency: "{creditNote.Currency}"
+                subtotal: {creditNote.Subtotal}
+                taxTotal: {creditNote.TaxTotal}
+                total: {creditNote.Total}
+                ---
+
+                {creditNote.Notes ?? string.Empty}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "credit-notes", $"{creditNote.CreditNoteId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "credit-notes.json"),
+            JsonSerializer.Serialize(canon.CreditNotes, JsonOptions),
             Utf8NoBom,
             cancellationToken);
 

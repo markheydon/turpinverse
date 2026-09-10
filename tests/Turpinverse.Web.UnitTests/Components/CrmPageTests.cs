@@ -314,7 +314,10 @@ internal static class CrmTestData
                 new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
                 new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
                 new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"]),
-                new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"])
+                new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"]),
+                new ExportDatasetInfo("invoices", "turpinverse-invoices.csv", 12, ["invoiceId"]),
+                new ExportDatasetInfo("payments", "turpinverse-payments.csv", 9, ["paymentId"]),
+                new ExportDatasetInfo("credit-notes", "turpinverse-credit-notes.csv", 3, ["creditNoteId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>

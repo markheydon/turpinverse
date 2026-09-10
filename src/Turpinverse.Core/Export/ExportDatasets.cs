@@ -23,6 +23,9 @@ public static class ExportDatasets
         new("projects", "Projects", "folder", "/projects", "Portfolio catalog items linked to accounts and contacts", CrmGroup),
         new("products", "Products", "tag", "/products", "Product and service catalogue with UK VAT defaults", FinanceGroup),
         new("quotes", "Quotes", "file-invoice", "/quotes", "Sales quotes and estimates with nested line items in canon", FinanceGroup),
+        new("invoices", "Invoices", "receipt", "/invoices", "Sales invoices with nested line items in canon", FinanceGroup),
+        new("payments", "Payments", "credit-card", "/payments", "Customer payments settling sales invoices", FinanceGroup),
+        new("credit-notes", "Credit Notes", "file-minus", "/credit-notes", "Accounts receivable credit notes with nested line items in canon", FinanceGroup),
     ];
 
     public static readonly IReadOnlyList<string> DisplayOrder =
