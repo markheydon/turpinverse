@@ -101,6 +101,79 @@ public class QuoteValidatorTests
         Assert.Contains(result.Violations, v => v.Rule == "VR-068" && v.EntityId == "quotes");
     }
 
+    [Fact]
+    public void Validate_QuoteInvalidStatus_FailsVr074()
+    {
+        var canon = CreateCanon(
+        [
+            Quote("quote-1", status: "Pending")
+        ],
+        organisations: [Organisation("highway-commission", roles: ["customer"])]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-074" && v.EntityId == "quote-1");
+    }
+
+    [Fact]
+    public void Validate_QuoteSingleLine_FailsVr074()
+    {
+        var canon = CreateCanon(
+        [
+            Quote("quote-1", lines: [Line(lineTotal: 1000, unitPrice: 1000, quantity: 1)])
+        ],
+        organisations: [Organisation("highway-commission", roles: ["customer"])]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-074" && v.EntityId == "quote-1");
+    }
+
+    [Fact]
+    public void Validate_NoSharedDealId_FailsVr071()
+    {
+        var canon = CreateCanon(
+            Enumerable.Range(1, 8)
+                .Select(i => Quote(
+                    $"quote-{i}",
+                    dealId: $"deal-{i}",
+                    quoteNumber: $"QUO-2026-{1000 + i:D4}"))
+                .ToList(),
+            organisations: [Organisation("highway-commission", roles: ["customer"])],
+            deals: Enumerable.Range(1, 8)
+                .Select(i => Deal($"deal-{i}", accountId: "highway-commission"))
+                .ToList());
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-071" && v.EntityId == "quotes");
+    }
+
+    [Fact]
+    public void Validate_QuoteTaxUsesPerLineRounding_FailsVr073WhenAuthoredTaxUnrounded()
+    {
+        var canon = CreateCanon(
+        [
+            Quote(
+                "quote-1",
+                subtotal: 66.66m,
+                taxTotal: 13.32m,
+                total: 79.98m,
+                lines:
+                [
+                    Line(lineTotal: 33.33m, unitPrice: 33.33m, quantity: 1),
+                    Line(lineTotal: 33.33m, unitPrice: 33.33m, quantity: 1, productId: "prod-2")
+                ])
+        ],
+        organisations: [Organisation("highway-commission", roles: ["customer"])]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(
+            result.Violations,
+            v => v.Rule == "VR-073" && v.EntityId == "quote-1" && v.Message.Contains("taxTotal"));
+    }
+
     private static Canon CreateCanon(
         IReadOnlyList<Quote> quotes,
         IReadOnlyList<Organisation>? organisations = null,
@@ -155,6 +228,8 @@ public class QuoteValidatorTests
         string accountId = "highway-commission",
         string? contactId = null,
         string? dealId = null,
+        string status = "Draft",
+        string quoteNumber = "QUO-2026-0100",
         decimal subtotal = 2000,
         decimal taxTotal = 400,
         decimal total = 2400,
@@ -162,11 +237,11 @@ public class QuoteValidatorTests
         new()
         {
             QuoteId = quoteId,
-            QuoteNumber = "QUO-2026-0100",
+            QuoteNumber = quoteNumber,
             AccountId = accountId,
             ContactId = contactId,
             DealId = dealId,
-            Status = "Draft",
+            Status = status,
             IssueDate = "2026-01-01",
             ExpiryDate = "2026-02-01",
             Currency = "GBP",

@@ -1058,6 +1058,21 @@ h1 {
 }
 
 /* Quote detail — line items table */
+.quote-lines-missing-notice {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--turpin-amber);
+  border-radius: 0.5rem;
+  background: var(--turpin-amber-light);
+  color: var(--turpin-slate);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.quote-lines-missing-notice code {
+  font-size: 0.85em;
+}
+
 .quote-lines-panel {
   overflow-x: auto;
   background: var(--entry);

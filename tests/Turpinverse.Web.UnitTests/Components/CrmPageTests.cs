@@ -217,6 +217,23 @@ public class LeadsPageTests : CrmEntityPageTestBase<Leads>
     }
 }
 
+public class QuotesPageTests : CrmEntityPageTestBase<Quotes>
+{
+    protected override string DatasetType => "quotes";
+
+    [Fact]
+    public void QuotesPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Quotes", cut.Markup);
+        Assert.Contains("QuoteNumber", cut.Markup);
+        Assert.Contains("Subtotal", cut.Markup);
+        Assert.Contains("TaxTotal", cut.Markup);
+        Assert.Contains("Status", cut.Markup);
+        Assert.Contains("QUO-2026-0035", cut.Markup);
+    }
+}
+
 public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
 {
     protected override string DatasetType => "projects";

@@ -1153,7 +1153,7 @@ public sealed partial class CanonValidator
             if (!AllowedQuoteStatuses.Contains(quote.Status))
             {
                 violations.Add(new ValidationViolation(
-                    "VR-068",
+                    "VR-074",
                     $"Quote status '{quote.Status}' is not allowed",
                     "Quote",
                     quote.QuoteId));
@@ -1162,7 +1162,7 @@ public sealed partial class CanonValidator
             if (!string.Equals(quote.Currency, "GBP", StringComparison.Ordinal))
             {
                 violations.Add(new ValidationViolation(
-                    "VR-068",
+                    "VR-074",
                     $"Quote currency '{quote.Currency}' must be GBP",
                     "Quote",
                     quote.QuoteId));
@@ -1171,7 +1171,7 @@ public sealed partial class CanonValidator
             if (quote.Lines.Count < 2 || quote.Lines.Count > 5)
             {
                 violations.Add(new ValidationViolation(
-                    "VR-068",
+                    "VR-074",
                     $"Quote '{quote.QuoteId}' must have between 2 and 5 lines, found {quote.Lines.Count}",
                     "Quote",
                     quote.QuoteId));
@@ -1322,7 +1322,7 @@ public sealed partial class CanonValidator
             }
             else
             {
-                computedTaxTotal += line.LineTotal * taxRate.Percentage / 100m;
+                computedTaxTotal += RoundQuoteLineTax(line.LineTotal, taxRate.Percentage);
             }
 
             if (!string.IsNullOrWhiteSpace(line.ProductId) && !productIds.Contains(line.ProductId))
@@ -1385,6 +1385,9 @@ public sealed partial class CanonValidator
                 quote.QuoteId));
         }
     }
+
+    private static decimal RoundQuoteLineTax(decimal lineTotal, decimal taxPercentage) =>
+        Math.Round(lineTotal * taxPercentage / 100m, 2, MidpointRounding.AwayFromZero);
 
     private static bool TryCompareDates(string left, string right, out int comparison)
     {

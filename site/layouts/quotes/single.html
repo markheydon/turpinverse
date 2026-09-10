@@ -25,8 +25,9 @@
 
   {{ $quoteId := .Params.quoteId }}
   {{ $taxRates := index hugo.Data "tax-rates" }}
-  {{ range hugo.Data.quotes }}
-    {{ if eq .quoteId $quoteId }}
+  {{ $matchedQuotes := where hugo.Data.quotes "quoteId" $quoteId }}
+  {{ if gt (len $matchedQuotes) 0 }}
+    {{ $quote := index $matchedQuotes 0 }}
   <section class="related-records quote-lines">
     <h2>Line items</h2>
     <div class="quote-lines-panel">
@@ -41,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          {{ range .lines }}
+          {{ range $quote.lines }}
           <tr>
             <td class="quote-line-cell">
               <p class="quote-line-description">{{ .description }}</p>
@@ -71,12 +72,19 @@
       </table>
     </div>
     <div class="quote-totals">
-      <div class="quote-total-row"><span>Subtotal</span><span>£{{ .subtotal }}</span></div>
-      <div class="quote-total-row"><span>VAT</span><span>£{{ .taxTotal }}</span></div>
-      <div class="quote-total-row quote-total-grand"><span>Total</span><span>£{{ .total }}</span></div>
+      <div class="quote-total-row"><span>Subtotal</span><span>£{{ $quote.subtotal }}</span></div>
+      <div class="quote-total-row"><span>VAT</span><span>£{{ $quote.taxTotal }}</span></div>
+      <div class="quote-total-row quote-total-grand"><span>Total</span><span>£{{ $quote.total }}</span></div>
     </div>
   </section>
-    {{ end }}
+  {{ else }}
+  <section class="related-records quote-lines-missing" role="status">
+    <h2>Line items</h2>
+    <p class="quote-lines-missing-notice">
+      Line items could not be loaded for quote <code>{{ $quoteId }}</code>.
+      Regenerate Hugo content from canon (<code>site/data/quotes.json</code> is out of sync with this page).
+    </p>
+  </section>
   {{ end }}
 </article>
 {{ end }}

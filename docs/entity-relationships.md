@@ -382,12 +382,13 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | VR-062 | Product | `taxRateId` references an existing tax rate |
 | VR-063 | Organisation | `roles[]` enum, unique, min 0; `turpin-enterprises` has none |
 | VR-064 | Organisation | Named supplier/partner hats on key story orgs |
-| VR-068 | Quote | Unique ids/numbers; ≥8 quotes; status/currency enums; 2–5 lines; `QUO-YYYY-nnnn` |
+| VR-068 | Quote | Unique ids/numbers; ≥8 quotes; `QUO-YYYY-nnnn` |
 | VR-069 | Quote | `accountId` customer role |
 | VR-070 | Quote | `contactId` membership against account |
-| VR-071 | Quote | `dealId` account alignment; ≥2 quotes per deal |
+| VR-071 | Quote | `dealId` account alignment; ≥2 quotes share one `dealId` |
 | VR-072 | Quote line | FK and project sponsoring-org rules |
-| VR-073 | Quote | Authored money and date order |
+| VR-073 | Quote | Authored money (per-line VAT rounded to 2 dp) and date order |
+| VR-074 | Quote | Status/currency enums; 2–5 lines |
 
 ## Repaired canon rows (shipped)
 
