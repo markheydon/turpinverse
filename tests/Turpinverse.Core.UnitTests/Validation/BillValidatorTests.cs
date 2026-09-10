@@ -68,10 +68,66 @@ public class BillValidatorTests
         Assert.Contains(result.Violations, v => v.Rule == "VR-094" && v.EntityId == "bill-1");
     }
 
+    [Fact]
+    public void Validate_BillDealBelongsToDifferentSupplier_FailsVr093()
+    {
+        var canon = CreateCanon(
+        [
+            Bill("bill-1", dealId: "deal-1")
+        ],
+        deals:
+        [
+            new Deal
+            {
+                DealId = "deal-1",
+                DealName = "Mismatch",
+                AccountId = "highway-commission",
+                Stage = "Proposal",
+                Amount = 1000,
+                CloseDate = "2026-12-31",
+                Description = "Deal on a different supplier account"
+            }
+        ]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-093" && v.EntityId == "bill-1");
+    }
+
+    [Fact]
+    public void Validate_PaymentExceedsBillTotal_FailsVr081()
+    {
+        var canon = CreateCanon(
+        [
+            Bill("bill-1", total: 2400, amountDue: 0)
+        ],
+        payments: [Payment("pay-1", billId: "bill-1", amount: 3000)]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-081" && v.EntityId == "bill-1");
+    }
+
+    [Fact]
+    public void Validate_PaymentWithUnknownBillId_FailsVr081()
+    {
+        var canon = CreateCanon(
+        [
+            Bill("bill-1")
+        ],
+        payments: [Payment("pay-1", billId: "bill-missing")]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-081" && v.EntityId == "pay-1");
+    }
+
     private static Canon CreateCanon(
         IReadOnlyList<Bill> bills,
         IReadOnlyList<Organisation>? organisations = null,
-        IReadOnlyList<Project>? projects = null) =>
+        IReadOnlyList<Project>? projects = null,
+        IReadOnlyList<Deal>? deals = null,
+        IReadOnlyList<Payment>? payments = null) =>
         new()
         {
             Version = "1.7.0",
@@ -95,26 +151,31 @@ public class BillValidatorTests
                 new() { TaxRateId = "tax-standard", Name = "Standard", Code = "S", Percentage = 20m, Description = "Standard VAT" }
             ],
             Projects = projects ?? [],
-            Bills = bills
+            Deals = deals ?? [],
+            Bills = bills,
+            Payments = payments ?? []
         };
 
     private static Bill Bill(
         string billId,
         string supplierAccountId = "king-equine-trading",
         decimal amountDue = 2400,
+        decimal total = 2400,
+        string? dealId = null,
         IReadOnlyList<BillLine>? lines = null) =>
         new()
         {
             BillId = billId,
             BillNumber = "BILL-2026-0001",
             SupplierAccountId = supplierAccountId,
-            Status = "Authorised",
+            DealId = dealId,
+            Status = amountDue == 0 ? "Paid" : "Authorised",
             IssueDate = "2026-01-01",
             DueDate = "2026-02-01",
             Currency = "GBP",
             Subtotal = 2000,
-            TaxTotal = 400,
-            Total = 2400,
+            TaxTotal = total - 2000,
+            Total = total,
             AmountDue = amountDue,
             Lines = lines ??
             [
@@ -137,6 +198,19 @@ public class BillValidatorTests
             LineTotal = lineTotal,
             ProductId = "highway-risk-day-rate",
             ProjectId = projectId
+        };
+
+    private static Payment Payment(
+        string paymentId,
+        string? billId = null,
+        decimal amount = 1000) =>
+        new()
+        {
+            PaymentId = paymentId,
+            PaymentDate = "2026-01-15",
+            Amount = amount,
+            Method = "Bank transfer",
+            BillId = billId
         };
 
     private static Organisation Organisation(string id, IReadOnlyList<string> roles) =>

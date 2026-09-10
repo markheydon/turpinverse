@@ -133,7 +133,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 
 | Code | Scope | Pass condition |
 |------|-------|----------------|
-| VR-081 | Payment | Unique `paymentId`; ≥8 payments; `method` in closed enum; exactly one target (`invoiceId` **XOR** `billId`); payment sums on a document ≤ document `total`; at least one partial payment |
+| VR-081 | Payment | Unique `paymentId`; ≥8 payments; `method` in closed enum; exactly one target (`invoiceId` **XOR** `billId`); payment sums on a document ≤ document `total`; at least one partial payment on an invoice or bill |
 
 ## Sales orders (VR-084–VR-089)
 
@@ -153,7 +153,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-090 | Bill | Unique `billId` / `billNumber`; ≥6 bills; `billNumber` matches `BILL-YYYY-nnnn` |
 | VR-091 | Bill | `supplierAccountId` exists and organisation `roles` includes `supplier` |
 | VR-092 | Bill | `contactId` omitted or exists and is a member of `supplierAccountId` |
-| VR-093 | Bill | Optional `dealId` / `caseId` exist; at least one bill references `case-011`; line FKs (project must exist; no supplier-org match on project) |
+| VR-093 | Bill | Optional `dealId` / `caseId` exist (`dealId` must belong to `supplierAccountId`); at least one bill references `case-011`; line FKs (project must exist; no supplier-org match on project) |
 | VR-094 | Bill | Authored money; `dueDate` ≥ `issueDate`; `amountDue` equals `total` minus bill payments |
 | VR-095 | Bill | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue`; `currency` is `GBP`; 2–5 nested lines; at least one `Overdue`; `Paid` requires full settlement; `Draft` requires no payments |
 

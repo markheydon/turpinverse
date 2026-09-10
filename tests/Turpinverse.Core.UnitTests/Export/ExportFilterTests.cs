@@ -271,6 +271,40 @@ public class ExportFilterTests
     }
 
     [Fact]
+    public void ApplyToSalesOrders_WhenStatusAndAccountIdMatch_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateSalesOrder("so-1", "Confirmed", "highway-commission"),
+            CreateSalesOrder("so-2", "Draft", "highway-commission"),
+            CreateSalesOrder("so-3", "Confirmed", "millington-inn")
+        };
+
+        var filter = new ExportFilter { Status = "Confirmed", AccountId = "highway-commission" };
+        var result = filter.ApplyToSalesOrders(rows);
+
+        Assert.Single(result);
+        Assert.Equal("so-1", result[0].SalesOrderId);
+    }
+
+    [Fact]
+    public void ApplyToBills_WhenStatusAndSupplierAccountIdMatch_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateBill("bill-1", "Paid", "king-equine-trading"),
+            CreateBill("bill-2", "Overdue", "king-equine-trading"),
+            CreateBill("bill-3", "Paid", "millington-inn")
+        };
+
+        var filter = new ExportFilter { Status = "Paid", AccountId = "king-equine-trading" };
+        var result = filter.ApplyToBills(rows);
+
+        Assert.Single(result);
+        Assert.Equal("bill-1", result[0].BillId);
+    }
+
+    [Fact]
     public void ApplyToPayments_WhenAccountIdMatch_ReturnsOnlyMatchingRows()
     {
         var rows = new[]
@@ -301,6 +335,36 @@ public class ExportFilterTests
         Assert.Single(result);
         Assert.Equal("crn-1", result[0].CreditNoteId);
     }
+
+    private static SalesOrderExport CreateSalesOrder(string salesOrderId, string status, string accountId) =>
+        new()
+        {
+            SalesOrderId = salesOrderId,
+            OrderNumber = "SO-2026-0001",
+            AccountId = accountId,
+            Status = status,
+            OrderDate = "2026-01-01",
+            Currency = "GBP",
+            Subtotal = 1000,
+            TaxTotal = 200,
+            Total = 1200
+        };
+
+    private static BillExport CreateBill(string billId, string status, string supplierAccountId) =>
+        new()
+        {
+            BillId = billId,
+            BillNumber = "BILL-2026-0001",
+            SupplierAccountId = supplierAccountId,
+            Status = status,
+            IssueDate = "2026-01-01",
+            DueDate = "2026-02-01",
+            Currency = "GBP",
+            Subtotal = 1000,
+            TaxTotal = 200,
+            Total = 1200,
+            AmountDue = status == "Paid" ? 0 : 1200
+        };
 
     private static InvoiceExport CreateInvoice(string invoiceId, string status, string accountId) =>
         new()

@@ -24,6 +24,7 @@
   {{ end }}
 
   {{ $salesOrderId := .Params.salesOrderId }}
+  {{ partial "related-invoices-for-sales-order-grid.html" $salesOrderId }}
   {{ $taxRates := index hugo.Data "tax-rates" }}
   {{ $matchedOrders := where (index hugo.Data "sales-orders") "salesOrderId" $salesOrderId }}
   {{ if gt (len $matchedOrders) 0 }}

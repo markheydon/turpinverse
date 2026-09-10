@@ -234,6 +234,38 @@ public class QuotesPageTests : CrmEntityPageTestBase<Quotes>
     }
 }
 
+public class SalesOrdersPageTests : CrmEntityPageTestBase<SalesOrders>
+{
+    protected override string DatasetType => "sales-orders";
+
+    [Fact]
+    public void SalesOrdersPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Sales Orders", cut.Markup);
+        Assert.Contains("OrderNumber", cut.Markup);
+        Assert.Contains("Total", cut.Markup);
+        Assert.Contains("Status", cut.Markup);
+        Assert.Contains("SO-2026-0101", cut.Markup);
+    }
+}
+
+public class BillsPageTests : CrmEntityPageTestBase<Bills>
+{
+    protected override string DatasetType => "bills";
+
+    [Fact]
+    public void BillsPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Bills", cut.Markup);
+        Assert.Contains("BillNumber", cut.Markup);
+        Assert.Contains("AmountDue", cut.Markup);
+        Assert.Contains("Supplier", cut.Markup);
+        Assert.Contains("BILL-2026-0041", cut.Markup);
+    }
+}
+
 public class InvoicesPageTests : CrmEntityPageTestBase<Invoices>
 {
     protected override string DatasetType => "invoices";
@@ -261,6 +293,7 @@ public class PaymentsPageTests : CrmEntityPageTestBase<Payments>
         Assert.Contains("Payments", cut.Markup);
         Assert.Contains("PaymentDate", cut.Markup);
         Assert.Contains("Method", cut.Markup);
+        Assert.Contains("BillId", cut.Markup);
         Assert.Contains("pay-001", cut.Markup);
     }
 }

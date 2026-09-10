@@ -213,6 +213,35 @@ public class ExportFilterApiTests : IClassFixture<WebApplicationFactory<Program>
     }
 
     [Fact]
+    public async Task Preview_SalesOrdersFilteredByStatus_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/sales-orders/preview?count=100&status=Confirmed",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.NotEmpty(rows);
+        Assert.All(rows!, row => Assert.Equal("Confirmed", row["status"], StringComparer.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Download_BillsFilteredBySupplierAccountId_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/bills?accountId=king-equine-trading",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = CsvExportReader.ParseRows(await response.Content.ReadAsByteArrayAsync(cancellationToken));
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("king-equine-trading", row["supplierAccountId"]));
+    }
+
+    [Fact]
     public async Task Preview_WithZeroMatchLeadFilter_ReturnsEmptyArray()
     {
         var cancellationToken = TestContext.Current.CancellationToken;

@@ -19,6 +19,9 @@
     {{ with .Params.invoiceId }}
     <p class="card-meta">Invoice: {{ partial "invoice-title.html" . }}</p>
     {{ end }}
+    {{ with .Params.billId }}
+    <p class="card-meta">Bill: {{ partial "bill-title.html" . }}</p>
+    {{ end }}
     {{ with .Summary }}<p class="card-summary">{{ . }}</p>{{ end }}
   </a>
   {{ end }}

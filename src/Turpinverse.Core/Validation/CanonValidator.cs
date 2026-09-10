@@ -1902,6 +1902,15 @@ public sealed partial class CanonValidator
             }
         }
 
+        foreach (var (billId, paidTotal) in paymentsByBill)
+        {
+            var bill = billsById[billId];
+            if (paidTotal > 0 && paidTotal < bill.Total)
+            {
+                hasPartialPayment = true;
+            }
+        }
+
         if (canon.Payments.Count < 8)
         {
             violations.Add(new ValidationViolation(
@@ -1928,7 +1937,7 @@ public sealed partial class CanonValidator
         {
             violations.Add(new ValidationViolation(
                 "VR-081",
-                "At least one invoice must have a partial payment (sum of payments less than total)",
+                "At least one invoice or bill must have a partial payment (sum of payments less than total)",
                 "Payment",
                 "payments"));
         }
@@ -2311,6 +2320,14 @@ public sealed partial class CanonValidator
                     violations.Add(new ValidationViolation(
                         "VR-093",
                         $"Bill '{bill.BillId}' references unknown deal '{bill.DealId}'",
+                        "Bill",
+                        bill.BillId));
+                }
+                else if (!string.Equals(deal.AccountId, bill.SupplierAccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-093",
+                        $"Bill '{bill.BillId}' deal '{bill.DealId}' belongs to a different supplier account",
                         "Bill",
                         bill.BillId));
                 }
