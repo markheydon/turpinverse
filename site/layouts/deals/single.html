@@ -12,5 +12,8 @@
   <div class="post-content md-content">{{ .Content }}</div>
 
   {{ partial "related-parties.html" . }}
+
+  {{ $dealId := .Params.dealId | default .File.BaseFileName }}
+  {{ partial "related-quotes-grid.html" (where hugo.Data.quotes "dealId" $dealId) }}
 </article>
 {{ end }}

@@ -34,8 +34,8 @@ public class ExportDatasetsTests
             .Where(dataset => dataset.Group == ExportDatasets.FinanceGroup)
             .ToList();
 
-        Assert.Single(financeDatasets);
-        Assert.Equal("products", financeDatasets[0].Type);
+        Assert.Equal(2, financeDatasets.Count);
+        Assert.Equal(["products", "quotes"], financeDatasets.Select(dataset => dataset.Type));
     }
 
     [Fact]

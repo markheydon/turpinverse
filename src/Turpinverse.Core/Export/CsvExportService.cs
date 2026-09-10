@@ -17,7 +17,8 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         ["cases"] = "turpinverse-cases.csv",
         ["projects"] = "turpinverse-projects.csv",
         ["products"] = "turpinverse-products.csv",
-        ["leads"] = "turpinverse-leads.csv"
+        ["leads"] = "turpinverse-leads.csv",
+        ["quotes"] = "turpinverse-quotes.csv"
     };
 
     private static readonly JsonSerializerOptions PreviewJsonOptions = new()
@@ -47,6 +48,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "projects" => await WriteProjectsAsync(csv, canon, filter, cancellationToken),
             "products" => await WriteProductsAsync(csv, canon, filter, cancellationToken),
             "leads" => await WriteLeadsAsync(csv, canon, filter, cancellationToken),
+            "quotes" => await WriteQuotesAsync(csv, canon, filter, cancellationToken),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
 
@@ -75,6 +77,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "projects" => GetProjects(canon, filter),
             "products" => GetProducts(canon, filter),
             "leads" => GetLeads(canon, filter),
+            "quotes" => GetQuotes(canon, filter),
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
 
@@ -171,6 +174,17 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         return rows.Count;
     }
 
+    private static async Task<int> WriteQuotesAsync(
+        CsvWriter csv,
+        Models.Canon canon,
+        ExportFilter? filter,
+        CancellationToken cancellationToken)
+    {
+        var rows = GetQuotes(canon, filter);
+        await csv.WriteRecordsAsync(rows, cancellationToken);
+        return rows.Count;
+    }
+
     private static IReadOnlyList<ContactExport> GetContacts(Models.Canon canon, ExportFilter? filter) =>
         filter is null
             ? ExportMapper.MapContacts(canon)
@@ -206,6 +220,11 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             ? ExportMapper.MapLeads(canon)
             : filter.ApplyToLeads(ExportMapper.MapLeads(canon));
 
+    private static IReadOnlyList<QuoteExport> GetQuotes(Models.Canon canon, ExportFilter? filter) =>
+        filter is null
+            ? ExportMapper.MapQuotes(canon)
+            : filter.ApplyToQuotes(ExportMapper.MapQuotes(canon));
+
     private static int GetRowCount(string type, Models.Canon canon) =>
         type.ToLowerInvariant() switch
         {
@@ -216,6 +235,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             "cases" => ExportMapper.MapCases(canon).Count,
             "projects" => ExportMapper.MapProjects(canon).Count,
             "products" => ExportMapper.MapProducts(canon).Count,
+            "quotes" => ExportMapper.MapQuotes(canon).Count,
             _ => throw new ArgumentException($"Dataset '{type}' is not supported.", nameof(type))
         };
 

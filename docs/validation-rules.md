@@ -106,9 +106,21 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-066 | Lead | `convertedContactId` required when `status` is `Converted` and must reference an existing persona; must be omitted otherwise |
 | VR-067 | Lead | Optional `accountId` references an existing organisation when set (no membership required) |
 
+## Quotes (VR-068–VR-074)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-068 | Quote | Unique `quoteId` / `quoteNumber`; ≥8 quotes; `quoteNumber` matches `QUO-YYYY-nnnn` |
+| VR-069 | Quote | `accountId` exists and organisation `roles` includes `customer` |
+| VR-070 | Quote | `contactId` omitted or exists and is a member of `accountId` |
+| VR-071 | Quote | `dealId` omitted or exists with matching `deal.accountId`; ≥2 quotes share one `dealId` |
+| VR-072 | Quote line | `taxRateId` and optional `productId` exist; optional `projectId` exists and `project.organisationId` equals quote `accountId` |
+| VR-073 | Quote | Authored money: line totals, subtotal, tax (per-line VAT rounded to 2 dp, then summed), total, and `expiryDate` ≥ `issueDate` |
+| VR-074 | Quote | `status` in `Draft` \| `Sent` \| `Accepted` \| `Declined` \| `Expired`; `currency` is `GBP`; 2–5 nested lines each |
+
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, quote notes/terms/line descriptions, persona notes, and address string fields.
 
 ## Related docs
 

@@ -25,18 +25,18 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `quotes` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
 | Name | Type | Datasets | Semantics |
 |------|------|----------|-----------|
-| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads` | Exact match, case-insensitive |
+| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `quotes` | Exact match, case-insensitive |
 | `source` | string | `leads` | Exact match, case-insensitive |
 | `taxRateId` | string | `products` | Exact match on export `taxRateId` |
 | `stage` | string | `deals` | Exact match, case-insensitive |
 | `priority` | string | `cases` | Exact match, case-insensitive |
-| `accountId` | string | `contacts`, `deals`, `cases` | Exact match on export `accountId` |
+| `accountId` | string | `contacts`, `deals`, `cases`, `quotes` | Exact match on export `accountId` |
 | `industry` | string | `accounts` | Exact match, case-insensitive |
 
 No query parameters → full dataset. Filtered body contains **only matching rows**.
@@ -73,6 +73,7 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `projects` | `turpinverse-projects.csv` |
 | `products` | `turpinverse-products.csv` |
 | `leads` | `turpinverse-leads.csv` |
+| `quotes` | `turpinverse-quotes.csv` |
 
 ### GET /api/export/manifest
 
@@ -116,7 +117,7 @@ Runs cross-reference validation and returns results. See [validation-rules.md](.
 ```json
 {
   "valid": true,
-  "canonVersion": "1.5.0",
+  "canonVersion": "1.6.0",
   "counts": {
     "personas": 25,
     "organisations": 10,

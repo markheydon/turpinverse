@@ -33,6 +33,7 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         Directory.CreateDirectory(Path.Combine(contentDir, "projects"));
         Directory.CreateDirectory(Path.Combine(contentDir, "products"));
         Directory.CreateDirectory(Path.Combine(contentDir, "leads"));
+        Directory.CreateDirectory(Path.Combine(contentDir, "quotes"));
         Directory.CreateDirectory(Path.Combine(contentDir, "articles"));
         Directory.CreateDirectory(Path.Combine(contentDir, "galleries"));
         Directory.CreateDirectory(Path.Combine(dataDir, "career"));
@@ -386,6 +387,73 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "leads.json"),
             JsonSerializer.Serialize(canon.Leads, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        var quotesIndexContent = """
+            ---
+            title: Quotes
+            ---
+
+            Sales quotes and estimates from the Turpinverse canon — proposal-stage commercial documents with nested line items.
+
+            """;
+        await File.WriteAllTextAsync(
+            Path.Combine(contentDir, "quotes", "_index.md"),
+            quotesIndexContent,
+            Encoding.UTF8,
+            cancellationToken);
+
+        foreach (var quote in canon.Quotes)
+        {
+            var contactLine = !string.IsNullOrWhiteSpace(quote.ContactId)
+                ? $"contactId: \"{quote.ContactId}\"\n"
+                : string.Empty;
+            var dealLine = !string.IsNullOrWhiteSpace(quote.DealId)
+                ? $"dealId: \"{quote.DealId}\"\n"
+                : string.Empty;
+            var notesBody = quote.Notes ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(quote.Terms))
+            {
+                notesBody = string.IsNullOrWhiteSpace(notesBody)
+                    ? quote.Terms
+                    : $"{notesBody}\n\n**Terms:** {quote.Terms}";
+            }
+
+            var content = $"""
+                ---
+                title: "{EscapeYaml(quote.QuoteNumber)}"
+                type: "quotes"
+                quoteId: "{quote.QuoteId}"
+                quoteNumber: "{EscapeYaml(quote.QuoteNumber)}"
+                accountId: "{quote.AccountId}"
+                {contactLine}{dealLine}status: "{EscapeYaml(quote.Status)}"
+                issueDate: "{quote.IssueDate}"
+                expiryDate: "{quote.ExpiryDate}"
+                currency: "{quote.Currency}"
+                subtotal: {quote.Subtotal}
+                taxTotal: {quote.TaxTotal}
+                total: {quote.Total}
+                ---
+
+                {notesBody}
+                """;
+            await File.WriteAllTextAsync(
+                Path.Combine(contentDir, "quotes", $"{quote.QuoteId}.md"),
+                content,
+                Encoding.UTF8,
+                cancellationToken);
+        }
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "quotes.json"),
+            JsonSerializer.Serialize(canon.Quotes, JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "tax-rates.json"),
+            JsonSerializer.Serialize(canon.TaxRates, JsonOptions),
             Utf8NoBom,
             cancellationToken);
 

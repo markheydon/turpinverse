@@ -155,6 +155,35 @@ public class ExportFilterApiTests : IClassFixture<WebApplicationFactory<Program>
     }
 
     [Fact]
+    public async Task Preview_QuotesFilteredByStatus_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/quotes/preview?count=100&status=Accepted",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("Accepted", row["status"], StringComparer.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Download_QuotesFilteredByAccountId_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/quotes?accountId=highway-commission",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = CsvExportReader.ParseRows(await response.Content.ReadAsByteArrayAsync(cancellationToken));
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("highway-commission", row["accountId"]));
+    }
+
+    [Fact]
     public async Task Preview_WithZeroMatchLeadFilter_ReturnsEmptyArray()
     {
         var cancellationToken = TestContext.Current.CancellationToken;

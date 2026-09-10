@@ -314,6 +314,7 @@ flowchart LR
         Project
         Product
         TaxRate
+        Quote
     end
     subgraph csv [CSV rows]
         Contact
@@ -322,6 +323,7 @@ flowchart LR
         CaseRow[Case]
         ProjectRow[Project]
         ProductRow[Product]
+        QuoteRow[Quote]
     end
     Persona -->|"1 row per membership"| Contact
     Organisation -->|"1:1 flatten registeredOffice plus roles"| Account
@@ -330,6 +332,7 @@ flowchart LR
     Project -->|"1:1 main plus stakeholders joined"| ProjectRow
     Product -->|"1:1 default taxRateId"| ProductRow
     TaxRate -.->|"lookup only on Hugo"| ProductRow
+    Quote -.->|"header CSV only"| QuoteRow[Quote]
 ```
 
 | Projection | Shipped behaviour |
@@ -339,6 +342,7 @@ flowchart LR
 | Product | 1:1 from catalogue item; `taxRateId` is the default VAT lookup (lines snapshot later). |
 | Deal / Case | 1:1; optional `contactId`; `stakeholderContactIds` as a semicolon-separated column (empty when none). |
 | Project | 1:1; optional `contactId`, `dealId`, `caseIds`; `stakeholderContactIds` column. Project people in export are main ∪ stakeholders. |
+| Quote | 1:1 **header only**; nested `lines[]` omitted from CSV (Hugo detail and canon JSON). Optional `contactId`, `dealId`. |
 
 Deals and cases are authored in canon; they are not generated from membership edges at export time.
 
@@ -378,6 +382,13 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | VR-062 | Product | `taxRateId` references an existing tax rate |
 | VR-063 | Organisation | `roles[]` enum, unique, min 0; `turpin-enterprises` has none |
 | VR-064 | Organisation | Named supplier/partner hats on key story orgs |
+| VR-068 | Quote | Unique ids/numbers; ≥8 quotes; `QUO-YYYY-nnnn` |
+| VR-069 | Quote | `accountId` customer role |
+| VR-070 | Quote | `contactId` membership against account |
+| VR-071 | Quote | `dealId` account alignment; ≥2 quotes share one `dealId` |
+| VR-072 | Quote line | FK and project sponsoring-org rules |
+| VR-073 | Quote | Authored money (per-line VAT rounded to 2 dp) and date order |
+| VR-074 | Quote | Status/currency enums; 2–5 lines |
 
 ## Repaired canon rows (shipped)
 
@@ -412,8 +423,8 @@ canon/
 ├── tax-rates.json
 ├── leads.json
 │
-│  # Agreed graph — remaining files land with child stories (#34–#36, #38):
-├── quotes.json                 # #34
+├── quotes.json                 # shipped #34
+│  # Agreed graph — remaining files land with child stories (#35–#36, #38):
 ├── sales-orders.json           # #36
 ├── invoices.json               # #35
 ├── payments.json               # #35

@@ -38,6 +38,7 @@ public sealed partial class CanonValidator
         ValidateAddresses(canon, violations);
         ValidateCatalogue(canon, violations);
         ValidateLeads(canon, personaIds, organisationIds, violations);
+        ValidateQuotes(canon, personaIds, organisationIds, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -56,7 +57,8 @@ public sealed partial class CanonValidator
             ["professionalExtras"] = canon.ProfessionalExtras.Count,
             ["products"] = canon.Products.Count,
             ["taxRates"] = canon.TaxRates.Count,
-            ["leads"] = canon.Leads.Count
+            ["leads"] = canon.Leads.Count,
+            ["quotes"] = canon.Quotes.Count
         };
 
         return new CanonValidationResult(
@@ -1094,6 +1096,326 @@ public sealed partial class CanonValidator
     {
         "Hot", "Warm", "Cold"
     };
+
+    private static readonly HashSet<string> AllowedQuoteStatuses = new(StringComparer.Ordinal)
+    {
+        "Draft", "Sent", "Accepted", "Declined", "Expired"
+    };
+
+    [GeneratedRegex(@"^QUO-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
+    private static partial Regex QuoteNumberPattern();
+
+    private static void ValidateQuotes(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var dealsById = canon.Deals.ToDictionary(d => d.DealId);
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        var productIds = canon.Products.Select(p => p.ProductId).ToHashSet(StringComparer.Ordinal);
+        var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
+
+        var seenQuoteIds = new HashSet<string>(StringComparer.Ordinal);
+        var seenQuoteNumbers = new HashSet<string>(StringComparer.Ordinal);
+        var dealIdCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+
+        foreach (var quote in canon.Quotes)
+        {
+            if (!seenQuoteIds.Add(quote.QuoteId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-068",
+                    $"Duplicate quote id '{quote.QuoteId}'",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!seenQuoteNumbers.Add(quote.QuoteNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-068",
+                    $"Duplicate quote number '{quote.QuoteNumber}'",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!QuoteNumberPattern().IsMatch(quote.QuoteNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-068",
+                    $"Quote number '{quote.QuoteNumber}' must match QUO-YYYY-nnnn",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!AllowedQuoteStatuses.Contains(quote.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-074",
+                    $"Quote status '{quote.Status}' is not allowed",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!string.Equals(quote.Currency, "GBP", StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-074",
+                    $"Quote currency '{quote.Currency}' must be GBP",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (quote.Lines.Count < 2 || quote.Lines.Count > 5)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-074",
+                    $"Quote '{quote.QuoteId}' must have between 2 and 5 lines, found {quote.Lines.Count}",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!organisationIds.Contains(quote.AccountId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-069",
+                    $"Quote '{quote.QuoteId}' references unknown account '{quote.AccountId}'",
+                    "Quote",
+                    quote.QuoteId));
+            }
+            else if (!organisationsById[quote.AccountId].Roles.Contains("customer", StringComparer.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-069",
+                    $"Quote '{quote.QuoteId}' account '{quote.AccountId}' must include customer role",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            ValidateQuoteMainContact(
+                quote.ContactId,
+                quote.AccountId,
+                organisationsById,
+                personaIds,
+                quote.QuoteId,
+                violations);
+
+            if (!string.IsNullOrWhiteSpace(quote.DealId))
+            {
+                if (!dealsById.TryGetValue(quote.DealId, out var deal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-071",
+                        $"Quote '{quote.QuoteId}' references unknown deal '{quote.DealId}'",
+                        "Quote",
+                        quote.QuoteId));
+                }
+                else if (!string.Equals(deal.AccountId, quote.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-071",
+                        $"Quote '{quote.QuoteId}' deal '{quote.DealId}' belongs to a different account",
+                        "Quote",
+                        quote.QuoteId));
+                }
+
+                dealIdCounts.TryGetValue(quote.DealId, out var count);
+                dealIdCounts[quote.DealId] = count + 1;
+            }
+
+            ValidateQuoteMoney(quote, taxRatesById, productIds, projectsById, violations);
+        }
+
+        if (canon.Quotes.Count < 8)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-068",
+                $"Minimum 8 quotes required, found {canon.Quotes.Count}",
+                "Quote",
+                "quotes"));
+        }
+
+        if (!dealIdCounts.Values.Any(count => count >= 2))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-071",
+                "At least two quotes must share the same dealId",
+                "Quote",
+                "quotes"));
+        }
+    }
+
+    private static void ValidateQuoteMainContact(
+        string? contactId,
+        string accountId,
+        Dictionary<string, Organisation> organisationsById,
+        HashSet<string> personaIds,
+        string quoteId,
+        List<ValidationViolation> violations)
+    {
+        if (string.IsNullOrWhiteSpace(contactId))
+        {
+            return;
+        }
+
+        if (!personaIds.Contains(contactId))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-070",
+                $"Quote '{quoteId}' contact '{contactId}' does not exist",
+                "Quote",
+                quoteId));
+            return;
+        }
+
+        if (!organisationsById.TryGetValue(accountId, out var organisation)
+            || !organisation.MemberPersonaIds.Contains(contactId))
+        {
+            violations.Add(new ValidationViolation(
+                "VR-070",
+                $"Quote '{quoteId}' contact '{contactId}' is not a member of account '{accountId}'",
+                "Quote",
+                quoteId));
+        }
+    }
+
+    private static void ValidateQuoteMoney(
+        Quote quote,
+        Dictionary<string, TaxRate> taxRatesById,
+        HashSet<string> productIds,
+        Dictionary<string, Project> projectsById,
+        List<ValidationViolation> violations)
+    {
+        if (!TryCompareDates(quote.IssueDate, quote.ExpiryDate, out var dateOrder) || dateOrder > 0)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-073",
+                $"Quote '{quote.QuoteId}' expiryDate must be on or after issueDate",
+                "Quote",
+                quote.QuoteId));
+        }
+
+        decimal computedSubtotal = 0;
+        decimal computedTaxTotal = 0;
+
+        foreach (var line in quote.Lines)
+        {
+            var expectedLineTotal = line.Quantity * line.UnitPrice;
+            if (line.LineTotal != expectedLineTotal)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-073",
+                    $"Quote '{quote.QuoteId}' line total {line.LineTotal} does not equal quantity × unitPrice ({expectedLineTotal})",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!taxRatesById.TryGetValue(line.TaxRateId, out var taxRate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-072",
+                    $"Quote '{quote.QuoteId}' line references unknown tax rate '{line.TaxRateId}'",
+                    "Quote",
+                    quote.QuoteId));
+            }
+            else
+            {
+                computedTaxTotal += RoundQuoteLineTax(line.LineTotal, taxRate.Percentage);
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProductId) && !productIds.Contains(line.ProductId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-072",
+                    $"Quote '{quote.QuoteId}' line references unknown product '{line.ProductId}'",
+                    "Quote",
+                    quote.QuoteId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProjectId))
+            {
+                if (!projectsById.TryGetValue(line.ProjectId, out var project))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-072",
+                        $"Quote '{quote.QuoteId}' line references unknown project '{line.ProjectId}'",
+                        "Quote",
+                        quote.QuoteId));
+                }
+                else if (!string.Equals(project.OrganisationId, quote.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-072",
+                        $"Quote '{quote.QuoteId}' line project '{line.ProjectId}' is not sponsored by account '{quote.AccountId}'",
+                        "Quote",
+                        quote.QuoteId));
+                }
+            }
+        }
+
+        computedSubtotal = quote.Lines.Sum(l => l.LineTotal);
+        var computedTotal = computedSubtotal + computedTaxTotal;
+
+        if (quote.Subtotal != computedSubtotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-073",
+                $"Quote '{quote.QuoteId}' subtotal {quote.Subtotal} does not equal sum of line totals ({computedSubtotal})",
+                "Quote",
+                quote.QuoteId));
+        }
+
+        if (quote.TaxTotal != computedTaxTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-073",
+                $"Quote '{quote.QuoteId}' taxTotal {quote.TaxTotal} does not equal computed tax ({computedTaxTotal})",
+                "Quote",
+                quote.QuoteId));
+        }
+
+        if (quote.Total != computedTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-073",
+                $"Quote '{quote.QuoteId}' total {quote.Total} does not equal subtotal + tax ({computedTotal})",
+                "Quote",
+                quote.QuoteId));
+        }
+    }
+
+    private static decimal RoundQuoteLineTax(decimal lineTotal, decimal taxPercentage) =>
+        Math.Round(lineTotal * taxPercentage / 100m, 2, MidpointRounding.AwayFromZero);
+
+    private static bool TryCompareDates(string left, string right, out int comparison)
+    {
+        comparison = 0;
+        if (!TryParseCanonDate(left, out var leftDate) || !TryParseCanonDate(right, out var rightDate))
+        {
+            return false;
+        }
+
+        comparison = leftDate.CompareTo(rightDate);
+        return true;
+    }
+
+    private static bool TryParseCanonDate(string value, out DateOnly date)
+    {
+        if (DateOnly.TryParse(value, out date))
+        {
+            return true;
+        }
+
+        if (value.Length == 7 && DateOnly.TryParse($"{value}-01", out date))
+        {
+            return true;
+        }
+
+        date = default;
+        return false;
+    }
 
     private static void ValidateLeads(
         Canon canon,
