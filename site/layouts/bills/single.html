@@ -33,7 +33,7 @@
   </section>
   {{ end }}
 
-  {{ $billId := .Params.billId }}
+  {{ $billId := .Params.billId | default .File.BaseFileName }}
   {{ $taxRates := index hugo.Data "tax-rates" }}
   {{ $matchedBills := where (index hugo.Data "bills") "billId" $billId }}
   {{ if gt (len $matchedBills) 0 }}
@@ -42,5 +42,6 @@
   {{ end }}
 
   {{ partial "related-payments-grid.html" (where hugo.Data.payments "billId" $billId) }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "bill" "regardingId" $billId) }}
 </article>
 {{ end }}

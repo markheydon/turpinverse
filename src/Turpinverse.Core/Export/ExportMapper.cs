@@ -36,6 +36,9 @@ public static class ExportMapper
     public static IReadOnlyList<LeadExport> MapLeads(Canon canon) =>
         canon.Leads.Select(MapLead).ToList();
 
+    public static IReadOnlyList<ActivityExport> MapActivities(Canon canon) =>
+        canon.Activities.Select(MapActivity).ToList();
+
     public static IReadOnlyList<QuoteExport> MapQuotes(Canon canon) =>
         canon.Quotes.Select(MapQuote).ToList();
 
@@ -175,6 +178,22 @@ public static class ExportMapper
             Description = lead.Description,
             AccountId = lead.AccountId ?? string.Empty,
             ConvertedContactId = lead.ConvertedContactId ?? string.Empty
+        };
+
+    public static ActivityExport MapActivity(Activity activity) =>
+        new()
+        {
+            ActivityId = activity.ActivityId,
+            Type = activity.Type,
+            Subject = activity.Subject,
+            Description = activity.Description,
+            ActivityDate = activity.ActivityDate,
+            DueDate = activity.DueDate ?? string.Empty,
+            Status = activity.Status,
+            RegardingType = activity.RegardingType,
+            RegardingId = activity.RegardingId,
+            OwnerContactId = activity.OwnerContactId,
+            DurationMinutes = activity.DurationMinutes?.ToString() ?? string.Empty
         };
 
     public static QuoteExport MapQuote(Quote quote) =>

@@ -9,6 +9,8 @@ public sealed record ExportFilter
     public string? Industry { get; init; }
     public string? TaxRateId { get; init; }
     public string? Source { get; init; }
+    public string? ActivityType { get; init; }
+    public string? RegardingType { get; init; }
 
     public bool HasConstraints =>
         !string.IsNullOrWhiteSpace(Status) ||
@@ -17,7 +19,9 @@ public sealed record ExportFilter
         !string.IsNullOrWhiteSpace(AccountId) ||
         !string.IsNullOrWhiteSpace(Industry) ||
         !string.IsNullOrWhiteSpace(TaxRateId) ||
-        !string.IsNullOrWhiteSpace(Source);
+        !string.IsNullOrWhiteSpace(Source) ||
+        !string.IsNullOrWhiteSpace(ActivityType) ||
+        !string.IsNullOrWhiteSpace(RegardingType);
 
     public static ExportFilter? FromQuery(IReadOnlyDictionary<string, string?> query)
     {
@@ -29,7 +33,9 @@ public sealed record ExportFilter
             AccountId = GetQueryValue(query, "accountId"),
             Industry = GetQueryValue(query, "industry"),
             TaxRateId = GetQueryValue(query, "taxRateId"),
-            Source = GetQueryValue(query, "source")
+            Source = GetQueryValue(query, "source"),
+            ActivityType = GetQueryValue(query, "type"),
+            RegardingType = GetQueryValue(query, "regardingType")
         };
 
         return filter.HasConstraints ? filter : null;
@@ -55,6 +61,9 @@ public sealed record ExportFilter
 
     public IReadOnlyList<LeadExport> ApplyToLeads(IEnumerable<LeadExport> rows) =>
         rows.Where(MatchesLead).ToList();
+
+    public IReadOnlyList<ActivityExport> ApplyToActivities(IEnumerable<ActivityExport> rows) =>
+        rows.Where(MatchesActivity).ToList();
 
     public IReadOnlyList<QuoteExport> ApplyToQuotes(IEnumerable<QuoteExport> rows) =>
         rows.Where(MatchesQuote).ToList();
@@ -98,6 +107,11 @@ public sealed record ExportFilter
     private bool MatchesLead(LeadExport row) =>
         MatchesStatus(row.Status) &&
         MatchesSource(row.Source);
+
+    private bool MatchesActivity(ActivityExport row) =>
+        MatchesStatus(row.Status) &&
+        MatchesActivityType(row.Type) &&
+        MatchesRegardingType(row.RegardingType);
 
     private bool MatchesQuote(QuoteExport row) =>
         MatchesStatus(row.Status) &&
@@ -148,6 +162,14 @@ public sealed record ExportFilter
     private bool MatchesSource(string value) =>
         string.IsNullOrWhiteSpace(Source) ||
         string.Equals(value, Source, StringComparison.OrdinalIgnoreCase);
+
+    private bool MatchesActivityType(string value) =>
+        string.IsNullOrWhiteSpace(ActivityType) ||
+        string.Equals(value, ActivityType, StringComparison.OrdinalIgnoreCase);
+
+    private bool MatchesRegardingType(string value) =>
+        string.IsNullOrWhiteSpace(RegardingType) ||
+        string.Equals(value, RegardingType, StringComparison.OrdinalIgnoreCase);
 
     private static string? GetQueryValue(IReadOnlyDictionary<string, string?> query, string key) =>
         query.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)

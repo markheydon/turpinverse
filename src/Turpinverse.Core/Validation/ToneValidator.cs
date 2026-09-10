@@ -38,6 +38,12 @@ public sealed partial class ToneValidator
             violations.AddRange(ValidateText(lead.Description, patterns, "Lead", lead.LeadId));
         }
 
+        foreach (var activity in canon.Activities)
+        {
+            violations.AddRange(ValidateText(activity.Subject, patterns, "Activity", activity.ActivityId));
+            violations.AddRange(ValidateText(activity.Description, patterns, "Activity", activity.ActivityId));
+        }
+
         foreach (var quote in canon.Quotes)
         {
             violations.AddRange(ValidateText(quote.Notes, patterns, "Quote", quote.QuoteId));

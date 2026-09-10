@@ -28,7 +28,8 @@
     "payments",
     "creditNotes",
     "salesOrders",
-    "bills"
+    "bills",
+    "activities"
   ],
   "properties": {
     "version": {
@@ -140,6 +141,12 @@
       "type": "array",
       "minItems": 6,
       "items": { "$ref": "#/$defs/Bill" }
+    },
+    "activities": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 25,
+      "items": { "$ref": "#/$defs/Activity" }
     }
   },
   "$defs": {
@@ -700,6 +707,46 @@
           "minItems": 2,
           "maxItems": 5,
           "items": { "$ref": "#/$defs/CreditNoteLine" }
+        }
+      }
+    },
+    "Activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activityId", "type", "subject", "description", "activityDate", "status",
+        "regardingType", "regardingId", "ownerContactId"
+      ],
+      "properties": {
+        "activityId": { "$ref": "#/$defs/slug" },
+        "type": {
+          "type": "string",
+          "enum": ["Call", "Email", "Meeting", "Task", "Note"]
+        },
+        "subject": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 500 },
+        "activityDate": {
+          "type": "string",
+          "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$"
+        },
+        "dueDate": {
+          "type": "string",
+          "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Open", "Completed", "Cancelled"]
+        },
+        "regardingType": {
+          "type": "string",
+          "enum": ["contact", "deal", "case", "lead", "invoice", "bill", "quote", "salesOrder"]
+        },
+        "regardingId": { "$ref": "#/$defs/slug" },
+        "ownerContactId": { "$ref": "#/$defs/slug" },
+        "durationMinutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 480
         }
       }
     },

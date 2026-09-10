@@ -23,7 +23,7 @@ public class ExportDatasetsTests
             .Select(dataset => dataset.Type)
             .ToArray();
 
-        Assert.Equal(["leads", "deals", "cases", "projects"], crmTypes);
+        Assert.Equal(["leads", "deals", "cases", "projects", "activities"], crmTypes);
         Assert.Equal(crmTypes, ExportDatasets.DisplayOrder.Where(type => crmTypes.Contains(type)));
     }
 

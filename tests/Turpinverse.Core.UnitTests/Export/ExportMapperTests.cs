@@ -91,6 +91,29 @@ public class ExportMapperTests
     }
 
     [Fact]
+    public void MapActivity_IncludesOptionalFieldsAsEmptyStrings()
+    {
+        var export = ExportMapper.MapActivity(new Activity
+        {
+            ActivityId = "activity-001",
+            Type = "Call",
+            Subject = "Qualification call",
+            Description = "Discussed corridor licensing.",
+            ActivityDate = "2026-02-18",
+            Status = "Completed",
+            RegardingType = "lead",
+            RegardingId = "lead-001",
+            OwnerContactId = "james-smith",
+            DurationMinutes = 15
+        });
+
+        Assert.Equal("activity-001", export.ActivityId);
+        Assert.Equal("Call", export.Type);
+        Assert.Equal(string.Empty, export.DueDate);
+        Assert.Equal("15", export.DurationMinutes);
+    }
+
+    [Fact]
     public void MapLead_IncludesOptionalFieldsAsEmptyStrings()
     {
         var export = ExportMapper.MapLead(new Lead

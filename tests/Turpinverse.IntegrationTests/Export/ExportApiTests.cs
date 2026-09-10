@@ -23,7 +23,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
 
         var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>(cancellationToken);
         Assert.NotNull(manifest);
-        Assert.Equal(13, manifest!.Datasets.Count);
+        Assert.Equal(14, manifest!.Datasets.Count);
         Assert.Equal(ExportDatasets.DisplayOrder, manifest.Datasets.Select(d => d.Type));
     }
 
@@ -35,6 +35,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("projects", "projectId")]
     [InlineData("products", "productId")]
     [InlineData("leads", "leadId")]
+    [InlineData("activities", "activityId")]
     [InlineData("quotes", "quoteId")]
     [InlineData("sales-orders", "salesOrderId")]
     [InlineData("invoices", "invoiceId")]
@@ -85,6 +86,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.True(result.Counts.ContainsKey("products"));
         Assert.True(result.Counts.ContainsKey("taxRates"));
         Assert.True(result.Counts.ContainsKey("leads"));
+        Assert.True(result.Counts.ContainsKey("activities"));
         Assert.True(result.Counts.ContainsKey("quotes"));
         Assert.True(result.Counts.ContainsKey("salesOrders"));
         Assert.True(result.Counts.ContainsKey("invoices"));
@@ -94,6 +96,8 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.True(result.Counts["experience"] > 0);
         Assert.True(result.Counts["products"] >= 10);
         Assert.True(result.Counts["leads"] >= 10);
+        Assert.True(result.Counts["activities"] >= 20);
+        Assert.True(result.Counts["activities"] <= 25);
         Assert.True(result.Counts["quotes"] >= 8);
         Assert.True(result.Counts["salesOrders"] >= 6);
         Assert.True(result.Counts["invoices"] >= 12);

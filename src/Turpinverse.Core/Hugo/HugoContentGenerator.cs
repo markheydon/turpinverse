@@ -395,6 +395,14 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
             Utf8NoBom,
             cancellationToken);
 
+        await File.WriteAllTextAsync(
+            Path.Combine(dataDir, "activities.json"),
+            JsonSerializer.Serialize(
+                canon.Activities.Select(HugoActivityData.FromActivity),
+                JsonOptions),
+            Utf8NoBom,
+            cancellationToken);
+
         var quotesIndexContent = """
             ---
             title: Quotes

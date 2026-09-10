@@ -44,6 +44,7 @@ public sealed class JsonCanonRepository : ICanonRepository
         var creditNotes = await ReadArrayAsync<CreditNote>("credit-notes.json", cancellationToken);
         var salesOrders = await ReadArrayAsync<SalesOrder>("sales-orders.json", cancellationToken);
         var bills = await ReadArrayAsync<Bill>("bills.json", cancellationToken);
+        var activities = await ReadArrayAsync<Activity>("activities.json", cancellationToken);
 
         return new Canon
         {
@@ -70,7 +71,8 @@ public sealed class JsonCanonRepository : ICanonRepository
             Payments = payments,
             CreditNotes = creditNotes,
             SalesOrders = salesOrders,
-            Bills = bills
+            Bills = bills,
+            Activities = activities
         };
     }
 

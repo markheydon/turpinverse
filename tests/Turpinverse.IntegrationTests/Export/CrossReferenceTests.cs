@@ -98,6 +98,65 @@ public class CrossReferenceTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
+    public async Task Activities_AllReferencesResolve()
+    {
+        var contacts = await ParseCsv("/api/export/contacts");
+        var deals = await ParseCsv("/api/export/deals");
+        var cases = await ParseCsv("/api/export/cases");
+        var leads = await ParseCsv("/api/export/leads");
+        var invoices = await ParseCsv("/api/export/invoices");
+        var bills = await ParseCsv("/api/export/bills");
+        var quotes = await ParseCsv("/api/export/quotes");
+        var salesOrders = await ParseCsv("/api/export/sales-orders");
+        var activities = await ParseCsv("/api/export/activities");
+
+        var contactIds = contacts.Select(r => r["contactId"]).ToHashSet();
+        var dealIds = deals.Select(r => r["dealId"]).ToHashSet();
+        var caseIds = cases.Select(r => r["caseId"]).ToHashSet();
+        var leadIds = leads.Select(r => r["leadId"]).ToHashSet();
+        var invoiceIds = invoices.Select(r => r["invoiceId"]).ToHashSet();
+        var billIds = bills.Select(r => r["billId"]).ToHashSet();
+        var quoteIds = quotes.Select(r => r["quoteId"]).ToHashSet();
+        var salesOrderIds = salesOrders.Select(r => r["salesOrderId"]).ToHashSet();
+
+        foreach (var activity in activities)
+        {
+            Assert.Contains(activity["ownerContactId"], contactIds);
+
+            switch (activity["regardingType"])
+            {
+                case "contact":
+                    Assert.Contains(activity["regardingId"], contactIds);
+                    break;
+                case "deal":
+                    Assert.Contains(activity["regardingId"], dealIds);
+                    break;
+                case "case":
+                    Assert.Contains(activity["regardingId"], caseIds);
+                    break;
+                case "lead":
+                    Assert.Contains(activity["regardingId"], leadIds);
+                    break;
+                case "invoice":
+                    Assert.Contains(activity["regardingId"], invoiceIds);
+                    break;
+                case "bill":
+                    Assert.Contains(activity["regardingId"], billIds);
+                    break;
+                case "quote":
+                    Assert.Contains(activity["regardingId"], quoteIds);
+                    break;
+                case "salesOrder":
+                    Assert.Contains(activity["regardingId"], salesOrderIds);
+                    break;
+                default:
+                    Assert.Fail($"Unexpected regardingType '{activity["regardingType"]}'");
+                    break;
+            }
+        }
+    }
+
+    [Fact]
     public async Task Leads_AllReferencesResolve()
     {
         var contacts = await ParseCsv("/api/export/contacts");

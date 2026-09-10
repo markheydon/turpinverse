@@ -157,6 +157,15 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-094 | Bill | Authored money; `dueDate` ≥ `issueDate`; `amountDue` equals `total` minus bill payments |
 | VR-095 | Bill | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue`; `currency` is `GBP`; 2–5 nested lines; at least one `Overdue`; `Paid` requires full settlement; `Draft` requires no payments |
 
+## Activities (VR-096–VR-099)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-096 | Activity | Unique `activityId`; count 20–25; `type`, `status`, and `regardingType` in closed enums |
+| VR-097 | Activity | `ownerContactId` references existing persona; `subject` ≤ 120 chars; `description` ≤ 500 chars; open tasks require `dueDate`; `dueDate` ≥ `activityDate` when set; `durationMinutes` only on Call/Meeting and ≤ 480 |
+| VR-098 | Activity | `regardingId` resolves for `regardingType` (`contact`, `deal`, `case`, `lead`, `invoice`, `bill`, `quote`, `salesOrder`) |
+| VR-099 | Activity | Flagship coverage: alias (`case-001` or `deal-004`), Black Bess (`deal-007` / `deal-015` / `deal-022`), `case-011`, `bill-003` |
+
 ## Credit notes (VR-082–VR-083)
 
 | Code | Scope | Pass condition |
@@ -166,7 +175,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, quote/sales-order/invoice/bill/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, activity subject/description, quote/sales-order/invoice/bill/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
 
 ## Related docs
 

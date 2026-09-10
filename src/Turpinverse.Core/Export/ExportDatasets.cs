@@ -21,6 +21,7 @@ public static class ExportDatasets
         new("deals", "Deals", "handshake", "/deals", "Commerce scenarios with pipeline stages", CrmGroup),
         new("cases", "Cases", "ticket", "/cases", "Support tickets derived from canon events", CrmGroup),
         new("projects", "Projects", "folder", "/projects", "Portfolio catalog items linked to accounts and contacts", CrmGroup),
+        new("activities", "Activities", "list-check", "/activities", "CRM interaction history — calls, emails, meetings, tasks, and notes", CrmGroup),
         new("products", "Products", "tag", "/products", "Product and service catalogue with UK VAT defaults", FinanceGroup),
         new("quotes", "Quotes", "file-invoice", "/quotes", "Sales quotes and estimates with nested line items in canon", FinanceGroup),
         new("sales-orders", "Sales Orders", "clipboard-list", "/sales-orders", "Sales orders with nested line items in canon", FinanceGroup),

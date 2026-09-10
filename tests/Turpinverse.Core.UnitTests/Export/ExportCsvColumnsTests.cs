@@ -51,6 +51,18 @@ public class ExportCsvColumnsTests
     }
 
     [Fact]
+    public void Activities_HasExpectedColumns()
+    {
+        Assert.Equal(
+            new[]
+            {
+                "activityId", "type", "subject", "description", "activityDate", "dueDate",
+                "status", "regardingType", "regardingId", "ownerContactId", "durationMinutes"
+            },
+            ExportCsvColumns.Activities);
+    }
+
+    [Fact]
     public void Contacts_IncludesMailingColumns()
     {
         var expected =

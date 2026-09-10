@@ -49,6 +49,12 @@ public static class ExportCsvColumns
         "status", "source", "rating", "description", "accountId", "convertedContactId"
     ];
 
+    public static readonly IReadOnlyList<string> Activities =
+    [
+        "activityId", "type", "subject", "description", "activityDate", "dueDate",
+        "status", "regardingType", "regardingId", "ownerContactId", "durationMinutes"
+    ];
+
     public static readonly IReadOnlyList<string> Quotes =
     [
         "quoteId", "quoteNumber", "accountId", "contactId", "dealId",
@@ -99,6 +105,7 @@ public static class ExportCsvColumns
             "projects" => Projects,
             "products" => Products,
             "leads" => Leads,
+            "activities" => Activities,
             "quotes" => Quotes,
             "sales-orders" => SalesOrders,
             "invoices" => Invoices,

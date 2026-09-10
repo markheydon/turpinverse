@@ -23,7 +23,7 @@
   </section>
   {{ end }}
 
-  {{ $salesOrderId := .Params.salesOrderId }}
+  {{ $salesOrderId := .Params.salesOrderId | default .File.BaseFileName }}
   {{ partial "related-invoices-for-sales-order-grid.html" $salesOrderId }}
   {{ $taxRates := index hugo.Data "tax-rates" }}
   {{ $matchedOrders := where (index hugo.Data "sales-orders") "salesOrderId" $salesOrderId }}
@@ -31,5 +31,6 @@
     {{ $salesOrder := index $matchedOrders 0 }}
     {{ partial "document-lines-table.html" (dict "lines" $salesOrder.lines "subtotal" $salesOrder.subtotal "taxTotal" $salesOrder.taxTotal "total" $salesOrder.total "taxRates" $taxRates) }}
   {{ end }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "salesOrder" "regardingId" $salesOrderId) }}
 </article>
 {{ end }}

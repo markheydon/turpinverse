@@ -185,7 +185,9 @@
                 ?? facetValues.GetValueOrDefault("supplierAccountId"),
             Industry = facetValues.GetValueOrDefault("industry"),
             TaxRateId = facetValues.GetValueOrDefault("taxRateId"),
-            Source = facetValues.GetValueOrDefault("source")
+            Source = facetValues.GetValueOrDefault("source"),
+            ActivityType = facetValues.GetValueOrDefault("type"),
+            RegardingType = facetValues.GetValueOrDefault("regardingType")
         };
     }
 
@@ -205,6 +207,7 @@
             "accountId" => "Account",
             "supplierAccountId" => "Supplier",
             "taxRateId" => "Tax rate",
+            "regardingType" => "Regarding type",
             _ => char.ToUpperInvariant(facet[0]) + facet[1..]
         };
 
@@ -255,6 +258,16 @@
         if (!string.IsNullOrWhiteSpace(filter.Source))
         {
             query.Add($"source={Uri.EscapeDataString(filter.Source)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.ActivityType))
+        {
+            query.Add($"type={Uri.EscapeDataString(filter.ActivityType)}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.RegardingType))
+        {
+            query.Add($"regardingType={Uri.EscapeDataString(filter.RegardingType)}");
         }
 
         return query.Count == 0

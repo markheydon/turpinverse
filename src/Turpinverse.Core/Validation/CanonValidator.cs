@@ -44,6 +44,7 @@ public sealed partial class CanonValidator
         ValidateBills(canon, personaIds, organisationIds, violations);
         ValidatePayments(canon, violations);
         ValidateCreditNotes(canon, personaIds, organisationIds, violations);
+        ValidateActivities(canon, personaIds, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -68,7 +69,8 @@ public sealed partial class CanonValidator
             ["payments"] = canon.Payments.Count,
             ["creditNotes"] = canon.CreditNotes.Count,
             ["salesOrders"] = canon.SalesOrders.Count,
-            ["bills"] = canon.Bills.Count
+            ["bills"] = canon.Bills.Count,
+            ["activities"] = canon.Activities.Count
         };
 
         return new CanonValidationResult(
@@ -1106,6 +1108,30 @@ public sealed partial class CanonValidator
     {
         "Hot", "Warm", "Cold"
     };
+
+    private static readonly HashSet<string> AllowedActivityTypes = new(StringComparer.Ordinal)
+    {
+        "Call", "Email", "Meeting", "Task", "Note"
+    };
+
+    private static readonly HashSet<string> AllowedActivityStatuses = new(StringComparer.Ordinal)
+    {
+        "Open", "Completed", "Cancelled"
+    };
+
+    private static readonly HashSet<string> AllowedRegardingTypes = new(StringComparer.Ordinal)
+    {
+        "contact", "deal", "case", "lead", "invoice", "bill", "quote", "salesOrder"
+    };
+
+    private static readonly HashSet<string> DurationAllowedActivityTypes = new(StringComparer.Ordinal)
+    {
+        "Call", "Meeting"
+    };
+
+    private const int MaxActivitySubjectLength = 120;
+    private const int MaxActivityDescriptionLength = 500;
+    private const int MaxActivityDurationMinutes = 480;
 
     private static readonly HashSet<string> AllowedQuoteStatuses = new(StringComparer.Ordinal)
     {
@@ -2857,6 +2883,251 @@ public sealed partial class CanonValidator
                 "leads"));
         }
     }
+
+    private static void ValidateActivities(
+        Canon canon,
+        HashSet<string> personaIds,
+        List<ValidationViolation> violations)
+    {
+        var dealIds = canon.Deals.Select(d => d.DealId).ToHashSet(StringComparer.Ordinal);
+        var caseIds = canon.Cases.Select(c => c.CaseId).ToHashSet(StringComparer.Ordinal);
+        var leadIds = canon.Leads.Select(l => l.LeadId).ToHashSet(StringComparer.Ordinal);
+        var invoiceIds = canon.Invoices.Select(i => i.InvoiceId).ToHashSet(StringComparer.Ordinal);
+        var billIds = canon.Bills.Select(b => b.BillId).ToHashSet(StringComparer.Ordinal);
+        var quoteIds = canon.Quotes.Select(q => q.QuoteId).ToHashSet(StringComparer.Ordinal);
+        var salesOrderIds = canon.SalesOrders.Select(s => s.SalesOrderId).ToHashSet(StringComparer.Ordinal);
+
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+        var hasAliasStory = false;
+        var hasBlackBessStory = false;
+        var hasCase011 = false;
+        var hasBill003 = false;
+
+        foreach (var activity in canon.Activities)
+        {
+            if (!seenIds.Add(activity.ActivityId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-096",
+                    $"Duplicate activity id '{activity.ActivityId}'",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (!AllowedActivityTypes.Contains(activity.Type))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-096",
+                    $"Activity type '{activity.Type}' is not allowed",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (!AllowedActivityStatuses.Contains(activity.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-096",
+                    $"Activity status '{activity.Status}' is not allowed",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (!AllowedRegardingTypes.Contains(activity.RegardingType))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-096",
+                    $"Activity regardingType '{activity.RegardingType}' is not allowed",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (!personaIds.Contains(activity.OwnerContactId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Activity '{activity.ActivityId}' references unknown owner '{activity.OwnerContactId}'",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (activity.Subject.Length > MaxActivitySubjectLength)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Activity '{activity.ActivityId}' subject exceeds {MaxActivitySubjectLength} characters",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (activity.Description.Length > MaxActivityDescriptionLength)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Activity '{activity.ActivityId}' description exceeds {MaxActivityDescriptionLength} characters",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (string.Equals(activity.Type, "Task", StringComparison.Ordinal)
+                && string.Equals(activity.Status, "Open", StringComparison.Ordinal)
+                && string.IsNullOrWhiteSpace(activity.DueDate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Open task '{activity.ActivityId}' requires dueDate",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(activity.DueDate)
+                && (!TryCompareDates(activity.ActivityDate, activity.DueDate, out var dueOrder) || dueOrder > 0))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Activity '{activity.ActivityId}' dueDate must be on or after activityDate",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (activity.DurationMinutes is not null)
+            {
+                if (!DurationAllowedActivityTypes.Contains(activity.Type))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-097",
+                        $"Activity '{activity.ActivityId}' durationMinutes is only allowed for Call or Meeting",
+                        "Activity",
+                        activity.ActivityId));
+                }
+                else if (activity.DurationMinutes <= 0)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-097",
+                        $"Activity '{activity.ActivityId}' durationMinutes must be positive",
+                        "Activity",
+                        activity.ActivityId));
+                }
+                else if (activity.DurationMinutes > MaxActivityDurationMinutes)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-097",
+                        $"Activity '{activity.ActivityId}' durationMinutes must be at most {MaxActivityDurationMinutes}",
+                        "Activity",
+                        activity.ActivityId));
+                }
+            }
+
+            if (!RegardingExists(
+                    activity,
+                    personaIds,
+                    dealIds,
+                    caseIds,
+                    leadIds,
+                    invoiceIds,
+                    billIds,
+                    quoteIds,
+                    salesOrderIds))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-098",
+                    $"Activity '{activity.ActivityId}' regardingId '{activity.RegardingId}' does not resolve for regardingType '{activity.RegardingType}'",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (activity.RegardingType == "case" && activity.RegardingId == "case-001"
+                || activity.RegardingType == "deal" && activity.RegardingId == "deal-004")
+            {
+                hasAliasStory = true;
+            }
+
+            if (activity.RegardingType == "deal"
+                && (activity.RegardingId == "deal-007"
+                    || activity.RegardingId == "deal-015"
+                    || activity.RegardingId == "deal-022"))
+            {
+                hasBlackBessStory = true;
+            }
+
+            if (activity.RegardingType == "case" && activity.RegardingId == "case-011")
+            {
+                hasCase011 = true;
+            }
+
+            if (activity.RegardingType == "bill" && activity.RegardingId == "bill-003")
+            {
+                hasBill003 = true;
+            }
+        }
+
+        if (canon.Activities.Count < 20 || canon.Activities.Count > 25)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-096",
+                $"Activities count must be between 20 and 25, found {canon.Activities.Count}",
+                "Activity",
+                "activities"));
+        }
+
+        if (!hasAliasStory)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-099",
+                "At least one activity must reference case-001 or deal-004 (alias mix-up story)",
+                "Activity",
+                "activities"));
+        }
+
+        if (!hasBlackBessStory)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-099",
+                "At least one activity must reference deal-007, deal-015, or deal-022 (Black Bess story)",
+                "Activity",
+                "activities"));
+        }
+
+        if (!hasCase011)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-099",
+                "At least one activity must reference case-011 (AP dispute story)",
+                "Activity",
+                "activities"));
+        }
+
+        if (!hasBill003)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-099",
+                "At least one activity must reference bill-003 (AP dispute bill)",
+                "Activity",
+                "activities"));
+        }
+    }
+
+    private static bool RegardingExists(
+        Activity activity,
+        HashSet<string> personaIds,
+        HashSet<string> dealIds,
+        HashSet<string> caseIds,
+        HashSet<string> leadIds,
+        HashSet<string> invoiceIds,
+        HashSet<string> billIds,
+        HashSet<string> quoteIds,
+        HashSet<string> salesOrderIds) =>
+        activity.RegardingType switch
+        {
+            "contact" => personaIds.Contains(activity.RegardingId),
+            "deal" => dealIds.Contains(activity.RegardingId),
+            "case" => caseIds.Contains(activity.RegardingId),
+            "lead" => leadIds.Contains(activity.RegardingId),
+            "invoice" => invoiceIds.Contains(activity.RegardingId),
+            "bill" => billIds.Contains(activity.RegardingId),
+            "quote" => quoteIds.Contains(activity.RegardingId),
+            "salesOrder" => salesOrderIds.Contains(activity.RegardingId),
+            _ => false
+        };
 
     private static void ValidateCareerPortfolio(
         Canon canon,

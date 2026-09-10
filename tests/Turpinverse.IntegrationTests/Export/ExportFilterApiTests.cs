@@ -255,6 +255,50 @@ public class ExportFilterApiTests : IClassFixture<WebApplicationFactory<Program>
         Assert.Empty(rows);
     }
 
+    [Fact]
+    public async Task Preview_ActivitiesFilteredByType_ReturnsOnlyMatchingRows()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/activities/preview?count=100&type=Call",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = await response.Content.ReadFromJsonAsync<List<Dictionary<string, string>>>(cancellationToken);
+        Assert.NotNull(rows);
+        Assert.NotEmpty(rows);
+        Assert.All(rows!, row => Assert.Equal("Call", row["type"], StringComparer.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Download_ActivitiesFilteredByRegardingType_ReturnsOnlyMatchingRowsInCsv()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/activities?regardingType=deal",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = CsvExportReader.ParseRows(await response.Content.ReadAsByteArrayAsync(cancellationToken));
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("deal", row["regardingType"], StringComparer.OrdinalIgnoreCase));
+        Assert.DoesNotContain(rows, row => row["regardingType"] == "lead");
+    }
+
+    [Fact]
+    public async Task Download_ActivitiesFilteredByStatus_ReturnsOnlyMatchingRowsInCsv()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var response = await _client.GetAsync(
+            "/api/export/activities?status=Open",
+            cancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var rows = CsvExportReader.ParseRows(await response.Content.ReadAsByteArrayAsync(cancellationToken));
+        Assert.NotEmpty(rows);
+        Assert.All(rows, row => Assert.Equal("Open", row["status"], StringComparer.OrdinalIgnoreCase));
+    }
+
     private sealed class ProblemDetailsResponse
     {
         public string Title { get; set; } = string.Empty;

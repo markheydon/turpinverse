@@ -1,0 +1,25 @@
+{{/* Expects dict: regardingType, regardingId */}}
+{{ $regardingType := .regardingType }}
+{{ $regardingId := .regardingId }}
+{{ $matched := where (where hugo.Data.activities "regardingType" $regardingType) "regardingId" $regardingId }}
+{{ $sorted := sort $matched "activityDateSort" "desc" }}
+{{ if gt (len $sorted) 0 }}
+<section class="related-records activity-timeline">
+  <h2>Activity timeline</h2>
+  <ol class="activity-timeline-list">
+    {{ range $sorted }}
+    <li class="activity-timeline-item">
+      <p class="activity-timeline-meta">
+        <span class="status-badge">{{ .type }}</span>
+        <time datetime="{{ .activityDate }}">{{ .activityDate }}</time>
+        <span class="status-badge status-{{ .status | urlize }}">{{ .status }}</span>
+        {{ with .durationMinutes }}<span>{{ . }} min</span>{{ end }}
+      </p>
+      <p class="activity-timeline-subject"><strong>{{ .subject }}</strong></p>
+      <p class="activity-timeline-description">{{ .description }}</p>
+      <p class="activity-timeline-owner">Owner: {{ partial "persona-title.html" .ownerContactId }}</p>
+    </li>
+    {{ end }}
+  </ol>
+</section>
+{{ end }}

@@ -1304,3 +1304,50 @@ h1 {
   width: 1.125rem;
   height: 1.125rem;
 }
+
+/* CRM activity timelines (embedded on regarding-record detail pages) */
+.activity-timeline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity-timeline-item {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.1rem;
+  background: var(--entry);
+  border: 1px solid var(--turpin-border);
+  border-radius: 0.5rem;
+}
+
+.activity-timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.activity-timeline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--secondary);
+}
+
+.activity-timeline-subject {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.activity-timeline-description {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--content);
+}
+
+.activity-timeline-owner {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--secondary);
+}

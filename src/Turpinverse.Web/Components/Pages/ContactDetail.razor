@@ -92,6 +92,27 @@
 
             <ContactExtrasSection Contact="extras?.Contact" />
             <SocialsSection Socials="@(extras?.Socials ?? [])" />
+
+            @if (relatedActivities.Count > 0)
+            {
+                <section class="related-activities-section">
+                    <h2>Related activities</h2>
+                    <ul class="activity-list">
+                        @foreach (var activity in relatedActivities)
+                        {
+                            <li class="activity-item">
+                                <p class="activity-meta">
+                                    <span class="status-badge">@activity.Type</span>
+                                    <span>@activity.ActivityDate</span>
+                                    <span class="status-badge status-@activity.Status.ToLowerInvariant()">@activity.Status</span>
+                                </p>
+                                <p class="activity-subject"><strong>@activity.Subject</strong></p>
+                                <p class="activity-description">@activity.Description</p>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
         </div>
     }
 </div>
@@ -105,6 +126,7 @@
     private IReadOnlyList<Education> education = [];
     private IReadOnlyList<Project> projects = [];
     private IReadOnlyList<Achievement> achievements = [];
+    private IReadOnlyList<Activity> relatedActivities = [];
     private bool suppressTitle;
     private bool suppressBiography;
     private bool suppressHeaderEmail;
@@ -127,6 +149,11 @@
             education = Presenter.GetEducationForPersona(canon, ContactId);
             projects = Presenter.GetProjectsForPersona(canon, ContactId);
             achievements = Presenter.GetAchievementsForPersona(canon, ContactId);
+            relatedActivities = ActivityDateSortKey.SortByDateDescending(
+                canon.Activities.Where(a =>
+                    string.Equals(a.OwnerContactId, ContactId, StringComparison.Ordinal)
+                    || (string.Equals(a.RegardingType, "contact", StringComparison.Ordinal)
+                        && string.Equals(a.RegardingId, ContactId, StringComparison.Ordinal))));
         }
 
         loading = false;

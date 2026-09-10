@@ -18,5 +18,6 @@
   {{ partial "related-sales-orders-grid.html" (where (index hugo.Data "sales-orders") "dealId" $dealId) }}
   {{ partial "related-invoices-grid.html" (where hugo.Data.invoices "dealId" $dealId) }}
   {{ partial "related-bills-grid.html" (where (index hugo.Data "bills") "dealId" $dealId) }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "deal" "regardingId" $dealId) }}
 </article>
 {{ end }}

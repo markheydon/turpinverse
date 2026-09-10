@@ -31,5 +31,8 @@
   {{ end }}
 
   <div class="post-content md-content">{{ .Content }}</div>
+
+  {{ $leadId := .Params.leadId | default .File.BaseFileName }}
+  {{ partial "related-activities-timeline.html" (dict "regardingType" "lead" "regardingId" $leadId) }}
 </article>
 {{ end }}
