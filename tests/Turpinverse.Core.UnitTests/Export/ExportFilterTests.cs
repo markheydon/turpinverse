@@ -220,4 +220,36 @@ public class ExportFilterTests
             Source = source,
             Description = "desc"
         };
+
+    [Fact]
+    public void ApplyToQuotes_WhenStatusAndAccountIdMatch_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateQuote("q1", "Sent", "highway-commission"),
+            CreateQuote("q2", "Draft", "highway-commission"),
+            CreateQuote("q3", "Sent", "millington-inn")
+        };
+
+        var filter = new ExportFilter { Status = "Sent", AccountId = "highway-commission" };
+        var result = filter.ApplyToQuotes(rows);
+
+        Assert.Single(result);
+        Assert.Equal("q1", result[0].QuoteId);
+    }
+
+    private static QuoteExport CreateQuote(string quoteId, string status, string accountId) =>
+        new()
+        {
+            QuoteId = quoteId,
+            QuoteNumber = "QUO-2026-0001",
+            AccountId = accountId,
+            Status = status,
+            IssueDate = "2026-01-01",
+            ExpiryDate = "2026-02-01",
+            Currency = "GBP",
+            Subtotal = 1000,
+            TaxTotal = 200,
+            Total = 1200
+        };
 }

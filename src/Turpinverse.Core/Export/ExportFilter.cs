@@ -56,6 +56,9 @@ public sealed record ExportFilter
     public IReadOnlyList<LeadExport> ApplyToLeads(IEnumerable<LeadExport> rows) =>
         rows.Where(MatchesLead).ToList();
 
+    public IReadOnlyList<QuoteExport> ApplyToQuotes(IEnumerable<QuoteExport> rows) =>
+        rows.Where(MatchesQuote).ToList();
+
     private bool MatchesContact(ContactExport row) =>
         MatchesStatus(row.Status) &&
         MatchesAccountId(row.AccountId);
@@ -80,6 +83,10 @@ public sealed record ExportFilter
     private bool MatchesLead(LeadExport row) =>
         MatchesStatus(row.Status) &&
         MatchesSource(row.Source);
+
+    private bool MatchesQuote(QuoteExport row) =>
+        MatchesStatus(row.Status) &&
+        MatchesAccountId(row.AccountId);
 
     private bool MatchesStatus(string value) =>
         string.IsNullOrWhiteSpace(Status) ||

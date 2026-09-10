@@ -4,6 +4,12 @@ Why Turpinverse data and code look the way they do. Newest entries first. For fi
 
 ---
 
+## Quote CSV shape (#34, 2026-09)
+
+v1 ships **header-only** `turpinverse-quotes.csv` (`/quotes` in Blazor and the export API). Nested `lines[]` stay in `canon/quotes.json` and on Hugo quote detail pages. Flattened quote-lines CSV is deferred until invoices (#35) if importers need it.
+
+---
+
 ## Navigation grouping (2026-09)
 
 Hugo and Blazor share the same information architecture so the showcase and export app stay aligned as commercial entities land.

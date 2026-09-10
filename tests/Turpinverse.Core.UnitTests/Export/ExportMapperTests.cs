@@ -110,4 +110,49 @@ public class ExportMapperTests
         Assert.Equal(string.Empty, export.AccountId);
         Assert.Equal(string.Empty, export.Rating);
     }
+
+    [Fact]
+    public void MapQuote_IncludesOptionalFieldsAsEmptyStrings()
+    {
+        var export = ExportMapper.MapQuote(new Quote
+        {
+            QuoteId = "quote-001",
+            QuoteNumber = "QUO-2026-0035",
+            AccountId = "highway-commission",
+            Status = "Draft",
+            IssueDate = "2026-06-01",
+            ExpiryDate = "2026-09-15",
+            Currency = "GBP",
+            Subtotal = 10240,
+            TaxTotal = 2048,
+            Total = 12288,
+            Lines =
+            [
+                new QuoteLine
+                {
+                    Description = "Day rate",
+                    Quantity = 1,
+                    UnitPrice = 1200,
+                    TaxRateId = "tax-standard",
+                    LineTotal = 1200,
+                    ProductId = "highway-risk-day-rate"
+                },
+                new QuoteLine
+                {
+                    Description = "Surcharge",
+                    Quantity = 1,
+                    UnitPrice = 320,
+                    TaxRateId = "tax-standard",
+                    LineTotal = 320,
+                    ProductId = "overnight-logistics-surcharge"
+                }
+            ]
+        });
+
+        Assert.Equal("quote-001", export.QuoteId);
+        Assert.Equal("QUO-2026-0035", export.QuoteNumber);
+        Assert.Equal(string.Empty, export.ContactId);
+        Assert.Equal(string.Empty, export.DealId);
+        Assert.Equal(string.Empty, export.Notes);
+    }
 }

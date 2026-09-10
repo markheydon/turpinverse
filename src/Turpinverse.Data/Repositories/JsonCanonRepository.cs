@@ -38,6 +38,7 @@ public sealed class JsonCanonRepository : ICanonRepository
         var products = await ReadArrayAsync<Product>("products.json", cancellationToken);
         var taxRates = await ReadArrayAsync<TaxRate>("tax-rates.json", cancellationToken);
         var leads = await ReadArrayAsync<Lead>("leads.json", cancellationToken);
+        var quotes = await ReadArrayAsync<Quote>("quotes.json", cancellationToken);
 
         return new Canon
         {
@@ -58,7 +59,8 @@ public sealed class JsonCanonRepository : ICanonRepository
             ProfessionalExtras = professionalExtras,
             Products = products,
             TaxRates = taxRates,
-            Leads = leads
+            Leads = leads,
+            Quotes = quotes
         };
     }
 

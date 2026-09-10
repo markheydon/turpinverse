@@ -1,0 +1,268 @@
+[
+  {
+    "quoteId": "quote-001",
+    "quoteNumber": "QUO-2026-0035",
+    "accountId": "highway-commission",
+    "contactId": "henry-clayton",
+    "dealId": "deal-006",
+    "status": "Draft",
+    "issueDate": "2026-06-01",
+    "expiryDate": "2026-09-15",
+    "currency": "GBP",
+    "subtotal": 10240,
+    "taxTotal": 2048,
+    "total": 12288,
+    "notes": "Initial corridor risk scope for Q1 coaching routes. A10 rated Critical add-on available on request.",
+    "terms": "Valid 30 days from issue. Day rates exclude overnight logistics surcharges unless itemised.",
+    "lines": [
+      {
+        "description": "Highway Risk Assessment — Day Rate",
+        "quantity": 8,
+        "unitPrice": 1200,
+        "taxRateId": "tax-standard",
+        "lineTotal": 9600,
+        "productId": "highway-risk-day-rate"
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 2,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 640,
+        "productId": "overnight-logistics-surcharge"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-002",
+    "quoteNumber": "QUO-2026-0036",
+    "accountId": "highway-commission",
+    "contactId": "henry-clayton",
+    "dealId": "deal-006",
+    "status": "Sent",
+    "issueDate": "2026-07-10",
+    "expiryDate": "2026-09-30",
+    "currency": "GBP",
+    "subtotal": 11120,
+    "taxTotal": 2224,
+    "total": 13344,
+    "notes": "Revised scope following toll-billing fault workshop — ninth assessment day and reduced surcharge line.",
+    "terms": "Supersedes QUO-2026-0035 in narrative only; both estimates remain on file for audit.",
+    "lines": [
+      {
+        "description": "Highway Risk Assessment — Day Rate",
+        "quantity": 9,
+        "unitPrice": 1200,
+        "taxRateId": "tax-standard",
+        "lineTotal": 10800,
+        "productId": "highway-risk-day-rate"
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 1,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 320,
+        "productId": "overnight-logistics-surcharge"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-003",
+    "quoteNumber": "QUO-2026-0037",
+    "accountId": "millington-inn",
+    "contactId": "anna-ward",
+    "dealId": "deal-019",
+    "status": "Sent",
+    "issueDate": "2026-05-20",
+    "expiryDate": "2026-08-31",
+    "currency": "GBP",
+    "subtotal": 5355,
+    "taxTotal": 351,
+    "total": 5706,
+    "notes": "VIP loyalty programme launch package — discretion tier workshops billed separately.",
+    "lines": [
+      {
+        "description": "Hospitality Block Booking",
+        "quantity": 2,
+        "unitPrice": 2400,
+        "taxRateId": "tax-reduced",
+        "lineTotal": 4800,
+        "productId": "hospitality-block-booking"
+      },
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 3,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 555,
+        "productId": "identity-advisory-hour"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-004",
+    "quoteNumber": "QUO-2026-0038",
+    "accountId": "king-equine-trading",
+    "contactId": "black-bess",
+    "dealId": "deal-022",
+    "status": "Sent",
+    "issueDate": "2026-08-01",
+    "expiryDate": "2026-11-30",
+    "currency": "GBP",
+    "subtotal": 14350,
+    "taxTotal": 2870,
+    "total": 17220,
+    "notes": "Comprehensive asset coverage estimate. Overnight ride mileage claims reviewed under separate dispute workflow.",
+    "terms": "Hire days subject to mileage reconciliation. Legend-based marketing claims excluded from insured value.",
+    "lines": [
+      {
+        "description": "Equine Asset Hire — Day Rate",
+        "quantity": 15,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 12750,
+        "productId": "equine-asset-hire-day"
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 5,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1600,
+        "productId": "overnight-logistics-surcharge"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-005",
+    "quoteNumber": "QUO-2026-0039",
+    "accountId": "brazier-legal",
+    "contactId": "mary-brazier",
+    "dealId": "deal-004",
+    "status": "Accepted",
+    "issueDate": "1737-09-15",
+    "expiryDate": "1737-10-31",
+    "currency": "GBP",
+    "subtotal": 3940,
+    "taxTotal": 788,
+    "total": 4728,
+    "notes": "Project Yorkshire identity package — lump delivery plus advisory hours for counsel handover.",
+    "lines": [
+      {
+        "description": "Palmer Identity Vault — complete alias lifecycle delivery",
+        "quantity": 1,
+        "unitPrice": 3200,
+        "taxRateId": "tax-standard",
+        "lineTotal": 3200,
+        "projectId": "palmer-identity-vault"
+      },
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 4,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 740,
+        "productId": "identity-advisory-hour"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-006",
+    "quoteNumber": "QUO-2026-0040",
+    "accountId": "epping-forest-authority",
+    "contactId": "william-hargreaves",
+    "dealId": "deal-008",
+    "status": "Accepted",
+    "issueDate": "2026-04-01",
+    "expiryDate": "2026-10-31",
+    "currency": "GBP",
+    "subtotal": 7500,
+    "taxTotal": 0,
+    "total": 7500,
+    "notes": "Sector 7 supplementary patrol — ten sector days as per outsourcing agreement.",
+    "lines": [
+      {
+        "description": "Forest Patrol — Sector Day (weeks 1–7)",
+        "quantity": 7,
+        "unitPrice": 750,
+        "taxRateId": "tax-zero",
+        "lineTotal": 5250,
+        "productId": "forest-patrol-sector"
+      },
+      {
+        "description": "Forest Patrol — Sector Day (weeks 8–10)",
+        "quantity": 3,
+        "unitPrice": 750,
+        "taxRateId": "tax-zero",
+        "lineTotal": 2250,
+        "productId": "forest-patrol-sector"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-007",
+    "quoteNumber": "QUO-2026-0041",
+    "accountId": "york-racing-society",
+    "contactId": "sarah-thornton",
+    "status": "Declined",
+    "issueDate": "2026-03-10",
+    "expiryDate": "2026-06-30",
+    "currency": "GBP",
+    "subtotal": 5750,
+    "taxTotal": 1150,
+    "total": 6900,
+    "notes": "Race-day hospitality suite declined — guest list curation could not be agreed before season opener.",
+    "lines": [
+      {
+        "description": "Race Day Hospitality Suite",
+        "quantity": 1,
+        "unitPrice": 4800,
+        "taxRateId": "tax-standard",
+        "lineTotal": 4800,
+        "productId": "race-day-hospitality-suite"
+      },
+      {
+        "description": "Alias Documentation Pack",
+        "quantity": 1,
+        "unitPrice": 950,
+        "taxRateId": "tax-standard",
+        "lineTotal": 950,
+        "productId": "alias-documentation-pack"
+      }
+    ]
+  },
+  {
+    "quoteId": "quote-008",
+    "quoteNumber": "QUO-2026-0042",
+    "accountId": "bayes-horsemanship",
+    "contactId": "richard-bayes",
+    "dealId": "deal-005",
+    "status": "Expired",
+    "issueDate": "1737-12-01",
+    "expiryDate": "1738-01-31",
+    "currency": "GBP",
+    "subtotal": 2810,
+    "taxTotal": 562,
+    "total": 3372,
+    "notes": "Executive mobility certification bundle — expired before sign-off on time-sensitive travel add-ons.",
+    "lines": [
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 6,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1110,
+        "productId": "identity-advisory-hour"
+      },
+      {
+        "description": "Equine Asset Hire — Day Rate",
+        "quantity": 2,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1700,
+        "productId": "equine-asset-hire-day"
+      }
+    ]
+  }
+]

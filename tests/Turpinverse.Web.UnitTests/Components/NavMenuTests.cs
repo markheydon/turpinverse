@@ -23,6 +23,7 @@ public class NavMenuTests : BunitContext
         var financeIndex = markup.IndexOf("Finance", StringComparison.Ordinal);
         var leadsIndex = markup.IndexOf("Leads", StringComparison.Ordinal);
         var productsIndex = markup.IndexOf("Products", StringComparison.Ordinal);
+        var quotesIndex = markup.IndexOf("Quotes", StringComparison.Ordinal);
 
         Assert.True(contactsIndex >= 0);
         Assert.True(accountsIndex > contactsIndex);
@@ -30,6 +31,7 @@ public class NavMenuTests : BunitContext
         Assert.True(leadsIndex > crmIndex);
         Assert.True(financeIndex > leadsIndex);
         Assert.True(productsIndex > financeIndex);
+        Assert.True(quotesIndex > productsIndex);
     }
 
     [Fact]

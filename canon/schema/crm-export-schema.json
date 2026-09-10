@@ -130,6 +130,35 @@
         "sku": { "type": "string", "maxLength": 32 }
       }
     },
+    "Quote": {
+      "type": "object",
+      "required": [
+        "quoteId", "quoteNumber", "accountId", "status",
+        "issueDate", "expiryDate", "currency", "subtotal", "taxTotal", "total"
+      ],
+      "properties": {
+        "quoteId": { "type": "string" },
+        "quoteNumber": { "type": "string", "maxLength": 32 },
+        "accountId": { "type": "string" },
+        "contactId": { "type": "string" },
+        "dealId": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Sent", "Accepted", "Declined", "Expired"]
+        },
+        "issueDate": { "type": "string", "format": "date" },
+        "expiryDate": { "type": "string", "format": "date" },
+        "currency": {
+          "type": "string",
+          "enum": ["GBP"]
+        },
+        "subtotal": { "type": "number", "minimum": 0 },
+        "taxTotal": { "type": "number", "minimum": 0 },
+        "total": { "type": "number", "minimum": 0 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "terms": { "type": "string", "maxLength": 1000 }
+      }
+    },
     "Lead": {
       "type": "object",
       "required": ["leadId", "companyName", "contactName", "status", "source", "description"],
@@ -227,6 +256,17 @@
         "status", "source", "rating", "description", "accountId", "convertedContactId"
       ],
       "schema": { "$ref": "#/$defs/Lead" }
+    },
+    "quotes": {
+      "filename": "turpinverse-quotes.csv",
+      "minRows": 8,
+      "rowRule": "Header-only export. Nested line items remain in canon/quotes.json and Hugo detail pages; flattened quote-lines CSV is deferred.",
+      "columns": [
+        "quoteId", "quoteNumber", "accountId", "contactId", "dealId",
+        "status", "issueDate", "expiryDate", "currency", "subtotal", "taxTotal", "total",
+        "notes", "terms"
+      ],
+      "schema": { "$ref": "#/$defs/Quote" }
     }
   },
   "collisionPolicy": {

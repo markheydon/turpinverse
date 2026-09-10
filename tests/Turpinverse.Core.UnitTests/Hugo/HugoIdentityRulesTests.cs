@@ -72,6 +72,16 @@ public class HugoIdentityRulesTests
                     Assert.DoesNotContain($"title: \"{lead.ConvertedContactId}\"", content);
                 }
             }
+
+            foreach (var quote in canon.Quotes)
+            {
+                var content = await File.ReadAllTextAsync(
+                    Path.Combine(siteRoot, "content", "quotes", $"{quote.QuoteId}.md"),
+                    cancellationToken);
+                Assert.Contains($"title: \"{quote.QuoteNumber}\"", content);
+                Assert.DoesNotContain($"title: \"{quote.QuoteId}\"", content);
+                Assert.DoesNotContain($"title: \"{quote.AccountId}\"", content);
+            }
         }
         finally
         {

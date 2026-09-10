@@ -1,0 +1,30 @@
+[
+  {
+    "taxRateId": "tax-standard",
+    "name": "Standard rate VAT",
+    "code": "S",
+    "percentage": 20,
+    "description": "UK standard VAT at 20%."
+  },
+  {
+    "taxRateId": "tax-reduced",
+    "name": "Reduced rate VAT",
+    "code": "R",
+    "percentage": 5,
+    "description": "UK reduced VAT at 5% \u2014 energy-saving materials and qualifying hospitality where applicable."
+  },
+  {
+    "taxRateId": "tax-zero",
+    "name": "Zero-rated VAT",
+    "code": "Z",
+    "percentage": 0,
+    "description": "UK zero-rated supplies \u2014 still VAT-registered reporting, 0% charged."
+  },
+  {
+    "taxRateId": "tax-exempt",
+    "name": "Exempt from VAT",
+    "code": "E",
+    "percentage": 0,
+    "description": "UK VAT-exempt supplies \u2014 outside the scope of reclaim on related purchases."
+  }
+]

@@ -1,0 +1,82 @@
+{{ define "main" }}
+<article class="quote post-single">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    <p class="card-meta">
+      {{ with .Params.status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+      {{ with .Params.total }}&nbsp;·&nbsp;£{{ . }}{{ end }}
+      {{ with .Params.issueDate }}&nbsp;·&nbsp;Issued {{ . }}{{ end }}
+      {{ with .Params.expiryDate }}&nbsp;·&nbsp;Expires {{ . }}{{ end }}
+    </p>
+  </header>
+
+  <div class="post-content md-content">{{ .Content }}</div>
+
+  {{ partial "related-parties.html" . }}
+
+  {{ with .Params.dealId }}
+  <section class="related-records related-deal-link">
+    <h2>Related deal</h2>
+    <ul class="chip-list">
+      <li><a class="chip" href="{{ "/deals/" | relURL }}{{ . }}/">{{ partial "deal-title.html" . }}</a></li>
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ $quoteId := .Params.quoteId }}
+  {{ $taxRates := index hugo.Data "tax-rates" }}
+  {{ range hugo.Data.quotes }}
+    {{ if eq .quoteId $quoteId }}
+  <section class="related-records quote-lines">
+    <h2>Line items</h2>
+    <div class="quote-lines-panel">
+      <table class="quote-lines-table">
+        <thead>
+          <tr>
+            <th scope="col">Description</th>
+            <th scope="col" class="num">Qty</th>
+            <th scope="col" class="num">Unit price</th>
+            <th scope="col">VAT</th>
+            <th scope="col" class="num">Line total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .lines }}
+          <tr>
+            <td class="quote-line-cell">
+              <p class="quote-line-description">{{ .description }}</p>
+              {{ if or .productId .projectId }}
+              <div class="quote-line-links">
+                {{ with .productId }}
+                <a class="chip" href="{{ printf "/products/%s/" . | relURL }}">{{ partial "product-title.html" . }}</a>
+                {{ end }}
+                {{ with .projectId }}
+                <a class="chip" href="{{ printf "/projects/%s/" . | relURL }}">{{ partial "project-title.html" . }}</a>
+                {{ end }}
+              </div>
+              {{ end }}
+            </td>
+            <td class="num">{{ .quantity }}</td>
+            <td class="num">£{{ .unitPrice }}</td>
+            <td class="quote-line-vat">
+              {{ $taxId := .taxRateId }}
+              {{ range $taxRates }}
+                {{ if eq .taxRateId $taxId }}{{ .percentage }}% {{ .name }}{{ end }}
+              {{ end }}
+            </td>
+            <td class="num">£{{ .lineTotal }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    <div class="quote-totals">
+      <div class="quote-total-row"><span>Subtotal</span><span>£{{ .subtotal }}</span></div>
+      <div class="quote-total-row"><span>VAT</span><span>£{{ .taxTotal }}</span></div>
+      <div class="quote-total-row quote-total-grand"><span>Total</span><span>£{{ .total }}</span></div>
+    </div>
+  </section>
+    {{ end }}
+  {{ end }}
+</article>
+{{ end }}

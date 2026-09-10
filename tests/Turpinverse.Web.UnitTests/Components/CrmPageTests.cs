@@ -296,7 +296,8 @@ internal static class CrmTestData
                 new ExportDatasetInfo("cases", "turpinverse-cases.csv", 17, ["caseId"]),
                 new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
                 new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
-                new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"])
+                new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"]),
+                new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>
@@ -410,6 +411,26 @@ internal static class CrmTestData
                     ["description"] = "Example lead",
                     ["accountId"] = "",
                     ["convertedContactId"] = ""
+                }
+            ],
+            "quotes" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["quoteId"] = "quote-001",
+                    ["quoteNumber"] = "QUO-2026-0035",
+                    ["accountId"] = "highway-commission",
+                    ["contactId"] = "henry-clayton",
+                    ["dealId"] = "deal-006",
+                    ["status"] = "Draft",
+                    ["issueDate"] = "2026-06-01",
+                    ["expiryDate"] = "2026-09-15",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "10240",
+                    ["taxTotal"] = "2048",
+                    ["total"] = "12288",
+                    ["notes"] = "Example quote",
+                    ["terms"] = ""
                 }
             ],
             _ => []

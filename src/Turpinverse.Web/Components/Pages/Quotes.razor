@@ -1,0 +1,18 @@
+@page "/quotes"
+@rendermode InteractiveServer
+
+<PageTitle>Quotes - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="quotes"
+                 Columns="@QuotesColumns"
+                 FacetColumns="@QuotesFacets" />
+
+@code {
+    private static readonly string[] QuotesColumns =
+    [
+        "quoteNumber", "status", "accountId", "contactId", "dealId",
+        "issueDate", "expiryDate", "currency", "subtotal", "taxTotal", "total"
+    ];
+
+    private static readonly string[] QuotesFacets = ["status", "accountId"];
+}

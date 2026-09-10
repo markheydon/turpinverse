@@ -36,6 +36,9 @@ public static class ExportMapper
     public static IReadOnlyList<LeadExport> MapLeads(Canon canon) =>
         canon.Leads.Select(MapLead).ToList();
 
+    public static IReadOnlyList<QuoteExport> MapQuotes(Canon canon) =>
+        canon.Quotes.Select(MapQuote).ToList();
+
     public static ContactExport MapContactForMembership(Persona persona, string accountId)
     {
         var (firstName, lastName) = SplitName(persona.DisplayName);
@@ -153,6 +156,25 @@ public static class ExportMapper
             Description = lead.Description,
             AccountId = lead.AccountId ?? string.Empty,
             ConvertedContactId = lead.ConvertedContactId ?? string.Empty
+        };
+
+    public static QuoteExport MapQuote(Quote quote) =>
+        new()
+        {
+            QuoteId = quote.QuoteId,
+            QuoteNumber = quote.QuoteNumber,
+            AccountId = quote.AccountId,
+            ContactId = quote.ContactId ?? string.Empty,
+            DealId = quote.DealId ?? string.Empty,
+            Status = quote.Status,
+            IssueDate = quote.IssueDate,
+            ExpiryDate = quote.ExpiryDate,
+            Currency = quote.Currency,
+            Subtotal = quote.Subtotal,
+            TaxTotal = quote.TaxTotal,
+            Total = quote.Total,
+            Notes = quote.Notes ?? string.Empty,
+            Terms = quote.Terms ?? string.Empty
         };
 
     internal static string JoinContactIds(IReadOnlyList<string> contactIds) =>

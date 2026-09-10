@@ -1,0 +1,17 @@
+{{/* Expects a slice of quote records from hugo.Data.quotes */}}
+{{ if gt (len .) 0 }}
+<section class="related-records related-quotes">
+  <h2>Related quotes</h2>
+  <div class="card-grid">
+    {{ range . }}
+    <a class="record-card quote-record" href="{{ "/quotes/" | relURL }}{{ .quoteId }}/">
+      <p class="card-title">{{ .quoteNumber }}</p>
+      <p class="card-meta">
+        <span class="status-badge status-{{ .status | urlize }}">{{ .status }}</span>
+        · £{{ .total }}
+      </p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

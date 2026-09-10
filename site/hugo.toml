@@ -82,6 +82,11 @@ publishDir = "public"
     parent = "finance"
     weight = 1
   [[menu.main]]
+    name = "Quotes"
+    url = "/quotes/"
+    parent = "finance"
+    weight = 2
+  [[menu.main]]
     identifier = "universe"
     name = "Universe"
     weight = 6
