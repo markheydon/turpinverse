@@ -25,18 +25,18 @@ Download a CSV export for the specified dataset type.
 
 | Parameter | Type | Values |
 |-----------|------|--------|
-| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `quotes`, `invoices`, `payments`, `credit-notes` |
+| `dataset` | string | `contacts`, `accounts`, `deals`, `cases`, `projects`, `products`, `leads`, `quotes`, `sales-orders`, `invoices`, `bills`, `payments`, `credit-notes` |
 
 **Query parameters** (optional; combined with AND; ignored when not applicable to the dataset):
 
 | Name | Type | Datasets | Semantics |
 |------|------|----------|-----------|
-| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `quotes`, `invoices` | Exact match, case-insensitive |
+| `status` | string | `contacts`, `accounts`, `cases`, `products`, `leads`, `quotes`, `sales-orders`, `invoices`, `bills` | Exact match, case-insensitive |
 | `source` | string | `leads` | Exact match, case-insensitive |
 | `taxRateId` | string | `products` | Exact match on export `taxRateId` |
 | `stage` | string | `deals` | Exact match, case-insensitive |
 | `priority` | string | `cases` | Exact match, case-insensitive |
-| `accountId` | string | `contacts`, `deals`, `cases`, `quotes`, `invoices`, `payments`, `credit-notes` | Exact match on export `accountId` |
+| `accountId` | string | `contacts`, `deals`, `cases`, `quotes`, `sales-orders`, `invoices`, `bills`, `payments`, `credit-notes` | Exact match on export `accountId` (bills: matches `supplierAccountId`) |
 | `industry` | string | `accounts` | Exact match, case-insensitive |
 
 No query parameters → full dataset. Filtered body contains **only matching rows**.
@@ -74,7 +74,9 @@ No query parameters → full dataset. Filtered body contains **only matching row
 | `products` | `turpinverse-products.csv` |
 | `leads` | `turpinverse-leads.csv` |
 | `quotes` | `turpinverse-quotes.csv` |
+| `sales-orders` | `turpinverse-sales-orders.csv` |
 | `invoices` | `turpinverse-invoices.csv` |
+| `bills` | `turpinverse-bills.csv` |
 | `payments` | `turpinverse-payments.csv` |
 | `credit-notes` | `turpinverse-credit-notes.csv` |
 

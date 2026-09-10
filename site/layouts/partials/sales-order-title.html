@@ -1,0 +1,3 @@
+{{ $id := . }}
+{{ $matched := where (index hugo.Data "sales-orders") "salesOrderId" $id }}
+{{ if gt (len $matched) 0 }}{{ (index $matched 0).orderNumber }}{{ else }}{{ $id }}{{ end }}

@@ -1,0 +1,17 @@
+{{/* Expects a slice of bill records from hugo.Data.bills */}}
+{{ if gt (len .) 0 }}
+<section class="related-records related-bills">
+  <h2>Related bills</h2>
+  <div class="record-grid">
+    {{ range . }}
+    <a class="record-card bill-record" href="{{ "/bills/" | relURL }}{{ .billId }}/">
+      <h3>{{ partial "bill-title.html" .billId }}</h3>
+      <p class="card-meta">
+        {{ with .status }}<span class="status-badge status-{{ . | urlize }}">{{ . }}</span>{{ end }}
+        {{ with .total }}&nbsp;·&nbsp;£{{ . }}{{ end }}
+      </p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

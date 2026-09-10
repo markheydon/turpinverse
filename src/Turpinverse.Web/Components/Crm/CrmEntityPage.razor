@@ -181,7 +181,8 @@
             Status = facetValues.GetValueOrDefault("status"),
             Stage = facetValues.GetValueOrDefault("stage"),
             Priority = facetValues.GetValueOrDefault("priority"),
-            AccountId = facetValues.GetValueOrDefault("accountId"),
+            AccountId = facetValues.GetValueOrDefault("accountId")
+                ?? facetValues.GetValueOrDefault("supplierAccountId"),
             Industry = facetValues.GetValueOrDefault("industry"),
             TaxRateId = facetValues.GetValueOrDefault("taxRateId"),
             Source = facetValues.GetValueOrDefault("source")
@@ -202,6 +203,7 @@
         facet switch
         {
             "accountId" => "Account",
+            "supplierAccountId" => "Supplier",
             "taxRateId" => "Tax rate",
             _ => char.ToUpperInvariant(facet[0]) + facet[1..]
         };

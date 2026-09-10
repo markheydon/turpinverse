@@ -227,4 +227,76 @@ public class ExportMapperTests
         Assert.Equal("highway-commission", export.AccountId);
         Assert.Equal("inv-001", export.InvoiceId);
     }
+
+    [Fact]
+    public void MapPayment_DenormalisesAccountIdFromBill()
+    {
+        var canon = new Canon
+        {
+            Version = "1.7.0",
+            Personas = [],
+            Organisations = [],
+            Events = [],
+            Aliases = [],
+            ToneGuidelines = new ToneGuidelines
+            {
+                Version = "1.0.0",
+                Principles = [],
+                Examples = [],
+                ForbiddenPatterns = []
+            },
+            Bills =
+            [
+                new Bill
+                {
+                    BillId = "bill-001",
+                    BillNumber = "BILL-2026-0041",
+                    SupplierAccountId = "king-equine-trading",
+                    Status = "Paid",
+                    IssueDate = "2026-01-01",
+                    DueDate = "2026-02-01",
+                    Currency = "GBP",
+                    Subtotal = 100,
+                    TaxTotal = 20,
+                    Total = 120,
+                    AmountDue = 0,
+                    Lines =
+                    [
+                        new BillLine
+                        {
+                            Description = "A",
+                            Quantity = 1,
+                            UnitPrice = 50,
+                            TaxRateId = "tax-standard",
+                            LineTotal = 50
+                        },
+                        new BillLine
+                        {
+                            Description = "B",
+                            Quantity = 1,
+                            UnitPrice = 50,
+                            TaxRateId = "tax-standard",
+                            LineTotal = 50
+                        }
+                    ]
+                }
+            ],
+            Payments =
+            [
+                new Payment
+                {
+                    PaymentId = "pay-010",
+                    PaymentDate = "2026-01-15",
+                    Amount = 120,
+                    Method = "Bank transfer",
+                    BillId = "bill-001"
+                }
+            ]
+        };
+
+        var export = ExportMapper.MapPayments(canon).Single();
+
+        Assert.Equal("king-equine-trading", export.AccountId);
+        Assert.Equal("bill-001", export.BillId);
+    }
 }

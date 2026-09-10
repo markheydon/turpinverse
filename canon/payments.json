@@ -70,5 +70,29 @@
     "method": "Bank transfer",
     "invoiceId": "inv-002",
     "reference": "MILL-VIP-DEP"
+  },
+  {
+    "paymentId": "pay-010",
+    "paymentDate": "2026-06-18",
+    "amount": 5868,
+    "method": "Bank transfer",
+    "billId": "bill-002",
+    "reference": "KET-CORRIDOR-TRIAL"
+  },
+  {
+    "paymentId": "pay-011",
+    "paymentDate": "1737-10-05",
+    "amount": 2472,
+    "method": "Bank transfer",
+    "billId": "bill-004",
+    "reference": "BRAZ-SUPP-YORK-1737"
+  },
+  {
+    "paymentId": "pay-012",
+    "paymentDate": "2026-05-10",
+    "amount": 2000,
+    "method": "Bank transfer",
+    "billId": "bill-005",
+    "reference": "KET-MAINT-PARTIAL"
   }
 ]

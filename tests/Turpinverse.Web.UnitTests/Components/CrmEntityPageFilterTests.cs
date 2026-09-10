@@ -81,6 +81,38 @@ public class CrmEntityPageFilterTests : BunitContext
     }
 
     [Fact]
+    public void CrmEntityPage_PassesSupplierAccountIdFacetToPreviewFilter()
+    {
+        var exportService = Substitute.For<IExportService>();
+        exportService.GetManifestAsync(Arg.Any<CancellationToken>())
+            .Returns(new ExportManifest("1.0.0", [new ExportDatasetInfo("bills", "turpinverse-bills.csv", 2, ["billId"])]));
+        exportService.PreviewAsync("bills", 100, null, Arg.Any<CancellationToken>())
+            .Returns(CreateBillRows(
+                ("supplierAccountId", "king-equine-trading"),
+                ("supplierAccountId", "millington-inn")));
+        exportService.PreviewAsync(
+                "bills",
+                100,
+                Arg.Is<ExportFilter>(filter => filter != null && filter.AccountId == "king-equine-trading"),
+                Arg.Any<CancellationToken>())
+            .Returns(CreateBillRows(("supplierAccountId", "king-equine-trading")));
+        Services.AddSingleton(exportService);
+
+        var cut = Render<CrmEntityPage>(parameters => parameters
+            .Add(p => p.DatasetType, "bills")
+            .Add(p => p.Columns, new[] { "billNumber", "supplierAccountId" })
+            .Add(p => p.FacetColumns, new[] { "supplierAccountId" }));
+
+        cut.Find("select.facet-select").Change("king-equine-trading");
+
+        exportService.Received(1).PreviewAsync(
+            "bills",
+            100,
+            Arg.Is<ExportFilter>(filter => filter != null && filter.AccountId == "king-equine-trading"),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public void CrmEntityPage_DisablesDownloadWhenFilterMatchesZeroRows()
     {
         var exportService = Substitute.For<IExportService>();
@@ -122,6 +154,15 @@ public class CrmEntityPageFilterTests : BunitContext
             ["dealName"] = "Deal",
             [pair.key] = pair.value,
             ["accountId"] = "org-a"
+        }).ToList();
+
+    private static IReadOnlyList<IReadOnlyDictionary<string, string>> CreateBillRows(
+        params (string key, string value)[] values) =>
+        values.Select(pair => (IReadOnlyDictionary<string, string>)new Dictionary<string, string>
+        {
+            ["billNumber"] = "BILL-2026-0001",
+            ["status"] = "Authorised",
+            [pair.key] = pair.value
         }).ToList();
 
     private static IReadOnlyList<IReadOnlyDictionary<string, string>> CreateProductRows(

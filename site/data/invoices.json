@@ -26,7 +26,7 @@
         "productId": "highway-risk-day-rate",
         "projectId": null,
         "quoteId": "quote-001",
-        "salesOrderId": null
+        "salesOrderId": "so-001"
       },
       {
         "description": "Overnight Logistics Surcharge",
@@ -37,7 +37,7 @@
         "productId": "overnight-logistics-surcharge",
         "projectId": null,
         "quoteId": "quote-001",
-        "salesOrderId": null
+        "salesOrderId": "so-001"
       }
     ]
   },
@@ -110,7 +110,7 @@
         "productId": null,
         "projectId": "palmer-identity-vault",
         "quoteId": "quote-005",
-        "salesOrderId": null
+        "salesOrderId": "so-005"
       },
       {
         "description": "Identity Management Advisory Hour",
@@ -152,7 +152,7 @@
         "productId": "forest-patrol-sector",
         "projectId": null,
         "quoteId": "quote-006",
-        "salesOrderId": null
+        "salesOrderId": "so-003"
       },
       {
         "description": "Forest Patrol \u2014 Sector Day (weeks 8\u201310)",
@@ -163,7 +163,7 @@
         "productId": "forest-patrol-sector",
         "projectId": null,
         "quoteId": "quote-006",
-        "salesOrderId": null
+        "salesOrderId": "so-003"
       }
     ]
   },
@@ -331,7 +331,7 @@
         "productId": "equine-asset-hire-day",
         "projectId": null,
         "quoteId": "quote-004",
-        "salesOrderId": null
+        "salesOrderId": "so-004"
       },
       {
         "description": "Overnight Logistics Surcharge",
@@ -342,7 +342,7 @@
         "productId": "overnight-logistics-surcharge",
         "projectId": null,
         "quoteId": "quote-004",
-        "salesOrderId": null
+        "salesOrderId": "so-004"
       }
     ]
   },

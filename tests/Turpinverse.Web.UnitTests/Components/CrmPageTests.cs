@@ -234,6 +234,38 @@ public class QuotesPageTests : CrmEntityPageTestBase<Quotes>
     }
 }
 
+public class SalesOrdersPageTests : CrmEntityPageTestBase<SalesOrders>
+{
+    protected override string DatasetType => "sales-orders";
+
+    [Fact]
+    public void SalesOrdersPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Sales Orders", cut.Markup);
+        Assert.Contains("OrderNumber", cut.Markup);
+        Assert.Contains("Total", cut.Markup);
+        Assert.Contains("Status", cut.Markup);
+        Assert.Contains("SO-2026-0101", cut.Markup);
+    }
+}
+
+public class BillsPageTests : CrmEntityPageTestBase<Bills>
+{
+    protected override string DatasetType => "bills";
+
+    [Fact]
+    public void BillsPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Bills", cut.Markup);
+        Assert.Contains("BillNumber", cut.Markup);
+        Assert.Contains("AmountDue", cut.Markup);
+        Assert.Contains("Supplier", cut.Markup);
+        Assert.Contains("BILL-2026-0041", cut.Markup);
+    }
+}
+
 public class InvoicesPageTests : CrmEntityPageTestBase<Invoices>
 {
     protected override string DatasetType => "invoices";
@@ -261,6 +293,7 @@ public class PaymentsPageTests : CrmEntityPageTestBase<Payments>
         Assert.Contains("Payments", cut.Markup);
         Assert.Contains("PaymentDate", cut.Markup);
         Assert.Contains("Method", cut.Markup);
+        Assert.Contains("BillId", cut.Markup);
         Assert.Contains("pay-001", cut.Markup);
     }
 }
@@ -361,8 +394,10 @@ internal static class CrmTestData
                 new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
                 new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"]),
                 new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"]),
+                new ExportDatasetInfo("sales-orders", "turpinverse-sales-orders.csv", 6, ["salesOrderId"]),
                 new ExportDatasetInfo("invoices", "turpinverse-invoices.csv", 12, ["invoiceId"]),
-                new ExportDatasetInfo("payments", "turpinverse-payments.csv", 9, ["paymentId"]),
+                new ExportDatasetInfo("bills", "turpinverse-bills.csv", 6, ["billId"]),
+                new ExportDatasetInfo("payments", "turpinverse-payments.csv", 12, ["paymentId"]),
                 new ExportDatasetInfo("credit-notes", "turpinverse-credit-notes.csv", 3, ["creditNoteId"])
             ]);
 
@@ -499,6 +534,26 @@ internal static class CrmTestData
                     ["terms"] = ""
                 }
             ],
+            "sales-orders" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["salesOrderId"] = "so-001",
+                    ["orderNumber"] = "SO-2026-0101",
+                    ["accountId"] = "highway-commission",
+                    ["contactId"] = "henry-clayton",
+                    ["dealId"] = "deal-006",
+                    ["status"] = "Confirmed",
+                    ["orderDate"] = "2026-07-15",
+                    ["requestedDeliveryDate"] = "2026-09-01",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "8720",
+                    ["taxTotal"] = "1744",
+                    ["total"] = "10464",
+                    ["notes"] = "Example sales order",
+                    ["terms"] = ""
+                }
+            ],
             "invoices" =>
             [
                 new Dictionary<string, string>
@@ -519,6 +574,27 @@ internal static class CrmTestData
                     ["amountDue"] = "12288",
                     ["notes"] = "Example invoice",
                     ["terms"] = ""
+                }
+            ],
+            "bills" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["billId"] = "bill-001",
+                    ["billNumber"] = "BILL-2026-0041",
+                    ["supplierAccountId"] = "king-equine-trading",
+                    ["contactId"] = "george-chapman",
+                    ["dealId"] = "deal-016",
+                    ["caseId"] = "",
+                    ["status"] = "Authorised",
+                    ["issueDate"] = "2026-06-15",
+                    ["dueDate"] = "2026-07-15",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "2920",
+                    ["taxTotal"] = "584",
+                    ["total"] = "3504",
+                    ["amountDue"] = "3504",
+                    ["notes"] = "Example bill"
                 }
             ],
             "payments" =>

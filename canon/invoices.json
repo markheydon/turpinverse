@@ -23,7 +23,8 @@
         "taxRateId": "tax-standard",
         "lineTotal": 9600,
         "productId": "highway-risk-day-rate",
-        "quoteId": "quote-001"
+        "quoteId": "quote-001",
+        "salesOrderId": "so-001"
       },
       {
         "description": "Overnight Logistics Surcharge",
@@ -32,7 +33,8 @@
         "taxRateId": "tax-standard",
         "lineTotal": 640,
         "productId": "overnight-logistics-surcharge",
-        "quoteId": "quote-001"
+        "quoteId": "quote-001",
+        "salesOrderId": "so-001"
       }
     ]
   },
@@ -95,7 +97,8 @@
         "taxRateId": "tax-standard",
         "lineTotal": 3200,
         "projectId": "palmer-identity-vault",
-        "quoteId": "quote-005"
+        "quoteId": "quote-005",
+        "salesOrderId": "so-005"
       },
       {
         "description": "Identity Management Advisory Hour",
@@ -131,7 +134,8 @@
         "taxRateId": "tax-zero",
         "lineTotal": 5250,
         "productId": "forest-patrol-sector",
-        "quoteId": "quote-006"
+        "quoteId": "quote-006",
+        "salesOrderId": "so-003"
       },
       {
         "description": "Forest Patrol — Sector Day (weeks 8–10)",
@@ -140,7 +144,8 @@
         "taxRateId": "tax-zero",
         "lineTotal": 2250,
         "productId": "forest-patrol-sector",
-        "quoteId": "quote-006"
+        "quoteId": "quote-006",
+        "salesOrderId": "so-003"
       }
     ]
   },
@@ -283,7 +288,8 @@
         "taxRateId": "tax-standard",
         "lineTotal": 2550,
         "productId": "equine-asset-hire-day",
-        "quoteId": "quote-004"
+        "quoteId": "quote-004",
+        "salesOrderId": "so-004"
       },
       {
         "description": "Overnight Logistics Surcharge",
@@ -292,7 +298,8 @@
         "taxRateId": "tax-standard",
         "lineTotal": 640,
         "productId": "overnight-logistics-surcharge",
-        "quoteId": "quote-004"
+        "quoteId": "quote-004",
+        "salesOrderId": "so-004"
       }
     ]
   },

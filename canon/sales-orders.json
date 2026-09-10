@@ -1,0 +1,197 @@
+[
+  {
+    "salesOrderId": "so-001",
+    "orderNumber": "SO-2026-0101",
+    "accountId": "highway-commission",
+    "contactId": "henry-clayton",
+    "dealId": "deal-006",
+    "status": "Confirmed",
+    "orderDate": "2026-07-15",
+    "requestedDeliveryDate": "2026-09-01",
+    "currency": "GBP",
+    "subtotal": 8720,
+    "taxTotal": 1744,
+    "total": 10464,
+    "notes": "Confirmed corridor assessment fulfilment — seven assessment days plus one overnight surcharge. Distinct scope from sent estimates.",
+    "terms": "Delivery against negotiated Q1 corridor programme. Workshop add-on invoiced separately.",
+    "lines": [
+      {
+        "description": "Highway Risk Assessment — Day Rate (fulfilment batch 1)",
+        "quantity": 7,
+        "unitPrice": 1200,
+        "taxRateId": "tax-standard",
+        "lineTotal": 8400,
+        "productId": "highway-risk-day-rate",
+        "quoteId": "quote-001"
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 1,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 320,
+        "productId": "overnight-logistics-surcharge"
+      }
+    ]
+  },
+  {
+    "salesOrderId": "so-002",
+    "orderNumber": "SO-2026-0102",
+    "accountId": "millington-inn",
+    "contactId": "anna-ward",
+    "dealId": "deal-019",
+    "status": "Fulfilled",
+    "orderDate": "2026-06-01",
+    "requestedDeliveryDate": "2026-06-30",
+    "currency": "GBP",
+    "subtotal": 5540,
+    "taxTotal": 388,
+    "total": 5928,
+    "notes": "VIP loyalty programme launch package fulfilled — discretion tier workshops remain on separate estimate.",
+    "lines": [
+      {
+        "description": "Hospitality Block Booking",
+        "quantity": 2,
+        "unitPrice": 2400,
+        "taxRateId": "tax-reduced",
+        "lineTotal": 4800,
+        "productId": "hospitality-block-booking",
+        "quoteId": "quote-003"
+      },
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 4,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 740,
+        "productId": "identity-advisory-hour"
+      }
+    ]
+  },
+  {
+    "salesOrderId": "so-003",
+    "orderNumber": "SO-2026-0103",
+    "accountId": "epping-forest-authority",
+    "contactId": "william-hargreaves",
+    "dealId": "deal-008",
+    "status": "Fulfilled",
+    "orderDate": "2026-04-15",
+    "currency": "GBP",
+    "subtotal": 7500,
+    "taxTotal": 0,
+    "total": 7500,
+    "notes": "Sector 7 supplementary patrol — ten sector days per outsourcing agreement. Whole-programme fulfilment.",
+    "lines": [
+      {
+        "description": "Forest Patrol — Sector Day (weeks 1–7)",
+        "quantity": 7,
+        "unitPrice": 750,
+        "taxRateId": "tax-zero",
+        "lineTotal": 5250,
+        "productId": "forest-patrol-sector",
+        "quoteId": "quote-006"
+      },
+      {
+        "description": "Forest Patrol — Sector Day (weeks 8–10)",
+        "quantity": 3,
+        "unitPrice": 750,
+        "taxRateId": "tax-zero",
+        "lineTotal": 2250,
+        "productId": "forest-patrol-sector",
+        "quoteId": "quote-006"
+      }
+    ]
+  },
+  {
+    "salesOrderId": "so-004",
+    "orderNumber": "SO-2026-0104",
+    "accountId": "king-equine-trading",
+    "contactId": "george-chapman",
+    "dealId": "deal-016",
+    "status": "Confirmed",
+    "orderDate": "2026-07-01",
+    "requestedDeliveryDate": "2026-07-31",
+    "currency": "GBP",
+    "subtotal": 3720,
+    "taxTotal": 744,
+    "total": 4464,
+    "notes": "Fleet maintenance support hire days — narrower scope than comprehensive asset coverage estimate.",
+    "terms": "Hire days subject to mileage reconciliation on return.",
+    "lines": [
+      {
+        "description": "Equine Asset Hire — Day Rate",
+        "quantity": 4,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 3400,
+        "productId": "equine-asset-hire-day"
+      },
+      {
+        "description": "Overnight Logistics Surcharge",
+        "quantity": 1,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 320,
+        "productId": "overnight-logistics-surcharge"
+      }
+    ]
+  },
+  {
+    "salesOrderId": "so-005",
+    "orderNumber": "SO-1737-0005",
+    "accountId": "brazier-legal",
+    "contactId": "mary-brazier",
+    "dealId": "deal-004",
+    "status": "Fulfilled",
+    "orderDate": "1737-10-01",
+    "currency": "GBP",
+    "subtotal": 3200,
+    "taxTotal": 640,
+    "total": 3840,
+    "notes": "Project Yorkshire identity package — whole-project delivery order for Palmer Identity Vault.",
+    "lines": [
+      {
+        "description": "Palmer Identity Vault — complete alias lifecycle delivery",
+        "quantity": 1,
+        "unitPrice": 3200,
+        "taxRateId": "tax-standard",
+        "lineTotal": 3200,
+        "projectId": "palmer-identity-vault",
+        "quoteId": "quote-005"
+      }
+    ]
+  },
+  {
+    "salesOrderId": "so-006",
+    "orderNumber": "SO-2026-0106",
+    "accountId": "essex-gang",
+    "contactId": "samuel-gregory",
+    "dealId": "deal-011",
+    "status": "Draft",
+    "orderDate": "2026-09-01",
+    "requestedDeliveryDate": "2026-10-15",
+    "currency": "GBP",
+    "subtotal": 5980,
+    "taxTotal": 1196,
+    "total": 7176,
+    "notes": "Rural procurement framework renewal — retainer plus advisory hours pending parish sign-off.",
+    "lines": [
+      {
+        "description": "Corridor Optimisation Retainer",
+        "quantity": 1,
+        "unitPrice": 4500,
+        "taxRateId": "tax-standard",
+        "lineTotal": 4500,
+        "productId": "corridor-optimisation-retainer"
+      },
+      {
+        "description": "Identity Management Advisory Hour",
+        "quantity": 8,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 1480,
+        "productId": "identity-advisory-hour"
+      }
+    ]
+  }
+]

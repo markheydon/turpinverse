@@ -1,0 +1,16 @@
+{{/* Expects a salesOrderId string; finds invoices with any line referencing that order. */}}
+{{ $salesOrderId := . }}
+{{ $related := slice }}
+{{ range hugo.Data.invoices }}
+  {{ $invoice := . }}
+  {{ $matched := false }}
+  {{ range .lines }}
+    {{ if and .salesOrderId (eq .salesOrderId $salesOrderId) }}
+      {{ $matched = true }}
+    {{ end }}
+  {{ end }}
+  {{ if $matched }}
+    {{ $related = $related | append $invoice }}
+  {{ end }}
+{{ end }}
+{{ partial "related-invoices-grid.html" $related }}

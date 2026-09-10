@@ -18,7 +18,7 @@
         <tr>
           <td class="quote-line-cell">
             <p class="quote-line-description">{{ .description }}</p>
-            {{ if or .productId .projectId .quoteId }}
+            {{ if or .productId .projectId .quoteId .salesOrderId }}
             <div class="quote-line-links">
               {{ with .productId }}
               <a class="chip" href="{{ printf "/products/%s/" . | relURL }}">{{ partial "product-title.html" . }}</a>
@@ -28,6 +28,9 @@
               {{ end }}
               {{ with .quoteId }}
               <a class="chip" href="{{ printf "/quotes/%s/" . | relURL }}">{{ partial "quote-title.html" . }}</a>
+              {{ end }}
+              {{ with .salesOrderId }}
+              <a class="chip" href="{{ printf "/sales-orders/%s/" . | relURL }}">{{ partial "sales-order-title.html" . }}</a>
               {{ end }}
             </div>
             {{ end }}

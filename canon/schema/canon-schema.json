@@ -26,7 +26,9 @@
     "quotes",
     "invoices",
     "payments",
-    "creditNotes"
+    "creditNotes",
+    "salesOrders",
+    "bills"
   ],
   "properties": {
     "version": {
@@ -128,6 +130,16 @@
       "type": "array",
       "minItems": 3,
       "items": { "$ref": "#/$defs/CreditNote" }
+    },
+    "salesOrders": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/SalesOrder" }
+    },
+    "bills": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/Bill" }
     }
   },
   "$defs": {
@@ -543,6 +555,119 @@
         "lineTotal": { "type": "number", "minimum": 0 },
         "productId": { "$ref": "#/$defs/slug" },
         "projectId": { "$ref": "#/$defs/slug" }
+      }
+    },
+    "SalesOrderLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description", "quantity", "unitPrice", "taxRateId", "lineTotal"
+      ],
+      "properties": {
+        "description": { "type": "string", "maxLength": 500 },
+        "quantity": { "type": "number", "minimum": 0 },
+        "unitPrice": { "type": "number", "minimum": 0 },
+        "taxRateId": { "$ref": "#/$defs/slug" },
+        "lineTotal": { "type": "number", "minimum": 0 },
+        "productId": { "$ref": "#/$defs/slug" },
+        "projectId": { "$ref": "#/$defs/slug" },
+        "quoteId": { "$ref": "#/$defs/slug" }
+      }
+    },
+    "SalesOrder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "salesOrderId", "orderNumber", "accountId", "status",
+        "orderDate", "currency", "subtotal", "taxTotal", "total", "lines"
+      ],
+      "properties": {
+        "salesOrderId": { "$ref": "#/$defs/slug" },
+        "orderNumber": {
+          "type": "string",
+          "pattern": "^SO-\\d{4}-\\d{4}$"
+        },
+        "accountId": { "$ref": "#/$defs/slug" },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "dealId": { "$ref": "#/$defs/slug" },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Confirmed", "Fulfilled", "Cancelled"]
+        },
+        "orderDate": { "$ref": "#/$defs/isoDateOrMonth" },
+        "requestedDeliveryDate": { "$ref": "#/$defs/isoDateOrMonth" },
+        "currency": {
+          "type": "string",
+          "enum": ["GBP"]
+        },
+        "subtotal": { "type": "number", "minimum": 0 },
+        "taxTotal": { "type": "number", "minimum": 0 },
+        "total": { "type": "number", "minimum": 0 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "terms": { "type": "string", "maxLength": 1000 },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/SalesOrderLine" }
+        }
+      }
+    },
+    "BillLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description", "quantity", "unitPrice", "taxRateId", "lineTotal"
+      ],
+      "properties": {
+        "description": { "type": "string", "maxLength": 500 },
+        "quantity": { "type": "number", "minimum": 0 },
+        "unitPrice": { "type": "number", "minimum": 0 },
+        "taxRateId": { "$ref": "#/$defs/slug" },
+        "lineTotal": { "type": "number", "minimum": 0 },
+        "productId": { "$ref": "#/$defs/slug" },
+        "projectId": { "$ref": "#/$defs/slug" }
+      }
+    },
+    "Bill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "billId", "billNumber", "supplierAccountId", "status",
+        "issueDate", "dueDate", "currency",
+        "subtotal", "taxTotal", "total", "amountDue", "lines"
+      ],
+      "properties": {
+        "billId": { "$ref": "#/$defs/slug" },
+        "billNumber": {
+          "type": "string",
+          "pattern": "^BILL-\\d{4}-\\d{4}$"
+        },
+        "supplierAccountId": { "$ref": "#/$defs/slug" },
+        "contactId": { "$ref": "#/$defs/slug" },
+        "dealId": { "$ref": "#/$defs/slug" },
+        "caseId": { "$ref": "#/$defs/slug" },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Authorised", "Paid", "Overdue"]
+        },
+        "issueDate": { "$ref": "#/$defs/isoDateOrMonth" },
+        "dueDate": { "$ref": "#/$defs/isoDateOrMonth" },
+        "currency": {
+          "type": "string",
+          "enum": ["GBP"]
+        },
+        "subtotal": { "type": "number", "minimum": 0 },
+        "taxTotal": { "type": "number", "minimum": 0 },
+        "total": { "type": "number", "minimum": 0 },
+        "amountDue": { "type": "number", "minimum": 0 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "lines": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/BillLine" }
+        }
       }
     },
     "CreditNote": {
