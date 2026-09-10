@@ -1589,6 +1589,43 @@ public sealed partial class CanonValidator
                     invoice.InvoiceId));
             }
 
+            if (string.Equals(invoice.Status, "Paid", StringComparison.Ordinal)
+                && (invoice.AmountDue != 0 || paidAmount != invoice.Total))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Paid requires amountDue 0 and payments totalling the invoice total",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (string.Equals(invoice.Status, "Overdue", StringComparison.Ordinal)
+                     && invoice.AmountDue <= 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Overdue requires amountDue greater than 0",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (string.Equals(invoice.Status, "Draft", StringComparison.Ordinal)
+                     && paidAmount > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Draft must not have payments",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (string.Equals(invoice.Status, "Void", StringComparison.Ordinal)
+                     && paidAmount > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Void must not have payments",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
             if (string.Equals(invoice.Status, "Overdue", StringComparison.Ordinal))
             {
                 hasOverdue = true;
@@ -1697,6 +1734,15 @@ public sealed partial class CanonValidator
                         invoice.InvoiceId));
                 }
             }
+
+            if (!string.IsNullOrWhiteSpace(line.SalesOrderId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-078",
+                    $"Invoice '{invoice.InvoiceId}' line references sales order '{line.SalesOrderId}' but sales orders are not yet in canon (#36)",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
         }
 
         var computedSubtotal = invoice.Lines.Sum(l => l.LineTotal);
@@ -1785,6 +1831,10 @@ public sealed partial class CanonValidator
                     paymentsByInvoice.TryGetValue(payment.InvoiceId!, out var running);
                     paymentsByInvoice[payment.InvoiceId!] = running + payment.Amount;
                 }
+            }
+            else
+            {
+                // Bill FK validation and payment accountId export denormalisation land with bills (#36).
             }
         }
 

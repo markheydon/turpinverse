@@ -125,9 +125,9 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-075 | Invoice | Unique `invoiceId` / `invoiceNumber`; ≥12 invoices; `invoiceNumber` matches `INV-YYYY-nnnn` |
 | VR-076 | Invoice | `accountId` exists and organisation `roles` includes `customer` |
 | VR-077 | Invoice | `contactId` omitted or exists and is a member of `accountId`; optional `dealId` exists with matching account; optional `caseId` exists and is **not** `case-011` |
-| VR-078 | Invoice line | Authored money and FK rules (products, projects, quotes same account); 2–5 nested lines |
+| VR-078 | Invoice line | Authored money and FK rules (products, projects, quotes same account); `salesOrderId` omitted until sales orders ship (#36); 2–5 nested lines |
 | VR-079 | Invoice | `dueDate` ≥ `issueDate`; `amountDue` equals `total` minus sum of payments (void invoices: `amountDue` is 0) |
-| VR-080 | Invoice | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue` \| `Void`; `currency` is `GBP`; at least one `Overdue` |
+| VR-080 | Invoice | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue` \| `Void`; `currency` is `GBP`; at least one `Overdue`; `Paid` requires full settlement; `Overdue` requires `amountDue` > 0; `Draft` and `Void` require no payments |
 
 ## Payments (VR-081)
 

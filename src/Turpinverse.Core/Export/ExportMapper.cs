@@ -42,8 +42,11 @@ public static class ExportMapper
     public static IReadOnlyList<InvoiceExport> MapInvoices(Canon canon) =>
         canon.Invoices.Select(MapInvoice).ToList();
 
-    public static IReadOnlyList<PaymentExport> MapPayments(Canon canon) =>
-        canon.Payments.Select(payment => MapPayment(payment, canon)).ToList();
+    public static IReadOnlyList<PaymentExport> MapPayments(Canon canon)
+    {
+        var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
+        return canon.Payments.Select(payment => MapPayment(payment, invoicesById)).ToList();
+    }
 
     public static IReadOnlyList<CreditNoteExport> MapCreditNotes(Canon canon) =>
         canon.CreditNotes.Select(MapCreditNote).ToList();
@@ -207,9 +210,14 @@ public static class ExportMapper
             Terms = invoice.Terms ?? string.Empty
         };
 
-    public static PaymentExport MapPayment(Payment payment, Canon canon)
+    public static PaymentExport MapPayment(Payment payment, Canon canon) =>
+        MapPayment(payment, canon.Invoices.ToDictionary(i => i.InvoiceId));
+
+    public static PaymentExport MapPayment(
+        Payment payment,
+        IReadOnlyDictionary<string, Invoice> invoicesById)
     {
-        var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
+        // Bill-targeted payments: denormalise accountId from bills when #36 lands.
         var accountId = string.Empty;
         if (!string.IsNullOrWhiteSpace(payment.InvoiceId)
             && invoicesById.TryGetValue(payment.InvoiceId, out var invoice))

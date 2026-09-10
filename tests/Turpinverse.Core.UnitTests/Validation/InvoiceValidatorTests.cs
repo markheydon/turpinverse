@@ -58,6 +58,60 @@ public class InvoiceValidatorTests
     }
 
     [Fact]
+    public void Validate_PaidInvoiceWithoutFullPayment_FailsVr080()
+    {
+        var canon = CreateCanon(
+            [Invoice("inv-1", status: "Paid", total: 1200, amountDue: 1200)]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-080" && v.EntityId == "inv-1");
+    }
+
+    [Fact]
+    public void Validate_OverdueInvoiceWithZeroAmountDue_FailsVr080()
+    {
+        var canon = CreateCanon(
+            [Invoice("inv-1", status: "Overdue", total: 1200, amountDue: 0)]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-080" && v.EntityId == "inv-1");
+    }
+
+    [Fact]
+    public void Validate_DraftInvoiceWithPayment_FailsVr080()
+    {
+        var canon = CreateCanon(
+            [Invoice("inv-1", status: "Draft", total: 1200, amountDue: 1200)],
+            payments: [Payment("pay-1", invoiceId: "inv-1", amount: 500)]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-080" && v.EntityId == "inv-1");
+    }
+
+    [Fact]
+    public void Validate_InvoiceLineWithSalesOrderId_FailsVr078()
+    {
+        var canon = CreateCanon(
+        [
+            Invoice("inv-1") with
+            {
+                Lines =
+                [
+                    Line(500),
+                    Line(500) with { SalesOrderId = "so-001" }
+                ]
+            }
+        ]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-078" && v.EntityId == "inv-1");
+    }
+
+    [Fact]
     public void Validate_FewerThanTwelveInvoices_FailsVr075()
     {
         var canon = CreateCanon(
@@ -105,7 +159,8 @@ public class InvoiceValidatorTests
         string? caseId = null,
         decimal total = 1200,
         decimal amountDue = 1200,
-        string invoiceNumber = "INV-2026-0001") =>
+        string invoiceNumber = "INV-2026-0001",
+        string? status = null) =>
         new()
         {
             InvoiceId = invoiceId,
@@ -113,7 +168,7 @@ public class InvoiceValidatorTests
             AccountId = "highway-commission",
             ContactId = "henry-clayton",
             CaseId = caseId,
-            Status = amountDue == 0 ? "Paid" : "Authorised",
+            Status = status ?? (amountDue == 0 ? "Paid" : "Authorised"),
             IssueDate = "2026-01-01",
             DueDate = "2026-02-01",
             Currency = "GBP",

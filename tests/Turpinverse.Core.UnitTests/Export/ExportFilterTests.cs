@@ -252,4 +252,92 @@ public class ExportFilterTests
             TaxTotal = 200,
             Total = 1200
         };
+
+    [Fact]
+    public void ApplyToInvoices_WhenStatusAndAccountIdMatch_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateInvoice("inv-1", "Paid", "highway-commission"),
+            CreateInvoice("inv-2", "Overdue", "highway-commission"),
+            CreateInvoice("inv-3", "Paid", "millington-inn")
+        };
+
+        var filter = new ExportFilter { Status = "Paid", AccountId = "highway-commission" };
+        var result = filter.ApplyToInvoices(rows);
+
+        Assert.Single(result);
+        Assert.Equal("inv-1", result[0].InvoiceId);
+    }
+
+    [Fact]
+    public void ApplyToPayments_WhenAccountIdMatch_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreatePayment("pay-1", "highway-commission"),
+            CreatePayment("pay-2", "millington-inn")
+        };
+
+        var filter = new ExportFilter { AccountId = "highway-commission" };
+        var result = filter.ApplyToPayments(rows);
+
+        Assert.Single(result);
+        Assert.Equal("pay-1", result[0].PaymentId);
+    }
+
+    [Fact]
+    public void ApplyToCreditNotes_WhenAccountIdMatch_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateCreditNote("crn-1", "highway-commission"),
+            CreateCreditNote("crn-2", "millington-inn")
+        };
+
+        var filter = new ExportFilter { AccountId = "highway-commission" };
+        var result = filter.ApplyToCreditNotes(rows);
+
+        Assert.Single(result);
+        Assert.Equal("crn-1", result[0].CreditNoteId);
+    }
+
+    private static InvoiceExport CreateInvoice(string invoiceId, string status, string accountId) =>
+        new()
+        {
+            InvoiceId = invoiceId,
+            InvoiceNumber = "INV-2026-0001",
+            AccountId = accountId,
+            Status = status,
+            IssueDate = "2026-01-01",
+            DueDate = "2026-02-01",
+            Currency = "GBP",
+            Subtotal = 1000,
+            TaxTotal = 200,
+            Total = 1200,
+            AmountDue = status == "Paid" ? 0 : 1200
+        };
+
+    private static PaymentExport CreatePayment(string paymentId, string accountId) =>
+        new()
+        {
+            PaymentId = paymentId,
+            PaymentDate = "2026-01-15",
+            Amount = 500,
+            Method = "Bank transfer",
+            AccountId = accountId
+        };
+
+    private static CreditNoteExport CreateCreditNote(string creditNoteId, string accountId) =>
+        new()
+        {
+            CreditNoteId = creditNoteId,
+            CreditNoteNumber = "CRN-2026-0001",
+            AccountId = accountId,
+            IssueDate = "2026-01-01",
+            Currency = "GBP",
+            Subtotal = 100,
+            TaxTotal = 20,
+            Total = 120
+        };
 }
