@@ -162,7 +162,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 | Code | Scope | Pass condition |
 |------|-------|----------------|
 | VR-096 | Activity | Unique `activityId`; count 20–25; `type`, `status`, and `regardingType` in closed enums |
-| VR-097 | Activity | `ownerContactId` references existing persona; open tasks require `dueDate`; `dueDate` ≥ `activityDate` when set; `durationMinutes` only on Call/Meeting |
+| VR-097 | Activity | `ownerContactId` references existing persona; `subject` ≤ 120 chars; `description` ≤ 500 chars; open tasks require `dueDate`; `dueDate` ≥ `activityDate` when set; `durationMinutes` only on Call/Meeting and ≤ 480 |
 | VR-098 | Activity | `regardingId` resolves for `regardingType` (`contact`, `deal`, `case`, `lead`, `invoice`, `bill`, `quote`, `salesOrder`) |
 | VR-099 | Activity | Flagship coverage: alias (`case-001` or `deal-004`), Black Bess (`deal-007` / `deal-015` / `deal-022`), `case-011`, `bill-003` |
 

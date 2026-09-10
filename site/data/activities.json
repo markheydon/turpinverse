@@ -10,7 +10,8 @@
     "regardingType": "case",
     "regardingId": "case-001",
     "ownerContactId": "mary-brazier",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "1737-10-18"
   },
   {
     "activityId": "activity-002",
@@ -23,7 +24,8 @@
     "regardingType": "deal",
     "regardingId": "deal-004",
     "ownerContactId": "mary-brazier",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "1737-11-02"
   },
   {
     "activityId": "activity-003",
@@ -36,7 +38,8 @@
     "regardingType": "lead",
     "regardingId": "lead-004",
     "ownerContactId": "james-smith",
-    "durationMinutes": 18
+    "durationMinutes": 18,
+    "activityDateSort": "1737-09-14"
   },
   {
     "activityId": "activity-004",
@@ -49,7 +52,8 @@
     "regardingType": "contact",
     "regardingId": "ned-palmer",
     "ownerContactId": "mary-brazier",
-    "durationMinutes": 12
+    "durationMinutes": 12,
+    "activityDateSort": "1737-10-20"
   },
   {
     "activityId": "activity-005",
@@ -62,7 +66,8 @@
     "regardingType": "deal",
     "regardingId": "deal-007",
     "ownerContactId": "james-smith",
-    "durationMinutes": 45
+    "durationMinutes": 45,
+    "activityDateSort": "2026-03-04"
   },
   {
     "activityId": "activity-006",
@@ -75,7 +80,8 @@
     "regardingType": "deal",
     "regardingId": "deal-015",
     "ownerContactId": "henry-clayton",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "2026-02-28"
   },
   {
     "activityId": "activity-007",
@@ -88,7 +94,8 @@
     "regardingType": "quote",
     "regardingId": "quote-004",
     "ownerContactId": "james-smith",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "2026-01-15"
   },
   {
     "activityId": "activity-008",
@@ -101,7 +108,8 @@
     "regardingType": "case",
     "regardingId": "case-011",
     "ownerContactId": "margaret-hayes",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "1738-07-08"
   },
   {
     "activityId": "activity-009",
@@ -114,7 +122,8 @@
     "regardingType": "bill",
     "regardingId": "bill-003",
     "ownerContactId": "margaret-hayes",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "1738-07-12"
   },
   {
     "activityId": "activity-010",
@@ -127,7 +136,8 @@
     "regardingType": "deal",
     "regardingId": "deal-006",
     "ownerContactId": "henry-clayton",
-    "durationMinutes": 32
+    "durationMinutes": 32,
+    "activityDateSort": "2026-02-10"
   },
   {
     "activityId": "activity-011",
@@ -140,7 +150,8 @@
     "regardingType": "deal",
     "regardingId": "deal-013",
     "ownerContactId": "james-smith",
-    "durationMinutes": 28
+    "durationMinutes": 28,
+    "activityDateSort": "2026-01-22"
   },
   {
     "activityId": "activity-012",
@@ -153,7 +164,8 @@
     "regardingType": "deal",
     "regardingId": "deal-018",
     "ownerContactId": "henry-clayton",
-    "durationMinutes": 22
+    "durationMinutes": 22,
+    "activityDateSort": "2026-03-01"
   },
   {
     "activityId": "activity-013",
@@ -166,7 +178,8 @@
     "regardingType": "lead",
     "regardingId": "lead-001",
     "ownerContactId": "james-smith",
-    "durationMinutes": 15
+    "durationMinutes": 15,
+    "activityDateSort": "2026-02-18"
   },
   {
     "activityId": "activity-014",
@@ -179,7 +192,8 @@
     "regardingType": "lead",
     "regardingId": "lead-002",
     "ownerContactId": "elizabeth-millington",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "2026-02-05"
   },
   {
     "activityId": "activity-015",
@@ -192,7 +206,8 @@
     "regardingType": "lead",
     "regardingId": "lead-005",
     "ownerContactId": "elizabeth-millington",
-    "durationMinutes": 35
+    "durationMinutes": 35,
+    "activityDateSort": "2026-01-30"
   },
   {
     "activityId": "activity-016",
@@ -205,7 +220,8 @@
     "regardingType": "invoice",
     "regardingId": "inv-003",
     "ownerContactId": "mary-brazier",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "1737-11-15"
   },
   {
     "activityId": "activity-017",
@@ -218,7 +234,8 @@
     "regardingType": "quote",
     "regardingId": "quote-005",
     "ownerContactId": "mary-brazier",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "1737-10-25"
   },
   {
     "activityId": "activity-018",
@@ -231,7 +248,8 @@
     "regardingType": "salesOrder",
     "regardingId": "so-005",
     "ownerContactId": "mary-brazier",
-    "durationMinutes": 30
+    "durationMinutes": 30,
+    "activityDateSort": "1737-11-05"
   },
   {
     "activityId": "activity-019",
@@ -244,7 +262,8 @@
     "regardingType": "deal",
     "regardingId": "deal-022",
     "ownerContactId": "james-smith",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "2026-02-01"
   },
   {
     "activityId": "activity-020",
@@ -257,7 +276,8 @@
     "regardingType": "contact",
     "regardingId": "margaret-hayes",
     "ownerContactId": "margaret-hayes",
-    "durationMinutes": 20
+    "durationMinutes": 20,
+    "activityDateSort": "1738-08-05"
   },
   {
     "activityId": "activity-021",
@@ -270,7 +290,8 @@
     "regardingType": "deal",
     "regardingId": "deal-014",
     "ownerContactId": "james-smith",
-    "durationMinutes": null
+    "durationMinutes": null,
+    "activityDateSort": "2026-02-14"
   },
   {
     "activityId": "activity-022",
@@ -283,6 +304,7 @@
     "regardingType": "deal",
     "regardingId": "deal-022",
     "ownerContactId": "james-smith",
-    "durationMinutes": 40
+    "durationMinutes": 40,
+    "activityDateSort": "2026-01-08"
   }
 ]

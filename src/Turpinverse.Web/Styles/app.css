@@ -573,6 +573,55 @@ h1:focus {
   font-size: 1.35rem;
 }
 
+.related-activities-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(30, 41, 59, 0.12);
+}
+
+.related-activities-section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.35rem;
+}
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity-item {
+  margin: 0 0 1rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(30, 41, 59, 0.12);
+  border-radius: 0.5rem;
+}
+
+.activity-item:last-child {
+  margin-bottom: 0;
+}
+
+.activity-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(30, 41, 59, 0.7);
+}
+
+.activity-subject {
+  margin: 0 0 0.35rem;
+}
+
+.activity-description {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
 .intro-short {
   font-size: 1.05rem;
   line-height: 1.5;

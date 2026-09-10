@@ -28,6 +28,9 @@ public class HugoActivityGeneratorTests
             var activitiesJson = await File.ReadAllTextAsync(activitiesDataPath, cancellationToken);
             var activities = JsonSerializer.Deserialize<JsonElement>(activitiesJson);
             Assert.Equal(canon.Activities.Count, activities.GetArrayLength());
+
+            var firstActivity = activities[0];
+            Assert.True(firstActivity.TryGetProperty("activityDateSort", out _));
         }
         finally
         {

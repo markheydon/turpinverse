@@ -2,7 +2,7 @@
 {{ $regardingType := .regardingType }}
 {{ $regardingId := .regardingId }}
 {{ $matched := where (where hugo.Data.activities "regardingType" $regardingType) "regardingId" $regardingId }}
-{{ $sorted := sort $matched "activityDate" "desc" }}
+{{ $sorted := sort $matched "activityDateSort" "desc" }}
 {{ if gt (len $sorted) 0 }}
 <section class="related-records activity-timeline">
   <h2>Activity timeline</h2>

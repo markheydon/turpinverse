@@ -397,7 +397,9 @@ public sealed class HugoContentGenerator(ICanonRepository canonRepository) : IHu
 
         await File.WriteAllTextAsync(
             Path.Combine(dataDir, "activities.json"),
-            JsonSerializer.Serialize(canon.Activities, JsonOptions),
+            JsonSerializer.Serialize(
+                canon.Activities.Select(HugoActivityData.FromActivity),
+                JsonOptions),
             Utf8NoBom,
             cancellationToken);
 

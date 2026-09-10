@@ -115,6 +115,26 @@ public class ActivityValidatorTests
         Assert.Contains(result.Violations, v => v.Rule == "VR-097" && v.EntityId == "activity-001");
     }
 
+    [Fact]
+    public void Validate_SubjectTooLong_FailsVr097()
+    {
+        var canon = CreateCanon([Activity("activity-001", subject: new string('x', 121))]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-097" && v.EntityId == "activity-001");
+    }
+
+    [Fact]
+    public void Validate_DurationAboveMaximum_FailsVr097()
+    {
+        var canon = CreateCanon([Activity("activity-001", type: "Call", durationMinutes: 481)]);
+
+        var result = _validator.Validate(canon);
+
+        Assert.Contains(result.Violations, v => v.Rule == "VR-097" && v.EntityId == "activity-001");
+    }
+
     private static Canon CreateCanon(
         IReadOnlyList<Activity> activities,
         IReadOnlyList<Persona>? personas = null) =>
@@ -168,12 +188,13 @@ public class ActivityValidatorTests
         string ownerContactId = "mary-brazier",
         string activityDate = "2026-01-01",
         string? dueDate = null,
-        int? durationMinutes = null) =>
+        int? durationMinutes = null,
+        string subject = "Example activity subject") =>
         new()
         {
             ActivityId = activityId,
             Type = type,
-            Subject = "Example activity subject",
+            Subject = subject,
             Description = "Example activity description for validation tests.",
             ActivityDate = activityDate,
             DueDate = dueDate,

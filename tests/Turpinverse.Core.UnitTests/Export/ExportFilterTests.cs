@@ -434,7 +434,40 @@ public class ExportFilterTests
         Assert.Equal("Meeting", filter!.ActivityType);
     }
 
-    private static ActivityExport CreateActivity(string activityId, string type, string status) =>
+    [Fact]
+    public void ApplyToActivities_WhenRegardingTypeMatches_ReturnsOnlyMatchingRows()
+    {
+        var rows = new[]
+        {
+            CreateActivity("a1", "Call", "Completed", regardingType: "deal"),
+            CreateActivity("a2", "Email", "Completed", regardingType: "lead"),
+            CreateActivity("a3", "Call", "Open", regardingType: "deal")
+        };
+
+        var filter = new ExportFilter { RegardingType = "deal" };
+        var result = filter.ApplyToActivities(rows);
+
+        Assert.Equal(2, result.Count);
+        Assert.All(result, row => Assert.Equal("deal", row.RegardingType));
+    }
+
+    [Fact]
+    public void FromQuery_WhenRegardingTypeProvided_ReturnsRegardingTypeFilter()
+    {
+        var filter = ExportFilter.FromQuery(new Dictionary<string, string?>
+        {
+            ["regardingType"] = "case"
+        });
+
+        Assert.NotNull(filter);
+        Assert.Equal("case", filter!.RegardingType);
+    }
+
+    private static ActivityExport CreateActivity(
+        string activityId,
+        string type,
+        string status,
+        string regardingType = "deal") =>
         new()
         {
             ActivityId = activityId,
@@ -443,7 +476,7 @@ public class ExportFilterTests
             Description = "Description",
             ActivityDate = "2026-01-01",
             Status = status,
-            RegardingType = "deal",
+            RegardingType = regardingType,
             RegardingId = "deal-001",
             OwnerContactId = "mary-brazier"
         };

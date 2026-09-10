@@ -149,11 +149,11 @@
             education = Presenter.GetEducationForPersona(canon, ContactId);
             projects = Presenter.GetProjectsForPersona(canon, ContactId);
             achievements = Presenter.GetAchievementsForPersona(canon, ContactId);
-            relatedActivities = canon.Activities
-                .Where(a => string.Equals(a.RegardingType, "contact", StringComparison.Ordinal)
-                    && string.Equals(a.RegardingId, ContactId, StringComparison.Ordinal))
-                .OrderByDescending(a => a.ActivityDate, StringComparer.Ordinal)
-                .ToList();
+            relatedActivities = ActivityDateSortKey.SortByDateDescending(
+                canon.Activities.Where(a =>
+                    string.Equals(a.OwnerContactId, ContactId, StringComparison.Ordinal)
+                    || (string.Equals(a.RegardingType, "contact", StringComparison.Ordinal)
+                        && string.Equals(a.RegardingId, ContactId, StringComparison.Ordinal))));
         }
 
         loading = false;

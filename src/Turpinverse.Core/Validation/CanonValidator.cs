@@ -1129,6 +1129,10 @@ public sealed partial class CanonValidator
         "Call", "Meeting"
     };
 
+    private const int MaxActivitySubjectLength = 120;
+    private const int MaxActivityDescriptionLength = 500;
+    private const int MaxActivityDurationMinutes = 480;
+
     private static readonly HashSet<string> AllowedQuoteStatuses = new(StringComparer.Ordinal)
     {
         "Draft", "Sent", "Accepted", "Declined", "Expired"
@@ -2946,6 +2950,24 @@ public sealed partial class CanonValidator
                     activity.ActivityId));
             }
 
+            if (activity.Subject.Length > MaxActivitySubjectLength)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Activity '{activity.ActivityId}' subject exceeds {MaxActivitySubjectLength} characters",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
+            if (activity.Description.Length > MaxActivityDescriptionLength)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-097",
+                    $"Activity '{activity.ActivityId}' description exceeds {MaxActivityDescriptionLength} characters",
+                    "Activity",
+                    activity.ActivityId));
+            }
+
             if (string.Equals(activity.Type, "Task", StringComparison.Ordinal)
                 && string.Equals(activity.Status, "Open", StringComparison.Ordinal)
                 && string.IsNullOrWhiteSpace(activity.DueDate))
@@ -2982,6 +3004,14 @@ public sealed partial class CanonValidator
                     violations.Add(new ValidationViolation(
                         "VR-097",
                         $"Activity '{activity.ActivityId}' durationMinutes must be positive",
+                        "Activity",
+                        activity.ActivityId));
+                }
+                else if (activity.DurationMinutes > MaxActivityDurationMinutes)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-097",
+                        $"Activity '{activity.ActivityId}' durationMinutes must be at most {MaxActivityDurationMinutes}",
                         "Activity",
                         activity.ActivityId));
                 }
