@@ -87,6 +87,21 @@ publishDir = "public"
     parent = "finance"
     weight = 2
   [[menu.main]]
+    name = "Invoices"
+    url = "/invoices/"
+    parent = "finance"
+    weight = 3
+  [[menu.main]]
+    name = "Payments"
+    url = "/payments/"
+    parent = "finance"
+    weight = 4
+  [[menu.main]]
+    name = "Credit Notes"
+    url = "/credit-notes/"
+    parent = "finance"
+    weight = 5
+  [[menu.main]]
     identifier = "universe"
     name = "Universe"
     weight = 6

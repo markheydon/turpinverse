@@ -234,6 +234,52 @@ public class QuotesPageTests : CrmEntityPageTestBase<Quotes>
     }
 }
 
+public class InvoicesPageTests : CrmEntityPageTestBase<Invoices>
+{
+    protected override string DatasetType => "invoices";
+
+    [Fact]
+    public void InvoicesPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Invoices", cut.Markup);
+        Assert.Contains("InvoiceNumber", cut.Markup);
+        Assert.Contains("AmountDue", cut.Markup);
+        Assert.Contains("Status", cut.Markup);
+        Assert.Contains("INV-2026-0187", cut.Markup);
+    }
+}
+
+public class PaymentsPageTests : CrmEntityPageTestBase<Payments>
+{
+    protected override string DatasetType => "payments";
+
+    [Fact]
+    public void PaymentsPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Payments", cut.Markup);
+        Assert.Contains("PaymentDate", cut.Markup);
+        Assert.Contains("Method", cut.Markup);
+        Assert.Contains("pay-001", cut.Markup);
+    }
+}
+
+public class CreditNotesPageTests : CrmEntityPageTestBase<CreditNotes>
+{
+    protected override string DatasetType => "credit-notes";
+
+    [Fact]
+    public void CreditNotesPage_RendersTableHeadersAndFacets()
+    {
+        var cut = RenderPage();
+        Assert.Contains("Credit Notes", cut.Markup);
+        Assert.Contains("CreditNoteNumber", cut.Markup);
+        Assert.Contains("Total", cut.Markup);
+        Assert.Contains("CRN-2026-0004", cut.Markup);
+    }
+}
+
 public class ProjectsPageTests : CrmEntityPageTestBase<Projects>
 {
     protected override string DatasetType => "projects";
@@ -314,7 +360,10 @@ internal static class CrmTestData
                 new ExportDatasetInfo("projects", "turpinverse-projects.csv", 3, ["projectId"]),
                 new ExportDatasetInfo("products", "turpinverse-products.csv", 10, ["productId"]),
                 new ExportDatasetInfo("leads", "turpinverse-leads.csv", 10, ["leadId"]),
-                new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"])
+                new ExportDatasetInfo("quotes", "turpinverse-quotes.csv", 8, ["quoteId"]),
+                new ExportDatasetInfo("invoices", "turpinverse-invoices.csv", 12, ["invoiceId"]),
+                new ExportDatasetInfo("payments", "turpinverse-payments.csv", 9, ["paymentId"]),
+                new ExportDatasetInfo("credit-notes", "turpinverse-credit-notes.csv", 3, ["creditNoteId"])
             ]);
 
     public static ExportManifest CreateIncompleteManifest() =>
@@ -448,6 +497,59 @@ internal static class CrmTestData
                     ["total"] = "12288",
                     ["notes"] = "Example quote",
                     ["terms"] = ""
+                }
+            ],
+            "invoices" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["invoiceId"] = "inv-001",
+                    ["invoiceNumber"] = "INV-2026-0187",
+                    ["accountId"] = "highway-commission",
+                    ["contactId"] = "henry-clayton",
+                    ["dealId"] = "deal-006",
+                    ["caseId"] = "",
+                    ["status"] = "Draft",
+                    ["issueDate"] = "2026-09-01",
+                    ["dueDate"] = "2026-10-01",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "10240",
+                    ["taxTotal"] = "2048",
+                    ["total"] = "12288",
+                    ["amountDue"] = "12288",
+                    ["notes"] = "Example invoice",
+                    ["terms"] = ""
+                }
+            ],
+            "payments" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["paymentId"] = "pay-001",
+                    ["paymentDate"] = "1737-11-20",
+                    ["amount"] = "4728",
+                    ["method"] = "Bank transfer",
+                    ["invoiceId"] = "inv-003",
+                    ["billId"] = "",
+                    ["accountId"] = "brazier-legal",
+                    ["reference"] = "BRAZ-YORK-1737-01"
+                }
+            ],
+            "credit-notes" =>
+            [
+                new Dictionary<string, string>
+                {
+                    ["creditNoteId"] = "crn-001",
+                    ["creditNoteNumber"] = "CRN-2026-0004",
+                    ["accountId"] = "brazier-legal",
+                    ["contactId"] = "mary-brazier",
+                    ["invoiceId"] = "inv-003",
+                    ["issueDate"] = "1737-12-10",
+                    ["currency"] = "GBP",
+                    ["subtotal"] = "185",
+                    ["taxTotal"] = "37",
+                    ["total"] = "222",
+                    ["notes"] = "Example credit note"
                 }
             ],
             _ => []

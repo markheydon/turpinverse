@@ -48,6 +48,30 @@ public sealed partial class ToneValidator
             }
         }
 
+        foreach (var invoice in canon.Invoices)
+        {
+            violations.AddRange(ValidateText(invoice.Notes, patterns, "Invoice", invoice.InvoiceId));
+            violations.AddRange(ValidateText(invoice.Terms, patterns, "Invoice", invoice.InvoiceId));
+            foreach (var line in invoice.Lines)
+            {
+                violations.AddRange(ValidateText(line.Description, patterns, "Invoice", invoice.InvoiceId));
+            }
+        }
+
+        foreach (var payment in canon.Payments)
+        {
+            violations.AddRange(ValidateText(payment.Reference, patterns, "Payment", payment.PaymentId));
+        }
+
+        foreach (var creditNote in canon.CreditNotes)
+        {
+            violations.AddRange(ValidateText(creditNote.Notes, patterns, "CreditNote", creditNote.CreditNoteId));
+            foreach (var line in creditNote.Lines)
+            {
+                violations.AddRange(ValidateText(line.Description, patterns, "CreditNote", creditNote.CreditNoteId));
+            }
+        }
+
         foreach (var persona in canon.Personas)
         {
             if (persona.Address is not null)

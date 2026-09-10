@@ -39,6 +39,9 @@ public sealed partial class CanonValidator
         ValidateCatalogue(canon, violations);
         ValidateLeads(canon, personaIds, organisationIds, violations);
         ValidateQuotes(canon, personaIds, organisationIds, violations);
+        ValidateInvoices(canon, personaIds, organisationIds, violations);
+        ValidatePayments(canon, violations);
+        ValidateCreditNotes(canon, personaIds, organisationIds, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -58,7 +61,10 @@ public sealed partial class CanonValidator
             ["products"] = canon.Products.Count,
             ["taxRates"] = canon.TaxRates.Count,
             ["leads"] = canon.Leads.Count,
-            ["quotes"] = canon.Quotes.Count
+            ["quotes"] = canon.Quotes.Count,
+            ["invoices"] = canon.Invoices.Count,
+            ["payments"] = canon.Payments.Count,
+            ["creditNotes"] = canon.CreditNotes.Count
         };
 
         return new CanonValidationResult(
@@ -1252,8 +1258,10 @@ public sealed partial class CanonValidator
         string accountId,
         Dictionary<string, Organisation> organisationsById,
         HashSet<string> personaIds,
-        string quoteId,
-        List<ValidationViolation> violations)
+        string entityId,
+        List<ValidationViolation> violations,
+        string contactRule = "VR-070",
+        string entityType = "Quote")
     {
         if (string.IsNullOrWhiteSpace(contactId))
         {
@@ -1263,10 +1271,10 @@ public sealed partial class CanonValidator
         if (!personaIds.Contains(contactId))
         {
             violations.Add(new ValidationViolation(
-                "VR-070",
-                $"Quote '{quoteId}' contact '{contactId}' does not exist",
-                "Quote",
-                quoteId));
+                contactRule,
+                $"{entityType} '{entityId}' contact '{contactId}' does not exist",
+                entityType,
+                entityId));
             return;
         }
 
@@ -1274,10 +1282,10 @@ public sealed partial class CanonValidator
             || !organisation.MemberPersonaIds.Contains(contactId))
         {
             violations.Add(new ValidationViolation(
-                "VR-070",
-                $"Quote '{quoteId}' contact '{contactId}' is not a member of account '{accountId}'",
-                "Quote",
-                quoteId));
+                contactRule,
+                $"{entityType} '{entityId}' contact '{contactId}' is not a member of account '{accountId}'",
+                entityType,
+                entityId));
         }
     }
 
@@ -1388,6 +1396,701 @@ public sealed partial class CanonValidator
 
     private static decimal RoundQuoteLineTax(decimal lineTotal, decimal taxPercentage) =>
         Math.Round(lineTotal * taxPercentage / 100m, 2, MidpointRounding.AwayFromZero);
+
+    private static readonly HashSet<string> AllowedInvoiceStatuses = new(StringComparer.Ordinal)
+    {
+        "Draft", "Authorised", "Paid", "Overdue", "Void"
+    };
+
+    private static readonly HashSet<string> AllowedPaymentMethods = new(StringComparer.Ordinal)
+    {
+        "Bank transfer", "Card", "Cash", "Cheque", "Direct debit"
+    };
+
+    [GeneratedRegex(@"^INV-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
+    private static partial Regex InvoiceNumberPattern();
+
+    [GeneratedRegex(@"^CRN-\d{4}-\d{4}$", RegexOptions.CultureInvariant)]
+    private static partial Regex CreditNoteNumberPattern();
+
+    private static void ValidateInvoices(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var dealsById = canon.Deals.ToDictionary(d => d.DealId);
+        var casesById = canon.Cases.ToDictionary(c => c.CaseId);
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        var quotesById = canon.Quotes.ToDictionary(q => q.QuoteId);
+        var productIds = canon.Products.Select(p => p.ProductId).ToHashSet(StringComparer.Ordinal);
+        var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
+        var paymentsByInvoice = canon.Payments
+            .Where(p => !string.IsNullOrWhiteSpace(p.InvoiceId))
+            .GroupBy(p => p.InvoiceId!, StringComparer.Ordinal)
+            .ToDictionary(g => g.Key, g => g.Sum(p => p.Amount));
+
+        var seenInvoiceIds = new HashSet<string>(StringComparer.Ordinal);
+        var seenInvoiceNumbers = new HashSet<string>(StringComparer.Ordinal);
+        var hasOverdue = false;
+
+        foreach (var invoice in canon.Invoices)
+        {
+            if (!seenInvoiceIds.Add(invoice.InvoiceId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-075",
+                    $"Duplicate invoice id '{invoice.InvoiceId}'",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!seenInvoiceNumbers.Add(invoice.InvoiceNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-075",
+                    $"Duplicate invoice number '{invoice.InvoiceNumber}'",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!InvoiceNumberPattern().IsMatch(invoice.InvoiceNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-075",
+                    $"Invoice number '{invoice.InvoiceNumber}' must match INV-YYYY-nnnn",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!AllowedInvoiceStatuses.Contains(invoice.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice status '{invoice.Status}' is not allowed",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!string.Equals(invoice.Currency, "GBP", StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice currency '{invoice.Currency}' must be GBP",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (invoice.Lines.Count < 2 || invoice.Lines.Count > 5)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' must have between 2 and 5 lines, found {invoice.Lines.Count}",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!organisationIds.Contains(invoice.AccountId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-076",
+                    $"Invoice '{invoice.InvoiceId}' references unknown account '{invoice.AccountId}'",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (!organisationsById[invoice.AccountId].Roles.Contains("customer", StringComparer.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-076",
+                    $"Invoice '{invoice.InvoiceId}' account '{invoice.AccountId}' must include customer role",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            ValidateQuoteMainContact(
+                invoice.ContactId,
+                invoice.AccountId,
+                organisationsById,
+                personaIds,
+                invoice.InvoiceId,
+                violations,
+                contactRule: "VR-077",
+                entityType: "Invoice");
+
+            if (!string.IsNullOrWhiteSpace(invoice.DealId))
+            {
+                if (!dealsById.TryGetValue(invoice.DealId, out var deal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-077",
+                        $"Invoice '{invoice.InvoiceId}' references unknown deal '{invoice.DealId}'",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+                else if (!string.Equals(deal.AccountId, invoice.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-077",
+                        $"Invoice '{invoice.InvoiceId}' deal '{invoice.DealId}' belongs to a different account",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(invoice.CaseId))
+            {
+                if (string.Equals(invoice.CaseId, "case-011", StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-077",
+                        $"Invoice '{invoice.InvoiceId}' must not reference case-011 (AP dispute belongs on a bill)",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+                else if (!casesById.ContainsKey(invoice.CaseId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-077",
+                        $"Invoice '{invoice.InvoiceId}' references unknown case '{invoice.CaseId}'",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+            }
+
+            ValidateInvoiceMoney(
+                invoice,
+                taxRatesById,
+                productIds,
+                projectsById,
+                quotesById,
+                violations);
+
+            if (!TryCompareDates(invoice.IssueDate, invoice.DueDate, out var dateOrder) || dateOrder > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-079",
+                    $"Invoice '{invoice.InvoiceId}' dueDate must be on or after issueDate",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            paymentsByInvoice.TryGetValue(invoice.InvoiceId, out var paidAmount);
+            var expectedAmountDue = string.Equals(invoice.Status, "Void", StringComparison.Ordinal)
+                ? 0m
+                : Math.Max(0m, invoice.Total - paidAmount);
+
+            if (invoice.AmountDue != expectedAmountDue)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-079",
+                    $"Invoice '{invoice.InvoiceId}' amountDue {invoice.AmountDue} does not equal total minus payments ({expectedAmountDue})",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (string.Equals(invoice.Status, "Paid", StringComparison.Ordinal)
+                && (invoice.AmountDue != 0 || paidAmount != invoice.Total))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Paid requires amountDue 0 and payments totalling the invoice total",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (string.Equals(invoice.Status, "Overdue", StringComparison.Ordinal)
+                     && invoice.AmountDue <= 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Overdue requires amountDue greater than 0",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (string.Equals(invoice.Status, "Draft", StringComparison.Ordinal)
+                     && paidAmount > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Draft must not have payments",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else if (string.Equals(invoice.Status, "Void", StringComparison.Ordinal)
+                     && paidAmount > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-080",
+                    $"Invoice '{invoice.InvoiceId}' status Void must not have payments",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (string.Equals(invoice.Status, "Overdue", StringComparison.Ordinal))
+            {
+                hasOverdue = true;
+            }
+        }
+
+        if (canon.Invoices.Count < 12)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-075",
+                $"Minimum 12 invoices required, found {canon.Invoices.Count}",
+                "Invoice",
+                "invoices"));
+        }
+
+        if (!hasOverdue)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-080",
+                "At least one invoice must have status Overdue",
+                "Invoice",
+                "invoices"));
+        }
+    }
+
+    private static void ValidateInvoiceMoney(
+        Invoice invoice,
+        Dictionary<string, TaxRate> taxRatesById,
+        HashSet<string> productIds,
+        Dictionary<string, Project> projectsById,
+        Dictionary<string, Quote> quotesById,
+        List<ValidationViolation> violations)
+    {
+        decimal computedTaxTotal = 0;
+
+        foreach (var line in invoice.Lines)
+        {
+            var expectedLineTotal = line.Quantity * line.UnitPrice;
+            if (line.LineTotal != expectedLineTotal)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-078",
+                    $"Invoice '{invoice.InvoiceId}' line total {line.LineTotal} does not equal quantity × unitPrice ({expectedLineTotal})",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!taxRatesById.TryGetValue(line.TaxRateId, out var taxRate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-078",
+                    $"Invoice '{invoice.InvoiceId}' line references unknown tax rate '{line.TaxRateId}'",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+            else
+            {
+                computedTaxTotal += RoundQuoteLineTax(line.LineTotal, taxRate.Percentage);
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProductId) && !productIds.Contains(line.ProductId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-078",
+                    $"Invoice '{invoice.InvoiceId}' line references unknown product '{line.ProductId}'",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProjectId))
+            {
+                if (!projectsById.TryGetValue(line.ProjectId, out var project))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-078",
+                        $"Invoice '{invoice.InvoiceId}' line references unknown project '{line.ProjectId}'",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+                else if (!string.Equals(project.OrganisationId, invoice.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-078",
+                        $"Invoice '{invoice.InvoiceId}' line project '{line.ProjectId}' is not sponsored by account '{invoice.AccountId}'",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.QuoteId))
+            {
+                if (!quotesById.TryGetValue(line.QuoteId, out var quote))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-078",
+                        $"Invoice '{invoice.InvoiceId}' line references unknown quote '{line.QuoteId}'",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+                else if (!string.Equals(quote.AccountId, invoice.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-078",
+                        $"Invoice '{invoice.InvoiceId}' line quote '{line.QuoteId}' belongs to a different account",
+                        "Invoice",
+                        invoice.InvoiceId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.SalesOrderId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-078",
+                    $"Invoice '{invoice.InvoiceId}' line references sales order '{line.SalesOrderId}' but sales orders are not yet in canon (#36)",
+                    "Invoice",
+                    invoice.InvoiceId));
+            }
+        }
+
+        var computedSubtotal = invoice.Lines.Sum(l => l.LineTotal);
+        var computedTotal = computedSubtotal + computedTaxTotal;
+
+        if (invoice.Subtotal != computedSubtotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-078",
+                $"Invoice '{invoice.InvoiceId}' subtotal {invoice.Subtotal} does not equal sum of line totals ({computedSubtotal})",
+                "Invoice",
+                invoice.InvoiceId));
+        }
+
+        if (invoice.TaxTotal != computedTaxTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-078",
+                $"Invoice '{invoice.InvoiceId}' taxTotal {invoice.TaxTotal} does not equal computed tax ({computedTaxTotal})",
+                "Invoice",
+                invoice.InvoiceId));
+        }
+
+        if (invoice.Total != computedTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-078",
+                $"Invoice '{invoice.InvoiceId}' total {invoice.Total} does not equal subtotal + tax ({computedTotal})",
+                "Invoice",
+                invoice.InvoiceId));
+        }
+    }
+
+    private static void ValidatePayments(Canon canon, List<ValidationViolation> violations)
+    {
+        var invoiceIds = canon.Invoices.Select(i => i.InvoiceId).ToHashSet(StringComparer.Ordinal);
+        var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
+        var seenPaymentIds = new HashSet<string>(StringComparer.Ordinal);
+        var paymentsByInvoice = new Dictionary<string, decimal>(StringComparer.Ordinal);
+        var hasPartialPayment = false;
+
+        foreach (var payment in canon.Payments)
+        {
+            if (!seenPaymentIds.Add(payment.PaymentId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-081",
+                    $"Duplicate payment id '{payment.PaymentId}'",
+                    "Payment",
+                    payment.PaymentId));
+            }
+
+            if (!AllowedPaymentMethods.Contains(payment.Method))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-081",
+                    $"Payment '{payment.PaymentId}' method '{payment.Method}' is not allowed",
+                    "Payment",
+                    payment.PaymentId));
+            }
+
+            var hasInvoice = !string.IsNullOrWhiteSpace(payment.InvoiceId);
+            var hasBill = !string.IsNullOrWhiteSpace(payment.BillId);
+
+            if (hasInvoice == hasBill)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-081",
+                    $"Payment '{payment.PaymentId}' must target exactly one invoiceId or billId",
+                    "Payment",
+                    payment.PaymentId));
+            }
+
+            if (hasInvoice)
+            {
+                if (!invoiceIds.Contains(payment.InvoiceId!))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-081",
+                        $"Payment '{payment.PaymentId}' references unknown invoice '{payment.InvoiceId}'",
+                        "Payment",
+                        payment.PaymentId));
+                }
+                else
+                {
+                    paymentsByInvoice.TryGetValue(payment.InvoiceId!, out var running);
+                    paymentsByInvoice[payment.InvoiceId!] = running + payment.Amount;
+                }
+            }
+            else
+            {
+                // Bill FK validation and payment accountId export denormalisation land with bills (#36).
+            }
+        }
+
+        foreach (var (invoiceId, paidTotal) in paymentsByInvoice)
+        {
+            var invoice = invoicesById[invoiceId];
+            if (paidTotal > invoice.Total)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-081",
+                    $"Payments on invoice '{invoiceId}' total {paidTotal} exceeds invoice total {invoice.Total}",
+                    "Payment",
+                    invoiceId));
+            }
+
+            if (paidTotal > 0 && paidTotal < invoice.Total)
+            {
+                hasPartialPayment = true;
+            }
+        }
+
+        if (canon.Payments.Count < 8)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-081",
+                $"Minimum 8 payments required, found {canon.Payments.Count}",
+                "Payment",
+                "payments"));
+        }
+
+        if (!hasPartialPayment)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-081",
+                "At least one invoice must have a partial payment (sum of payments less than total)",
+                "Payment",
+                "payments"));
+        }
+    }
+
+    private static void ValidateCreditNotes(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var invoicesById = canon.Invoices.ToDictionary(i => i.InvoiceId);
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        var productIds = canon.Products.Select(p => p.ProductId).ToHashSet(StringComparer.Ordinal);
+        var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
+
+        var seenCreditNoteIds = new HashSet<string>(StringComparer.Ordinal);
+        var seenCreditNoteNumbers = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var creditNote in canon.CreditNotes)
+        {
+            if (!seenCreditNoteIds.Add(creditNote.CreditNoteId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-082",
+                    $"Duplicate credit note id '{creditNote.CreditNoteId}'",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (!seenCreditNoteNumbers.Add(creditNote.CreditNoteNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-082",
+                    $"Duplicate credit note number '{creditNote.CreditNoteNumber}'",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (!CreditNoteNumberPattern().IsMatch(creditNote.CreditNoteNumber))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-082",
+                    $"Credit note number '{creditNote.CreditNoteNumber}' must match CRN-YYYY-nnnn",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (!string.Equals(creditNote.Currency, "GBP", StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-083",
+                    $"Credit note currency '{creditNote.Currency}' must be GBP",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (creditNote.Lines.Count < 2 || creditNote.Lines.Count > 5)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-083",
+                    $"Credit note '{creditNote.CreditNoteId}' must have between 2 and 5 lines, found {creditNote.Lines.Count}",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (!organisationIds.Contains(creditNote.AccountId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-082",
+                    $"Credit note '{creditNote.CreditNoteId}' references unknown account '{creditNote.AccountId}'",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+            else if (!organisationsById[creditNote.AccountId].Roles.Contains("customer", StringComparer.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-082",
+                    $"Credit note '{creditNote.CreditNoteId}' account '{creditNote.AccountId}' must include customer role",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            ValidateQuoteMainContact(
+                creditNote.ContactId,
+                creditNote.AccountId,
+                organisationsById,
+                personaIds,
+                creditNote.CreditNoteId,
+                violations,
+                contactRule: "VR-082",
+                entityType: "CreditNote");
+
+            if (!string.IsNullOrWhiteSpace(creditNote.InvoiceId))
+            {
+                if (!invoicesById.TryGetValue(creditNote.InvoiceId, out var invoice))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-082",
+                        $"Credit note '{creditNote.CreditNoteId}' references unknown invoice '{creditNote.InvoiceId}'",
+                        "CreditNote",
+                        creditNote.CreditNoteId));
+                }
+                else if (!string.Equals(invoice.AccountId, creditNote.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-082",
+                        $"Credit note '{creditNote.CreditNoteId}' invoice '{creditNote.InvoiceId}' belongs to a different account",
+                        "CreditNote",
+                        creditNote.CreditNoteId));
+                }
+            }
+
+            ValidateCreditNoteMoney(creditNote, taxRatesById, productIds, projectsById, violations);
+        }
+
+        if (canon.CreditNotes.Count < 3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-082",
+                $"Minimum 3 credit notes required, found {canon.CreditNotes.Count}",
+                "CreditNote",
+                "creditNotes"));
+        }
+    }
+
+    private static void ValidateCreditNoteMoney(
+        CreditNote creditNote,
+        Dictionary<string, TaxRate> taxRatesById,
+        HashSet<string> productIds,
+        Dictionary<string, Project> projectsById,
+        List<ValidationViolation> violations)
+    {
+        decimal computedTaxTotal = 0;
+
+        foreach (var line in creditNote.Lines)
+        {
+            var expectedLineTotal = line.Quantity * line.UnitPrice;
+            if (line.LineTotal != expectedLineTotal)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-083",
+                    $"Credit note '{creditNote.CreditNoteId}' line total {line.LineTotal} does not equal quantity × unitPrice ({expectedLineTotal})",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (!taxRatesById.TryGetValue(line.TaxRateId, out var taxRate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-083",
+                    $"Credit note '{creditNote.CreditNoteId}' line references unknown tax rate '{line.TaxRateId}'",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+            else
+            {
+                computedTaxTotal += RoundQuoteLineTax(line.LineTotal, taxRate.Percentage);
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProductId) && !productIds.Contains(line.ProductId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-083",
+                    $"Credit note '{creditNote.CreditNoteId}' line references unknown product '{line.ProductId}'",
+                    "CreditNote",
+                    creditNote.CreditNoteId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.ProjectId))
+            {
+                if (!projectsById.TryGetValue(line.ProjectId, out var project))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-083",
+                        $"Credit note '{creditNote.CreditNoteId}' line references unknown project '{line.ProjectId}'",
+                        "CreditNote",
+                        creditNote.CreditNoteId));
+                }
+                else if (!string.Equals(project.OrganisationId, creditNote.AccountId, StringComparison.Ordinal))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-083",
+                        $"Credit note '{creditNote.CreditNoteId}' line project '{line.ProjectId}' is not sponsored by account '{creditNote.AccountId}'",
+                        "CreditNote",
+                        creditNote.CreditNoteId));
+                }
+            }
+        }
+
+        var computedSubtotal = creditNote.Lines.Sum(l => l.LineTotal);
+        var computedTotal = computedSubtotal + computedTaxTotal;
+
+        if (creditNote.Subtotal != computedSubtotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-083",
+                $"Credit note '{creditNote.CreditNoteId}' subtotal {creditNote.Subtotal} does not equal sum of line totals ({computedSubtotal})",
+                "CreditNote",
+                creditNote.CreditNoteId));
+        }
+
+        if (creditNote.TaxTotal != computedTaxTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-083",
+                $"Credit note '{creditNote.CreditNoteId}' taxTotal {creditNote.TaxTotal} does not equal computed tax ({computedTaxTotal})",
+                "CreditNote",
+                creditNote.CreditNoteId));
+        }
+
+        if (creditNote.Total != computedTotal)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-083",
+                $"Credit note '{creditNote.CreditNoteId}' total {creditNote.Total} does not equal subtotal + tax ({computedTotal})",
+                "CreditNote",
+                creditNote.CreditNoteId));
+        }
+    }
 
     private static bool TryCompareDates(string left, string right, out int comparison)
     {

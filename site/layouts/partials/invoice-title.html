@@ -1,0 +1,7 @@
+{{ $id := . }}
+{{ $matched := where hugo.Data.invoices "invoiceId" $id }}
+{{ if gt (len $matched) 0 }}
+  {{ (index $matched 0).invoiceNumber }}
+{{ else }}
+  {{ $id }}
+{{ end }}

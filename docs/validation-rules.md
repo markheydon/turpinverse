@@ -118,9 +118,33 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-073 | Quote | Authored money: line totals, subtotal, tax (per-line VAT rounded to 2 dp, then summed), total, and `expiryDate` ≥ `issueDate` |
 | VR-074 | Quote | `status` in `Draft` \| `Sent` \| `Accepted` \| `Declined` \| `Expired`; `currency` is `GBP`; 2–5 nested lines each |
 
+## Invoices (VR-075–VR-080)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-075 | Invoice | Unique `invoiceId` / `invoiceNumber`; ≥12 invoices; `invoiceNumber` matches `INV-YYYY-nnnn` |
+| VR-076 | Invoice | `accountId` exists and organisation `roles` includes `customer` |
+| VR-077 | Invoice | `contactId` omitted or exists and is a member of `accountId`; optional `dealId` exists with matching account; optional `caseId` exists and is **not** `case-011` |
+| VR-078 | Invoice line | Authored money and FK rules (products, projects, quotes same account); `salesOrderId` omitted until sales orders ship (#36); 2–5 nested lines |
+| VR-079 | Invoice | `dueDate` ≥ `issueDate`; `amountDue` equals `total` minus sum of payments (void invoices: `amountDue` is 0) |
+| VR-080 | Invoice | `status` in `Draft` \| `Authorised` \| `Paid` \| `Overdue` \| `Void`; `currency` is `GBP`; at least one `Overdue`; `Paid` requires full settlement; `Overdue` requires `amountDue` > 0; `Draft` and `Void` require no payments |
+
+## Payments (VR-081)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-081 | Payment | Unique `paymentId`; ≥8 payments; `method` in closed enum; exactly one target (`invoiceId` **XOR** `billId`); payment sums on a document ≤ document `total`; at least one partial payment |
+
+## Credit notes (VR-082–VR-083)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-082 | Credit note | Unique ids/numbers; ≥3 credit notes; `creditNoteNumber` matches `CRN-YYYY-nnnn`; customer account; optional `invoiceId` same account |
+| VR-083 | Credit note | Authored money; 2–5 nested lines; `currency` is `GBP` |
+
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, quote notes/terms/line descriptions, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, quote/invoice/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
 
 ## Related docs
 

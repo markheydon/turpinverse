@@ -1,0 +1,14 @@
+{{/* Expects a slice of credit note records from hugo.Data "credit-notes" */}}
+{{ if gt (len .) 0 }}
+<section class="related-records related-credit-notes">
+  <h2>Credit notes</h2>
+  <div class="card-grid">
+    {{ range . }}
+    <a class="record-card credit-note-record" href="{{ "/credit-notes/" | relURL }}{{ .creditNoteId }}/">
+      <p class="card-title">£{{ .total }}</p>
+      <p class="card-meta">{{ .issueDate }} · {{ .creditNoteNumber }}</p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

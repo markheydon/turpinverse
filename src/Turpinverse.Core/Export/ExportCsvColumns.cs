@@ -56,6 +56,25 @@ public static class ExportCsvColumns
         "notes", "terms"
     ];
 
+    public static readonly IReadOnlyList<string> Invoices =
+    [
+        "invoiceId", "invoiceNumber", "accountId", "contactId", "dealId", "caseId",
+        "status", "issueDate", "dueDate", "currency", "subtotal", "taxTotal", "total",
+        "amountDue", "notes", "terms"
+    ];
+
+    public static readonly IReadOnlyList<string> Payments =
+    [
+        "paymentId", "paymentDate", "amount", "method",
+        "invoiceId", "billId", "accountId", "reference"
+    ];
+
+    public static readonly IReadOnlyList<string> CreditNotes =
+    [
+        "creditNoteId", "creditNoteNumber", "accountId", "contactId", "invoiceId",
+        "issueDate", "currency", "subtotal", "taxTotal", "total", "notes"
+    ];
+
     public static IReadOnlyList<string> ForDataset(string dataset) =>
         dataset.ToLowerInvariant() switch
         {
@@ -67,6 +86,9 @@ public static class ExportCsvColumns
             "products" => Products,
             "leads" => Leads,
             "quotes" => Quotes,
+            "invoices" => Invoices,
+            "payments" => Payments,
+            "credit-notes" => CreditNotes,
             _ => throw new ArgumentException($"Dataset '{dataset}' is not supported.", nameof(dataset))
         };
 }

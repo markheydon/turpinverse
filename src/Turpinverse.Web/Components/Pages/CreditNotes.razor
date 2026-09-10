@@ -1,0 +1,18 @@
+@page "/credit-notes"
+@rendermode InteractiveServer
+
+<PageTitle>Credit Notes - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="credit-notes"
+                 Columns="@CreditNotesColumns"
+                 FacetColumns="@CreditNotesFacets" />
+
+@code {
+    private static readonly string[] CreditNotesColumns =
+    [
+        "creditNoteNumber", "accountId", "contactId", "invoiceId",
+        "issueDate", "currency", "subtotal", "taxTotal", "total"
+    ];
+
+    private static readonly string[] CreditNotesFacets = ["accountId"];
+}

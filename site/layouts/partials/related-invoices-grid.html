@@ -1,0 +1,17 @@
+{{/* Expects a slice of invoice records from hugo.Data.invoices */}}
+{{ if gt (len .) 0 }}
+<section class="related-records related-invoices">
+  <h2>Related invoices</h2>
+  <div class="card-grid">
+    {{ range . }}
+    <a class="record-card invoice-record" href="{{ "/invoices/" | relURL }}{{ .invoiceId }}/">
+      <p class="card-title">{{ .invoiceNumber }}</p>
+      <p class="card-meta">
+        <span class="status-badge status-{{ .status | urlize }}">{{ .status }}</span>
+        · £{{ .total }}
+      </p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

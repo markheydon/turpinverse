@@ -155,4 +155,76 @@ public class ExportMapperTests
         Assert.Equal(string.Empty, export.DealId);
         Assert.Equal(string.Empty, export.Notes);
     }
+
+    [Fact]
+    public void MapPayment_DenormalisesAccountIdFromInvoice()
+    {
+        var canon = new Canon
+        {
+            Version = "1.6.0",
+            Personas = [],
+            Organisations = [],
+            Events = [],
+            Aliases = [],
+            ToneGuidelines = new ToneGuidelines
+            {
+                Version = "1.0.0",
+                Principles = [],
+                Examples = [],
+                ForbiddenPatterns = []
+            },
+            Invoices =
+            [
+                new Invoice
+                {
+                    InvoiceId = "inv-001",
+                    InvoiceNumber = "INV-2026-0187",
+                    AccountId = "highway-commission",
+                    Status = "Paid",
+                    IssueDate = "2026-01-01",
+                    DueDate = "2026-02-01",
+                    Currency = "GBP",
+                    Subtotal = 100,
+                    TaxTotal = 20,
+                    Total = 120,
+                    AmountDue = 0,
+                    Lines =
+                    [
+                        new InvoiceLine
+                        {
+                            Description = "A",
+                            Quantity = 1,
+                            UnitPrice = 50,
+                            TaxRateId = "tax-standard",
+                            LineTotal = 50
+                        },
+                        new InvoiceLine
+                        {
+                            Description = "B",
+                            Quantity = 1,
+                            UnitPrice = 50,
+                            TaxRateId = "tax-standard",
+                            LineTotal = 50
+                        }
+                    ]
+                }
+            ],
+            Payments =
+            [
+                new Payment
+                {
+                    PaymentId = "pay-001",
+                    PaymentDate = "2026-01-15",
+                    Amount = 120,
+                    Method = "Bank transfer",
+                    InvoiceId = "inv-001"
+                }
+            ]
+        };
+
+        var export = ExportMapper.MapPayments(canon).Single();
+
+        Assert.Equal("highway-commission", export.AccountId);
+        Assert.Equal("inv-001", export.InvoiceId);
+    }
 }

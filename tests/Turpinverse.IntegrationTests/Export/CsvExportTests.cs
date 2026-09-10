@@ -23,6 +23,9 @@ public class CsvExportTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("products", "turpinverse-products.csv", 10)]
     [InlineData("leads", "turpinverse-leads.csv", 10)]
     [InlineData("quotes", "turpinverse-quotes.csv", 8)]
+    [InlineData("invoices", "turpinverse-invoices.csv", 12)]
+    [InlineData("payments", "turpinverse-payments.csv", 8)]
+    [InlineData("credit-notes", "turpinverse-credit-notes.csv", 3)]
     public async Task Export_ReturnsValidCsv(string dataset, string filename, int minRows)
     {
         var cancellationToken = TestContext.Current.CancellationToken;

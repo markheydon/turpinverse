@@ -59,6 +59,15 @@ public sealed record ExportFilter
     public IReadOnlyList<QuoteExport> ApplyToQuotes(IEnumerable<QuoteExport> rows) =>
         rows.Where(MatchesQuote).ToList();
 
+    public IReadOnlyList<InvoiceExport> ApplyToInvoices(IEnumerable<InvoiceExport> rows) =>
+        rows.Where(MatchesInvoice).ToList();
+
+    public IReadOnlyList<PaymentExport> ApplyToPayments(IEnumerable<PaymentExport> rows) =>
+        rows.Where(MatchesPayment).ToList();
+
+    public IReadOnlyList<CreditNoteExport> ApplyToCreditNotes(IEnumerable<CreditNoteExport> rows) =>
+        rows.Where(MatchesCreditNote).ToList();
+
     private bool MatchesContact(ContactExport row) =>
         MatchesStatus(row.Status) &&
         MatchesAccountId(row.AccountId);
@@ -86,6 +95,16 @@ public sealed record ExportFilter
 
     private bool MatchesQuote(QuoteExport row) =>
         MatchesStatus(row.Status) &&
+        MatchesAccountId(row.AccountId);
+
+    private bool MatchesInvoice(InvoiceExport row) =>
+        MatchesStatus(row.Status) &&
+        MatchesAccountId(row.AccountId);
+
+    private bool MatchesPayment(PaymentExport row) =>
+        MatchesAccountId(row.AccountId);
+
+    private bool MatchesCreditNote(CreditNoteExport row) =>
         MatchesAccountId(row.AccountId);
 
     private bool MatchesStatus(string value) =>

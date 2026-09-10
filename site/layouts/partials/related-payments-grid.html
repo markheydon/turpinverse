@@ -1,0 +1,14 @@
+{{/* Expects a slice of payment records from hugo.Data.payments */}}
+{{ if gt (len .) 0 }}
+<section class="related-records related-payments">
+  <h2>Payments</h2>
+  <div class="card-grid">
+    {{ range . }}
+    <a class="record-card payment-record" href="{{ "/payments/" | relURL }}{{ .paymentId }}/">
+      <p class="card-title">£{{ .amount }}</p>
+      <p class="card-meta">{{ .paymentDate }} · {{ .method }}</p>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

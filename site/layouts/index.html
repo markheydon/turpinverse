@@ -36,6 +36,14 @@
       <span class="turpin-stat-label">Quotes</span>
     </div>
     <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "invoices") }}</span>
+      <span class="turpin-stat-label">Invoices</span>
+    </div>
+    <div class="turpin-stat">
+      <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "payments") }}</span>
+      <span class="turpin-stat-label">Payments</span>
+    </div>
+    <div class="turpin-stat">
       <span class="turpin-stat-value">{{ len (where site.RegularPages "Type" "articles") }}</span>
       <span class="turpin-stat-label">Articles</span>
     </div>
@@ -101,6 +109,18 @@
       <a class="turpin-quick-link" href="{{ "/quotes/" | relURL }}">
         <strong>Quotes</strong>
         Sales quotes and estimates with line-item detail
+      </a>
+      <a class="turpin-quick-link" href="{{ "/invoices/" | relURL }}">
+        <strong>Invoices</strong>
+        Sales invoices with payment status and line items
+      </a>
+      <a class="turpin-quick-link" href="{{ "/payments/" | relURL }}">
+        <strong>Payments</strong>
+        Customer settlements against sales invoices
+      </a>
+      <a class="turpin-quick-link" href="{{ "/credit-notes/" | relURL }}">
+        <strong>Credit Notes</strong>
+        AR adjustments and dispute credits
       </a>
     </div>
   </section>

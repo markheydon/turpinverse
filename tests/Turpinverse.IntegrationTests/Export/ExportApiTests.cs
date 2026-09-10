@@ -23,7 +23,7 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
 
         var manifest = await response.Content.ReadFromJsonAsync<ManifestResponse>(cancellationToken);
         Assert.NotNull(manifest);
-        Assert.Equal(8, manifest!.Datasets.Count);
+        Assert.Equal(11, manifest!.Datasets.Count);
         Assert.Equal(ExportDatasets.DisplayOrder, manifest.Datasets.Select(d => d.Type));
     }
 
@@ -36,6 +36,9 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("products", "productId")]
     [InlineData("leads", "leadId")]
     [InlineData("quotes", "quoteId")]
+    [InlineData("invoices", "invoiceId")]
+    [InlineData("payments", "paymentId")]
+    [InlineData("credit-notes", "creditNoteId")]
     public async Task Manifest_UsesCamelCaseColumnNames(string datasetType, string firstColumn)
     {
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -81,10 +84,16 @@ public class ExportApiTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.True(result.Counts.ContainsKey("taxRates"));
         Assert.True(result.Counts.ContainsKey("leads"));
         Assert.True(result.Counts.ContainsKey("quotes"));
+        Assert.True(result.Counts.ContainsKey("invoices"));
+        Assert.True(result.Counts.ContainsKey("payments"));
+        Assert.True(result.Counts.ContainsKey("creditNotes"));
         Assert.True(result.Counts["experience"] > 0);
         Assert.True(result.Counts["products"] >= 10);
         Assert.True(result.Counts["leads"] >= 10);
         Assert.True(result.Counts["quotes"] >= 8);
+        Assert.True(result.Counts["invoices"] >= 12);
+        Assert.True(result.Counts["payments"] >= 8);
+        Assert.True(result.Counts["creditNotes"] >= 3);
         Assert.Equal(4, result.Counts["taxRates"]);
     }
 

@@ -1,0 +1,101 @@
+[
+  {
+    "creditNoteId": "crn-001",
+    "creditNoteNumber": "CRN-2026-0004",
+    "accountId": "brazier-legal",
+    "contactId": "mary-brazier",
+    "invoiceId": "inv-003",
+    "issueDate": "1737-12-10",
+    "currency": "GBP",
+    "subtotal": 185,
+    "taxTotal": 37,
+    "total": 222,
+    "notes": "Goodwill credit for one advisory hour reclassified as counsel handover time.",
+    "lines": [
+      {
+        "description": "Identity Management Advisory Hour \u2014 reclassification credit",
+        "quantity": 1,
+        "unitPrice": 185,
+        "taxRateId": "tax-standard",
+        "lineTotal": 185,
+        "productId": "identity-advisory-hour",
+        "projectId": null
+      },
+      {
+        "description": "Administrative adjustment \u2014 rounding",
+        "quantity": 1,
+        "unitPrice": 0,
+        "taxRateId": "tax-zero",
+        "lineTotal": 0,
+        "productId": null,
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "creditNoteId": "crn-002",
+    "creditNoteNumber": "CRN-2026-0005",
+    "accountId": "highway-commission",
+    "contactId": "henry-clayton",
+    "invoiceId": "inv-006",
+    "issueDate": "2026-06-01",
+    "currency": "GBP",
+    "subtotal": 320,
+    "taxTotal": 64,
+    "total": 384,
+    "notes": "Credit for one overnight logistics surcharge line disputed under turnpike billing fault case.",
+    "lines": [
+      {
+        "description": "Overnight Logistics Surcharge \u2014 billing fault credit",
+        "quantity": 1,
+        "unitPrice": 320,
+        "taxRateId": "tax-standard",
+        "lineTotal": 320,
+        "productId": "overnight-logistics-surcharge",
+        "projectId": null
+      },
+      {
+        "description": "Case administration fee waiver",
+        "quantity": 1,
+        "unitPrice": 0,
+        "taxRateId": "tax-zero",
+        "lineTotal": 0,
+        "productId": null,
+        "projectId": null
+      }
+    ]
+  },
+  {
+    "creditNoteId": "crn-003",
+    "creditNoteNumber": "CRN-2026-0006",
+    "accountId": "king-equine-trading",
+    "contactId": "black-bess",
+    "invoiceId": null,
+    "issueDate": "2026-09-01",
+    "currency": "GBP",
+    "subtotal": 850,
+    "taxTotal": 170,
+    "total": 1020,
+    "notes": "Standalone credit for disputed overnight mileage on hire day \u2014 applied to customer account, not allocated to a specific invoice.",
+    "lines": [
+      {
+        "description": "Equine Asset Hire \u2014 Day Rate (mileage dispute credit)",
+        "quantity": 1,
+        "unitPrice": 850,
+        "taxRateId": "tax-standard",
+        "lineTotal": 850,
+        "productId": "equine-asset-hire-day",
+        "projectId": null
+      },
+      {
+        "description": "Mileage reconciliation adjustment",
+        "quantity": 1,
+        "unitPrice": 0,
+        "taxRateId": "tax-zero",
+        "lineTotal": 0,
+        "productId": null,
+        "projectId": null
+      }
+    ]
+  }
+]

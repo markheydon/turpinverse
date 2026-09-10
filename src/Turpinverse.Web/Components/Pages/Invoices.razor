@@ -1,0 +1,18 @@
+@page "/invoices"
+@rendermode InteractiveServer
+
+<PageTitle>Invoices - Turpinverse</PageTitle>
+
+<CrmEntityPage DatasetType="invoices"
+                 Columns="@InvoicesColumns"
+                 FacetColumns="@InvoicesFacets" />
+
+@code {
+    private static readonly string[] InvoicesColumns =
+    [
+        "invoiceNumber", "status", "accountId", "contactId", "dealId", "caseId",
+        "issueDate", "dueDate", "currency", "subtotal", "taxTotal", "total", "amountDue"
+    ];
+
+    private static readonly string[] InvoicesFacets = ["status", "accountId"];
+}

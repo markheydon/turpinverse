@@ -4,6 +4,14 @@ Why Turpinverse data and code look the way they do. Newest entries first. For fi
 
 ---
 
+## Invoice and credit note CSV shape (#35, 2026-09)
+
+v1 ships **header-only** `turpinverse-invoices.csv` and `turpinverse-credit-notes.csv` (`/invoices`, `/credit-notes`, `/payments` in Blazor and the export API). Nested `lines[]` stay in `canon/invoices.json` / `canon/credit-notes.json` and on Hugo detail pages. Flattened document-lines CSV remains deferred (same posture as quotes in #34).
+
+Payments export one row per payment; `accountId` is denormalised from the target invoice for filtering.
+
+---
+
 ## Quote CSV shape (#34, 2026-09)
 
 v1 ships **header-only** `turpinverse-quotes.csv` (`/quotes` in Blazor and the export API). Nested `lines[]` stay in `canon/quotes.json` and on Hugo quote detail pages. Flattened quote-lines CSV is deferred until invoices (#35) if importers need it.
