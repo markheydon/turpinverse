@@ -38,4 +38,5 @@ Do not introduce:
 - `bunit` — Blazor component tests
 - `coverlet.collector` — code coverage
 - `Microsoft.AspNetCore.Mvc.Testing` — integration tests
+- `Microsoft.Playwright` — Hugo static site browser tests (`Category=HugoSite` in `Turpinverse.Site.E2ETests`; requires built `site/public/`)
 - `Microsoft.NET.Test.Sdk` + `xunit.runner.visualstudio` — VSTest runner
