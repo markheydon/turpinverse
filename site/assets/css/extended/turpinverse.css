@@ -1268,7 +1268,7 @@ h1 {
   display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .menu {
     flex-wrap: wrap;
     white-space: normal;

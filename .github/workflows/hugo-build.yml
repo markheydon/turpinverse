@@ -104,6 +104,18 @@ jobs:
           path: ${{ runner.temp }}/.cache/hugo
           key: ${{ steps.cache-restore.outputs.cache-primary-key }}
 
+      - name: Build Hugo site E2E tests
+        if: inputs.deploy != true
+        run: dotnet build tests/Turpinverse.Site.E2ETests/Turpinverse.Site.E2ETests.csproj --configuration Release
+
+      - name: Install Playwright Chromium
+        if: inputs.deploy != true
+        run: pwsh tests/Turpinverse.Site.E2ETests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium
+
+      - name: Run Hugo site E2E tests
+        if: inputs.deploy != true
+        run: dotnet test tests/Turpinverse.Site.E2ETests/Turpinverse.Site.E2ETests.csproj --configuration Release --no-build --filter "Category=HugoSite"
+
       - name: Upload artifact
         if: inputs.deploy
         uses: actions/upload-pages-artifact@v5

@@ -11,5 +11,6 @@
     <Project Path="tests/Turpinverse.Core.UnitTests/Turpinverse.Core.UnitTests.csproj" />
     <Project Path="tests/Turpinverse.IntegrationTests/Turpinverse.IntegrationTests.csproj" />
     <Project Path="tests/Turpinverse.Web.UnitTests/Turpinverse.Web.UnitTests.csproj" />
+    <Project Path="tests/Turpinverse.Site.E2ETests/Turpinverse.Site.E2ETests.csproj" />
   </Folder>
 </Solution>

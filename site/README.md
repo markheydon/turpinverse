@@ -81,6 +81,19 @@ podman run --rm -p 8080:80 -v "${PWD}/site/public:/usr/share/nginx/html:ro,Z" do
 
 Open http://localhost:8080
 
+## Browser regression tests (Playwright, .NET)
+
+Layout tests for the built static site live in `tests/Turpinverse.Site.E2ETests` (`Category=HugoSite`). Build the site first, then:
+
+```bash
+./scripts/invoke-hugo-site.sh build
+dotnet build tests/Turpinverse.Site.E2ETests
+pwsh tests/Turpinverse.Site.E2ETests/bin/Debug/net10.0/playwright.ps1 install chromium
+dotnet test tests/Turpinverse.Site.E2ETests --filter "Category=HugoSite"
+```
+
+Hugo CI runs these after `hugo build` on pull requests. The main solution `dotnet test` skips them when `site/public/` is missing.
+
 ## Windows notes
 
 - Run commands from the **repository root** (`turpinverse/`), not from `site/`.
