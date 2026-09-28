@@ -1271,14 +1271,15 @@ h1 {
 @media (max-width: 767px) {
   .menu {
     flex-wrap: wrap;
+    align-items: flex-start;
     white-space: normal;
     row-gap: 0.35rem;
   }
 
+  /* Keep dropdown panels out of flex flow on phones so open groups do not
+     vertically center sibling items on wrapped rows (see issue #54). */
   .menu-dropdown-panel {
-    position: static;
-    margin-top: 0.35rem;
-    box-shadow: none;
+    max-width: calc(100vw - 2 * var(--gap));
   }
 }
 

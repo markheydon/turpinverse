@@ -45,7 +45,7 @@ public sealed class PrimaryNavDropdownTests(HugoSiteFixture fixture)
     }
 
     [Fact]
-    public async Task CrmDropdown_OnPhone_UsesStaticPanel()
+    public async Task CrmDropdown_OnPhone_KeepsSiblingNavItemsTopAlignedWhenOpen()
     {
         if (!fixture.IsReady)
         {
@@ -55,11 +55,15 @@ public sealed class PrimaryNavDropdownTests(HugoSiteFixture fixture)
         await using var context = await fixture.Browser.NewContextAsync(new BrowserNewContextOptions
         {
             BaseURL = fixture.BaseUrl,
-            ViewportSize = new ViewportSize { Width = 375, Height = 667 },
+            ViewportSize = new ViewportSize { Width = 390, Height = 844 },
         });
         var page = await context.NewPageAsync();
 
         await page.GotoAsync("/");
+
+        var financeClosedTop = await page.Locator("#menu > li.menu-dropdown", new PageLocatorOptions { HasText = "Finance" })
+            .EvaluateAsync<int>("el => el.offsetTop");
+
         await page.Locator("summary.menu-dropdown-trigger", new PageLocatorOptions { HasText = "CRM" })
             .ClickAsync();
 
@@ -67,6 +71,10 @@ public sealed class PrimaryNavDropdownTests(HugoSiteFixture fixture)
         await panel.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Visible });
 
         var position = await panel.EvaluateAsync<string>("el => getComputedStyle(el).position");
-        Assert.Equal("static", position);
+        Assert.Equal("absolute", position);
+
+        var financeOpenTop = await page.Locator("#menu > li.menu-dropdown", new PageLocatorOptions { HasText = "Finance" })
+            .EvaluateAsync<int>("el => el.offsetTop");
+        Assert.Equal(financeClosedTop, financeOpenTop);
     }
 }
