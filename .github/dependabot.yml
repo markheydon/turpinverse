@@ -12,6 +12,14 @@ updates:
       - "type/chore"
     assignees:
       - "markheydon"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - major
+          - minor
+          - patch
 
   - package-ecosystem: "nuget"
     directory: "/"
@@ -35,48 +43,48 @@ updates:
         patterns:
           - "xunit*"
           - "bunit"
-          - "NSubstitute"
+          - "NSubstitute*"
           - "Microsoft.NET.Test.Sdk"
           - "Microsoft.AspNetCore.Mvc.Testing"
-          - "coverlet"
+          - "coverlet*"
         update-types:
           - "minor"
           - "patch"
 
       microsoft-extensions:
         patterns:
-          - "^Microsoft\\.Extensions\\."
+          - "Microsoft.Extensions.*"
         update-types:
           - "minor"
           - "patch"
 
       azure:
         patterns:
-          - "^Azure\\."
-          - "^Microsoft\\.Azure\\."
+          - "Azure.*"
+          - "Microsoft.Azure.*"
+          - "Aspire.*"
         update-types:
           - "minor"
           - "patch"
 
       opentelemetry:
         patterns:
-          - "^OpenTelemetry"
+          - "OpenTelemetry.*"
         update-types:
           - "minor"
           - "patch"
 
       analyzers:
         patterns:
-          - "Analyzer$"
-          - "Analyzers$"
-          - "^Microsoft\\.CodeAnalysis"
+          - "*Analyzers*"
+          - "Microsoft.CodeAnalysis.*"
         update-types:
           - "minor"
           - "patch"
 
-      minor-and-patch:
+      other:
         patterns:
-          - ".*"
+          - "*"
         update-types:
           - "minor"
           - "patch"
