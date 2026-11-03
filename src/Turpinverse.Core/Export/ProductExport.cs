@@ -1,38 +1,31 @@
-using CsvHelper.Configuration.Attributes;
+using CsvHelper;
 
 namespace Turpinverse.Core.Export;
 
-public sealed record ProductExport
+[CsvRecord]
+public sealed partial record ProductExport
 {
-    [Name("productId")]
-    [Index(0)]
+    [CsvColumn("productId", Index = 0)]
     public required string ProductId { get; init; }
 
-    [Name("name")]
-    [Index(1)]
+    [CsvColumn("name", Index = 1)]
     public required string Name { get; init; }
 
-    [Name("description")]
-    [Index(2)]
+    [CsvColumn("description", Index = 2)]
     public required string Description { get; init; }
 
-    [Name("unitPrice")]
-    [Index(3)]
+    [CsvColumn("unitPrice", Index = 3)]
     public required decimal UnitPrice { get; init; }
 
-    [Name("taxRateId")]
-    [Index(4)]
+    [CsvColumn("taxRateId", Index = 4)]
     public required string TaxRateId { get; init; }
 
-    [Name("unitOfMeasure")]
-    [Index(5)]
+    [CsvColumn("unitOfMeasure", Index = 5)]
     public required string UnitOfMeasure { get; init; }
 
-    [Name("status")]
-    [Index(6)]
+    [CsvColumn("status", Index = 6)]
     public required string Status { get; init; }
 
-    [Name("sku")]
-    [Index(7)]
+    [CsvColumn("sku", Index = 7)]
     public string Sku { get; init; } = string.Empty;
 }
