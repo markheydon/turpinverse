@@ -1,74 +1,58 @@
-using CsvHelper.Configuration.Attributes;
+using CsvHelper;
 
 namespace Turpinverse.Core.Export;
 
-public sealed record AccountExport
+[CsvRecord]
+public sealed partial record AccountExport
 {
-    [Name("accountId")]
-    [Index(0)]
+    [CsvColumn("accountId", Index = 0)]
     public required string AccountId { get; init; }
 
-    [Name("accountName")]
-    [Index(1)]
+    [CsvColumn("accountName", Index = 1)]
     public required string AccountName { get; init; }
 
-    [Name("legalName")]
-    [Index(2)]
+    [CsvColumn("legalName", Index = 2)]
     public string LegalName { get; init; } = string.Empty;
 
-    [Name("industry")]
-    [Index(3)]
+    [CsvColumn("industry", Index = 3)]
     public required string Industry { get; init; }
 
-    [Name("parentAccountId")]
-    [Index(4)]
+    [CsvColumn("parentAccountId", Index = 4)]
     public string ParentAccountId { get; init; } = string.Empty;
 
-    [Name("primaryContactId")]
-    [Index(5)]
+    [CsvColumn("primaryContactId", Index = 5)]
     public string PrimaryContactId { get; init; } = string.Empty;
 
-    [Name("description")]
-    [Index(6)]
+    [CsvColumn("description", Index = 6)]
     public required string Description { get; init; }
 
-    [Name("website")]
-    [Index(7)]
+    [CsvColumn("website", Index = 7)]
     public string Website { get; init; } = string.Empty;
 
-    [Name("status")]
-    [Index(8)]
+    [CsvColumn("status", Index = 8)]
     public required string Status { get; init; }
 
-    [Name("roles")]
-    [Index(9)]
+    [CsvColumn("roles", Index = 9)]
     public string Roles { get; init; } = string.Empty;
 
-    [Name("registeredOfficeAddress1")]
-    [Index(10)]
+    [CsvColumn("registeredOfficeAddress1", Index = 10)]
     public string RegisteredOfficeAddress1 { get; init; } = string.Empty;
 
-    [Name("registeredOfficeAddress2")]
-    [Index(11)]
+    [CsvColumn("registeredOfficeAddress2", Index = 11)]
     public string RegisteredOfficeAddress2 { get; init; } = string.Empty;
 
-    [Name("registeredOfficeAddress3")]
-    [Index(12)]
+    [CsvColumn("registeredOfficeAddress3", Index = 12)]
     public string RegisteredOfficeAddress3 { get; init; } = string.Empty;
 
-    [Name("registeredOfficeTown")]
-    [Index(13)]
+    [CsvColumn("registeredOfficeTown", Index = 13)]
     public string RegisteredOfficeTown { get; init; } = string.Empty;
 
-    [Name("registeredOfficeRegion")]
-    [Index(14)]
+    [CsvColumn("registeredOfficeRegion", Index = 14)]
     public string RegisteredOfficeRegion { get; init; } = string.Empty;
 
-    [Name("registeredOfficePostcode")]
-    [Index(15)]
+    [CsvColumn("registeredOfficePostcode", Index = 15)]
     public string RegisteredOfficePostcode { get; init; } = string.Empty;
 
-    [Name("registeredOfficeCountry")]
-    [Index(16)]
+    [CsvColumn("registeredOfficeCountry", Index = 16)]
     public string RegisteredOfficeCountry { get; init; } = string.Empty;
 }

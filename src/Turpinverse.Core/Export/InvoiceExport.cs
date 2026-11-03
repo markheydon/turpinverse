@@ -1,70 +1,55 @@
-using CsvHelper.Configuration.Attributes;
+using CsvHelper;
 
 namespace Turpinverse.Core.Export;
 
-public sealed record InvoiceExport
+[CsvRecord]
+public sealed partial record InvoiceExport
 {
-    [Name("invoiceId")]
-    [Index(0)]
+    [CsvColumn("invoiceId", Index = 0)]
     public required string InvoiceId { get; init; }
 
-    [Name("invoiceNumber")]
-    [Index(1)]
+    [CsvColumn("invoiceNumber", Index = 1)]
     public required string InvoiceNumber { get; init; }
 
-    [Name("accountId")]
-    [Index(2)]
+    [CsvColumn("accountId", Index = 2)]
     public required string AccountId { get; init; }
 
-    [Name("contactId")]
-    [Index(3)]
+    [CsvColumn("contactId", Index = 3)]
     public string ContactId { get; init; } = string.Empty;
 
-    [Name("dealId")]
-    [Index(4)]
+    [CsvColumn("dealId", Index = 4)]
     public string DealId { get; init; } = string.Empty;
 
-    [Name("caseId")]
-    [Index(5)]
+    [CsvColumn("caseId", Index = 5)]
     public string CaseId { get; init; } = string.Empty;
 
-    [Name("status")]
-    [Index(6)]
+    [CsvColumn("status", Index = 6)]
     public required string Status { get; init; }
 
-    [Name("issueDate")]
-    [Index(7)]
+    [CsvColumn("issueDate", Index = 7)]
     public required string IssueDate { get; init; }
 
-    [Name("dueDate")]
-    [Index(8)]
+    [CsvColumn("dueDate", Index = 8)]
     public required string DueDate { get; init; }
 
-    [Name("currency")]
-    [Index(9)]
+    [CsvColumn("currency", Index = 9)]
     public required string Currency { get; init; }
 
-    [Name("subtotal")]
-    [Index(10)]
+    [CsvColumn("subtotal", Index = 10)]
     public required decimal Subtotal { get; init; }
 
-    [Name("taxTotal")]
-    [Index(11)]
+    [CsvColumn("taxTotal", Index = 11)]
     public required decimal TaxTotal { get; init; }
 
-    [Name("total")]
-    [Index(12)]
+    [CsvColumn("total", Index = 12)]
     public required decimal Total { get; init; }
 
-    [Name("amountDue")]
-    [Index(13)]
+    [CsvColumn("amountDue", Index = 13)]
     public required decimal AmountDue { get; init; }
 
-    [Name("notes")]
-    [Index(14)]
+    [CsvColumn("notes", Index = 14)]
     public string Notes { get; init; } = string.Empty;
 
-    [Name("terms")]
-    [Index(15)]
+    [CsvColumn("terms", Index = 15)]
     public string Terms { get; init; } = string.Empty;
 }

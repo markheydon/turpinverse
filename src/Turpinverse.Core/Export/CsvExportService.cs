@@ -1,8 +1,6 @@
-using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using CsvHelper;
-using CsvHelper.Configuration;
 using Turpinverse.Core.Abstractions;
 
 namespace Turpinverse.Core.Export;
@@ -40,7 +38,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
         var canon = await canonRepository.LoadAsync(cancellationToken);
         using var memoryStream = new MemoryStream();
         await using var writer = new StreamWriter(memoryStream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
-        await using var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
+        await using var csv = CsvWriter.Create(writer, new CsvWriterOptions
         {
             NewLine = "\r\n"
         });
@@ -69,6 +67,7 @@ public sealed class CsvExportService(ICanonRepository canonRepository) : IExport
             throw new EmptyFilterMatchException();
         }
 
+        await csv.FlushAsync(cancellationToken);
         await writer.FlushAsync(cancellationToken);
         return memoryStream.ToArray();
     }
