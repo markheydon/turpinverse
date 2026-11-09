@@ -1,15 +1,6 @@
-@import "tailwindcss";
-
-@theme {
-  --color-turpin-amber: #d97706;
-  --color-turpin-slate: #1e293b;
-  --color-turpin-cream: #fef3c7;
-}
+/* Legacy page styles (migrating to BlazorBlueprint bb: utilities). */
 
 body {
-  font-family: system-ui, sans-serif;
-  background-color: var(--color-turpin-cream);
-  color: var(--color-turpin-slate);
   margin: 0;
 }
 

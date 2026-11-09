@@ -9,6 +9,7 @@ using Turpinverse.Core.Models;
 using Turpinverse.Core.Validation;
 using Turpinverse.Data.DependencyInjection;
 using Turpinverse.Web.Components.Pages;
+using Turpinverse.Web.UnitTests;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
@@ -17,6 +18,7 @@ public class HomePageTests : BunitContext
     public HomePageTests()
     {
         JSInterop.Mode = JSRuntimeMode.Loose;
+        Services.RegisterBlueprint();
     }
 
     [Fact]
@@ -166,7 +168,7 @@ public class DealsPageTests : CrmEntityPageTestBase<Deals>
         Assert.Contains("Deal Name", cut.Markup);
         Assert.Contains("Contact ID", cut.Markup);
         Assert.Contains("Stakeholder Contact IDs", cut.Markup);
-        Assert.Contains("pipeline-chart", cut.Markup);
+        Assert.Contains("data-slot=\"bar-chart\"", cut.Markup);
     }
 }
 
@@ -346,6 +348,7 @@ public abstract class CrmEntityPageTestBase<TPage> : BunitContext where TPage : 
     protected CrmEntityPageTestBase()
     {
         JSInterop.Mode = JSRuntimeMode.Loose;
+        Services.RegisterBlueprint();
     }
 
     protected abstract string DatasetType { get; }

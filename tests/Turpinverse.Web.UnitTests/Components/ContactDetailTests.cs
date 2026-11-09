@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Turpinverse.Core.DependencyInjection;
 using Turpinverse.Data.DependencyInjection;
 using Turpinverse.Web.Components.Pages;
+using Turpinverse.Web.UnitTests;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
@@ -11,6 +12,7 @@ public class ContactDetailTests : BunitContext
     public ContactDetailTests()
     {
         JSInterop.Mode = JSRuntimeMode.Loose;
+        Services.RegisterBlueprint();
     }
 
     [Fact]

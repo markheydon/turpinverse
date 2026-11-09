@@ -1,34 +1,30 @@
-@inject IJSRuntime JS
-
-<div class="chart-container">
-    <h3>Dataset Summary</h3>
-    <canvas @ref="canvasRef" id="@CanvasId"></canvas>
-</div>
+<BbCard>
+    <BbCardHeader>
+        <BbCardTitle>Dataset summary</BbCardTitle>
+    </BbCardHeader>
+    <BbCardContent>
+        @if (ChartRows.Count == 0)
+        {
+            <BbTypographyMuted>No data to chart.</BbTypographyMuted>
+        }
+        else
+        {
+            <BbPieChart Data="@ChartRows" Height="320px" Title="Records by dataset">
+                <BbChartTooltip />
+                <BbChartLegend />
+                <BbPie DataKey="Count" NameKey="Name" InnerRadius="45" ShowLabels="true" LabelFormatter="{b}: {c}" />
+            </BbPieChart>
+        }
+    </BbCardContent>
+</BbCard>
 
 @code {
     [Parameter] public Dictionary<string, int>? Counts { get; set; }
-    [Parameter] public string CanvasId { get; set; } = "summary-chart";
 
-    private ElementReference canvasRef;
-    private string? lastRenderedSignature;
+    private IReadOnlyList<SummaryRow> ChartRows =>
+        Counts is null
+            ? []
+            : Counts.Select(pair => new SummaryRow(pair.Key, pair.Value)).ToList();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (Counts is null)
-        {
-            return;
-        }
-
-        var signature = string.Join('|', Counts.OrderBy(pair => pair.Key).Select(pair => $"{pair.Key}:{pair.Value}"));
-        if (signature == lastRenderedSignature)
-        {
-            return;
-        }
-
-        lastRenderedSignature = signature;
-        await JS.InvokeVoidAsync("chartInterop.renderDoughnutChart", CanvasId,
-            Counts.Keys.ToArray(),
-            Counts.Values.ToArray());
-    }
+    private sealed record SummaryRow(string Name, int Count);
 }
-

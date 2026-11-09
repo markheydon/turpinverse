@@ -15,10 +15,10 @@
         }
       </div>
     </div>
-    <button class="download-btn" @onclick="DownloadCsv" disabled="@(loading || downloadDisabled)">
+    <BbButton Variant="ButtonVariant.Default" OnClick="DownloadCsv" Disabled="@(loading || downloadDisabled)">
       <LucideIcon Name="download" />
       Download CSV
-    </button>
+    </BbButton>
   </div>
 
   @if (FacetColumns is { Count: > 0 })
@@ -43,7 +43,7 @@
   @if (ShowPipelineChart && deals is not null)
   {
     <div class="charts-section charts-section-single">
-      <PipelineChart Deals="deals" CanvasId="pipeline-chart" />
+      <PipelineChart Deals="deals" />
     </div>
   }
 

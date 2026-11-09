@@ -1,18 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="flex min-h-screen">
-    <aside class="sidebar">
-        <NavMenu />
-    </aside>
+<BbSidebarProvider>
+    <AppSidebar />
 
-    <main class="main-content">
-        <article class="content-area">
+    <BbSidebarInset>
+        <header class="bb:sticky bb:top-0 bb:z-40 bb:flex bb:h-14 bb:items-center bb:gap-2 bb:border-b bb:bg-background bb:px-4">
+            <BbSidebarTrigger />
+            <BbSeparator Orientation="SeparatorOrientation.Vertical" Class="bb:h-4" />
+            <span class="bb:font-medium bb:text-sm">Turpinverse export</span>
+            <div class="bb:flex bb:flex-1 bb:items-center bb:justify-end bb:gap-1">
+                <BbDarkModeToggle Variant="ButtonVariant.Ghost" />
+            </div>
+        </header>
+
+        <div class="bb:flex bb:flex-1 bb:flex-col bb:gap-6 bb:p-6">
             @Body
-        </article>
-    </main>
-</div>
+        </div>
+    </BbSidebarInset>
+</BbSidebarProvider>
 
-<div id="blazor-error-ui" data-nosnippet>
+<BbToastProvider Position="ToastPosition.BottomRight" />
+<BbDialogProvider />
+<BbPortalHost />
+
+<div id="blazor-error-ui" class="bb:hidden" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">&#x2715;</span>

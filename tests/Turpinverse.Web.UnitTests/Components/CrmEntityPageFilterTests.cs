@@ -4,6 +4,7 @@ using NSubstitute;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Export;
 using Turpinverse.Web.Components.Crm;
+using Turpinverse.Web.UnitTests;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
@@ -12,6 +13,7 @@ public class CrmEntityPageFilterTests : BunitContext
     public CrmEntityPageFilterTests()
     {
         JSInterop.Mode = JSRuntimeMode.Loose;
+        Services.RegisterBlueprint();
     }
 
     [Fact]
@@ -131,7 +133,7 @@ public class CrmEntityPageFilterTests : BunitContext
 
         cut.Find("select.facet-select").Change("Negotiation");
 
-        var button = cut.Find("button.download-btn");
+        var button = cut.FindAll("button").First(element => element.TextContent?.Contains("Download CSV", StringComparison.Ordinal) == true);
         Assert.True(button.HasAttribute("disabled"));
     }
 

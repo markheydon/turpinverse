@@ -1,6 +1,7 @@
 using Bunit;
 using Turpinverse.Core.Export;
 using Turpinverse.Web.Components.Layout;
+using Turpinverse.Web.UnitTests;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
@@ -9,6 +10,7 @@ public class NavMenuTests : BunitContext
     public NavMenuTests()
     {
         JSInterop.Mode = JSRuntimeMode.Loose;
+        Services.RegisterBlueprint();
     }
 
     [Fact]
