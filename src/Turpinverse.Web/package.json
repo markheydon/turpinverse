@@ -6,7 +6,7 @@
     "watch:css": "npx @tailwindcss/cli -i Styles/app.css -o wwwroot/css/app.min.css --watch"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.0",
+    "@tailwindcss/cli": "^4.3.5",
     "tailwindcss": "^4.1.0"
   }
 }
