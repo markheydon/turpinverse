@@ -136,7 +136,7 @@ These are product facts, not blockers for the channel split above:
 - [canon/README.md](../canon/README.md) — using the datasets from another project
 - [universe-voice.md](./universe-voice.md) — tone and copy conventions
 - [engineering.md](./engineering.md) — how this repo is maintained
-- [decision-log.md](./decision-log.md) — why the model looks this way
+- [adr/](../adr/) — why the model looks this way
 - [site/README.md](../site/README.md) — Hugo build, preview, and deploy
 - [tech-stack.md](./tech-stack.md) — technology summary
 - [career-portfolio-mapping.md](./career-portfolio-mapping.md) — projecting career/portfolio entities to a typical personal-site layout

@@ -17,4 +17,4 @@ Tone guidelines in [`canon/tone-guidelines.json`](../canon/tone-guidelines.json)
 
 - [canon/README.md](../canon/README.md) — dataset files
 - [product-surfaces.md](./product-surfaces.md) — how Hugo and Blazor present copy
-- [decision-log.md](./decision-log.md) — why the data model looks the way it does
+- [adr/](../adr/) — why the data model looks the way it does

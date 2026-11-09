@@ -205,4 +205,4 @@ All errors use [RFC 7807 Problem Details](https://datatracker.ietf.org/doc/html/
 
 - [entity-relationships.md](./entity-relationships.md) — join graph and export projection
 - [validation-rules.md](./validation-rules.md) — VR codes
-- [decision-log.md](./decision-log.md) — why membership rows and API gating
+- [adr/](../adr/) — why membership rows and API gating

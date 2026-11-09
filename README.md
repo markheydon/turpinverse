@@ -84,7 +84,7 @@ Use `-Runtime docker` if you prefer Docker over Podman. Full details: [site/READ
 | [docs/entity-relationships.md](docs/entity-relationships.md) | Join graph |
 | [docs/export-api.md](docs/export-api.md) | HTTP/CSV export contract |
 | [docs/engineering.md](docs/engineering.md) | How this repo is maintained |
-| [docs/decision-log.md](docs/decision-log.md) | Past design decisions |
+| [adr/](adr/) | Architectural decision records |
 | [docs/tech-stack.md](docs/tech-stack.md) | Technology summary |
 
 ## Scripts

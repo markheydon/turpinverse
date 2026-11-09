@@ -34,7 +34,7 @@ Authoritative artefacts:
 | Join graph | [entity-relationships.md](./entity-relationships.md) |
 | Validation codes | [validation-rules.md](./validation-rules.md) + `CanonValidator.cs` |
 | HTTP export | [export-api.md](./export-api.md) |
-| Past decisions | [decision-log.md](./decision-log.md) |
+| Past decisions | [adr/](../adr/) |
 
 ## 5. Issues and pull requests
 
