@@ -39,14 +39,6 @@
   "powershell.integratedConsole.showOnStartup": false,
   "shellcheck.enable": true,
   "shellcheck.run": "onSave",
-  "tailwindCSS.includeLanguages": {
-    "razor": "html",
-    "aspnetcorerazor": "html"
-  },
-  "tailwindCSS.experimental.configFile": "src/Turpinverse.Web/Styles/app.css",
-  "tailwindCSS.files.exclude": [
-    "**/wwwroot/css/app.min.css"
-  ],
   "search.exclude": {
     "**/node_modules": true,
     "**/bin": true,

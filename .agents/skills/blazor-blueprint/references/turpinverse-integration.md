@@ -2,14 +2,14 @@
 
 Ground truth in the repo; prefer reading these files over memory.
 
-**Baseline:** BlazorBlueprint **Scenario B** (no app Tailwind build): Turpin-themed preset CSS, package `blazorblueprint.css`, and `theme-init.js`. App shell uses **`Bb*`** plus **`bb:`** utilities from `blazorblueprint.css`. Legacy layout class names in `wwwroot/css/app.css` remain during migration; prefer new `bb:` markup on touched pages.
+**Baseline:** BlazorBlueprint **Scenario B** (no app Tailwind build): `ThemePresets.Standard` in `Program.cs`, package `blazorblueprint.css`, and `theme-init.js`. Pages use **`Bb*`** components; library `bb:` utilities are acceptable for layout when no styled wrapper exists.
 
 ## Packages (central versions)
 
 `Directory.Packages.props`:
 
 - `BlazorBlueprint.Components` (styled; pulls in Primitives transitively)
-- `BlazorBlueprint.Icons.Lucide` (optional; house `LucideIcon` remains on some pages)
+- `BlazorBlueprint.Icons.Lucide` (`LucideIcon` from `BlazorBlueprint.Icons.Lucide.Components`)
 
 Do not add icon packs or chart libraries unless the user explicitly requests package changes.
 
@@ -17,7 +17,7 @@ Do not add icon packs or chart libraries unless the user explicitly requests pac
 
 `src/Turpinverse.Web/Program.cs`:
 
-- `builder.Services.AddBlazorBlueprintComponents(configureTheme: ...)` once (radius **0.65**, `PersistToLocalStorage`, `DetectSystemPreference`).
+- `builder.Services.AddBlazorBlueprintComponents(configureTheme: ...)` once with `DefaultPreset = ThemePresets.Standard`, `PersistToLocalStorage`, `DetectSystemPreference`.
 - Blazor Web App uses Interactive Server (`AddInteractiveServerComponents` / `AddInteractiveServerRenderMode`).
 
 ## Static assets (`Components/App.razor`)
@@ -25,10 +25,11 @@ Do not add icon packs or chart libraries unless the user explicitly requests pac
 Order:
 
 1. Favicon
-2. `wwwroot/styles/themes/turpin.css` (Turpin amber/slate palette on OKLCH tokens)
-3. `_content/BlazorBlueprint.Components/blazorblueprint.css`
-4. Legacy `wwwroot/css/app.css` (shrinking as pages migrate)
-5. Blocking `_content/BlazorBlueprint.Components/js/theme-init.js` in `<head>` after stylesheets
+2. `_content/BlazorBlueprint.Components/blazorblueprint.css`
+3. `_content/BlazorBlueprint.Components/css/themes.css`
+4. Blocking `_content/BlazorBlueprint.Components/js/theme-init.js` in `<head>` after stylesheets
+
+No `wwwroot` CSS and no Tailwind build (unlike the sample `dotnet new blazorblueprint` template, which adds `styles/themes/default.css` and built `css/app.css`). Icons on `ExportDatasets` use Lucide names directly.
 
 Root `<Routes @rendermode="InteractiveServer" />`.
 
@@ -57,10 +58,10 @@ Use BlazorBlueprint chart components (`BbBarChart`, `BbPieChart`, etc.) on Home 
 
 | Instead of | Use |
 |------------|-----|
-| `.download-btn` | `BbButton` with download icon |
-| Facet `<select>` | `BbNativeSelect` / `BbFormFieldNativeSelect` when refactoring |
-| Raw `<table>` in `DataTable.razor` | `BbDataTable` (incremental) |
-| Page title blocks | `BbSectionHeader` / `BbTypographyH1` |
+| Raw download control | `BbButton` with Lucide download icon |
+| Facet `<select>` | `BbFormFieldNativeSelect` |
+| Raw preview table | `BbDataTable` via `ExportDataTable.razor` |
+| Page title blocks | `BbSectionHeader` |
 
 ## Spec alignment
 

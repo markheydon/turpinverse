@@ -40,15 +40,6 @@
       "problemMatcher": []
     },
     {
-      "label": "tailwind: build css",
-      "type": "shell",
-      "command": "npm run build:css",
-      "options": {
-        "cwd": "${workspaceFolder}/src/Turpinverse.Web"
-      },
-      "problemMatcher": []
-    },
-    {
       "label": "hugo: generate content",
       "type": "process",
       "command": "dotnet",

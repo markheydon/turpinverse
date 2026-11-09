@@ -25,7 +25,7 @@ public class CrmEntityPageFilterTests : BunitContext
             .Add(p => p.Columns, new[] { "dealName", "stage" })
             .Add(p => p.FacetColumns, new[] { "stage", "accountId" }));
 
-        Assert.Contains("facet-controls", cut.Markup);
+        Assert.True(cut.FindAll("select").Count >= 2);
         Assert.Contains("Stage", cut.Markup);
         Assert.Contains("Account", cut.Markup);
     }
@@ -47,7 +47,7 @@ public class CrmEntityPageFilterTests : BunitContext
             .Add(p => p.Columns, new[] { "dealName", "stage" })
             .Add(p => p.FacetColumns, new[] { "stage" }));
 
-        cut.Find("select.facet-select").Change("Negotiation");
+        cut.Find("select").Change("Negotiation");
 
         Assert.Contains("Nothing matched the current filters.", cut.Markup);
     }
@@ -73,7 +73,7 @@ public class CrmEntityPageFilterTests : BunitContext
             .Add(p => p.Columns, new[] { "name", "taxRateId" })
             .Add(p => p.FacetColumns, new[] { "taxRateId" }));
 
-        cut.FindAll("select.facet-select")[0].Change("tax-standard");
+        cut.FindAll("select")[0].Change("tax-standard");
 
         exportService.Received(1).PreviewAsync(
             "products",
@@ -105,7 +105,7 @@ public class CrmEntityPageFilterTests : BunitContext
             .Add(p => p.Columns, new[] { "billNumber", "supplierAccountId" })
             .Add(p => p.FacetColumns, new[] { "supplierAccountId" }));
 
-        cut.Find("select.facet-select").Change("king-equine-trading");
+        cut.Find("select").Change("king-equine-trading");
 
         exportService.Received(1).PreviewAsync(
             "bills",
@@ -131,7 +131,7 @@ public class CrmEntityPageFilterTests : BunitContext
             .Add(p => p.Columns, new[] { "dealName", "stage" })
             .Add(p => p.FacetColumns, new[] { "stage" }));
 
-        cut.Find("select.facet-select").Change("Negotiation");
+        cut.Find("select").Change("Negotiation");
 
         var button = cut.FindAll("button").First(element => element.TextContent?.Contains("Download CSV", StringComparison.Ordinal) == true);
         Assert.True(button.HasAttribute("disabled"));

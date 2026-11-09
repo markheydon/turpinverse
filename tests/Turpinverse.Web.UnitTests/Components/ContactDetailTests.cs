@@ -92,12 +92,12 @@ public class ContactDetailTests : BunitContext
         Services.AddTurpinverseData();
         var cut = Render<ContactDetail>(parameters => parameters.Add(p => p.ContactId, "dick-turpin"));
 
-        Assert.Contains("about-section", cut.Markup);
+        Assert.Contains("About", cut.Markup);
         Assert.Contains("Core competencies", cut.Markup);
         Assert.Contains("Strategic corridor planning", cut.Markup);
         Assert.DoesNotContain("Biography", cut.Markup);
 
-        var aboutIndex = cut.Markup.IndexOf("about-section", StringComparison.Ordinal);
+        var aboutIndex = cut.Markup.IndexOf("About", StringComparison.Ordinal);
         var skillsIndex = cut.Markup.IndexOf("Core competencies", StringComparison.Ordinal);
         var experienceIndex = cut.Markup.IndexOf("Experience", StringComparison.Ordinal);
 

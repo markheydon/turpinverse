@@ -3,19 +3,21 @@
 
 @if (Intro is not null)
 {
-    <section class="profile-section intro-section">
-        <p class="intro-short">@Intro.ShortIntro</p>
-        <p class="intro-headline">@Intro.Headline</p>
-        <p class="intro-subtitle">@Intro.Subtitle</p>
-        @if (Intro.Cta is not null)
-        {
-            <p class="intro-cta">
-                <a href="@CareerLinkResolver.ResolveForPublication(Intro.Cta.Url)">
+    <BbCard Class="bb:mt-6">
+        <BbCardContent>
+            <BbTypographyP>@Intro.ShortIntro</BbTypographyP>
+            <BbTypographyH3>@Intro.Headline</BbTypographyH3>
+            <BbTypographyMuted>@Intro.Subtitle</BbTypographyMuted>
+            @if (Intro.Cta is not null)
+            {
+                <BbButton Variant="ButtonVariant.Link"
+                          Href="@CareerLinkResolver.ResolveForPublication(Intro.Cta.Url)"
+                          Class="bb:mt-2">
                     @(Intro.Cta.Label ?? Intro.Cta.Name ?? "Learn more")
-                </a>
-            </p>
-        }
-    </section>
+                </BbButton>
+            }
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

@@ -18,7 +18,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddBlazorBlueprintComponents(configureTheme: options =>
 {
-    options.DefaultRadius = 0.65;
+    options.DefaultPreset = ThemePresets.Standard;
     options.PersistToLocalStorage = true;
     options.DetectSystemPreference = true;
 });

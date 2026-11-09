@@ -5,7 +5,7 @@
         <BbSidebarMenu>
             <BbSidebarMenuItem>
                 <BbSidebarMenuButton Href="/" Match="NavLinkMatch.All" Size="SidebarMenuButtonSize.Large">
-                    <LucideIcon Name="home" />
+                    <LucideIcon Name="house" Size="18" />
                     <span class="bb:font-semibold">Turpinverse</span>
                 </BbSidebarMenuButton>
             </BbSidebarMenuItem>
@@ -20,7 +20,7 @@
                 {
                     <BbSidebarMenuItem>
                         <BbSidebarMenuButton Href="@dataset.Route" Match="NavLinkMatch.Prefix" Tooltip="@dataset.Title">
-                            <LucideIcon Name="@dataset.Icon" />
+                            <LucideIcon Name="@dataset.Icon" Size="18" />
                             <span>@dataset.Title</span>
                         </BbSidebarMenuButton>
                     </BbSidebarMenuItem>
@@ -37,7 +37,7 @@
                     {
                         <BbSidebarMenuItem>
                             <BbSidebarMenuButton Href="@dataset.Route" Match="NavLinkMatch.Prefix" Tooltip="@dataset.Title">
-                                <LucideIcon Name="@MapIcon(dataset.Icon)" />
+                                <LucideIcon Name="@dataset.Icon" Size="18" />
                                 <span>@dataset.Title</span>
                             </BbSidebarMenuButton>
                         </BbSidebarMenuItem>
@@ -53,12 +53,3 @@
 
     <BbSidebarRail />
 </BbSidebar>
-
-@code {
-    private static string MapIcon(string icon) => icon switch
-    {
-        "user-plus" or "list-check" or "file-invoice" or "clipboard-list" or "receipt"
-            or "file-invoice-dollar" or "credit-card" or "file-minus" or "tag" => "file",
-        _ => icon
-    };
-}

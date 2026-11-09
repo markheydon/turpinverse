@@ -13,109 +13,129 @@
 
 <PageTitle>@pageTitle - Turpinverse</PageTitle>
 
-<div class="page-container contact-detail">
-    @if (loading)
-    {
-        <p>Loading contact...</p>
-    }
-    else if (persona is null)
-    {
-        <h1>Contact not found</h1>
-        <p>No persona matches contact id <code>@ContactId</code>.</p>
-        <a href="/contacts">Back to contacts</a>
-    }
-    else
-    {
-        <div class="contact-detail-header">
-            <a class="back-link" href="/contacts">← Contacts</a>
-            <div class="profile-header">
+@if (loading)
+{
+    <div class="bb:flex bb:items-center bb:gap-2">
+        <BbSpinner />
+        <BbTypographyMuted>Loading contact...</BbTypographyMuted>
+    </div>
+}
+else if (persona is null)
+{
+    <BbEmpty Title="Contact not found"
+             Description="@($"No persona matches contact id {ContactId}.")"
+             Size="EmptySize.Default">
+        <ChildContent>
+            <BbButton Href="/contacts" Variant="ButtonVariant.Outline">Back to contacts</BbButton>
+        </ChildContent>
+    </BbEmpty>
+}
+else
+{
+    <BbButton Href="/contacts" Variant="ButtonVariant.Ghost" Class="bb:mb-4">
+        <LucideIcon Name="arrow-left" Size="16" />
+        Contacts
+    </BbButton>
+
+    <BbCard>
+        <BbCardContent>
+            <div class="bb:flex bb:flex-wrap bb:items-start bb:gap-6">
                 @if (!string.IsNullOrWhiteSpace(extras?.Intro?.Photo))
                 {
-                    <div class="profile-avatar">
-                        <img src="@extras.Intro.Photo" alt="@persona.DisplayName" loading="lazy" width="160" height="160">
-                    </div>
+                    <BbAvatar Class="bb:size-40">
+                        <img src="@extras.Intro.Photo" alt="@persona.DisplayName" loading="lazy" width="160" height="160" />
+                    </BbAvatar>
                 }
-                <div class="profile-meta">
-                    <h1>@persona.DisplayName</h1>
+                <div>
+                    <BbTypographyH1>@persona.DisplayName</BbTypographyH1>
                     @if (!suppressTitle)
                     {
-                        <p class="contact-title">@persona.Title</p>
+                        <BbTypographyMuted>@persona.Title</BbTypographyMuted>
                     }
                     @if (!suppressHeaderEmail)
                     {
-                        <p class="contact-email">@persona.Email</p>
+                        <BbTypographyMuted>@persona.Email</BbTypographyMuted>
                     }
-                    <span class="status-badge status-@persona.Status">@persona.Status</span>
+                    <BbBadge Class="bb:mt-2">@persona.Status</BbBadge>
                 </div>
             </div>
-        </div>
+        </BbCardContent>
+    </BbCard>
 
-        <div class="contact-detail-body">
-            <IntroSection Intro="extras?.Intro" />
+    <IntroSection Intro="extras?.Intro" />
 
-            @if (!suppressBiography)
-            {
-                <section class="biography-section">
-                    <h2>Biography</h2>
-                    <p class="biography">@persona.Biography</p>
-                </section>
-            }
-
-            <AboutSection Text="@extras?.About" />
-            <SkillsSection SectionHeading="@extras?.SkillsHeading" SkillItems="@(extras?.Skills ?? [])" />
-
-            <ExperienceSection Items="experience" />
-            <EducationSection Items="education" />
-            <ProjectsSection Items="projects" />
-            <AchievementsSection Items="achievements" />
-
-            @if (persona.Address is { } mailingAddress && CanonValidator.IsCompleteAddress(mailingAddress))
-            {
-                <section class="mailing-address-section">
-                    <h2>Mailing address</h2>
-                    <address class="postal-address">
-                        <p>@mailingAddress.Address1</p>
-                        @if (!string.IsNullOrWhiteSpace(mailingAddress.Address2))
-                        {
-                            <p>@mailingAddress.Address2</p>
-                        }
-                        @if (!string.IsNullOrWhiteSpace(mailingAddress.Address3))
-                        {
-                            <p>@mailingAddress.Address3</p>
-                        }
-                        <p>@mailingAddress.Town@(string.IsNullOrWhiteSpace(mailingAddress.Region) ? "" : $", {mailingAddress.Region}")</p>
-                        <p>@mailingAddress.Postcode</p>
-                        <p>@mailingAddress.Country</p>
-                    </address>
-                </section>
-            }
-
-            <ContactExtrasSection Contact="extras?.Contact" />
-            <SocialsSection Socials="@(extras?.Socials ?? [])" />
-
-            @if (relatedActivities.Count > 0)
-            {
-                <section class="related-activities-section">
-                    <h2>Related activities</h2>
-                    <ul class="activity-list">
-                        @foreach (var activity in relatedActivities)
-                        {
-                            <li class="activity-item">
-                                <p class="activity-meta">
-                                    <span class="status-badge">@activity.Type</span>
-                                    <span>@activity.ActivityDate</span>
-                                    <span class="status-badge status-@activity.Status.ToLowerInvariant()">@activity.Status</span>
-                                </p>
-                                <p class="activity-subject"><strong>@activity.Subject</strong></p>
-                                <p class="activity-description">@activity.Description</p>
-                            </li>
-                        }
-                    </ul>
-                </section>
-            }
-        </div>
+    @if (!suppressBiography)
+    {
+        <BbCard Class="bb:mt-6">
+            <BbCardHeader>
+                <BbCardTitle>Biography</BbCardTitle>
+            </BbCardHeader>
+            <BbCardContent>
+                <BbTypographyP>@persona.Biography</BbTypographyP>
+            </BbCardContent>
+        </BbCard>
     }
-</div>
+
+    <AboutSection Text="@extras?.About" />
+    <SkillsSection SectionHeading="@extras?.SkillsHeading" SkillItems="@(extras?.Skills ?? [])" />
+
+    <ExperienceSection Items="experience" />
+    <EducationSection Items="education" />
+    <ProjectsSection Items="projects" />
+    <AchievementsSection Items="achievements" />
+
+    @if (persona.Address is { } mailingAddress && CanonValidator.IsCompleteAddress(mailingAddress))
+    {
+        <BbCard Class="bb:mt-6">
+            <BbCardHeader>
+                <BbCardTitle>Mailing address</BbCardTitle>
+            </BbCardHeader>
+            <BbCardContent>
+                <address>
+                    <BbTypographyP>@mailingAddress.Address1</BbTypographyP>
+                    @if (!string.IsNullOrWhiteSpace(mailingAddress.Address2))
+                    {
+                        <BbTypographyP>@mailingAddress.Address2</BbTypographyP>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(mailingAddress.Address3))
+                    {
+                        <BbTypographyP>@mailingAddress.Address3</BbTypographyP>
+                    }
+                    <BbTypographyP>@mailingAddress.Town@(string.IsNullOrWhiteSpace(mailingAddress.Region) ? "" : $", {mailingAddress.Region}")</BbTypographyP>
+                    <BbTypographyP>@mailingAddress.Postcode</BbTypographyP>
+                    <BbTypographyP>@mailingAddress.Country</BbTypographyP>
+                </address>
+            </BbCardContent>
+        </BbCard>
+    }
+
+    <ContactExtrasSection Contact="extras?.Contact" />
+    <SocialsSection Socials="@(extras?.Socials ?? [])" />
+
+    @if (relatedActivities.Count > 0)
+    {
+        <BbCard Class="bb:mt-6">
+            <BbCardHeader>
+                <BbCardTitle>Related activities</BbCardTitle>
+            </BbCardHeader>
+            <BbCardContent>
+                @foreach (var activity in relatedActivities)
+                {
+                    <div class="bb:mb-4">
+                        <div class="bb:flex bb:flex-wrap bb:items-center bb:gap-2">
+                            <BbBadge>@activity.Type</BbBadge>
+                            <BbTypographyMuted>@activity.ActivityDate</BbTypographyMuted>
+                            <BbBadge Variant="BadgeVariant.Outline">@activity.Status</BbBadge>
+                        </div>
+                        <BbTypographyH4>@activity.Subject</BbTypographyH4>
+                        <BbTypographyP>@activity.Description</BbTypographyP>
+                    </div>
+                    <BbSeparator Class="bb:my-4" />
+                }
+            </BbCardContent>
+        </BbCard>
+    }
+}
 
 @code {
     [Parameter] public string ContactId { get; set; } = string.Empty;

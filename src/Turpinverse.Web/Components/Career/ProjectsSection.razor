@@ -3,51 +3,61 @@
 
 @if (Items.Count > 0)
 {
-    <section class="career-section projects-section">
-        <h2>Projects</h2>
-        <ul class="projects-list">
+    <BbCard Class="bb:mt-6">
+        <BbCardHeader>
+            <BbCardTitle>Projects</BbCardTitle>
+        </BbCardHeader>
+        <BbCardContent>
             @foreach (var project in Items)
             {
-                <li class="project-entry">
+                <article class="bb:mb-6">
                     @if (!string.IsNullOrWhiteSpace(project.Image))
                     {
-                        <img class="career-image project-image" src="@project.Image" alt="@project.Title" loading="lazy" width="640" height="360" />
+                        <BbAspectRatio Ratio="1.777" Class="bb:mb-4">
+                            <img src="@project.Image" alt="@project.Title" loading="lazy" width="640" height="360" />
+                        </BbAspectRatio>
                     }
-                    <h3>@project.Title</h3>
-                    <p class="project-summary">@project.Summary</p>
-                    <p class="project-account">
-                        Account: <a href="/organisations/@project.OrganisationId">@project.OrganisationId</a>
-                    </p>
+                    <BbTypographyH4>@project.Title</BbTypographyH4>
+                    <BbTypographyP>@project.Summary</BbTypographyP>
+                    <BbTypographyMuted>
+                        Account:
+                        <BbLink Href="@($"/organisations/{project.OrganisationId}")">@project.OrganisationId</BbLink>
+                    </BbTypographyMuted>
                     @if (project.Tags.Count > 0)
                     {
-                        <ul class="chip-list">
+                        <div class="bb:mt-2 bb:flex bb:flex-wrap bb:gap-2">
                             @foreach (var tag in project.Tags)
                             {
-                                <li class="chip">@tag</li>
+                                <BbChip>@tag</BbChip>
                             }
-                        </ul>
+                        </div>
                     }
                     @if (project.Links.Count > 0)
                     {
-                        <ul class="featured-links">
+                        <ul class="bb:mt-2">
                             @foreach (var link in project.Links)
                             {
                                 <li>
-                                    <a href="@CareerLinkResolver.ResolveForPublication(link.Url)">@(link.Label ?? link.Name ?? (string.IsNullOrWhiteSpace(link.Icon) ? "Link" : "View details"))</a>
+                                    <BbLink Href="@CareerLinkResolver.ResolveForPublication(link.Url)">
+                                        @(link.Label ?? link.Name ?? (string.IsNullOrWhiteSpace(link.Icon) ? "Link" : "View details"))
+                                    </BbLink>
                                 </li>
                             }
                         </ul>
                     }
                     @if (project.FeaturedCta is { } cta)
                     {
-                        <p class="featured-cta">
-                            <a href="@CareerLinkResolver.ResolveForPublication(cta.Url)">@(cta.Name ?? cta.Label ?? "View project")</a>
-                        </p>
+                        <BbButton Variant="ButtonVariant.Link"
+                                  Href="@CareerLinkResolver.ResolveForPublication(cta.Url)"
+                                  Class="bb:mt-2">
+                            @(cta.Name ?? cta.Label ?? "View project")
+                        </BbButton>
                     }
-                </li>
+                </article>
+                <BbSeparator Class="bb:my-4" />
             }
-        </ul>
-    </section>
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

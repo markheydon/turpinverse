@@ -3,49 +3,54 @@
 
 @if (Items.Count > 0)
 {
-    <section class="career-section experience-section">
-        <h2>Experience</h2>
-        @foreach (var grouping in Items)
-        {
-            <div class="experience-grouping">
-                <h3>
-                    @if (!string.IsNullOrWhiteSpace(grouping.OrganisationId))
-                    {
-                        <a href="/organisations/@grouping.OrganisationId">@grouping.OrganisationName</a>
-                    }
-                    else
-                    {
-                        @grouping.OrganisationName
-                    }
-                </h3>
-                @foreach (var role in grouping.Roles)
-                {
-                    <div class="role">
-                        <h4>@role.Title</h4>
-                        <p class="date-range">@FormatDateRange(role)</p>
-                        <p class="role-description">@role.Description</p>
-                        @if (!string.IsNullOrWhiteSpace(role.ExtraInfo))
+    <BbCard Class="bb:mt-6">
+        <BbCardHeader>
+            <BbCardTitle>Experience</BbCardTitle>
+        </BbCardHeader>
+        <BbCardContent>
+            @foreach (var grouping in Items)
+            {
+                <div class="bb:mb-6">
+                    <BbTypographyH4>
+                        @if (!string.IsNullOrWhiteSpace(grouping.OrganisationId))
                         {
-                            <p class="role-extra" title="@role.ExtraInfo">@role.ExtraInfo</p>
+                            <BbLink Href="@($"/organisations/{grouping.OrganisationId}")">@grouping.OrganisationName</BbLink>
                         }
-                        @if (role.FeaturedLinks.Count > 0)
+                        else
                         {
-                            <ul class="featured-links">
-                                @foreach (var link in role.FeaturedLinks)
-                                {
-                                    <li>
-                                        <a href="@CareerLinkResolver.ResolveForPublication(link.Url)" title="@link.Tooltip">
-                                            @(link.Label ?? link.Name ?? (string.IsNullOrWhiteSpace(link.Icon) ? "Link" : "View details"))
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
+                            @grouping.OrganisationName
                         }
-                    </div>
-                }
-            </div>
-        }
-    </section>
+                    </BbTypographyH4>
+                    @foreach (var role in grouping.Roles)
+                    {
+                        <div class="bb:mt-4">
+                            <BbTypographyH4>@role.Title</BbTypographyH4>
+                            <BbTypographyMuted>@FormatDateRange(role)</BbTypographyMuted>
+                            <BbTypographyP>@role.Description</BbTypographyP>
+                            @if (!string.IsNullOrWhiteSpace(role.ExtraInfo))
+                            {
+                                <BbTypographyMuted Title="@role.ExtraInfo">@role.ExtraInfo</BbTypographyMuted>
+                            }
+                            @if (role.FeaturedLinks.Count > 0)
+                            {
+                                <ul class="bb:mt-2">
+                                    @foreach (var link in role.FeaturedLinks)
+                                    {
+                                        <li>
+                                            <BbLink Href="@CareerLinkResolver.ResolveForPublication(link.Url)" Title="@link.Tooltip">
+                                                @(link.Label ?? link.Name ?? (string.IsNullOrWhiteSpace(link.Icon) ? "Link" : "View details"))
+                                            </BbLink>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                        <BbSeparator Class="bb:my-4" />
+                    }
+                </div>
+            }
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

@@ -3,31 +3,36 @@
 
 @if (Items.Count > 0)
 {
-    <section class="career-section achievements-section">
-        <h2>Achievements</h2>
-        <ul class="achievements-list">
+    <BbCard Class="bb:mt-6">
+        <BbCardHeader>
+            <BbCardTitle>Achievements</BbCardTitle>
+        </BbCardHeader>
+        <BbCardContent>
             @foreach (var achievement in Items)
             {
-                <li class="achievement-entry">
+                <article class="bb:mb-6">
                     @if (!string.IsNullOrWhiteSpace(achievement.Image))
                     {
-                        <img class="career-image achievement-image" src="@achievement.Image" alt="@achievement.Title" loading="lazy" width="640" height="360" />
+                        <BbAspectRatio Ratio="1.777" Class="bb:mb-4">
+                            <img src="@achievement.Image" alt="@achievement.Title" loading="lazy" width="640" height="360" />
+                        </BbAspectRatio>
                     }
-                    <h3>
+                    <BbTypographyH4>
                         @if (!string.IsNullOrWhiteSpace(achievement.Url))
                         {
-                            <a href="@CareerLinkResolver.ResolveForPublication(achievement.Url)">@achievement.Title</a>
+                            <BbLink Href="@CareerLinkResolver.ResolveForPublication(achievement.Url)">@achievement.Title</BbLink>
                         }
                         else
                         {
                             @achievement.Title
                         }
-                    </h3>
-                    <p class="achievement-summary">@achievement.Summary</p>
-                </li>
+                    </BbTypographyH4>
+                    <BbTypographyP>@achievement.Summary</BbTypographyP>
+                </article>
+                <BbSeparator Class="bb:my-4" />
             }
-        </ul>
-    </section>
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

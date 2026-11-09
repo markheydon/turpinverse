@@ -1,9 +1,13 @@
 @if (!string.IsNullOrWhiteSpace(Text))
 {
-    <section class="profile-section about-section">
-        <h2>About</h2>
-        <div class="about-text">@Text</div>
-    </section>
+    <BbCard Class="bb:mt-6">
+        <BbCardHeader>
+            <BbCardTitle>About</BbCardTitle>
+        </BbCardHeader>
+        <BbCardContent>
+            <BbTypographyP>@Text</BbTypographyP>
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

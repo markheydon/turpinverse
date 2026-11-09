@@ -67,17 +67,6 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: src/Turpinverse.Web/package-lock.json
-
-      - name: Install npm dependencies
-        working-directory: src/Turpinverse.Web
-        run: npm ci
-
       - name: Restore
         run: dotnet restore Turpinverse.slnx
 

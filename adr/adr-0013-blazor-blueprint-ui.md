@@ -20,7 +20,7 @@ The Blazor export app used Tailwind CSS 4 (npm build), hand-maintained layout CS
 
 ## Decision
 
-Adopt **BlazorBlueprint.Components** v4 with Turpin-themed CSS tokens, `BbSidebar` shell layout, BlazorBlueprint charts for home and pipeline views, and remove the Tailwind npm build and Chart.js CDN.
+Adopt **BlazorBlueprint.Components** v4 with **ThemePresets.Standard** (via `ThemeService`), `BbSidebar` shell layout, BlazorBlueprint charts for home and pipeline views, Lucide icons from **BlazorBlueprint.Icons.Lucide**, and **no app-level CSS** (only package stylesheets `blazorblueprint.css`, `themes.css`, and `theme-init.js`).
 
 ## Consequences
 
@@ -32,9 +32,11 @@ Adopt **BlazorBlueprint.Components** v4 with Turpin-themed CSS tokens, `BbSideba
 
 ### Negative
 
-- Legacy page CSS remains until pages are incrementally migrated to `Bb*`
+- Layout spacing on bespoke pages relies on `Bb*` components and library `bb:` utilities where no styled wrapper exists
 - bUnit tests register `AddBlazorBlueprintComponents`
 
 ## Alternatives Considered
 
 Kept Tailwind-only styling — rejected for toolchain duplication and weaker component consistency.
+
+Custom Turpin-themed CSS tokens — rejected in favour of Blueprint presets (no legacy colour matching requirement).

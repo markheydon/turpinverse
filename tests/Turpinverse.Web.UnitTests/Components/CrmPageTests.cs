@@ -27,7 +27,7 @@ public class HomePageTests : BunitContext
         RegisterHomeServices(CrmTestData.CreateManifest(), valid: true);
         var cut = Render<Home>();
         Assert.Contains("Turpinverse", cut.Markup);
-        Assert.Contains("Canon Valid", cut.Markup);
+        Assert.Contains("Canon valid", cut.Markup);
         Assert.Contains("Accounts", cut.Markup);
         Assert.Contains("Cases", cut.Markup);
         Assert.Contains("Projects", cut.Markup);
@@ -46,7 +46,7 @@ public class HomePageTests : BunitContext
     {
         RegisterHomeServices(CrmTestData.CreateManifest(), valid: false);
         var cut = Render<Home>();
-        Assert.Contains("Canon Issues", cut.Markup);
+        Assert.Contains("Canon issues", cut.Markup);
     }
 
     private void RegisterHomeServices(ExportManifest manifest, bool valid)

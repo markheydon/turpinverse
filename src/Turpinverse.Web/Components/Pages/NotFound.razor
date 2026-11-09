@@ -1,5 +1,12 @@
 ﻿@page "/not-found"
 @layout MainLayout
 
-<h3>Not Found</h3>
-<p>Sorry, the content you are looking for does not exist.</p>
+<PageTitle>Not found</PageTitle>
+
+<BbEmpty Title="Not found"
+          Description="Sorry, the content you are looking for does not exist."
+          Size="EmptySize.Default">
+    <ChildContent>
+        <BbButton Href="/" Variant="ButtonVariant.Outline">Back to home</BbButton>
+    </ChildContent>
+</BbEmpty>
