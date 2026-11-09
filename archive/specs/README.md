@@ -14,7 +14,7 @@ This directory holds historical GitHub Spec Kit artefacts from when Turpinverse 
 | Voice rules | [`docs/universe-voice.md`](../../docs/universe-voice.md) |
 | Export HTTP contract | [`docs/export-api.md`](../../docs/export-api.md) |
 | Validation codes | [`docs/validation-rules.md`](../../docs/validation-rules.md) |
-| Design decisions | [`docs/decision-log.md`](../../docs/decision-log.md) |
+| Design decisions | [`adr/`](../../adr/) |
 | Engineering rules | [`docs/engineering.md`](../../docs/engineering.md) |
 | Agent orientation | [`AGENTS.md`](../../AGENTS.md) |
 

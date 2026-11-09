@@ -97,9 +97,6 @@ fi
 log "Restoring .NET solution"
 dotnet restore "${REPO_ROOT}/Turpinverse.slnx"
 
-log "Installing npm dependencies for Turpinverse.Web"
-( cd "${REPO_ROOT}/src/Turpinverse.Web" && npm ci )
-
 log "Pre-fetching Hugo Go modules"
 ( cd "${REPO_ROOT}/site" && go mod download )
 
