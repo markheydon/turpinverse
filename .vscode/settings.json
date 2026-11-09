@@ -1,0 +1,69 @@
+{
+  "editor.formatOnSave": true,
+  "editor.rulers": [
+    120
+  ],
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+  },
+  "dotnet.defaultSolution": "Turpinverse.slnx",
+  "dotnet.formatting.organizeImportsOnFormat": true,
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "canon/*.json"
+      ],
+      "url": "canon/schema/canon-schema.json"
+    }
+  ],
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow": "/.github/workflows/*.{yml,yaml}",
+    "https://json.schemastore.org/github-issue-forms": "/.github/ISSUE_TEMPLATE/*.{yml,yaml}"
+  },
+  "powershell.scriptAnalysis.enable": true,
+  "powershell.scriptAnalysis.settingsPath": "PSScriptAnalyzerSettings.psd1",
+  "powershell.integratedConsole.showOnStartup": false,
+  "shellcheck.enable": true,
+  "shellcheck.run": "onSave",
+  "tailwindCSS.includeLanguages": {
+    "razor": "html",
+    "aspnetcorerazor": "html"
+  },
+  "tailwindCSS.experimental.configFile": "src/Turpinverse.Web/Styles/app.css",
+  "tailwindCSS.files.exclude": [
+    "**/wwwroot/css/app.min.css"
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bin": true,
+    "**/obj": true,
+    "site/public": true,
+    "site/resources": true,
+    "site/_vendor": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/bin/**": true,
+    "**/obj/**": true,
+    "site/public/**": true,
+    "site/resources/**": true
+  },
+  "cSpell.words": [
+    "Blazor",
+    "Turpinverse"
+  ]
+}

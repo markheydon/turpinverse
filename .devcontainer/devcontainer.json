@@ -1,11 +1,14 @@
 {
     "name": "Turpinverse",
-    "image": "mcr.microsoft.com/devcontainers/base:3-ubuntu24.04",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "username": "vscode"
+        },
         "ghcr.io/microsoft/aspire-devcontainer-feature/aspire:3": {},
-        "ghcr.io/devcontainers/features/azure-cli:1": {},
-        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-        "ghcr.io/devcontainers/features/node:2": {},
+        "ghcr.io/devcontainers/features/node:2": {
+            "version": "22"
+        },
         "ghcr.io/devcontainers/features/github-cli:1": {
             "version": "2"
         },
@@ -13,28 +16,74 @@
             "version": "10.0"
         },
         "ghcr.io/devcontainers/features/powershell:2": {},
-        "ghcr.io/stu-bell/devcontainer-features/cursor-cli:0": {},
-        "ghcr.io/markheydon/devcontainer-features/copilot-likes:1": {}
+        "ghcr.io/devcontainers/features/go:1": {
+            "version": "1.26.5"
+        },
+        "ghcr.io/stu-bell/devcontainer-features/cursor-cli:0": {}
     },
-    "onCreateCommand": "sudo apt-get update && sudo apt-get install -y libnss3-tools",
+    "hostRequirements": {
+        "cpus": 2,
+        "memory": "8gb",
+        "storage": "32gb"
+    },
+    "onCreateCommand": "sudo apt-get update && sudo apt-get install -y libnss3-tools shellcheck",
     "containerEnv": {
         "SSL_CERT_DIR": "/home/vscode/.aspnet/dev-certs/trust:/usr/lib/ssl/certs",
         "ASPNETCORE_ENVIRONMENT": "Development"
     },
     "postStartCommand": "aspire certs trust --non-interactive",
-    "postCreateCommand": "dotnet restore Turpinverse.slnx",
-    "updateContentCommand": "dotnet restore Turpinverse.slnx",
-    "hostRequirements": {
-        "cpus": 4,
-        "memory": "8gb",
-        "storage": "32gb"
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    "updateContentCommand": "dotnet restore Turpinverse.slnx && npm ci --prefix src/Turpinverse.Web",
+    "forwardPorts": [
+        1313,
+        5051,
+        7154,
+        8080,
+        15183,
+        17180
+    ],
+    "portsAttributes": {
+        "1313": {
+            "label": "Hugo (dev server)",
+            "onAutoForward": "notify"
+        },
+        "8080": {
+            "label": "Hugo (nginx preview)",
+            "onAutoForward": "silent"
+        },
+        "5051": {
+            "label": "Blazor (HTTP)",
+            "onAutoForward": "notify"
+        },
+        "7154": {
+            "label": "Blazor (HTTPS)",
+            "onAutoForward": "silent"
+        },
+        "15183": {
+            "label": "AppHost (HTTP)",
+            "onAutoForward": "notify"
+        },
+        "17180": {
+            "label": "AppHost (HTTPS)",
+            "onAutoForward": "silent"
+        }
+    },
+    "otherPortsAttributes": {
+        "onAutoForward": "notify"
     },
     "customizations": {
         "vscode": {
             "extensions": [
+                "ms-dotnettools.csdevkit",
                 "microsoft-aspire.aspire-vscode",
-                "GitHub.copilot-chat",
-                "ms-dotnettools.csdevkit"
+                "ms-vscode.powershell",
+                "editorconfig.editorconfig",
+                "timonwong.shellcheck",
+                "github.vscode-github-actions",
+                "redhat.vscode-yaml",
+                "bradlc.vscode-tailwindcss",
+                "ms-playwright.playwright",
+                "streetsidesoftware.code-spell-checker"
             ]
         }
     }

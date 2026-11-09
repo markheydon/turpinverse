@@ -1,0 +1,84 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build: solution",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "Turpinverse.slnx", "--configuration", "Debug"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "test: canon validation",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "tests/Turpinverse.Core.UnitTests",
+        "--filter",
+        "Category=CanonValidation",
+        "--no-restore"
+      ],
+      "group": "test",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "format: verify",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "format",
+        "Turpinverse.slnx",
+        "--verify-no-changes",
+        "--verbosity",
+        "minimal"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "tailwind: build css",
+      "type": "shell",
+      "command": "npm run build:css",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Turpinverse.Web"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "hugo: generate content",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/Turpinverse.Tools.GenerateHugoContent",
+        "--configuration",
+        "Debug"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "hugo: build site",
+      "type": "shell",
+      "command": "hugo --minify",
+      "options": {
+        "cwd": "${workspaceFolder}/site"
+      },
+      "dependsOn": ["hugo: generate content"],
+      "problemMatcher": []
+    },
+    {
+      "label": "lint: scripts (PSScriptAnalyzer)",
+      "type": "shell",
+      "command": "pwsh -NoProfile -Command \"Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1; ./scripts/Test-ScriptConventions.ps1\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

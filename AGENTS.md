@@ -33,7 +33,9 @@ When changing canon validation, export, or Hugo generation, add or update bounda
 
 The public reference site lives under [`site/`](site/). Content and `site/data/*.json` are **generated** from canon — do not hand-edit generated markdown or data files except by re-running the generator.
 
-**Local preview (no Hugo install required)** — from the repo root:
+**Dev container** installs Go, Hugo Extended, and Node (see `.devcontainer/post-create.sh`) — use `hugo` directly under `site/` after running the content generator, same as CI.
+
+**Bare WSL/Windows (no Hugo install)** — from the repo root:
 
 ```bash
 ./scripts/invoke-hugo-site.sh serve    # dev server + live reload → http://localhost:1313

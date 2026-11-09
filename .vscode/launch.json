@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "AppHost (Aspire)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Turpinverse.AppHost/Turpinverse.AppHost.csproj"
+    },
+    {
+      "name": "Blazor Web (no Aspire)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Turpinverse.Web/Turpinverse.Web.csproj"
+    }
+  ]
+}
