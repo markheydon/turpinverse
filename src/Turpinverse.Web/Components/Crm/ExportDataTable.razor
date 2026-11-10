@@ -1,9 +1,9 @@
-@if (TableRows.Count > 0)
+@if (tableRows.Count > 0)
 {
     <BbScrollArea Orientation="ScrollAreaOrientation.Horizontal" Type="ScrollAreaType.Auto" Class="bb:w-full">
     <BbDataTable TData="ExportDataRow"
                  Class="bb:min-w-full"
-                 Data="@TableRows"
+                 Data="@tableRows"
                  ShowToolbar="true"
                  ShowPagination="true"
                  InitialPageSize="20"
@@ -54,10 +54,19 @@ else if (!Loading)
     [Parameter] public string? RowLinkIdColumn { get; set; }
 
     private IReadOnlyList<string> headers = [];
-    private IReadOnlyList<ExportDataRow> TableRows => Rows.Select(row => new ExportDataRow(row)).ToList();
+    private IReadOnlyList<ExportDataRow> tableRows = [];
+    private IReadOnlyList<IReadOnlyDictionary<string, string>>? lastRows;
 
-    protected override void OnParametersSet() =>
+    protected override void OnParametersSet()
+    {
         headers = ComputeHeaders();
+
+        if (!ReferenceEquals(Rows, lastRows))
+        {
+            lastRows = Rows;
+            tableRows = Rows.Select(row => new ExportDataRow(row)).ToList();
+        }
+    }
 
     private IReadOnlyList<string> ComputeHeaders()
     {

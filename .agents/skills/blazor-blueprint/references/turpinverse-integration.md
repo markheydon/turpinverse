@@ -45,6 +45,12 @@ No app Tailwind `css/app.css` build; Turpinverse markup uses `bb:` utilities. Ic
 
 Root `<Routes @rendermode="InteractiveServer" />`.
 
+## Blazor Server reconnect (host page only)
+
+Interactive Server needs static markup in `Components/App.razor` with `id="components-reconnect-modal"` so the framework drives BlazorBlueprint’s themed overlay instead of injecting its own unstyled dialog. Copy the block from the [BlazorBlueprint reconnection guide](https://github.com/blazorblueprintui/ui/blob/main/demos/BlazorBlueprint.Demo.Shared/CodeExamples/Guides/Reconnection/markup.txt) (also in `BlazorBlueprint.Demo.Server/App.razor`). It **cannot** be a Razor component: the circuit may already be down when the overlay appears.
+
+Also keep `#blazor-error-ui` on the host page (`App.razor`) with `wwwroot/styles/host.css` for the fixed error bar (framework toggles `display`).
+
 ## Layout
 
 `Components/Layout/MainLayout.razor`:
