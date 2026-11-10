@@ -16,7 +16,7 @@
     <Actions>
         @if (validationResult is not null)
         {
-            <BbBadge Variant="@(validationResult.Valid ? BadgeVariant.Secondary : BadgeVariant.Destructive)">
+            <BbBadge Variant="@(validationResult.Valid ? BadgeVariant.Success : BadgeVariant.Destructive)">
                 <LucideIcon Name="@(validationResult.Valid ? "circle-check" : "circle-alert")" Size="16" />
                 @(validationResult.Valid ? "Canon valid" : "Canon issues")
             </BbBadge>

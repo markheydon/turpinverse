@@ -16,12 +16,7 @@ builder.Services.AddTurpinverseWeb(builder.Configuration);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddBlazorBlueprintComponents(configureTheme: options =>
-{
-    options.DefaultPreset = ThemePresets.Standard;
-    options.PersistToLocalStorage = true;
-    options.DetectSystemPreference = true;
-});
+builder.Services.AddBlazorBlueprintComponents();
 
 var app = builder.Build();
 

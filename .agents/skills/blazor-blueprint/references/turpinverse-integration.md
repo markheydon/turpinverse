@@ -2,7 +2,7 @@
 
 Ground truth in the repo; prefer reading these files over memory.
 
-**Baseline:** BlazorBlueprint **Scenario B** (no app Tailwind build): `ThemePresets.Standard` in `Program.cs`, package `blazorblueprint.css`, and `theme-init.js`. Pages use **`Bb*`** components; library `bb:` utilities are acceptable for layout when no styled wrapper exists.
+**Baseline:** Align with **`dotnet new blazorblueprint`** theming: app `styles/themes/theme.css` (imports a doc preset), package `blazorblueprint.css`, `themes.css` (after your theme, for `BbThemeSwitcher`), and blocking `theme-init.js`. `AddBlazorBlueprintComponents()` with no custom `configureTheme`. Pages use **`Bb*`** components; library `bb:` utilities are acceptable for layout when no styled wrapper exists.
 
 ## Packages (central versions)
 
@@ -17,19 +17,31 @@ Do not add icon packs or chart libraries unless the user explicitly requests pac
 
 `src/Turpinverse.Web/Program.cs`:
 
-- `builder.Services.AddBlazorBlueprintComponents(configureTheme: ...)` once with `DefaultPreset = ThemePresets.Standard`, `PersistToLocalStorage`, `DetectSystemPreference`.
+- `builder.Services.AddBlazorBlueprintComponents()` once.
 - Blazor Web App uses Interactive Server (`AddInteractiveServerComponents` / `AddInteractiveServerRenderMode`).
+
+## Theme files and presets
+
+| Path | Role |
+|------|------|
+| `wwwroot/styles/themes/theme.css` | Only theme link from `App.razor`; `@import` active preset |
+| `wwwroot/styles/themes/presets/forest.css` | Current brand (Forest doc preset) |
+| `wwwroot/styles/themes/presets/default.css` | Template baseline / merge checklist for new presets |
+| `wwwroot/styles/themes/presets/README.md` | How to swap or add Ocean, Midnight, etc. |
+
+Swap preset: change the `@import` in `theme.css` (not `App.razor`). See [Blazor Blueprint Theming](https://blazorblueprintui.com/docs/theming).
 
 ## Static assets (`Components/App.razor`)
 
 Order:
 
-1. Favicon
+1. Favicon (optional; Turpinverse uses `favicon.png`)
 2. `_content/BlazorBlueprint.Components/blazorblueprint.css`
 3. `_content/BlazorBlueprint.Components/css/themes.css`
-4. Blocking `_content/BlazorBlueprint.Components/js/theme-init.js` in `<head>` after stylesheets
+4. `styles/themes/theme.css` **after** `themes.css` so doc presets (Forest) override default `data-base-color` zinc greys; `BbThemeSwitcher` primary picks still apply via `data-primary-color`
+5. Blocking `_content/BlazorBlueprint.Components/js/theme-init.js` in `<head>` after stylesheets
 
-No `wwwroot` CSS and no Tailwind build (unlike the sample `dotnet new blazorblueprint` template, which adds `styles/themes/default.css` and built `css/app.css`). Icons on `ExportDatasets` use Lucide names directly.
+No app Tailwind `css/app.css` build; Turpinverse markup uses `bb:` utilities. Icons on export pages use Lucide names directly.
 
 Root `<Routes @rendermode="InteractiveServer" />`.
 
@@ -39,7 +51,7 @@ Root `<Routes @rendermode="InteractiveServer" />`.
 
 - `BbSidebarProvider`, `AppSidebar`, `BbSidebarInset` (header + content)
 - `BbToastProvider`, `BbDialogProvider`, `BbPortalHost`
-- `BbDarkModeToggle` in header
+- `BbThemeSwitcher` and `BbDarkModeToggle` in header
 
 ## Imports
 
