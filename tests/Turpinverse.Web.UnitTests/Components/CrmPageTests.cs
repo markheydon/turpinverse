@@ -168,7 +168,7 @@ public class DealsPageTests : CrmEntityPageTestBase<Deals>
         Assert.Contains("Deal Name", cut.Markup);
         Assert.Contains("Contact ID", cut.Markup);
         Assert.Contains("Stakeholder Contact IDs", cut.Markup);
-        Assert.Contains("data-slot=\"bar-chart\"", cut.Markup);
+        Assert.Contains("data-slot=\"funnel-chart\"", cut.Markup);
     }
 }
 

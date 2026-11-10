@@ -9,11 +9,12 @@
         }
         else
         {
-            <BbPieChart Data="@ChartRows" Height="320px" Title="Records by dataset">
+            <BbBarChart Data="@ChartRows" Horizontal="true" Height="320px" Title="Records by dataset">
                 <BbChartTooltip />
-                <BbChartLegend />
-                <BbPie DataKey="Count" NameKey="Name" InnerRadius="45" ShowLabels="true" LabelFormatter="{b}: {c}" />
-            </BbPieChart>
+                <BbXAxis DataKey="Name" />
+                <BbYAxis />
+                <BbBar DataKey="Count" FillKey="Fill" BorderRadius="4" ShowLabel="true" LabelPosition="LabelPosition.Right" />
+            </BbBarChart>
         }
     </BbCardContent>
 </BbCard>
@@ -21,10 +22,21 @@
 @code {
     [Parameter] public Dictionary<string, int>? Counts { get; set; }
 
+    private static readonly string[] ThemeFills =
+    [
+        "var(--chart-1)",
+        "var(--chart-2)",
+        "var(--chart-3)",
+        "var(--chart-4)",
+        "var(--chart-5)",
+    ];
+
     private IReadOnlyList<SummaryRow> ChartRows =>
         Counts is null
             ? []
-            : Counts.Select(pair => new SummaryRow(pair.Key, pair.Value)).ToList();
+            : Counts
+                .Select((pair, index) => new SummaryRow(pair.Key, pair.Value, ThemeFills[index % ThemeFills.Length]))
+                .ToList();
 
-    private sealed record SummaryRow(string Name, int Count);
+    private sealed record SummaryRow(string Name, int Count, string Fill);
 }

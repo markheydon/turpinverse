@@ -5,16 +5,20 @@
     <BbCardContent>
         @if (ChartRows.Count == 0)
         {
-            <BbTypographyMuted>No deals to chart.</BbTypographyMuted>
+            <BbTypographyMuted>No deals to chart in the pipeline funnel.</BbTypographyMuted>
         }
         else
         {
-            <BbBarChart Data="@ChartRows" Height="300px" Title="Deals by stage">
+            <BbFunnelChart Data="@ChartRows" Height="300px" Title="Deals by stage">
                 <BbChartTooltip />
-                <BbXAxis DataKey="Stage" />
-                <BbYAxis />
-                <BbBar DataKey="Count" />
-            </BbBarChart>
+                <BbFunnel DataKey="Count" NameKey="Stage" Sort="FunnelSort.None" LabelFormatter="{b}: {c}" />
+            </BbFunnelChart>
+        }
+        @if (ClosedLostCount > 0)
+        {
+            <BbTypographyMuted Class="bb:mt-3">
+                Closed lost: @ClosedLostCount deal@(ClosedLostCount == 1 ? "" : "s") — outcomes, not a pipeline stage.
+            </BbTypographyMuted>
         }
     </BbCardContent>
 </BbCard>
@@ -22,18 +26,14 @@
 @code {
     [Parameter] public IReadOnlyList<DealPreview>? Deals { get; set; }
 
-    private IReadOnlyList<StageRow> ChartRows =>
-        Deals is null
-            ? []
-            : Deals.GroupBy(deal => deal.Stage)
-                .Select(group => new StageRow(group.Key, group.Count()))
-                .OrderBy(row => row.Stage, StringComparer.OrdinalIgnoreCase)
-                .ToList();
+    private IReadOnlyList<PipelineStageCount> ChartRows =>
+        DealPipelineChartData.BuildFunnelRows(Deals?.Select(deal => deal.Stage) ?? []);
+
+    private int ClosedLostCount =>
+        DealPipelineChartData.CountClosedLost(Deals?.Select(deal => deal.Stage) ?? []);
 
     public class DealPreview
     {
         public string Stage { get; set; } = string.Empty;
     }
-
-    private sealed record StageRow(string Stage, int Count);
 }
