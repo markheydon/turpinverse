@@ -1,6 +1,5 @@
 using Bunit;
 using Turpinverse.Web.Components.Charts;
-using Turpinverse.Web.UnitTests;
 
 namespace Turpinverse.Web.UnitTests.Components;
 

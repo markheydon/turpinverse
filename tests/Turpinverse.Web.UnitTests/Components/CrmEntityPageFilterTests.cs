@@ -4,7 +4,6 @@ using NSubstitute;
 using Turpinverse.Core.Abstractions;
 using Turpinverse.Core.Export;
 using Turpinverse.Web.Components.Crm;
-using Turpinverse.Web.UnitTests;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
