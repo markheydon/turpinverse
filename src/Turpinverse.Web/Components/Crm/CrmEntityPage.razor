@@ -3,76 +3,80 @@
 @using Turpinverse.Core.Abstractions
 @using Turpinverse.Core.Export
 
-<div class="page-container">
-  <div class="page-header">
-    <div class="page-header-title">
-      <LucideIcon Name="@definition.Icon" />
-      <div>
-        <h1>@definition.Title</h1>
-        @if (rowCount is not null)
+<BbSectionHeader Title="@definition.Title"
+                 Description="@RecordCountDescription"
+                 HeadingLevel="1"
+                 Separator="true">
+    <Actions>
+        <BbButton Variant="ButtonVariant.Default" OnClick="DownloadCsv" Disabled="@(loading || downloadDisabled)">
+            <LucideIcon Name="download" Size="18" />
+            Download CSV
+        </BbButton>
+    </Actions>
+</BbSectionHeader>
+
+@if (FacetColumns is { Count: > 0 })
+{
+    <div class="bb:mt-4 bb:flex bb:flex-wrap bb:gap-4" role="group" aria-label="Filters">
+        @foreach (var facet in FacetColumns)
         {
-          <p class="record-count">@rowCount records</p>
+            var facetName = facet;
+            <BbFormFieldNativeSelect TValue="string"
+                                     Label="@FormatFacetLabel(facetName)"
+                                     Value="@GetFacetValue(facetName)"
+                                     ValueChanged="value => OnFacetValueChangedAsync(facetName, value)">
+                <option value="">All</option>
+                @foreach (var option in GetFacetOptions(facetName))
+                {
+                    <option value="@option">@option</option>
+                }
+            </BbFormFieldNativeSelect>
         }
-      </div>
     </div>
-    <button class="download-btn" @onclick="DownloadCsv" disabled="@(loading || downloadDisabled)">
-      <LucideIcon Name="download" />
-      Download CSV
-    </button>
-  </div>
+}
 
-  @if (FacetColumns is { Count: > 0 })
-  {
-    <div class="facet-controls">
-      @foreach (var facet in FacetColumns)
-      {
-        <label class="facet-control">
-          <span class="facet-label">@FormatFacetLabel(facet)</span>
-          <select class="facet-select" value="@GetFacetValue(facet)" @onchange="e => OnFacetChanged(facet, e)">
-            <option value="">All</option>
-            @foreach (var option in GetFacetOptions(facet))
-            {
-              <option value="@option">@option</option>
-            }
-          </select>
-        </label>
-      }
+@if (ShowPipelineChart && deals is not null)
+{
+    <div class="bb:mt-6">
+        <PipelineChart Deals="deals" />
     </div>
-  }
+}
 
-  @if (ShowPipelineChart && deals is not null)
-  {
-    <div class="charts-section charts-section-single">
-      <PipelineChart Deals="deals" CanvasId="pipeline-chart" />
+@if (ExportHelp is not null)
+{
+    <BbAlert Class="bb:mt-6" Variant="AlertVariant.Default">
+        @ExportHelp
+    </BbAlert>
+}
+
+@if (loading)
+{
+    <div class="bb:mt-6 bb:flex bb:items-center bb:gap-2">
+        <BbSpinner />
+        <BbTypographyMuted>Loading @GetDisplayName().ToLowerInvariant()...</BbTypographyMuted>
     </div>
-  }
-
-  @if (ExportHelp is not null)
-  {
-    <div class="export-help-section">
-      @ExportHelp
+}
+else if (loadError is not null)
+{
+    <BbAlert Class="bb:mt-6" Variant="AlertVariant.Danger" Title="Could not load data">
+        @loadError
+    </BbAlert>
+}
+else if (rows.Count == 0 && filter is not null)
+{
+    <BbEmpty Class="bb:mt-6"
+             Title="Nothing matched"
+             Description="Nothing matched the current filters."
+             Size="EmptySize.Small" />
+}
+else
+{
+    <div class="bb:mt-6">
+        <ExportDataTable Rows="rows" Columns="Columns" Loading="loading"
+                         RowLinkColumn="@RowLinkColumn" RowLinkPathPrefix="@RowLinkPathPrefix"
+                         RowLinkIdColumn="@RowLinkIdColumn" />
     </div>
-  }
-
-  @if (loading)
-  {
-    <p>Loading @GetDisplayName().ToLowerInvariant()...</p>
-  }
-  else if (loadError is not null)
-  {
-    <p class="error-message">@loadError</p>
-  }
-  else if (rows.Count == 0 && filter is not null)
-  {
-    <p class="empty-filter-state">Nothing matched the current filters.</p>
-  }
-  else
-  {
-    <DataTable Rows="rows" Columns="Columns" Loading="loading"
-               RowLinkColumn="@RowLinkColumn" RowLinkPathPrefix="@RowLinkPathPrefix"
-               RowLinkIdColumn="@RowLinkIdColumn" />
-  }
-</div>
+}
 
 @code {
     [Parameter, EditorRequired] public string DatasetType { get; set; } = string.Empty;
@@ -94,6 +98,9 @@
     private ExportFilter? filter;
     private readonly Dictionary<string, string> facetValues = new(StringComparer.OrdinalIgnoreCase);
     private bool downloadDisabled;
+
+    private string? RecordCountDescription =>
+        rowCount is null ? null : $"{rowCount} records";
 
     protected override void OnParametersSet()
     {
@@ -123,9 +130,8 @@
     private string GetDisplayName() =>
         string.IsNullOrEmpty(definition.Title) ? DatasetType : definition.Title;
 
-    private async Task OnFacetChanged(string facet, ChangeEventArgs args)
+    private async Task OnFacetValueChangedAsync(string facet, string? value)
     {
-        var value = args.Value?.ToString() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(value))
         {
             facetValues.Remove(facet);

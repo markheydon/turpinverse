@@ -1,20 +1,22 @@
+using BlazorBlueprint.Components;
 using Bunit;
 using Turpinverse.Core.Export;
 using Turpinverse.Web.Components.Layout;
 
 namespace Turpinverse.Web.UnitTests.Components;
 
-public class NavMenuTests : BunitContext
+public class AppSidebarTests : BunitContext
 {
-    public NavMenuTests()
+    public AppSidebarTests()
     {
         JSInterop.Mode = JSRuntimeMode.Loose;
+        Services.RegisterBlueprint();
     }
 
     [Fact]
-    public void NavMenu_RendersDirectoryItemsBeforeGroupedSections()
+    public void AppSidebar_RendersDirectoryItemsBeforeGroupedSections()
     {
-        var cut = Render<NavMenu>();
+        var cut = Render<BbSidebarProvider>(provider => provider.AddChildContent<AppSidebar>());
         var markup = cut.Markup;
 
         var contactsIndex = markup.IndexOf("Contacts", StringComparison.Ordinal);
@@ -35,14 +37,14 @@ public class NavMenuTests : BunitContext
     }
 
     [Fact]
-    public void NavMenu_GroupedItemsFollowExportDatasetOrder()
+    public void AppSidebar_GroupedItemsFollowExportDatasetOrder()
     {
         var expectedOrder = ExportDatasets.All
             .Where(dataset => dataset.Group is not null)
             .Select(dataset => dataset.Title)
             .ToArray();
 
-        var cut = Render<NavMenu>();
+        var cut = Render<BbSidebarProvider>(provider => provider.AddChildContent<AppSidebar>());
         var positions = expectedOrder
             .Select(title => cut.Markup.IndexOf(title, StringComparison.Ordinal))
             .ToArray();

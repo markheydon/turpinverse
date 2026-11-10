@@ -3,39 +3,42 @@
 
 @if (Items.Count > 0)
 {
-    <section class="career-section education-section">
-        <h2>Education</h2>
-        <ul class="education-list">
+    <BbCard Class="bb:mt-6">
+        <BbCardHeader>
+            <BbCardTitle>Education</BbCardTitle>
+        </BbCardHeader>
+        <BbCardContent>
             @foreach (var entry in Items)
             {
-                <li class="education-entry">
-                    <h3>@entry.Title</h3>
-                    <p class="institution">@entry.InstitutionName</p>
+                <div class="bb:mb-6">
+                    <BbTypographyH4>@entry.Title</BbTypographyH4>
+                    <BbTypographyMuted>@entry.InstitutionName</BbTypographyMuted>
                     @{
                         var dateRange = FormatDateRange(entry);
                     }
                     @if (!string.IsNullOrWhiteSpace(dateRange))
                     {
-                        <p class="date-range">@dateRange</p>
+                        <BbTypographyMuted>@dateRange</BbTypographyMuted>
                     }
                     @if (!string.IsNullOrWhiteSpace(entry.Grade))
                     {
-                        <p class="grade">@entry.Grade</p>
+                        <BbTypographyP>@entry.Grade</BbTypographyP>
                     }
                     @if (!string.IsNullOrWhiteSpace(entry.Description))
                     {
-                        <p class="education-description">@entry.Description</p>
+                        <BbTypographyP>@entry.Description</BbTypographyP>
                     }
                     @if (entry.FeaturedLink is { } link)
                     {
-                        <p>
-                            <a href="@CareerLinkResolver.ResolveForPublication(link.Url)">@(link.Name ?? link.Label ?? "Learn more")</a>
-                        </p>
+                        <BbButton Variant="ButtonVariant.Link" Href="@CareerLinkResolver.ResolveForPublication(link.Url)">
+                            @(link.Name ?? link.Label ?? "Learn more")
+                        </BbButton>
                     }
-                </li>
+                </div>
+                <BbSeparator Class="bb:my-4" />
             }
-        </ul>
-    </section>
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

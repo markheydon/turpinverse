@@ -33,7 +33,7 @@
     },
     "postStartCommand": "aspire certs trust --non-interactive",
     "postCreateCommand": "bash .devcontainer/post-create.sh",
-    "updateContentCommand": "dotnet restore Turpinverse.slnx && npm ci --prefix src/Turpinverse.Web",
+    "updateContentCommand": "dotnet restore Turpinverse.slnx",
     "forwardPorts": [
         1313,
         5051,

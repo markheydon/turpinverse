@@ -1,42 +1,39 @@
-@inject IJSRuntime JS
-
-<div class="chart-container">
-    <h3>Deal Pipeline</h3>
-    <canvas @ref="canvasRef" id="@CanvasId"></canvas>
-</div>
+<BbCard>
+    <BbCardHeader>
+        <BbCardTitle>Deal Pipeline</BbCardTitle>
+    </BbCardHeader>
+    <BbCardContent>
+        @if (ChartRows.Count == 0)
+        {
+            <BbTypographyMuted>No deals to chart in the pipeline funnel.</BbTypographyMuted>
+        }
+        else
+        {
+            <BbFunnelChart Data="@ChartRows" Height="300px" Title="Deals by stage">
+                <BbChartTooltip />
+                <BbFunnel DataKey="Count" NameKey="Stage" Sort="FunnelSort.None" LabelFormatter="{b}: {c}" />
+            </BbFunnelChart>
+        }
+        @if (ClosedLostCount > 0)
+        {
+            <BbTypographyMuted Class="bb:mt-3">
+                Closed lost: @ClosedLostCount deal@(ClosedLostCount == 1 ? "" : "s") — outcomes, not a pipeline stage.
+            </BbTypographyMuted>
+        }
+    </BbCardContent>
+</BbCard>
 
 @code {
     [Parameter] public IReadOnlyList<DealPreview>? Deals { get; set; }
-    [Parameter] public string CanvasId { get; set; } = "pipeline-chart";
 
-    private ElementReference canvasRef;
-    private string? lastRenderedSignature;
+    private IReadOnlyList<PipelineStageCount> ChartRows =>
+        DealPipelineChartData.BuildFunnelRows(Deals?.Select(deal => deal.Stage) ?? []);
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (Deals is null)
-        {
-            return;
-        }
-
-        var signature = string.Join('|', Deals.Select(deal => deal.Stage));
-        if (signature == lastRenderedSignature)
-        {
-            return;
-        }
-
-        lastRenderedSignature = signature;
-        var stages = Deals.GroupBy(deal => deal.Stage)
-            .Select(group => new { stage = group.Key, count = group.Count() })
-            .ToList();
-        await JS.InvokeVoidAsync("chartInterop.renderBarChart", CanvasId,
-            stages.Select(stage => stage.stage).ToArray(),
-            stages.Select(stage => stage.count).ToArray());
-    }
+    private int ClosedLostCount =>
+        DealPipelineChartData.CountClosedLost(Deals?.Select(deal => deal.Stage) ?? []);
 
     public class DealPreview
     {
         public string Stage { get; set; } = string.Empty;
     }
 }
-

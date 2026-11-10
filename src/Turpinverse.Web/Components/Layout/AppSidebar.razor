@@ -1,0 +1,55 @@
+@using Turpinverse.Core.Export
+
+<BbSidebar>
+    <BbSidebarHeader>
+        <BbSidebarMenu>
+            <BbSidebarMenuItem>
+                <BbSidebarMenuButton Href="/" Match="NavLinkMatch.All" Size="SidebarMenuButtonSize.Large">
+                    <LucideIcon Name="house" Size="18" />
+                    <span class="bb:font-semibold">Turpinverse</span>
+                </BbSidebarMenuButton>
+            </BbSidebarMenuItem>
+        </BbSidebarMenu>
+    </BbSidebarHeader>
+
+    <BbSidebarContent>
+        <BbSidebarGroup>
+            <BbSidebarGroupLabel>Directory</BbSidebarGroupLabel>
+            <BbSidebarMenu>
+                @foreach (var dataset in ExportDatasets.All.Where(d => d.Group is null))
+                {
+                    <BbSidebarMenuItem>
+                        <BbSidebarMenuButton Href="@dataset.Route" Match="NavLinkMatch.Prefix" Tooltip="@dataset.Title">
+                            <LucideIcon Name="@dataset.Icon" Size="18" />
+                            <span>@dataset.Title</span>
+                        </BbSidebarMenuButton>
+                    </BbSidebarMenuItem>
+                }
+            </BbSidebarMenu>
+        </BbSidebarGroup>
+
+        @foreach (var group in new[] { ExportDatasets.CrmGroup, ExportDatasets.FinanceGroup })
+        {
+            <BbSidebarGroup>
+                <BbSidebarGroupLabel>@group</BbSidebarGroupLabel>
+                <BbSidebarMenu>
+                    @foreach (var dataset in ExportDatasets.All.Where(d => d.Group == group))
+                    {
+                        <BbSidebarMenuItem>
+                            <BbSidebarMenuButton Href="@dataset.Route" Match="NavLinkMatch.Prefix" Tooltip="@dataset.Title">
+                                <LucideIcon Name="@dataset.Icon" Size="18" />
+                                <span>@dataset.Title</span>
+                            </BbSidebarMenuButton>
+                        </BbSidebarMenuItem>
+                    }
+                </BbSidebarMenu>
+            </BbSidebarGroup>
+        }
+    </BbSidebarContent>
+
+    <BbSidebarFooter>
+        <BbTypographyMuted Class="bb:px-2 bb:text-xs">Fictional CRM demo data for export</BbTypographyMuted>
+    </BbSidebarFooter>
+
+    <BbSidebarRail />
+</BbSidebar>

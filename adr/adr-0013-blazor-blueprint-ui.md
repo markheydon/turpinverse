@@ -20,7 +20,7 @@ The Blazor export app used Tailwind CSS 4 (npm build), hand-maintained layout CS
 
 ## Decision
 
-Adopt **BlazorBlueprint.Components** v4 with Turpin-themed CSS tokens, `BbSidebar` shell layout, BlazorBlueprint charts for home and pipeline views, and remove the Tailwind npm build and Chart.js CDN.
+Adopt **BlazorBlueprint.Components** v4 with **`dotnet new blazorblueprint`-style theming**: app `styles/themes/theme.css` (doc presets such as Forest), package stylesheets `blazorblueprint.css`, `themes.css`, and `theme-init.js`; `AddBlazorBlueprintComponents()`; `BbThemeSwitcher` and `BbDarkModeToggle`. `BbSidebar` shell layout, BlazorBlueprint charts for home and pipeline views, Lucide icons from **BlazorBlueprint.Icons.Lucide**. No npm Tailwind build in the export app (layout uses `bb:` utilities).
 
 ## Consequences
 
@@ -32,9 +32,15 @@ Adopt **BlazorBlueprint.Components** v4 with Turpin-themed CSS tokens, `BbSideba
 
 ### Negative
 
-- Legacy page CSS remains until pages are incrementally migrated to `Bb*`
+- Layout spacing on bespoke pages relies on `Bb*` components and library `bb:` utilities where no styled wrapper exists
 - bUnit tests register `AddBlazorBlueprintComponents`
 
 ## Alternatives Considered
 
 Kept Tailwind-only styling — rejected for toolchain duplication and weaker component consistency.
+
+Custom Turpin-themed CSS tokens — rejected in favour of official Blueprint doc presets and `ThemeService` (no legacy colour matching requirement).
+
+## Revision (2026-11-09)
+
+Supersedes the earlier “no app-level CSS” wording: the export app now ships theme variable files under `wwwroot/styles/themes/` per [Blazor Blueprint Theming](https://blazorblueprintui.com/docs/theming), not bespoke Turpin colour invention.

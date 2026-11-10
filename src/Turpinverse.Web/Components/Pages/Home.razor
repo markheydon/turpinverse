@@ -9,59 +9,69 @@
 
 <PageTitle>Turpinverse</PageTitle>
 
-<div class="page-container">
-    <div class="page-header">
-        <div class="page-header-title">
-            <div>
-                <h1>Turpinverse</h1>
-                <p class="record-count">Browse canon data mapped to CRM records</p>
-            </div>
-        </div>
+<BbSectionHeader Title="Turpinverse"
+                 Description="Browse canon data mapped to CRM records"
+                 HeadingLevel="1"
+                 Separator="true">
+    <Actions>
         @if (validationResult is not null)
         {
-            <span class="validation-badge @(validationResult.Valid ? "valid" : "invalid")">
-                <LucideIcon Name="@(validationResult.Valid ? "check-circle" : "alert-circle")" />
-                @(validationResult.Valid ? "Canon Valid" : "Canon Issues")
-            </span>
+            <BbBadge Variant="@(validationResult.Valid ? BadgeVariant.Success : BadgeVariant.Destructive)">
+                <LucideIcon Name="@(validationResult.Valid ? "circle-check" : "circle-alert")" Size="16" />
+                @(validationResult.Valid ? "Canon valid" : "Canon issues")
+            </BbBadge>
+        }
+    </Actions>
+</BbSectionHeader>
+
+@if (loading)
+{
+    <div class="bb:mt-6 bb:flex bb:items-center bb:gap-2">
+        <BbSpinner />
+        <BbTypographyMuted>Loading overview...</BbTypographyMuted>
+    </div>
+}
+else if (loadError is not null)
+{
+    <BbAlert Class="bb:mt-6" Variant="AlertVariant.Danger" Title="Could not load overview">
+        @loadError
+    </BbAlert>
+}
+else if (orderedDatasets is not null)
+{
+    <div class="bb:mt-6 bb:flex bb:flex-wrap bb:gap-4">
+        @foreach (var dataset in orderedDatasets)
+        {
+            var definition = ExportDatasets.TryGet(dataset.Type);
+            @if (definition is not null)
+            {
+                <a href="@definition.Route" class="bb:block bb:min-w-48 bb:flex-1">
+                    <BbCard>
+                        <BbCardHeader>
+                            <BbCardTitle>
+                                <span class="bb:inline-flex bb:items-center bb:gap-2">
+                                    <LucideIcon Name="@definition.Icon" Size="18" />
+                                    @definition.Title
+                                </span>
+                            </BbCardTitle>
+                        </BbCardHeader>
+                        <BbCardContent>
+                            <BbTypographyH3>@dataset.RowCount</BbTypographyH3>
+                            <BbTypographyMuted>records</BbTypographyMuted>
+                        </BbCardContent>
+                    </BbCard>
+                </a>
+            }
         }
     </div>
 
-    @if (loading)
+    @if (summaryCounts is not null)
     {
-        <p>Loading overview...</p>
-    }
-    else if (loadError is not null)
-    {
-        <p class="error-message">@loadError</p>
-    }
-    else if (orderedDatasets is not null)
-    {
-        <div class="stat-grid">
-            @foreach (var dataset in orderedDatasets)
-            {
-                var definition = ExportDatasets.TryGet(dataset.Type);
-                @if (definition is not null)
-                {
-                    <a href="@definition.Route" class="stat-card">
-                        <div class="stat-card-header">
-                            <LucideIcon Name="@definition.Icon" />
-                            <h3>@definition.Title</h3>
-                        </div>
-                        <p class="stat-card-count">@dataset.RowCount</p>
-                        <p class="stat-card-label">records</p>
-                    </a>
-                }
-            }
+        <div class="bb:mt-6">
+            <SummaryChart Counts="summaryCounts" />
         </div>
-
-        @if (summaryCounts is not null)
-        {
-            <div class="charts-section charts-section-single">
-                <SummaryChart Counts="summaryCounts" CanvasId="summary-chart" />
-            </div>
-        }
     }
-</div>
+}
 
 @code {
     private IReadOnlyList<ExportDatasetInfo>? orderedDatasets;
@@ -122,4 +132,3 @@
         return true;
     }
 }
-

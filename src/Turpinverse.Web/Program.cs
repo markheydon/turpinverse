@@ -1,3 +1,4 @@
+using BlazorBlueprint.Components;
 using Microsoft.Extensions.Options;
 using Turpinverse.Core.DependencyInjection;
 using Turpinverse.Data.DependencyInjection;
@@ -14,6 +15,8 @@ builder.Services.AddTurpinverseData();
 builder.Services.AddTurpinverseWeb(builder.Configuration);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddBlazorBlueprintComponents();
 
 var app = builder.Build();
 

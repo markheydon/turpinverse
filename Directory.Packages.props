@@ -4,7 +4,10 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AngleSharp" Version="1.10.0" />
+    <PackageVersion Include="Aspire.Hosting.Dotnet" Version="13.6.4-preview.1.26523.11" />
+    <PackageVersion Include="BlazorBlueprint.Components" Version="4.2.0" />
+    <PackageVersion Include="BlazorBlueprint.Icons.Lucide" Version="2.0.2" />
+    <PackageVersion Include="AngleSharp" Version="1.10.1" />
     <PackageVersion Include="bunit" Version="2.14.0" />
     <PackageVersion Include="coverlet.collector" Version="10.1.0" />
     <PackageVersion Include="CsvHelper" Version="34.0.0" />

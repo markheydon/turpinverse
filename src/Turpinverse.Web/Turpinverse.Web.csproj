@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <PackageReference Include="BlazorBlueprint.Components" />
+    <PackageReference Include="BlazorBlueprint.Icons.Lucide" />
     <ProjectReference Include="..\Turpinverse.Core\Turpinverse.Core.csproj" />
     <ProjectReference Include="..\Turpinverse.ServiceDefaults\Turpinverse.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Turpinverse.Data\Turpinverse.Data.csproj" />
@@ -11,10 +13,5 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <Target Name="BuildTailwindCss" BeforeTargets="Build" Condition="Exists('$(MSBuildProjectDirectory)\package.json')">
-    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="!Exists('$(MSBuildProjectDirectory)\node_modules\tailwindcss')" />
-    <Exec Command="npm run build:css" WorkingDirectory="$(MSBuildProjectDirectory)" />
-  </Target>
 
 </Project>

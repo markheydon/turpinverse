@@ -2,17 +2,21 @@
 
 @if (Socials.Count > 0)
 {
-    <section class="profile-section socials-section">
-        <h2>Socials</h2>
-        <ul class="chip-list socials-chip-list">
-            @foreach (var social in Socials)
-            {
-                <li>
-                    <a class="chip" href="@social.Url" rel="noopener noreferrer">@social.Network</a>
-                </li>
-            }
-        </ul>
-    </section>
+    <BbCard Class="bb:mt-6">
+        <BbCardHeader>
+            <BbCardTitle>Socials</BbCardTitle>
+        </BbCardHeader>
+        <BbCardContent>
+            <div class="bb:flex bb:flex-wrap bb:gap-2">
+                @foreach (var social in Socials)
+                {
+                    <BbChip>
+                        <BbLink Href="@social.Url" Target="_blank" Rel="noopener noreferrer">@social.Network</BbLink>
+                    </BbChip>
+                }
+            </div>
+        </BbCardContent>
+    </BbCard>
 }
 
 @code {

@@ -1,43 +1,48 @@
-@if (Rows.Count > 0)
+@if (tableRows.Count > 0)
 {
-    <div class="data-table">
-        <div class="data-table-scroll">
-            <table>
-                <thead>
-                    <tr>
-                        @foreach (var header in headers)
+    <BbScrollArea Orientation="ScrollAreaOrientation.Horizontal" Type="ScrollAreaType.Auto" Class="bb:w-full">
+    <BbDataTable TData="ExportDataRow"
+                 Class="bb:min-w-full"
+                 Data="@tableRows"
+                 ShowToolbar="true"
+                 ShowPagination="true"
+                 InitialPageSize="20"
+                 IsLoading="Loading"
+                 AriaLabel="Export preview">
+        <Columns>
+            @foreach (var header in headers)
+            {
+                var columnId = header;
+                <BbDataTableColumn TData="ExportDataRow" TValue="string"
+                                   Id="@columnId"
+                                   Header="@FormatLabel(columnId)"
+                                   Property="@(row => row.GetValue(columnId))"
+                                   Sortable="true"
+                                   Filterable="true">
+                    <CellTemplate Context="row">
+                        @if (ShouldLinkRow(columnId, row, out var href))
                         {
-                            <th>@FormatLabel(header)</th>
+                            <BbLink Href="@href">@row.GetValue(columnId)</BbLink>
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var row in Rows)
-                    {
-                        <tr>
-                            @foreach (var header in headers)
-                            {
-                                <td>
-                                    @if (ShouldLinkRow(header, row, out var href))
-                                    {
-                                        <a href="@href">@GetValue(row, header)</a>
-                                    }
-                                    else
-                                    {
-                                        @GetValue(row, header)
-                                    }
-                                </td>
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
+                        else
+                        {
+                            @row.GetValue(columnId)
+                        }
+                    </CellTemplate>
+                </BbDataTableColumn>
+            }
+        </Columns>
+        <EmptyTemplate>
+            <BbTypographyMuted>No records found.</BbTypographyMuted>
+        </EmptyTemplate>
+    </BbDataTable>
+    </BbScrollArea>
 }
 else if (!Loading)
 {
-    <p class="text-slate-500">No records found.</p>
+    <BbEmpty Title="No records found"
+             Description="There is nothing to show in this preview."
+             Size="EmptySize.Small" />
 }
 
 @code {
@@ -49,10 +54,18 @@ else if (!Loading)
     [Parameter] public string? RowLinkIdColumn { get; set; }
 
     private IReadOnlyList<string> headers = [];
+    private IReadOnlyList<ExportDataRow> tableRows = [];
+    private IReadOnlyList<IReadOnlyDictionary<string, string>>? lastRows;
 
     protected override void OnParametersSet()
     {
         headers = ComputeHeaders();
+
+        if (!ReferenceEquals(Rows, lastRows))
+        {
+            lastRows = Rows;
+            tableRows = Rows.Select(row => new ExportDataRow(row)).ToList();
+        }
     }
 
     private IReadOnlyList<string> ComputeHeaders()
@@ -70,10 +83,7 @@ else if (!Loading)
         return [];
     }
 
-    private static string GetValue(IReadOnlyDictionary<string, string> row, string header) =>
-        row.TryGetValue(header, out var value) ? value : string.Empty;
-
-    private bool ShouldLinkRow(string header, IReadOnlyDictionary<string, string> row, out string href)
+    private bool ShouldLinkRow(string header, ExportDataRow row, out string href)
     {
         href = string.Empty;
         if (string.IsNullOrWhiteSpace(RowLinkColumn)
@@ -84,7 +94,8 @@ else if (!Loading)
         }
 
         var idColumn = string.IsNullOrWhiteSpace(RowLinkIdColumn) ? RowLinkColumn : RowLinkIdColumn;
-        if (!row.TryGetValue(idColumn, out var id) || string.IsNullOrWhiteSpace(id))
+        var id = row.GetValue(idColumn);
+        if (string.IsNullOrWhiteSpace(id))
         {
             return false;
         }
@@ -124,4 +135,3 @@ else if (!Loading)
         };
     }
 }
-
