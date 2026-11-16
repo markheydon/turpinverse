@@ -4,6 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting" Version="13.6.5" />
     <PackageVersion Include="Aspire.Hosting.Dotnet" Version="13.6.4-preview.1.26523.11" />
     <PackageVersion Include="BlazorBlueprint.Components" Version="4.2.0" />
     <PackageVersion Include="BlazorBlueprint.Icons.Lucide" Version="2.0.2" />
