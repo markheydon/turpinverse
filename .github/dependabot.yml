@@ -54,6 +54,10 @@ updates:
       - type/chore
     assignees:
       - markheydon
+    ignore:
+      - dependency-name: "Microsoft.Extensions.*"
+        update-types:
+          - version-update:semver-major
     groups:
       tests:
         patterns:
