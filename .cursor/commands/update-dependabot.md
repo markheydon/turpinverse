@@ -1,6 +1,6 @@
 # Update `dependabot.yml`
 
-Review the current Dependabot config. And update or create a `.github/dependabot.yml` file. The config should be a clean, consistent, minimal configuration that follows best practices and reduces noise, while managing dependencies for relevant ecosystems based on the repo contents. 
+Review the current Dependabot config. And update or create a `.github/dependabot.yml` file. The config should be a clean, consistent, minimal configuration that follows best practices and reduces noise, while managing dependencies for relevant ecosystems based on the repo contents.
 
 Repo `dependabot.yml` files can easily become inconsistent, overly complex, and include unnecessary configuration. So my policy is for a simple, standard structure applied across all repositories based on the following.
 
@@ -19,7 +19,7 @@ Repo `dependabot.yml` files can easily become inconsistent, overly complex, and 
    - 04:00
    - Timezone: Europe/London
 3. Ensure GitHub Actions (github-actions) updates are ALWAYS included.
-4. Ensure Dev Contaniers (devcontainers) updates are included if there is a `.devcontainer` folder with a `devcontainer.json` file in the repo.
+4. Ensure Dev Containers (devcontainers) updates are included if there is a `.devcontainer` folder with a `devcontainer.json` file in the repo.
 5. Include only relevant package ecosystems based on what is actually used.
 6. Apply a sensible open-pull-requests-limit:
    - Default: 5
@@ -30,12 +30,16 @@ Repo `dependabot.yml` files can easily become inconsistent, overly complex, and 
      - For .NET:
        - test packages (xunit, Moq, Microsoft.NET.Test.Sdk, coverlet, etc.)
        - Microsoft.Extensions.*
+       - Aspire.* (dedicated group; do not fold into Azure)
        - Azure.*
        - OpenTelemetry.*
        - analyzers
    - Avoid over-engineering group definitions
 8. Labels:
-   - Where a repo has a label called 'type/chore', then use that; otherwise use the default GitHub out-of-the-box label 'dependencies'.
+   - When you can, confirm labels on GitHub (prefer `gh label list` from the repo root). Do **not** infer labels from `plan/LABEL_STRATEGY.md`, issue templates, or other docs; those may describe labels that are not created on GitHub yet.
+   - If the check succeeds and `type/chore` is present, use `type/chore` only.
+   - If the check succeeds and `type/chore` is absent, use the default GitHub label `dependencies` only.
+   - If the check cannot be made (no `gh`, not signed in, no network, wrong remote, or any error), use `dependencies` only. Do not guess.
 9. Assignees:
    - Always assign PRs to: markheydon
 10. Do NOT include:
@@ -48,7 +52,7 @@ Repo `dependabot.yml` files can easily become inconsistent, overly complex, and 
 
 ### Microsoft.OpenApi package in C# projects
 
-Some repos have pinned 'Microsoft.OpenApi' in their `Directory.Packages.props` file due to a known vulernability in a dependent package.
+Some repos have pinned 'Microsoft.OpenApi' in their `Directory.Packages.props` file due to a known vulnerability in a dependent package.
 
 Microsoft.OpenApi's versions are aligned to specific .NET versions therefore the following 'ignore' is required to stop Dependabot trying to update to an incompatible version.
 
@@ -58,6 +62,28 @@ Microsoft.OpenApi's versions are aligned to specific .NET versions therefore the
         update-types:
           - version-update:semver-major
 
+### LTS repos: Microsoft.Extensions.* major versions
+
+While the app targets the current LTS runtime (e.g. net10.0), do not take `Microsoft.Extensions.*` semver-major updates (11.x while on .NET 10). A `microsoft-extensions` group with `update-types: [minor, patch]` is not enough: Dependabot still opens **individual** PRs for majors. Add a job-level ignore:
+
+    ignore:
+      - dependency-name: "Microsoft.Extensions.*"
+        update-types:
+          - version-update:semver-major
+
+### Repos with Aspire hosting packages (`Aspire.*`)
+
+Apply when central package management or project references include `Aspire.Hosting.*` (or other `Aspire.*` NuGet packages). Hosting packages ship on a single aligned major line and must update together; a jump such as 12.x to 17.x is a deliberate migration (CLI pin, dev container install, workflow skills), not routine dependency churn.
+
+Use a dedicated `aspire` group so patch and minor updates land in one PR. A group with `update-types: [minor, patch]` alone is not enough: Dependabot still opens **individual** PRs for semver-major. Add a job-level ignore:
+
+    ignore:
+      - dependency-name: "Aspire.*"
+        update-types:
+          - version-update:semver-major
+
+Keep `Aspire.*` out of the `azure` group; Azure SDK and Functions worker packages are unrelated to Aspire hosting version alignment.
+
 ## Notes
 
 - The `update-types` option for groups supports a different set of levels than other uses of `update-types`. Supported values: `minor`, `patch`, and `major`.
@@ -66,5 +92,5 @@ Microsoft.OpenApi's versions are aligned to specific .NET versions therefore the
 ## Output
 
 - ONLY an updated, final `dependabot.yml`, which you will update the repo's version with.
-- No explanations.
-- No comments unless they add real value.
+- Very brief explanation of what changed, not the full diff.
+- No other comments unless they add real value.
