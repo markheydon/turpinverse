@@ -21,7 +21,8 @@
         "unitPrice": 850,
         "taxRateId": "tax-standard",
         "lineTotal": 2550,
-        "productId": "equine-asset-hire-day"
+        "productId": "equine-asset-hire-day",
+        "projectId": "black-bess-route-optimiser"
       },
       {
         "description": "Identity Management Advisory Hour",
@@ -29,7 +30,8 @@
         "unitPrice": 185,
         "taxRateId": "tax-standard",
         "lineTotal": 370,
-        "productId": "identity-advisory-hour"
+        "productId": "identity-advisory-hour",
+        "projectId": "black-bess-route-optimiser"
       }
     ]
   },
@@ -64,7 +66,8 @@
         "unitPrice": 320,
         "taxRateId": "tax-standard",
         "lineTotal": 640,
-        "productId": "overnight-logistics-surcharge"
+        "productId": "overnight-logistics-surcharge",
+        "projectId": "black-bess-route-optimiser"
       }
     ]
   },
@@ -91,7 +94,8 @@
         "unitPrice": 185,
         "taxRateId": "tax-standard",
         "lineTotal": 1850,
-        "productId": "identity-advisory-hour"
+        "productId": "identity-advisory-hour",
+        "projectId": "palmer-identity-vault"
       },
       {
         "description": "Alias Documentation Pack",
@@ -99,7 +103,8 @@
         "unitPrice": 950,
         "taxRateId": "tax-standard",
         "lineTotal": 950,
-        "productId": "alias-documentation-pack"
+        "productId": "alias-documentation-pack",
+        "projectId": "palmer-identity-vault"
       }
     ]
   },
@@ -125,7 +130,8 @@
         "unitPrice": 950,
         "taxRateId": "tax-standard",
         "lineTotal": 950,
-        "productId": "alias-documentation-pack"
+        "productId": "alias-documentation-pack",
+        "projectId": "palmer-identity-vault"
       },
       {
         "description": "Identity Management Advisory Hour",
@@ -133,7 +139,8 @@
         "unitPrice": 185,
         "taxRateId": "tax-standard",
         "lineTotal": 1110,
-        "productId": "identity-advisory-hour"
+        "productId": "identity-advisory-hour",
+        "projectId": "palmer-identity-vault"
       }
     ]
   },
@@ -159,7 +166,8 @@
         "unitPrice": 850,
         "taxRateId": "tax-standard",
         "lineTotal": 3400,
-        "productId": "equine-asset-hire-day"
+        "productId": "equine-asset-hire-day",
+        "projectId": "black-bess-route-optimiser"
       },
       {
         "description": "Overnight Logistics Surcharge",
@@ -167,7 +175,8 @@
         "unitPrice": 320,
         "taxRateId": "tax-standard",
         "lineTotal": 320,
-        "productId": "overnight-logistics-surcharge"
+        "productId": "overnight-logistics-surcharge",
+        "projectId": "black-bess-route-optimiser"
       }
     ]
   },

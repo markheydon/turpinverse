@@ -25,6 +25,9 @@ Canon JSON uses universe names. CSV export uses CRM names. They are the same log
 | Payment | Payment | Settles one invoice **or** one bill |
 | CreditNote | Credit note (AR) | Authored in `credit-notes.json` |
 | Bill | Bill / purchase invoice (ACCPAY) | Authored in `bills.json` |
+| Expense | Expense | Employee out-of-pocket cost in `expenses.json` |
+| ProjectTask | Task | Billable work unit under a project in `project-tasks.json` |
+| Timeslip | Timeslip | Hours logged against a task in `timeslips.json` |
 | Lead | Lead | Pre-contact prospect in `leads.json` |
 | Activity | Activity | CRM interaction in `activities.json` |
 
@@ -250,6 +253,34 @@ Curated volume only (~20–25 activities total) — not a full history per recor
 
 Fields: `activityId`, `type` (Call | Email | Meeting | Task | Note), `subject`, `description`, `activityDate`, optional `dueDate` (required for open tasks), `status` (Open | Completed | Cancelled), `regardingType` + `regardingId`, required `ownerContactId`, optional `durationMinutes` (Call/Meeting only).
 
+## Downstream consumers
+
+Turpinverse holds **business facts** (who spent what, which document belongs to which project, hours and rates). Accounting products add their own wire shape: bank statement lines, nominal categories, company start dates, OAuth users, opening balances, and report payloads. [FreeAgent.NET](https://github.com/markheydon/freeagent-dotnet) is one such consumer; its seeders map canon rather than defining it.
+
+## Employee expenses, tasks, and time
+
+```mermaid
+erDiagram
+    Persona ||--o{ Expense : "personaId submitter"
+    Project |o--o{ Expense : "projectId cost"
+    Project |o--o{ Expense : "billableToProjectId rebill"
+    Project ||--o{ ProjectTask : "projectId required"
+    ProjectTask ||--o{ Timeslip : "taskId required"
+    Persona ||--o{ Timeslip : "personaId required"
+    Project ||--o{ Timeslip : "projectId must match task"
+    Invoice |o--o{ Timeslip : "invoiceId optional billed"
+```
+
+| Link | Rule |
+|------|------|
+| Expense → Persona | Submitter must be a member of `turpin-enterprises` (home books). |
+| Expense → Project | Optional cost `projectId`. When `billable` and `billableToProjectId` are set, `markupPercent` is the portable rebill markup (not product-specific field names). |
+| Expense receipt | `hasReceipt: true` marks that a receipt exists; file bytes stay with the consumer. |
+| ProjectTask → Project | Required. `isBillable` drives whether timeslips may be billed. |
+| Timeslip → ProjectTask | Task `projectId` must equal timeslip `projectId`. |
+| Timeslip → Invoice | Optional; marks time already billed on that invoice. |
+| Project `billingRatePerHour` | Required on anchor demo projects (`palmer-identity-vault`, `black-bess-route-optimiser`) so consumers price hours consistently. |
+
 ## Import mapping (Xero / FreeAgent / QuickBooks / Sage)
 
 Turpinverse is a **generic CRM + SME commercial file**, not a clone of any one API. Importers flatten; mapping should be mechanical.
@@ -265,7 +296,9 @@ Turpinverse is a **generic CRM + SME commercial file**, not a clone of any one A
 | Line `taxRateId` | `TaxType` | Sales tax | `TaxCodeRef` | `tax_rate_id` |
 | Line `projectId` | Tracking category | `project` on invoice item | `ClassRef` per line (not Job) | — (Sage 50: project per line) |
 | Line `salesOrderId` | — (no SO object) | — | — | — |
-| Payment | Payment → invoice or bill | — | Payment | Payment |
+| Payment | Payment → invoice or bill | Bank explanation | Payment | Payment |
+| Expense | — | Expense | Expense | Expense |
+| ProjectTask / Timeslip | — | Task / Timeslip | Time activity | — |
 | Credit note | Credit note + allocation | — | Credit memo | Credit note |
 | Nominal / ledger code | `AccountCode` on line | Category | Account on item | `ledger_account_id` | **Parked** — importer applies default account |
 
@@ -359,7 +392,9 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | Chart of accounts / nominal codes on lines | Parked (#32). Importers apply default sales/purchase accounts. |
 | Journals, bank accounts, reconciliation | Parked (#32). |
 | Payroll, inventory, purchase orders (separate from bills) | Parked (#32). |
-| Recurring invoices, multi-currency, timesheets, fixed assets | Parked (#32). |
+| Recurring invoices, multi-currency, fixed assets | Parked (#32). |
+| Project tasks and timeslips | **Shipped** — `project-tasks.json`, `timeslips.json` (curated demo set only). |
+| Payroll / full timesheet product | Parked (#32) — not the same as demo tasks and slips. |
 | Campaigns, territories, queues, SLAs | Parked (#32). |
 | Document attachments / PDFs | Parked (#32). |
 | Supplier credit notes (AP credits) | Parked — AR credit notes only in #35. |
@@ -391,6 +426,12 @@ Deals and cases are authored in canon; they are not generated from membership ed
 | VR-072 | Quote line | FK and project sponsoring-org rules |
 | VR-073 | Quote | Authored money (per-line VAT rounded to 2 dp) and date order |
 | VR-074 | Quote | Status/currency enums; 2–5 lines |
+| VR-100 | Expense | Unique ids; ≥6 expenses |
+| VR-101 | Expense | Turpin submitter, tax math, billable / markup rules |
+| VR-102 | Expense | Receipt, unbillable Palmer, cross-project rebill coverage |
+| VR-103 | ProjectTask | Unique ids; ≥4 tasks; ≥2 per anchor project |
+| VR-104 | Timeslip | FK alignment; billable task match; ≥4 timeslips |
+| VR-105 | Project | Anchor projects have `billingRatePerHour`; thickened line `projectId` coverage |
 
 ## Repaired canon rows (shipped)
 
@@ -431,8 +472,10 @@ canon/
 ├── credit-notes.json           # shipped #35
 ├── sales-orders.json           # shipped #36
 ├── bills.json                  # shipped #36
-│  # Agreed graph — remaining files land with child stories (#38):
-└── activities.json             # #38
+├── activities.json             # #38
+├── expenses.json
+├── project-tasks.json
+└── timeslips.json
 ```
 
 See [canon/README.md](../canon/README.md) for how to consume these files from another project.

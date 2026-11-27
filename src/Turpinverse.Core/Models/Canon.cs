@@ -27,4 +27,7 @@ public sealed record Canon
     public IReadOnlyList<SalesOrder> SalesOrders { get; init; } = [];
     public IReadOnlyList<Bill> Bills { get; init; } = [];
     public IReadOnlyList<Activity> Activities { get; init; } = [];
+    public IReadOnlyList<Expense> Expenses { get; init; } = [];
+    public IReadOnlyList<ProjectTask> ProjectTasks { get; init; } = [];
+    public IReadOnlyList<Timeslip> Timeslips { get; init; } = [];
 }

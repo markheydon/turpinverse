@@ -163,7 +163,8 @@
         "unitPrice": 185,
         "taxRateId": "tax-standard",
         "lineTotal": 740,
-        "productId": "identity-advisory-hour"
+        "productId": "identity-advisory-hour",
+        "projectId": "palmer-identity-vault"
       }
     ]
   },

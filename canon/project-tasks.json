@@ -1,0 +1,44 @@
+[
+  {
+    "taskId": "task-palmer-sso-review",
+    "projectId": "palmer-identity-vault",
+    "name": "SSO integration review",
+    "isBillable": true,
+    "status": "Active"
+  },
+  {
+    "taskId": "task-palmer-audit-prep",
+    "projectId": "palmer-identity-vault",
+    "name": "Audit evidence preparation",
+    "isBillable": true,
+    "status": "Active"
+  },
+  {
+    "taskId": "task-palmer-training",
+    "projectId": "palmer-identity-vault",
+    "name": "Counsel onboarding familiarisation",
+    "isBillable": false,
+    "status": "Completed"
+  },
+  {
+    "taskId": "task-bess-corridor-mapping",
+    "projectId": "black-bess-route-optimiser",
+    "name": "Corridor segment mapping",
+    "isBillable": true,
+    "status": "Active"
+  },
+  {
+    "taskId": "task-bess-mileage-review",
+    "projectId": "black-bess-route-optimiser",
+    "name": "Mileage reconciliation workshop",
+    "isBillable": true,
+    "status": "Active"
+  },
+  {
+    "taskId": "task-bess-legend-research",
+    "projectId": "black-bess-route-optimiser",
+    "name": "Folklore disclaimer drafting",
+    "isBillable": false,
+    "status": "Completed"
+  }
+]

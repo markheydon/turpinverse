@@ -33,7 +33,10 @@ public class EmbeddedCanonResourceTests
         "credit-notes.json",
         "sales-orders.json",
         "bills.json",
-        "activities.json"
+        "activities.json",
+        "expenses.json",
+        "project-tasks.json",
+        "timeslips.json"
     ];
 
     [Fact]

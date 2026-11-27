@@ -5,8 +5,8 @@ Fictional Dick Turpin universe demo data: personas, organisations, deals, cases,
 ## Quick start
 
 1. Clone or submodule this repository (or copy this `canon/` folder).
-2. Read `canon.json` for the dataset version (currently `1.8.0`).
-3. Load the entity files listed below. Property names are **camelCase** JSON.
+2. Read `canon.json` for the dataset version.
+3. Load the entity files listed below. Property names are **camelCase** JSON. Dataset version in `canon.json` is currently `1.9.0`.
 4. Validate against [`schema/canon-schema.json`](schema/canon-schema.json) if your toolchain supports JSON Schema.
 5. For CRM-shaped CSV columns (optional), see [`schema/crm-export-schema.json`](schema/crm-export-schema.json).
 
@@ -27,6 +27,9 @@ Example (relative path from another repo):
 | `products.json` | Product/service catalogue (price book) |
 | `leads.json` | Pre-contact CRM prospects and qualification pipeline |
 | `activities.json` | CRM interaction history (calls, emails, meetings, tasks, notes) |
+| `expenses.json` | Employee out-of-pocket costs (billable markup, optional receipt flag) |
+| `project-tasks.json` | Delivery tasks under projects |
+| `timeslips.json` | Hours logged against tasks |
 | `quotes.json` | Sales quotes and estimates with nested line items |
 | `sales-orders.json` | Sales orders with nested line items (optional `quoteId` on lines) |
 | `invoices.json` | Sales invoices (accounts receivable) with nested line items |

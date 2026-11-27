@@ -29,7 +29,10 @@
     "creditNotes",
     "salesOrders",
     "bills",
-    "activities"
+    "activities",
+    "expenses",
+    "projectTasks",
+    "timeslips"
   ],
   "properties": {
     "version": {
@@ -147,6 +150,21 @@
       "minItems": 20,
       "maxItems": 25,
       "items": { "$ref": "#/$defs/Activity" }
+    },
+    "expenses": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/Expense" }
+    },
+    "projectTasks": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/ProjectTask" }
+    },
+    "timeslips": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/Timeslip" }
     }
   },
   "$defs": {
@@ -265,7 +283,73 @@
           "items": { "$ref": "#/$defs/slug" }
         },
         "featuredCta": { "$ref": "#/$defs/FeaturedLink" },
-        "featured": { "type": "boolean" }
+        "featured": { "type": "boolean" },
+        "billingRatePerHour": { "type": "number", "minimum": 0 }
+      }
+    },
+    "Expense": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expenseId", "personaId", "expenseDate", "description",
+        "amountExTax", "taxRateId", "taxAmount", "total",
+        "currency", "billable", "status"
+      ],
+      "properties": {
+        "expenseId": { "$ref": "#/$defs/slug" },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "expenseDate": { "$ref": "#/$defs/isoDateOrMonth" },
+        "description": { "type": "string", "maxLength": 500 },
+        "amountExTax": { "type": "number", "minimum": 0 },
+        "taxRateId": { "$ref": "#/$defs/slug" },
+        "taxAmount": { "type": "number", "minimum": 0 },
+        "total": { "type": "number", "minimum": 0 },
+        "currency": {
+          "type": "string",
+          "enum": ["GBP"]
+        },
+        "projectId": { "$ref": "#/$defs/slug" },
+        "billableToProjectId": { "$ref": "#/$defs/slug" },
+        "billable": { "type": "boolean" },
+        "markupPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "hasReceipt": { "type": "boolean" },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Submitted", "Approved", "Rejected"]
+        }
+      }
+    },
+    "ProjectTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taskId", "projectId", "name", "isBillable", "status"],
+      "properties": {
+        "taskId": { "$ref": "#/$defs/slug" },
+        "projectId": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "maxLength": 120 },
+        "isBillable": { "type": "boolean" },
+        "status": {
+          "type": "string",
+          "enum": ["Active", "Completed", "Hidden"]
+        }
+      }
+    },
+    "Timeslip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeslipId", "taskId", "projectId", "personaId",
+        "workDate", "hours", "billable"
+      ],
+      "properties": {
+        "timeslipId": { "$ref": "#/$defs/slug" },
+        "taskId": { "$ref": "#/$defs/slug" },
+        "projectId": { "$ref": "#/$defs/slug" },
+        "personaId": { "$ref": "#/$defs/slug" },
+        "workDate": { "$ref": "#/$defs/isoDateOrMonth" },
+        "hours": { "type": "number", "exclusiveMinimum": 0, "maximum": 24 },
+        "billable": { "type": "boolean" },
+        "invoiceId": { "$ref": "#/$defs/slug" }
       }
     },
     "Achievement": {

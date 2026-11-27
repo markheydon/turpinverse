@@ -166,6 +166,22 @@ Violations use `{ rule, message, entityType, entityId }`.
 | VR-098 | Activity | `regardingId` resolves for `regardingType` (`contact`, `deal`, `case`, `lead`, `invoice`, `bill`, `quote`, `salesOrder`) |
 | VR-099 | Activity | Flagship coverage: alias (`case-001` or `deal-004`), Black Bess (`deal-007` / `deal-015` / `deal-022`), `case-011`, `bill-003` |
 
+## Expenses (VR-100–VR-102)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-100 | Expense | Unique `expenseId`; ≥6 expenses |
+| VR-101 | Expense | Submitter is a member of `turpin-enterprises`; `taxRateId` exists; `taxAmount` and `total` match authored VAT; billable / `billableToProjectId` / `markupPercent` consistency; optional `projectId` exists |
+| VR-102 | Expense | At least one `hasReceipt`; one unbillable cost on `palmer-identity-vault`; one billable cost on `black-bess-route-optimiser` rebilled to `palmer-identity-vault` |
+
+## Project tasks and timeslips (VR-103–VR-105)
+
+| Code | Scope | Pass condition |
+|------|-------|----------------|
+| VR-103 | ProjectTask | Unique `taskId`; ≥4 tasks; ≥2 tasks on `palmer-identity-vault` and on `black-bess-route-optimiser` |
+| VR-104 | Timeslip | Unique `timeslipId`; ≥4 timeslips; task and project alignment; billable slips only on billable tasks; optional `invoiceId` exists |
+| VR-105 | Project | `palmer-identity-vault` and `black-bess-route-optimiser` have `billingRatePerHour` > 0; ≥3 quote/order/invoice lines reference Palmer; ≥3 bill lines reference Black Bess |
+
 ## Credit notes (VR-082–VR-083)
 
 | Code | Scope | Pass condition |
@@ -175,7 +191,7 @@ Violations use `{ rule, message, entityType, entityId }`.
 
 ## Tone (TONE-001)
 
-Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, activity subject/description, quote/sales-order/invoice/bill/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
+Forbidden patterns from `tone-guidelines.json` applied to organisation descriptions, product name/description, lead company/contact/description, activity subject/description, expense description, project task name, quote/sales-order/invoice/bill/credit-note notes/terms/line descriptions, payment reference, persona notes, and address string fields.
 
 ## Related docs
 

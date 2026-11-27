@@ -45,6 +45,10 @@ public sealed partial class CanonValidator
         ValidatePayments(canon, violations);
         ValidateCreditNotes(canon, personaIds, organisationIds, violations);
         ValidateActivities(canon, personaIds, violations);
+        ValidateExpenses(canon, personaIds, organisationIds, violations);
+        ValidateProjectTasks(canon, violations);
+        ValidateTimeslips(canon, personaIds, violations);
+        ValidateProjectBillingRates(canon, violations);
         ValidateTone(canon, violations);
 
         var counts = new Dictionary<string, int>
@@ -70,7 +74,10 @@ public sealed partial class CanonValidator
             ["creditNotes"] = canon.CreditNotes.Count,
             ["salesOrders"] = canon.SalesOrders.Count,
             ["bills"] = canon.Bills.Count,
-            ["activities"] = canon.Activities.Count
+            ["activities"] = canon.Activities.Count,
+            ["expenses"] = canon.Expenses.Count,
+            ["projectTasks"] = canon.ProjectTasks.Count,
+            ["timeslips"] = canon.Timeslips.Count
         };
 
         return new CanonValidationResult(
@@ -3850,6 +3857,441 @@ public sealed partial class CanonValidator
                 "Persona",
                 primaryId));
         }
+    }
+
+    private const string TurpinEnterprisesId = "turpin-enterprises";
+    private const string PalmerIdentityVaultId = "palmer-identity-vault";
+    private const string BlackBessRouteOptimiserId = "black-bess-route-optimiser";
+
+    private static readonly HashSet<string> AllowedExpenseStatuses = new(StringComparer.Ordinal)
+    {
+        "Draft", "Submitted", "Approved", "Rejected"
+    };
+
+    private static readonly HashSet<string> AllowedProjectTaskStatuses = new(StringComparer.Ordinal)
+    {
+        "Active", "Completed", "Hidden"
+    };
+
+    private static void ValidateExpenses(
+        Canon canon,
+        HashSet<string> personaIds,
+        HashSet<string> organisationIds,
+        List<ValidationViolation> violations)
+    {
+        var organisationsById = canon.Organisations.ToDictionary(o => o.Id);
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        var taxRatesById = canon.TaxRates.ToDictionary(t => t.TaxRateId);
+        var personasById = canon.Personas.ToDictionary(p => p.Id);
+
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+        var hasReceipt = false;
+        var hasUnbillablePalmer = false;
+        var hasCrossProjectRebill = false;
+
+        foreach (var expense in canon.Expenses)
+        {
+            if (!seenIds.Add(expense.ExpenseId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-100",
+                    $"Duplicate expense id '{expense.ExpenseId}'",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (!AllowedExpenseStatuses.Contains(expense.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense status '{expense.Status}' is not allowed",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (!string.Equals(expense.Currency, "GBP", StringComparison.Ordinal))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense currency '{expense.Currency}' must be GBP",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (!personaIds.Contains(expense.PersonaId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense '{expense.ExpenseId}' references unknown persona '{expense.PersonaId}'",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+            else if (!personasById[expense.PersonaId].OrganisationIds.Contains(TurpinEnterprisesId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense '{expense.ExpenseId}' submitter '{expense.PersonaId}' must be a member of '{TurpinEnterprisesId}'",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (!taxRatesById.TryGetValue(expense.TaxRateId, out var taxRate))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense '{expense.ExpenseId}' references unknown tax rate '{expense.TaxRateId}'",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+            else
+            {
+                var expectedTax = RoundQuoteLineTax(expense.AmountExTax, taxRate.Percentage);
+                if (expense.TaxAmount != expectedTax)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-101",
+                        $"Expense '{expense.ExpenseId}' taxAmount {expense.TaxAmount} does not match VAT on amountExTax ({expectedTax})",
+                        "Expense",
+                        expense.ExpenseId));
+                }
+            }
+
+            var expectedTotal = Math.Round(expense.AmountExTax + expense.TaxAmount, 2, MidpointRounding.AwayFromZero);
+            if (expense.Total != expectedTotal)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense '{expense.ExpenseId}' total {expense.Total} does not equal amountExTax + tax ({expectedTotal})",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(expense.ProjectId)
+                && !projectsById.ContainsKey(expense.ProjectId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense '{expense.ExpenseId}' references unknown project '{expense.ProjectId}'",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(expense.BillableToProjectId))
+            {
+                if (!expense.Billable)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-101",
+                        $"Expense '{expense.ExpenseId}' cannot set billableToProjectId when billable is false",
+                        "Expense",
+                        expense.ExpenseId));
+                }
+                else if (!projectsById.ContainsKey(expense.BillableToProjectId))
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-101",
+                        $"Expense '{expense.ExpenseId}' references unknown billableToProjectId '{expense.BillableToProjectId}'",
+                        "Expense",
+                        expense.ExpenseId));
+                }
+                else if (expense.MarkupPercent is null)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-101",
+                        $"Expense '{expense.ExpenseId}' requires markupPercent when billableToProjectId is set",
+                        "Expense",
+                        expense.ExpenseId));
+                }
+            }
+            else if (expense.MarkupPercent is not null)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-101",
+                    $"Expense '{expense.ExpenseId}' cannot set markupPercent without billableToProjectId",
+                    "Expense",
+                    expense.ExpenseId));
+            }
+
+            if (expense.HasReceipt == true)
+            {
+                hasReceipt = true;
+            }
+
+            if (!expense.Billable && expense.ProjectId == PalmerIdentityVaultId)
+            {
+                hasUnbillablePalmer = true;
+            }
+
+            if (expense.Billable
+                && expense.ProjectId == BlackBessRouteOptimiserId
+                && expense.BillableToProjectId == PalmerIdentityVaultId)
+            {
+                hasCrossProjectRebill = true;
+            }
+        }
+
+        if (canon.Expenses.Count < 6)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-100",
+                $"At least 6 expenses required, found {canon.Expenses.Count}",
+                "Expense",
+                "expenses"));
+        }
+
+        if (!hasReceipt)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-102",
+                "At least one expense must set hasReceipt for downstream attachment probes",
+                "Expense",
+                "expenses"));
+        }
+
+        if (!hasUnbillablePalmer)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-102",
+                "At least one unbillable expense must reference palmer-identity-vault",
+                "Expense",
+                "expenses"));
+        }
+
+        if (!hasCrossProjectRebill)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-102",
+                "At least one billable expense must cost black-bess-route-optimiser and rebill to palmer-identity-vault",
+                "Expense",
+                "expenses"));
+        }
+
+    }
+
+    private static void ValidateProjectTasks(
+        Canon canon,
+        List<ValidationViolation> violations)
+    {
+        var projectIds = canon.Projects.Select(p => p.Id).ToHashSet(StringComparer.Ordinal);
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+        var taskCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+
+        foreach (var task in canon.ProjectTasks)
+        {
+            if (!seenIds.Add(task.TaskId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-103",
+                    $"Duplicate project task id '{task.TaskId}'",
+                    "ProjectTask",
+                    task.TaskId));
+            }
+
+            if (!AllowedProjectTaskStatuses.Contains(task.Status))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-103",
+                    $"Project task status '{task.Status}' is not allowed",
+                    "ProjectTask",
+                    task.TaskId));
+            }
+
+            if (!projectIds.Contains(task.ProjectId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-103",
+                    $"Project task '{task.TaskId}' references unknown project '{task.ProjectId}'",
+                    "ProjectTask",
+                    task.TaskId));
+            }
+            else
+            {
+                taskCounts.TryGetValue(task.ProjectId, out var count);
+                taskCounts[task.ProjectId] = count + 1;
+            }
+        }
+
+        if (canon.ProjectTasks.Count < 4)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-103",
+                $"At least 4 project tasks required, found {canon.ProjectTasks.Count}",
+                "ProjectTask",
+                "projectTasks"));
+        }
+
+        foreach (var projectId in new[] { PalmerIdentityVaultId, BlackBessRouteOptimiserId })
+        {
+            if (!taskCounts.TryGetValue(projectId, out var count) || count < 2)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-103",
+                    $"Project '{projectId}' must have at least 2 tasks, found {count}",
+                    "ProjectTask",
+                    projectId));
+            }
+        }
+    }
+
+    private static void ValidateTimeslips(
+        Canon canon,
+        HashSet<string> personaIds,
+        List<ValidationViolation> violations)
+    {
+        var tasksById = canon.ProjectTasks.ToDictionary(t => t.TaskId);
+        var projectIds = canon.Projects.Select(p => p.Id).ToHashSet(StringComparer.Ordinal);
+        var invoiceIds = canon.Invoices.Select(i => i.InvoiceId).ToHashSet(StringComparer.Ordinal);
+        var seenIds = new HashSet<string>(StringComparer.Ordinal);
+
+        foreach (var timeslip in canon.Timeslips)
+        {
+            if (!seenIds.Add(timeslip.TimeslipId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-104",
+                    $"Duplicate timeslip id '{timeslip.TimeslipId}'",
+                    "Timeslip",
+                    timeslip.TimeslipId));
+            }
+
+            if (!personaIds.Contains(timeslip.PersonaId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-104",
+                    $"Timeslip '{timeslip.TimeslipId}' references unknown persona '{timeslip.PersonaId}'",
+                    "Timeslip",
+                    timeslip.TimeslipId));
+            }
+
+            if (!projectIds.Contains(timeslip.ProjectId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-104",
+                    $"Timeslip '{timeslip.TimeslipId}' references unknown project '{timeslip.ProjectId}'",
+                    "Timeslip",
+                    timeslip.TimeslipId));
+            }
+
+            if (!tasksById.TryGetValue(timeslip.TaskId, out var task))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-104",
+                    $"Timeslip '{timeslip.TimeslipId}' references unknown task '{timeslip.TaskId}'",
+                    "Timeslip",
+                    timeslip.TimeslipId));
+            }
+            else
+            {
+                if (task.ProjectId != timeslip.ProjectId)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-104",
+                        $"Timeslip '{timeslip.TimeslipId}' project must match task '{timeslip.TaskId}' project",
+                        "Timeslip",
+                        timeslip.TimeslipId));
+                }
+
+                if (timeslip.Billable && !task.IsBillable)
+                {
+                    violations.Add(new ValidationViolation(
+                        "VR-104",
+                        $"Billable timeslip '{timeslip.TimeslipId}' cannot reference non-billable task '{timeslip.TaskId}'",
+                        "Timeslip",
+                        timeslip.TimeslipId));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(timeslip.InvoiceId) && !invoiceIds.Contains(timeslip.InvoiceId))
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-104",
+                    $"Timeslip '{timeslip.TimeslipId}' references unknown invoice '{timeslip.InvoiceId}'",
+                    "Timeslip",
+                    timeslip.InvoiceId));
+            }
+        }
+
+        if (canon.Timeslips.Count < 4)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-104",
+                $"At least 4 timeslips required, found {canon.Timeslips.Count}",
+                "Timeslip",
+                "timeslips"));
+        }
+    }
+
+    private static void ValidateProjectBillingRates(
+        Canon canon,
+        List<ValidationViolation> violations)
+    {
+        var projectsById = canon.Projects.ToDictionary(p => p.Id);
+        foreach (var projectId in new[] { PalmerIdentityVaultId, BlackBessRouteOptimiserId })
+        {
+            if (!projectsById.TryGetValue(projectId, out var project)
+                || project.BillingRatePerHour is not > 0)
+            {
+                violations.Add(new ValidationViolation(
+                    "VR-105",
+                    $"Project '{projectId}' requires billingRatePerHour greater than zero",
+                    "Project",
+                    projectId));
+            }
+        }
+
+        var palmerLineCount = CountDocumentLineProjectRefs(
+            canon,
+            PalmerIdentityVaultId);
+        if (palmerLineCount < 3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-105",
+                $"At least 3 quote, sales-order, or invoice lines must reference '{PalmerIdentityVaultId}', found {palmerLineCount}",
+                "Project",
+                PalmerIdentityVaultId));
+        }
+
+        var bessBillLineCount = CountBillLineProjectRefs(canon, BlackBessRouteOptimiserId);
+        if (bessBillLineCount < 3)
+        {
+            violations.Add(new ValidationViolation(
+                "VR-105",
+                $"At least 3 bill lines must reference '{BlackBessRouteOptimiserId}', found {bessBillLineCount}",
+                "Project",
+                BlackBessRouteOptimiserId));
+        }
+    }
+
+    private static int CountDocumentLineProjectRefs(Canon canon, string projectId)
+    {
+        var count = 0;
+        foreach (var quote in canon.Quotes)
+        {
+            count += quote.Lines.Count(line => string.Equals(line.ProjectId, projectId, StringComparison.Ordinal));
+        }
+
+        foreach (var salesOrder in canon.SalesOrders)
+        {
+            count += salesOrder.Lines.Count(line => string.Equals(line.ProjectId, projectId, StringComparison.Ordinal));
+        }
+
+        foreach (var invoice in canon.Invoices)
+        {
+            count += invoice.Lines.Count(line => string.Equals(line.ProjectId, projectId, StringComparison.Ordinal));
+        }
+
+        return count;
+    }
+
+    private static int CountBillLineProjectRefs(Canon canon, string projectId)
+    {
+        var count = 0;
+        foreach (var bill in canon.Bills)
+        {
+            count += bill.Lines.Count(line => string.Equals(line.ProjectId, projectId, StringComparison.Ordinal));
+        }
+
+        return count;
     }
 
     [GeneratedRegex(@"\d{4}")]

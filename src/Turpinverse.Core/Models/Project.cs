@@ -17,6 +17,7 @@ public sealed record Project
     public IReadOnlyList<string> CaseIds { get; init; } = [];
     public FeaturedLink? FeaturedCta { get; init; }
     public bool? Featured { get; init; }
+    public decimal? BillingRatePerHour { get; init; }
 
     [JsonIgnore]
     public IReadOnlyList<string> LinkedPersonaIds
