@@ -25,28 +25,64 @@ Intent for new work: a GitHub issue (templates under `.github/ISSUE_TEMPLATE/`) 
 
 ## Skills
 
-Project skills live in [`.agents/skills/`](.agents/skills/). Read `SKILL.md` when the task matches.
+### Configuration inventory
+
+[`.cursor/settings.json`](.cursor/settings.json) enables Cursor plugin bundles for **dotnet-agent-skills** and **aspire-skills/aspire**. Plugin skills load from the Cursor plugin cache, **not** from `.agents/skills/`. Do not pin `gitRef` in settings unless the user explicitly asks; unpinned entries track current skills from official .NET and Aspire plugin sources.
+
+| Source | In this repo |
+| --- | --- |
+| Project skills | [`.agents/skills/`](.agents/skills/) (authored in git) |
+| .NET plugin bundles | `dotnet`, `dotnet-blazor`, `dotnet-test`, `dotnet-data`, `dotnet-nuget` |
+| Aspire workflow bundle | `aspire-skills/aspire` |
+| `dotnet-inspect` companion | Vendored [`.agents/skills/dotnet-inspect/`](.agents/skills/dotnet-inspect/) |
+
+### Project skills
 
 | Skill | Use when |
-|-------|----------|
+| --- | --- |
 | `create-architectural-decision-record` | Creating or major-updating an ADR |
-| `documentation-writer` | Diátaxis-aligned documentation |
-| `project-documentation` | Project-aware docs placement |
+| `project-documentation` | Diátaxis and project-aware docs (README, `docs/`, placement) |
 | `code-review` | PR or branch review before merge (see [`.cursor/commands/loop-code-review.md`](.cursor/commands/loop-code-review.md)) |
-| `principal-engineering` | Non-trivial implementation, refactors, build fixes, new abstractions |
+| `implementation-guardrails` | Non-trivial implementation, refactors, analyzer/build fixes, new abstractions |
+| `dotnet-inspect` | Evidence-first .NET package and API investigation |
 | `blazor-blueprint` | BlazorBlueprint UI in `Turpinverse.Web` |
-| `aspire` (and related `aspire-*` skills) | AppHost wiring, deploy, or diagnostics |
-| `aspire-project-v2-migration` | Assessing or migrating AppHost to DotnetProject resources (13.6+) |
+| `playwright-cli` | Hugo site E2E and Playwright CLI workflows |
+
+### Precedence (repository guidance wins)
+
+| Topic | Use first | Plugin skill only when |
+| --- | --- | --- |
+| Implementation / architecture | `implementation-guardrails` + ADRs | `csharp-refactoring`, `csharp-expert`, `msbuild` for mechanical or build-specific work |
+| Pre-merge review | `code-review` | - |
+| Tests | [`docs/engineering.md`](docs/engineering.md), [`.cursor/rules/testing.mdc`](.cursor/rules/testing.mdc) | `run-tests`, `platform-detection`, `code-testing`, `test-gap-analysis` |
+| NuGet / CPM | Explicit user approval in this file | `convert-to-cpm` when maintaining `Directory.Packages.props` |
+| EF Core | ADRs + conventions | `optimizing-ef-core-queries` |
+| Aspire / AppHost | `aspire` plugin router + `dotnet-inspect` | - |
+| Blazor Blueprint UI | `blazor-blueprint` | `dotnet-blazor` plugin for generic Blazor API lookup |
+
+### Curated plugin routing
+
+| Skill or bundle | Use when |
+| --- | --- |
+| `run-tests` | Choosing correct `dotnet test` / MTP flags for this solution |
+| `platform-detection` | Uncertain test platform before running or filtering |
+| `code-testing` | Writing or repairing xUnit tests (respect repo assert and mock rules) |
+| `test-gap-analysis` | Checking whether tests would catch a production change |
+| `csharp-refactoring` | Behaviour-preserving refactors (pair with `dotnet-breaking-changes` if public API) |
+| `msbuild` | Build failures, targets, binlogs (not routine feature work) |
+| `convert-to-cpm` | Central package management changes |
+| `optimizing-ef-core-queries` | EF performance review |
+| `aspire`, `aspire-init`, `aspireify`, `aspire-orchestration`, `aspire-monitoring`, `aspire-deployment`, `aspire-project-v2-migration`, `aspire-terminals` | AppHost wiring, CLI lifecycle, logs, deploy, terminals |
 
 ## Task routing
 
 - **Code** (`src/`, `tests/`): [`docs/engineering.md`](docs/engineering.md), [`.cursor/rules/csharp.mdc`](.cursor/rules/csharp.mdc).
-- **Documentation** (`**/*.md` except `adr/`): `documentation-writer` + `project-documentation`.
+- **Documentation** (`**/*.md` except `adr/`): `project-documentation` skill.
 - **ADRs** (`adr/*.md`): `create-architectural-decision-record` only.
 
 ## Tests
 
-Follow [`.cursor/rules/testing-standards.mdc`](.cursor/rules/testing-standards.mdc): xUnit v3, NSubstitute, built-in `Assert` only.
+Follow [`.cursor/rules/testing.mdc`](.cursor/rules/testing.mdc): xUnit v3, NSubstitute, built-in `Assert` only.
 
 When changing canon validation, export, or Hugo generation, add or update boundary tests.
 
@@ -67,11 +103,17 @@ Bump centrally managed packages to the latest compatible stable versions where a
 dotnet test Turpinverse.slnx -c Release
 ```
 
+## Aspire and dependencies
+
+When a distributed app is modelled in a .NET Aspire AppHost, consume every integrated resource through the DI registrations and client types from the matching Aspire integration package. Do **not** construct connections from guessed or hard-coded connection strings when AppHost already models that resource.
+
+Do not unit-test Aspire AppHost resource modelling or orchestration.
+
 ## Hugo site
 
 The public reference site lives under [`site/`](site/). Content and `site/data/*.json` are **generated** from canon — do not hand-edit generated markdown or data files except by re-running the generator.
 
-**Dev container** installs Go, Hugo Extended, and Node (see `.devcontainer/post-create.sh`) — use `hugo` directly under `site/` after running the content generator, same as CI.
+**Dev container** installs Go and Hugo Extended via devcontainer features (see [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json)) — use `hugo` directly under `site/` after running the content generator, same as CI.
 
 **Bare WSL/Windows (no Hugo install)** — from the repo root:
 

@@ -59,14 +59,20 @@ dotnet run --project src/Turpinverse.AppHost
 # Run canon validation tests
 dotnet test tests/Turpinverse.Core.UnitTests --filter "Category=CanonValidation"
 
-# Build documentation site (requires Hugo installed)
+# Build documentation site (see Hugo options below)
 dotnet run --project src/Turpinverse.Tools.GenerateHugoContent
 cd site && hugo --minify
 ```
 
-### Hugo site without installing Hugo (Docker / Podman)
+### Hugo site
 
-On Windows, use Podman Desktop or Docker Desktop — no local Hugo install needed:
+| Environment | How to build or preview |
+|-------------|-------------------------|
+| **Dev container** | Hugo Extended is installed via [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json). Run the content generator, then `hugo` under `site/` (same as CI). |
+| **Linux / WSL / macOS** | From the repo root: `./scripts/invoke-hugo-site.sh build`, `serve`, or `preview` (runs the generator first). |
+| **Windows (no Hugo install)** | Podman or Docker via PowerShell helpers — no local Hugo needed. |
+
+**Windows (PowerShell):**
 
 ```powershell
 .\scripts\Invoke-HugoSite.ps1 build    # generate content + build to site/public/
@@ -74,7 +80,15 @@ On Windows, use Podman Desktop or Docker Desktop — no local Hugo install neede
 .\scripts\Invoke-HugoSite.ps1 preview  # build + serve site/public/ at http://localhost:8080
 ```
 
-Use `-Runtime docker` if you prefer Docker over Podman. Full details: [site/README.md](site/README.md).
+**Linux / WSL / macOS (bash):**
+
+```bash
+./scripts/invoke-hugo-site.sh build
+./scripts/invoke-hugo-site.sh serve
+./scripts/invoke-hugo-site.sh preview
+```
+
+Use `-Runtime docker` on the PowerShell script if you prefer Docker over Podman. Full details: [site/README.md](site/README.md). Agent-oriented commands: [AGENTS.md](AGENTS.md#hugo-site).
 
 ## Documentation
 
@@ -84,6 +98,7 @@ Use `-Runtime docker` if you prefer Docker over Podman. Full details: [site/READ
 | [docs/entity-relationships.md](docs/entity-relationships.md) | Join graph |
 | [docs/export-api.md](docs/export-api.md) | HTTP/CSV export contract |
 | [docs/engineering.md](docs/engineering.md) | How this repo is maintained |
+| [AGENTS.md](AGENTS.md) | Cursor agents, skills, and verification commands |
 | [adr/](adr/) | Architectural decision records |
 | [docs/tech-stack.md](docs/tech-stack.md) | Technology summary |
 
@@ -98,13 +113,11 @@ pwsh -Command "Install-Module PSScriptAnalyzer -Scope CurrentUser -Force; Invoke
 
 ## Testing standards
 
-- xUnit v3 for all automated .NET tests
-- NSubstitute for mocks, stubs, and test doubles
-- Built-in xUnit `Assert` methods only
-- Keep test dependencies to a minimum
+xUnit v3, NSubstitute, and built-in `Assert` only. Do not introduce FluentAssertions,
+AwesomeAssertions, Shouldly, Moq, NUnit, or MSTest unless explicitly requested.
 
-Do not introduce FluentAssertions, AwesomeAssertions, Shouldly, Moq, NUnit, or MSTest
-unless explicitly requested.
+Full conventions: [`.cursor/rules/testing.mdc`](.cursor/rules/testing.mdc) and
+[`docs/engineering.md`](docs/engineering.md).
 
 ## License
 

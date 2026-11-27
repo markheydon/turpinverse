@@ -1,97 +1,32 @@
 ---
 name: create-architectural-decision-record
-description: 'Create an Architectural Decision Record (ADR) document for AI-optimized decision documentation.'
+description: >-
+  Write a new Architectural Decision Record (ADR) under adr/ with the next
+  adr-NNNN-[slug].md filename. Use when documenting a significant architecture or
+  technology choice, superseding a prior decision, or when the user asks for an ADR.
 ---
 
-# Create Architectural Decision Record
+# Create architectural decision record
 
-Create an ADR document for `${input:DecisionTitle}` using structured formatting optimized for AI consumption and human readability.
+## Instructions
 
-## Inputs
-
-- **Context**: `${input:Context}`
-- **Decision**: `${input:Decision}`
-- **Alternatives**: `${input:Alternatives}`
-- **Stakeholders**: `${input:Stakeholders}`
-
-## Input Validation
-If any of the required inputs are not provided or cannot be determined from the conversation history, ask the user to provide the missing information before proceeding with ADR generation.
+1. Confirm the decision title, context, chosen option, alternatives, and stakeholders from the user or conversation. Ask if anything required is missing.
+2. Determine the next sequence number by listing existing `adr/adr-*.md` files (four-digit `NNNN`).
+3. Draft the ADR using [references/adr-document-template.md](references/adr-document-template.md). Use precise UK English; include positive and negative consequences and rejection rationale for alternatives.
+4. Save only under repository-root `adr/` as `adr-NNNN-[title-slug].md`. Do not place ADRs under `docs/`.
+5. Use coded bullets (3-4 letter prefix + three digits) in multi-item sections when using the full template.
+6. Set `**Status:**` using the vocabulary in [adr/README.md](../../../adr/README.md#status-field). Use **Accepted** once the decision is approved and binding.
+7. Add or update the ADR row in the [index table](../../../adr/README.md#index) in the same change.
 
 ## Requirements
 
-- Use precise, unambiguous language
-- Follow standardized ADR format with front matter
-- Include both positive and negative consequences
-- Document alternatives with rejection rationale
-- Structure for machine parsing and human reference
-- Use coded bullet points (3-4 letter codes + 3-digit numbers) for multi-item sections
+- Machine-parseable structure and readable prose.
+- Status appropriate to the request: **Proposed** until approved, then **Accepted**; use only values in the [README status table](../../../adr/README.md#status-field).
+- Do not rewrite binding ADR body text without documenting status changes (addendum or **Status history**).
 
-The ADR must be saved in the repository-root `adr/` directory using the naming convention: `adr-NNNN-[title-slug].md`, where NNNN is the next sequential 4-digit number (e.g., `adr-0001-database-selection.md`). Do not save ADRs under `docs/`.
+## Resources
 
-## Required Documentation Structure
-
-The documentation file must follow the template below, ensuring that all sections are filled out appropriately. The front matter for the markdown should be structured correctly as per the example following:
-
-```md
----
-title: "ADR-NNNN: [Decision Title]"
-status: "Proposed"
-date: "YYYY-MM-DD"
-authors: "[Stakeholder Names/Roles]"
-tags: ["architecture", "decision"]
-supersedes: ""
-superseded_by: ""
----
-
-# ADR-NNNN: [Decision Title]
-
-## Status
-
-**Proposed** | Accepted | Rejected | Superseded | Deprecated
-
-## Context
-
-[Problem statement, technical constraints, business requirements, and environmental factors requiring this decision.]
-
-## Decision
-
-[Chosen solution with clear rationale for selection.]
-
-## Consequences
-
-### Positive
-
-- **POS-001**: [Beneficial outcomes and advantages]
-- **POS-002**: [Performance, maintainability, scalability improvements]
-- **POS-003**: [Alignment with architectural principles]
-
-### Negative
-
-- **NEG-001**: [Trade-offs, limitations, drawbacks]
-- **NEG-002**: [Technical debt or complexity introduced]
-- **NEG-003**: [Risks and future challenges]
-
-## Alternatives Considered
-
-### [Alternative 1 Name]
-
-- **ALT-001**: **Description**: [Brief technical description]
-- **ALT-002**: **Rejection Reason**: [Why this option was not selected]
-
-### [Alternative 2 Name]
-
-- **ALT-003**: **Description**: [Brief technical description]
-- **ALT-004**: **Rejection Reason**: [Why this option was not selected]
-
-## Implementation Notes
-
-- **IMP-001**: [Key implementation considerations]
-- **IMP-002**: [Migration or rollout strategy if applicable]
-- **IMP-003**: [Monitoring and success criteria]
-
-## References
-
-- **REF-001**: [Related ADRs]
-- **REF-002**: [External documentation]
-- **REF-003**: [Standards or frameworks referenced]
-```
+| Path | Purpose |
+| --- | --- |
+| [references/adr-document-template.md](references/adr-document-template.md) | Full ADR markdown template |
+| [adr/README.md](../../../adr/README.md) | Repository ADR folder conventions |

@@ -15,3 +15,5 @@ Short reference for Turpinverse technology choices. The demo datasets live in [`
 | Tests | xUnit v3, NSubstitute, bUnit |
 
 See [README.md](../README.md) for quickstart commands and testing standards.
+
+Contributor and Cursor agent setup (skills, rules, dev container): [`AGENTS.md`](../AGENTS.md) and [engineering.md](./engineering.md#6-agent-and-editor-tooling).

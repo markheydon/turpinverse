@@ -7,14 +7,17 @@ see the Blazor app described in [docs/product-surfaces.md](../docs/product-surfa
 
 Hugo source lives here. Built output goes to `public/` (gitignored; deployed via GitHub Actions to [turpinverse.uk](https://turpinverse.uk)).
 
-You do **not** need Hugo installed locally if you use Docker or Podman.
+You do **not** need a host Hugo install if you use the dev container, Docker, or Podman.
 
 ## Prerequisites
 
 | Tool | Required for |
 |------|----------------|
 | .NET SDK 10.x | Generating `content/` and `data/` from canon JSON |
-| Docker or Podman | Building and previewing the Hugo site |
+| Hugo Extended (optional) | Native `hugo` under `site/` — installed in the [dev container](../.devcontainer/devcontainer.json) (0.165.0, matches CI) |
+| Docker or Podman (optional) | Building and previewing without a local Hugo install |
+
+On Linux, WSL, or macOS without Hugo, use [`scripts/invoke-hugo-site.sh`](../scripts/invoke-hugo-site.sh) from the repo root (`build`, `serve`, `preview`). On Windows without Hugo, use `scripts/Invoke-HugoSite.ps1` (see [Windows notes](#windows-notes)).
 
 ## 1. Generate content from canon
 
@@ -83,12 +86,11 @@ Open http://localhost:8080
 
 ## Browser regression tests (Playwright, .NET)
 
-Layout tests for the built static site live in `tests/Turpinverse.Site.E2ETests` (`Category=HugoSite`). Build the site first, then:
+Layout tests for the built static site live in `tests/Turpinverse.Site.E2ETests` (`Category=HugoSite`). The dev container runs [`.devcontainer/install-playwright-browsers.sh`](../.devcontainer/install-playwright-browsers.sh) after create (same pattern as solo-dev-board). On a bare machine, build the site and install Chromium yourself:
 
 ```bash
 ./scripts/invoke-hugo-site.sh build
-dotnet build tests/Turpinverse.Site.E2ETests
-pwsh tests/Turpinverse.Site.E2ETests/bin/Debug/net10.0/playwright.ps1 install chromium
+bash .devcontainer/install-playwright-browsers.sh
 dotnet test tests/Turpinverse.Site.E2ETests --filter "Category=HugoSite"
 ```
 
