@@ -107,7 +107,8 @@
         "taxRateId": "tax-standard",
         "lineTotal": 740,
         "productId": "identity-advisory-hour",
-        "quoteId": "quote-005"
+        "quoteId": "quote-005",
+        "projectId": "palmer-identity-vault"
       }
     ]
   },

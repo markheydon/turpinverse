@@ -1,0 +1,76 @@
+[
+  {
+    "timeslipId": "ts-001",
+    "taskId": "task-palmer-sso-review",
+    "projectId": "palmer-identity-vault",
+    "personaId": "dick-turpin",
+    "workDate": "1737-10-12",
+    "hours": 6,
+    "billable": true,
+    "invoiceId": "inv-003"
+  },
+  {
+    "timeslipId": "ts-002",
+    "taskId": "task-palmer-audit-prep",
+    "projectId": "palmer-identity-vault",
+    "personaId": "mary-brazier",
+    "workDate": "1737-10-14",
+    "hours": 3.5,
+    "billable": true
+  },
+  {
+    "timeslipId": "ts-003",
+    "taskId": "task-palmer-training",
+    "projectId": "palmer-identity-vault",
+    "personaId": "henry-clayton",
+    "workDate": "2026-03-10",
+    "hours": 2,
+    "billable": false
+  },
+  {
+    "timeslipId": "ts-004",
+    "taskId": "task-bess-corridor-mapping",
+    "projectId": "black-bess-route-optimiser",
+    "personaId": "ned-palmer",
+    "workDate": "2026-03-18",
+    "hours": 5,
+    "billable": true
+  },
+  {
+    "timeslipId": "ts-005",
+    "taskId": "task-bess-mileage-review",
+    "projectId": "black-bess-route-optimiser",
+    "personaId": "black-bess",
+    "workDate": "2026-03-18",
+    "hours": 4,
+    "billable": true
+  },
+  {
+    "timeslipId": "ts-006",
+    "taskId": "task-bess-legend-research",
+    "projectId": "black-bess-route-optimiser",
+    "personaId": "dick-turpin",
+    "workDate": "2026-03-19",
+    "hours": 1.5,
+    "billable": false
+  },
+  {
+    "timeslipId": "ts-007",
+    "taskId": "task-bess-corridor-mapping",
+    "projectId": "black-bess-route-optimiser",
+    "personaId": "henry-clayton",
+    "workDate": "2026-04-02",
+    "hours": 7.5,
+    "billable": true
+  },
+  {
+    "timeslipId": "ts-008",
+    "taskId": "task-palmer-sso-review",
+    "projectId": "palmer-identity-vault",
+    "personaId": "ned-palmer",
+    "workDate": "1737-10-18",
+    "hours": 4,
+    "billable": true,
+    "invoiceId": "inv-003"
+  }
+]

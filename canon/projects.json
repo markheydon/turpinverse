@@ -18,7 +18,8 @@
       "name": "Request demo",
       "url": "https://turpin-enterprises.turpinverse.uk/demo/black-bess"
     },
-    "featured": true
+    "featured": true,
+    "billingRatePerHour": 120
   },
   {
     "id": "palmer-identity-vault",
@@ -35,7 +36,8 @@
     ],
     "organisationId": "brazier-legal",
     "contactId": "mary-brazier",
-    "stakeholderContactIds": ["dick-turpin"]
+    "stakeholderContactIds": ["dick-turpin"],
+    "billingRatePerHour": 185
   },
   {
     "id": "essex-procurement-hub",
