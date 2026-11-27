@@ -2,7 +2,7 @@
 
 Before considering documentation complete, verify the following:
 
-- The document type matches the reader's goal.
+- The document type matches the reader's goal and the shape described in [diataxis.md](diataxis.md).
 - The target audience is clear from the opening section.
 - Terminology matches the project's existing files and codebase.
 - The content states what is in scope and avoids implying unsupported behaviour.

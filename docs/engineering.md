@@ -12,7 +12,7 @@ Channel responsibilities for the bundled consumers: [product-surfaces.md](./prod
 
 When you change canon validation, CSV export, the Hugo content generator, or export HTTP endpoints, add or update automated tests. Prefer contract or integration coverage at those boundaries.
 
-Testing stack: xUnit v3, NSubstitute — see [README](../README.md) and [`.cursor/rules/testing-standards.mdc`](../.cursor/rules/testing-standards.mdc).
+Testing stack: xUnit v3, NSubstitute — see [README](../README.md) and [`.cursor/rules/testing.mdc`](../.cursor/rules/testing.mdc).
 
 ## 3. Explicit errors at API boundaries
 
@@ -49,3 +49,9 @@ Pull requests use [`.github/pull_request_template.md`](../.github/pull_request_t
 This repo no longer uses GitHub Spec Kit. There is no requirement for a feature spec, plan, or tasks file before implementation. Use GitHub issues and the docs above for intent.
 
 Historical Spec Kit packs live under [`archive/specs/`](../archive/specs/) (frozen, not maintained).
+
+## 6. Agent and editor tooling
+
+Cursor rules under [`.cursor/rules/`](../.cursor/rules/) and the agent guide in [`AGENTS.md`](../AGENTS.md) define how assistants and contributors using Cursor should work in this repository. Project skills live in [`.agents/skills/`](../.agents/skills/); Aspire and .NET workflow skills load from Cursor plugin bundles configured in [`.cursor/settings.json`](../.cursor/settings.json).
+
+When you change dev container features, test conventions, skill routing, or Hugo/Playwright bootstrap scripts, update `AGENTS.md`, the relevant `.cursor/rules/*.mdc` files, and this section if maintenance expectations shift.

@@ -1,0 +1,50 @@
+---
+description: Testing standards and skill routing for tests/
+globs: "tests/**/*.cs"
+alwaysApply: false
+---
+
+# Testing Conventions
+
+Follow [`docs/engineering.md`](../../docs/engineering.md) and [`AGENTS.md`](../../AGENTS.md). Repository assert, mock, and naming rules override portable **dotnet-test** skill defaults.
+
+## Required
+
+- Use **xUnit v3** (`xunit.v3` package) for all automated tests
+- Use **NSubstitute** for mocks, stubs, and test doubles
+- Use built-in **xUnit `Assert` methods** only
+- Keep test dependencies to a minimum
+
+## Prohibited
+
+Do not introduce:
+
+- FluentAssertions, AwesomeAssertions, Shouldly, Moq, NUnit, MSTest
+- The `writing-mstest-tests` plugin skill (MSTest is not used here)
+
+Do not unit-test Aspire AppHost resource modelling or orchestration.
+
+## Conventions
+
+- Test projects require `<OutputType>Exe</OutputType>` (set in `tests/Directory.Build.props`)
+- Use `[Trait("Category", "...")]` for filterable test categories (e.g. `CanonValidation`, `HugoSite`)
+- Test method names may use `Method_When_Then` underscore convention (CA1707 suppressed in `tests/**/*.cs`)
+- Hand-rolled fakes (e.g. `HttpMessageHandler`, `WebApplicationFactory`) are acceptable when more appropriate than NSubstitute
+
+## Allowed supporting packages
+
+- `bunit` — Blazor component tests
+- `coverlet.collector` — code coverage
+- `Microsoft.AspNetCore.Mvc.Testing` — integration tests
+- `Microsoft.Playwright` — Hugo static site browser tests (`Category=HugoSite` in `Turpinverse.Site.E2ETests`; requires built `site/public/`)
+- `Microsoft.NET.Test.Sdk` + `xunit.runner.visualstudio` — VSTest runner
+
+## Skills
+
+| When | Skill |
+| --- | --- |
+| Before running tests or quoting a `dotnet test` command | `run-tests` (`dotnet-test` plugin) |
+| Uncertain test platform or MTP/VSTest mode | `platform-detection` (`dotnet-test` plugin) |
+| Write, repair, or strengthen tests | `code-testing` (`dotnet-test` plugin) bound to xUnit v3, built-in `Assert`, and NSubstitute above |
+| After a meaningful production change, check coverage gaps | `test-gap-analysis` (`dotnet-test` plugin) |
+| Hugo site E2E or Playwright CLI workflows | `playwright-cli` (`.agents/skills/`) |

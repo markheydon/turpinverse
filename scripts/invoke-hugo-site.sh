@@ -114,8 +114,17 @@ generate_hugo_content() {
     fi
 }
 
+hugo_container_user_flags() {
+    # Hugo in Docker runs as root by default and leaves root-owned site/public and .hugo_build.lock.
+    if [[ "$RUNTIME" == "docker" ]] || [[ "$RUNTIME" == "podman" ]]; then
+        printf -- '-u %s:%s' "$(id -u)" "$(id -g)"
+    fi
+}
+
 hugo_build() {
+    # shellcheck disable=SC2046
     if ! "$RUNTIME" run --rm \
+        $(hugo_container_user_flags) \
         -v "$(volume_mount "$REPO_ROOT" /src)" \
         -w /src/site \
         "$HUGO_IMAGE" \
@@ -147,7 +156,9 @@ case "$COMMAND" in
     serve)
         generate_hugo_content
         echo "Starting Hugo dev server at http://localhost:${SERVE_PORT} ..."
+        # shellcheck disable=SC2046
         "$RUNTIME" run --rm -p "${SERVE_PORT}:1313" \
+            $(hugo_container_user_flags) \
             -v "$(volume_mount "$REPO_ROOT" /src)" \
             -w /src/site \
             "$HUGO_IMAGE" \

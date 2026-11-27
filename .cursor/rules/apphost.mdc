@@ -1,0 +1,28 @@
+---
+description: Aspire AppHost conventions and skill routing
+globs: "src/**/*AppHost/**"
+alwaysApply: false
+---
+
+# Aspire AppHost
+
+Follow [`docs/engineering.md`](../../docs/engineering.md) and `AGENTS.md` (Aspire and dependencies). Do not vendor Aspire plugin skills into `.agents/skills/`; use the **aspire-skills/aspire** Cursor plugin. Do not unit-test AppHost resource modelling or orchestration (see [testing.mdc](testing.mdc)).
+
+When the distributed app is modelled in a .NET Aspire AppHost, consume integrated resources through the DI registrations and client types from the matching Aspire integration package. Do not construct connections from hard-coded connection strings when AppHost already models that resource.
+
+## Skills
+
+Start with the **`aspire`** router skill (`aspire-skills/aspire` plugin), then the narrowest sub-skill:
+
+| When | Skill |
+| --- | --- |
+| First-run or add Aspire to the repo | `aspire-init` |
+| Wire or repair AppHost projects | `aspireify` |
+| Start, stop, lifecycle locally | `aspire-orchestration` |
+| Logs, traces, dashboard | `aspire-monitoring` |
+| Publish and deploy | `aspire-deployment` |
+| Project v2 migration | `aspire-project-v2-migration` |
+| Terminals and automation | `aspire-terminals` |
+| Package or CLI evidence | `dotnet-inspect` (`.agents/skills/`) |
+
+Other production `src/**/*.cs` outside AppHost → [csharp.mdc](csharp.mdc). Tests → [testing.mdc](testing.mdc).
